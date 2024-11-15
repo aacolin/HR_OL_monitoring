@@ -80,3 +80,9 @@
   height: auto;
 
 }
+
+
+.hero {
+  background: url(../img/treadmill.jpg) !important;
+  background-size: cover !important;
+}
