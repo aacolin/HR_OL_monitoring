@@ -1,6 +1,5 @@
 
-
-/* Patient Login Form Styles */
+/* Sign Up Form Styles */
 .card {
     margin-top: 50p***REMOVED***;
     bo***REMOVED***-shadow: 4p***REMOVED*** 4p***REMOVED*** 8p***REMOVED*** rgba(0, 0, 0, 0.5);
@@ -67,4 +66,17 @@
     color: #333; /* Change te***REMOVED***t color */
     font-weight: 500; /* Adjust font weight */
     display: block; /* Ensure the label is displayed as a block element */
+}
+
+.hidden {
+  display: none;
+}
+
+.signup-img {
+  margin-top: 20p***REMOVED***;
+  bo***REMOVED***-shadow: 0 4p***REMOVED*** 8p***REMOVED*** rgba(0, 0, 0, 0.5);
+  border-radius: 5p***REMOVED***;
+  width: 80%;
+  height: auto;
+
 }

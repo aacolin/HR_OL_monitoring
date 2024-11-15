@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Saguaro Login</title>
+  <title>Saguaro Sign Up</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -25,7 +25,7 @@
   <link href="../assets/vendor/glightbo***REMOVED***/css/glightbo***REMOVED***.min.css" rel="stylesheet">
 
   <!-- Login CSS File -->
-  <link href="../assets/css/login.css" rel="stylesheet">
+  <link href="../assets/css/signup.css" rel="stylesheet">
   <link href="../assets/css/main.css" rel="stylesheet">
   <link href="../assets/css/navigation.css" rel="stylesheet">
 
@@ -45,7 +45,7 @@
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="inde***REMOVED***.html" class="active">Home</a></li>
-          <li><a href="login.html">Login</a> </li>
+          <li class="hidden"><a href="login.html">Login</a> </li>
           <li class="dropdown"><a href="about.html#about"><span>About</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="about.html#about">Project</a></li>
@@ -72,17 +72,26 @@
       <div class="container">
         <div class="row gy-4">
           <div class="col-lg-4 order-lg-last hero-img" data-aos="zoom-out">
-            <img src="../assets/img/phone_1.png" alt="Phone 1" class="phone-1">
-            <img src="../assets/img/phone_2.png" alt="Phone 2" class="phone-2">
+            <img src="../assets/img/signup_female.webp" alt="Signup Male" class="signup-img">
+            <img src="../assets/img/signup_male.webp" alt="Signup Female" class="signup-img">
           </div>
+          
           <div class="col-lg-8 d-fle***REMOVED*** fle***REMOVED***-column justify-content-center align-items te***REMOVED***t-center te***REMOVED***t-md-start" data-aos="fade-up">
-            <h2 class="te***REMOVED***t-white">Portal Login</h2>
+            <h2 class="te***REMOVED***t-white">Sign Up</h2>
             <div class="container">
               <div class="row justify-content-center">
                 <div class="col-md-6">
                   <div class="card">
                     <div class="card-body">
                       <form>
+                        <div class="form-group">
+                          <label for="first_name">First Name</label>
+                          <input type="te***REMOVED***t" class="form-control" id="first_name" placeholder="John">
+                        </div>
+                        <div class="form-group">
+                          <label for="last_name">Last Name</label>
+                          <input type="te***REMOVED***t" class="form-control" id="last_name" placeholder="Connor">
+                        </div>
                         <div class="form-group">
                           <label for="email">Email address</label>
                           <input type="email" class="form-control" id="email" placeholder="user@email.com">
@@ -91,12 +100,12 @@
                           <label for="password">Password</label>
                           <input type="password" class="form-control" id="password" placeholder="Password">
                         </div>
-                        <div class="form-group form-check">
-                          <input type="checkbo***REMOVED***" class="form-check-input" id="rememberMe">
-                          <label class="form-check-label" for="rememberMe">Remember me</label>
+                        <div class="form-group">
+                          <label for="confirm_password">Confirm Password</label>
+                          <input type="password" class="form-control" id="confirm_password" placeholder="Confirm Password">
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">Login</button>
-                        <p class="create-account">Don't have an account? <a href="signup.html">Create account</a></p>
+                        <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+                        <p class="create-account">Already have an account? Login <a href="login.html">here</a></p>
                       </form>
                     </div>
                   </div>
