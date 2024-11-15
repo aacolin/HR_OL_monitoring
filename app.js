@@ -14,13 +14,13 @@ app.use(cookieParser());
 app.use(e***REMOVED***press.static(path.join(__dirname, 'public')));
 
 var inde***REMOVED***Router = require('./routes/inde***REMOVED***');
-var patientsRouter = require('./routes/patients');
-var sensorDataRouter = require('./routes/sensorData'); 
-var devicesRouter = require('./routes/devices');
-var physiciansRouter = require('./routes/physicians');
+// var patientsRouter = require('./routes/patients');
+// var sensorDataRouter = require('./routes/sensorData'); 
+// var devicesRouter = require('./routes/devices');
+// var physiciansRouter = require('./routes/physicians');
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+//app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // CORS middleware
@@ -34,10 +34,10 @@ app.use(function (req, res, ne***REMOVED***t) {
 
 // Routes
 app.use('/', inde***REMOVED***Router);
-app.use('/patients', patientsRouter);
-app.use('/sensorData', sensorDataRouter); 
-app.use('/devices', devicesRouter);
-app.use('/physicians', physiciansRouter);
+// app.use('/patients', patientsRouter);
+// app.use('/sensorData', sensorDataRouter); 
+// app.use('/devices', devicesRouter);
+// app.use('/physicians', physiciansRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, ne***REMOVED***t) {
