@@ -11,25 +11,19 @@
   "author": "Aaron Colin",
   "license": "ISC",
   "dependencies": {
-    "a***REMOVED***ios": "^1.6.1",
     "bcryptjs": "^2.4.3",
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "dotenv": "^16.3.1",
+    "cookie-parser": "^1.4.7",
+    "debug": "^4.3.7",
+    "dotenv": "^16.4.5",
     "e***REMOVED***press": "^4.21.1",
-    "http-errors": "~1.6.3",
+    "http-errors": "^2.0.0",
     "jwt-simple": "^0.5.6",
-    "moment-timezone": "^0.5.43",
-    "mongoose": "^8.0.0",
-    "morgan": "~1.9.1",
-    "particle-api-js": "^9.0.1",
-    "pug": "^3.0.1",
-    "yargs": "^15.4.1"
+    "mongoose": "^8.8.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.7",
+    "pug": "^3.0.3"
   },
   "engines": {
     "node": ">=15.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.7"
   }
 }
