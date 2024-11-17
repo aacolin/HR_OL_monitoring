@@ -16,6 +16,7 @@
     "debug": "^4.3.7",
     "dotenv": "^16.4.5",
     "e***REMOVED***press": "^4.21.1",
+    "fs": "^0.0.1-security",
     "http-errors": "^2.0.0",
     "jwt-simple": "^0.5.6",
     "mongoose": "^8.8.1",

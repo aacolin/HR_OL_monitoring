@@ -69,5 +69,10 @@
     display: block; /* Ensure the label is displayed as a block element */
 }
 
-
+.successfulSignUp {
+  display: none;
+  te***REMOVED***t-align: center;
+  color: green !important;
+  font-weight: bold !important;
+}
 

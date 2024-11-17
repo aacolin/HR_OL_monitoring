@@ -75,29 +75,24 @@
                 <div class="col-md-6">
                   <div class="card">
                     <div class="card-body">
-                      <form>
-                        <div class="form-group">
-                          <label for="first_name">First Name</label>
-                          <input type="te***REMOVED***t" class="form-control" id="first_name" placeholder="First name">
+                      <form id="signUpForm">
+                        <label for="firstName">First Name</label>
+                        <input type="te***REMOVED***t" class="signupTe***REMOVED***tbo***REMOVED***" id="firstName" placeholder="First name">
+                        <label for="lastName">Last Name</label>
+                        <input type="te***REMOVED***t" class="signupTe***REMOVED***tbo***REMOVED***" id="lastName" placeholder="Last name">
+                        <label for="email">Email address</label>
+                        <input type="email" class="signupTe***REMOVED***tbo***REMOVED***" id="email" placeholder="user@email.com">
+                        <label for="password">Password</label>
+                        <input type="password" class="signupTe***REMOVED***tbo***REMOVED***" id="password" placeholder="Password">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" class="signupTe***REMOVED***tbo***REMOVED***" id="confirmPassword" placeholder="Confirm Password">
+                        <button type="submit" id="signupBtn" class="signupBtn">Sign Up</button>
+                        <div class="errorDiv" style="display:none">
+                          <p class="errorMessage">error</p>
                         </div>
-                        <div class="form-group">
-                          <label for="last_name">Last Name</label>
-                          <input type="te***REMOVED***t" class="form-control" id="last_name" placeholder="Last name">
-                        </div>
-                        <div class="form-group">
-                          <label for="email">Email address</label>
-                          <input type="email" class="form-control" id="email" placeholder="user@email.com">
-                        </div>
-                        <div class="form-group">
-                          <label for="password">Password</label>
-                          <input type="password" class="form-control" id="password" placeholder="Password">
-                        </div>
-                        <div class="form-group">
-                          <label for="confirm_password">Confirm Password</label>
-                          <input type="password" class="form-control" id="confirm_password" placeholder="Confirm Password">
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
-                        <p class="create-account">Already have an account? Login <a href="login.html">here</a></p>
+                        <p class="create-account">
+                          Already have an account? Login <a href="login.html">here</a>
+                        </p>
                       </form>
                     </div>
                   </div>
@@ -140,10 +135,11 @@
   <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
+  <script src="https://aja***REMOVED***.googleapis.com/aja***REMOVED***/libs/jquery/3.5.1/jquery.min.js"></script>  
 
-  <!-- Main JS File -->
+  <!-- project JS Files -->
   <script src="assets/js/main.js"></script>
-
+  <script src="assets/js/signup.js"></script>
 </body>
 
 </html>

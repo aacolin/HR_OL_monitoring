@@ -14,18 +14,18 @@ var app = e***REMOVED***press();
 
 // import routes
 var inde***REMOVED***Router = require('./routes/inde***REMOVED***');
-// var patientsRouter = require('./routes/patients');
+var patientsRouter = require('./routes/patients');
 // var sensorDataRouter = require('./routes/sensorData'); 
 // var devicesRouter = require('./routes/devices');
 // var physiciansRouter = require('./routes/physicians');
 
 // set up middlewares
-app.use(logger('dev'));
-app.use(e***REMOVED***press.json());
-app.use(e***REMOVED***press.urlencoded({ e***REMOVED***tended: false }));
-app.use(cookieParser());
-app.use(e***REMOVED***press.static(path.join(__dirname, 'public')));
-app.use(function (req, res, ne***REMOVED***t) {
+app.use(logger('dev'));     // Show HTTP requests in the console
+app.use(e***REMOVED***press.json());    // Parse JSON bodies
+app.use(e***REMOVED***press.urlencoded({ e***REMOVED***tended: false }));   // Parse URL-encoded bodies
+app.use(cookieParser());    // Parse cookie headers
+app.use(e***REMOVED***press.static(path.join(__dirname, 'public')));    // Serve static files
+app.use(function (req, res, ne***REMOVED***t) {   // Set up CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
@@ -35,7 +35,7 @@ app.use(function (req, res, ne***REMOVED***t) {
 
 // set up routes
 app.use('/', inde***REMOVED***Router);
-// app.use('/patients', patientsRouter);
+app.use('/patients', patientsRouter);
 // app.use('/sensorData', sensorDataRouter); 
 // app.use('/devices', devicesRouter);
 // app.use('/physicians', physiciansRouter);
