@@ -13,17 +13,15 @@ $(document).ready(function() {
         event.preventDefault();
         var errorMessages = [];
         const loginFormFields = {
-            email: $('#email').val(),
-            password: $('#password').val(),
+            Email: $('#email').val(),
+            Password: $('#password').val(),
         };
     
         const credentials = {
-            email: loginFormFields.email,
-            password: loginFormFields.password
+            Email: loginFormFields.Email,
+            Password: loginFormFields.Password
         }
         const credentialsInJSON = JSON.stringify(credentials);
-
-        
         $.aja***REMOVED***({
             url: '/patients/login',
             method: 'POST',
@@ -31,9 +29,10 @@ $(document).ready(function() {
             data: credentialsInJSON,
             dataType: 'json',
         }).done(function(data) {
-            if (this.status === 200){
-                alert("Login success");
+            if ($('#rememberMe').checked) {
+                window.localStorage.setItem('patient-token', data.patientToken);
             }
+            window.location.href = '/home.html';
         }).fail(function(err){
             errorMessages.push(err.responseJSON.message);
             displayErrorMessages(errorMessages);

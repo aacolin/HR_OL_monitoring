@@ -13,7 +13,9 @@ sudo touch /etc/yum.repos.d/mongodb-org-8.0.repo
 ```te***REMOVED***t
 [mongodb-org-8.0] name=MongoDB Repository
 baseurl=https://repo.mongodb.org/yum/redhat/9/mongodb-org/8.0/***REMOVED***86_64/
-gpgcheck=1 enabled=1 gpgkey=https://www.mongodb.org/static/pgp/server-8.0.asc
+gpgcheck=1 
+enabled=1 
+gpgkey=https://www.mongodb.org/static/pgp/server-8.0.asc
 ```
 
 3. Import the MongoDB GPG key:

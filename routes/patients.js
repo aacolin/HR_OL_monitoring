@@ -5,7 +5,6 @@ const bcrypt = require("bcryptjs");
 const fs = require('fs');
 const secret = fs.readFileSync(__dirname + '/../jwt/secret').toString();
 const Patient = require('../models/patient');
-const { log } = require('console');
 
 const PatientE***REMOVED***ists = 'A patient with this email address already e***REMOVED***ists. Please use a different email address.';
 const InvalidData = 'Your request contains invalid data or missing fields. Please correct and try again.'
@@ -66,27 +65,31 @@ const PatientNotFound = 'Patient not found please create an account.';
 router.post('/login', async function(req, res) {
 
     try{
-        const loginFormData = req.body;
         
+        const userEmail = req.body.Email;
+        const userPassword = req.body.Password;
         
-      
-       
-        if (!loginFormData.email || !loginFormData.password ) {
+        // check if the email and password are not empty
+        if (!userEmail || !userPassword) {
             throw new Error(InvalidUserNameOrPassword);
         }
-        const patientE***REMOVED***istInDatabase = await Patient.findOne({ email: loginFormData.mail });
-        console.log (loginFormData.email);
-        console.log (patientE***REMOVED***istInDatabase);
-        if (!patientE***REMOVED***istInDatabase) {
+      
+        //check if the patient e***REMOVED***ists in the database
+        const e***REMOVED***istingPatient = await Patient.findOne({ email: userEmail });
+        if (!e***REMOVED***istingPatient) {
             throw new Error(PatientNotFound);
         }
         
-        const isCorrectPassword = await bcrypt.compare(loginFormData.password, patientE***REMOVED***istInDatabase.password);
+        const isCorrectPassword = await bcrypt.compare(userPassword,e***REMOVED***istingPatient.password);
         if (!isCorrectPassword) {
             throw new Error(InvalidUserNameOrPassword);
         }
-        
-        res.status(200).json({ success: true, patientToken: token, message: "Login success" });
+
+        if (e***REMOVED***istingPatient && isCorrectPassword) {
+            const token = jwt.encode({ userEmail: e***REMOVED***istingPatient.email }, secret);
+            await e***REMOVED***istingPatient.save();
+            res.status(200).json({ success: true, patientToken: token, message: "Login success" });
+        }
     }catch(err){
         if (err.message === InvalidUserNameOrPassword) {
             console.log(err.message);
