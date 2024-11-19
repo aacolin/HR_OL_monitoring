@@ -6,39 +6,47 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-var loginFormFields = {
-    email: $('#email'),
-    password: $('#password'),
-    isMissing(fieldOfInterest){
-        return fieldOfInterest.val() === '';
-    }
-};
+
 
 $(document).ready(function() {
     $('#logInForm').on('submit', function(event) {
-            event.preventDefault();
-            if (loginFormFields.isMissing(loginFormFields.email) || loginFormFields.isMissing(loginFormFields.password)){
+        event.preventDefault();
+        var errorMessages = [];
+        const loginFormFields = {
+            email: $('#email').val(),
+            password: $('#password').val(),
+        };
+    
+        const credentials = {
+            email: loginFormFields.email,
+            password: loginFormFields.password
+        }
+        const credentialsInJSON = JSON.stringify(credentials);
 
-                return;
+        
+        $.aja***REMOVED***({
+            url: '/patients/login',
+            method: 'POST',
+            contentType: 'application/json',
+            data: credentialsInJSON,
+            dataType: 'json',
+        }).done(function(data) {
+            if (this.status === 200){
+                alert("Login success");
             }
-            let credentials = {
-                email: loginFormFields.email,
-                password: loginFormFields.password
-            }
-
-            let credentialsInJSON = JSON.stringify(credentials);
-            $.aja***REMOVED***({
-                url: '/patients/login',
-                method: 'POST',
-                contentType: 'application/json',
-                data: credentialsInJSON,
-                dataType: 'json',
-            }).done(function(data){
-                    if (data.success) {
-                        alert('Login successful');
-                    }
-            }).fail(function(err){
-                    alert('Login failed');
-            });
+        }).fail(function(err){
+            errorMessages.push(err.responseJSON.message);
+            displayErrorMessages(errorMessages);
         });
+    });
 });
+
+function displayErrorMessages(messages) {
+    var errorMessageHtml = "<ul>";
+    messages.forEach(function(message) {
+        errorMessageHtml += "<li class='errorMessage'>" + message + "</li>";
+    });
+    errorMessageHtml += "</ul>";
+    $('.errorDiv').html(errorMessageHtml);
+    $('.errorDiv').show();
+}

@@ -11,7 +11,6 @@ const PatientE***REMOVED***ists = 'A patient with this email address already e**
 const InvalidData = 'Your request contains invalid data or missing fields. Please correct and try again.'
 const ServerError = 'An une***REMOVED***pected error occurred on the server while processing your request please try again later.'
 const PatientCreated = 'Patient account created successfully.';
-const PatientNotFound = 'Patient not found.';
 const InvalidUserNameOrPassword = 'Invalid username or password.';
 
 router.post('/signup', async function(req, res) {
@@ -62,15 +61,32 @@ router.post('/signup', async function(req, res) {
 });
 
 
+const PatientNotFound = 'Patient not found please create an account.';
 
 router.post('/login', async function(req, res) {
 
-    const loginFormData = req.body;
-   
     try{
-        if (!loginFormData.email || !loginFormData.password) {
+        const loginFormData = req.body;
+        
+        
+      
+       
+        if (!loginFormData.email || !loginFormData.password ) {
             throw new Error(InvalidUserNameOrPassword);
         }
+        const patientE***REMOVED***istInDatabase = await Patient.findOne({ email: loginFormData.mail });
+        console.log (loginFormData.email);
+        console.log (patientE***REMOVED***istInDatabase);
+        if (!patientE***REMOVED***istInDatabase) {
+            throw new Error(PatientNotFound);
+        }
+        
+        const isCorrectPassword = await bcrypt.compare(loginFormData.password, patientE***REMOVED***istInDatabase.password);
+        if (!isCorrectPassword) {
+            throw new Error(InvalidUserNameOrPassword);
+        }
+        
+        res.status(200).json({ success: true, patientToken: token, message: "Login success" });
     }catch(err){
         if (err.message === InvalidUserNameOrPassword) {
             console.log(err.message);
@@ -78,6 +94,18 @@ router.post('/login', async function(req, res) {
                 .status(400)
                 .json({ message: InvalidUserNameOrPassword });
         }
+        if (err.message === PatientNotFound) {
+            console.log(err.message);
+            return res
+                .status(400)
+                .json({ message: PatientNotFound });
+        }
+        // else {
+        //     console.log(err.message);
+        //     return res
+        //         .status(500)
+        //         .json({ message: ServerError });
+        // }
     }
 
 });

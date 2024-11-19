@@ -76,3 +76,14 @@
   font-weight: bold !important;
 }
 
+.errorDiv {
+  margin-top: 10p***REMOVED***;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 14p***REMOVED***;
+  margin-top: 2p***REMOVED***;
+  font-size:0.8em;
+  te***REMOVED***t-align:left;
+}
