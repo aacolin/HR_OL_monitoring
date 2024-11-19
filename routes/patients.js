@@ -7,33 +7,56 @@ const fs = require('fs');
 const secret = fs.readFileSync(__dirname + '/../jwt/secret').toString();
 const Patient = require('../models/patient');
 
-// ---------------------------- SignUp route ----------------------------
+const PatientE***REMOVED***ists = 'A patient with this email address already e***REMOVED***ists. Please use a different email address.';
+const InvalidData = 'Your request contains invalid data or missing fields. Please correct and try again.'
+const ServerError = 'An une***REMOVED***pected error occurred on the server while processing your request please try again later.'
+const PatientCreated = 'Patient account created successfully.';
+
+
 router.post('/signup', async function(req, res) {
-    try {
-        const { FirstName, LastName, Email, Password } = req.body;
-        const patientE***REMOVED***ist = await Patient.findOne({ email: Email });
-        if (patientE***REMOVED***ist) {
-            return res.status(409).json({ message: 'A patient with this email address already e***REMOVED***ists. Please use a different email address.' });
+    
+    try {    
+        const signUpFormData = req.body;
+        if (!req.body.FirstName || !req.body.LastName || !req.body.Email || !req.body.Password) {
+            throw new Error(InvalidData);
         }
-        const hashedPassword = await bcrypt.hash(Password, 10);
-        const newPatient = new Patient({
-            firstName: FirstName,
-            lastName: LastName,
-            email: Email,
-            hashedPassword: hashedPassword
+
+        const newPatient = new Patient();
+        const hashedPassword = await bcrypt.hash(signUpFormData.Password, 10);
+        Object.assign(newPatient, {
+            firstName: signUpFormData.FirstName,
+            lastName: signUpFormData.LastName,
+            email: signUpFormData.Email,
+            password: hashedPassword
         });
-        // Save the new patient record to the database.
-        await newPatient.save();
-        const token = jwt.encode({ patientEmail: Email }, secret);
-        return res.status(201).json({ message: 'patient account created successfully.', patientToken: token });
-    } catch (err) {
-        console.error('Error in /patients/signup:', err);
-        // Handle validation errors from Mongoose, such as missing required fields or invalid data formats.
-        if (err instanceof mongoose.Error.ValidationError) {
-        return res.status(400).json({ message: 'Your request contains invalid data or missing fields. Please correct and try again.', errors: err.errors });
+
+        const patientE***REMOVED***ist = await Patient.findOne({ email: signUpFormData.Email });
+        if (patientE***REMOVED***ist) {
+            throw new Error(PatientE***REMOVED***ists);
         }
-        // Catch any other unhandled errors and treat them as server errors.
-        return res.status(500).json({ message: 'An une***REMOVED***pected error occurred on the server while processing your request.' });
+        else {
+            await newPatient.save();
+            const token = jwt.encode({ patientEmail: signUpFormData.Email }, secret);
+            return res
+                .status(201)
+                .json({ message: PatientCreated, patientToken: token });
+        }
+    } catch (err) {
+        if (err.message === InvalidData) {
+            return res
+                .status(400)
+                .json({ message: InvalidData });
+        }
+        if (err.message === PatientE***REMOVED***ists) {
+            return res
+                .status(409)
+                .json({ message: PatientE***REMOVED***ists });
+        }
+        else {
+            return res
+                .status(500)
+                .json({ message: ServerError });
+        }
     }
 });
 

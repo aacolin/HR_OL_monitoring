@@ -1,23 +1,15 @@
-
 // Load environment variables
 require('dotenv').config();
 
-// load Node.js modules
 var e***REMOVED***press = require('e***REMOVED***press');
 var path = require('path');
 var httpError = require('http-errors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
-// create E***REMOVED***press app
 var app = e***REMOVED***press();
 
-// import routes
 var inde***REMOVED***Router = require('./routes/inde***REMOVED***');
 var patientsRouter = require('./routes/patients');
-// var sensorDataRouter = require('./routes/sensorData'); 
-// var devicesRouter = require('./routes/devices');
-// var physiciansRouter = require('./routes/physicians');
 
 // set up middlewares
 app.use(logger('dev'));     // Show HTTP requests in the console
@@ -36,9 +28,6 @@ app.use(function (req, res, ne***REMOVED***t) {   // Set up CORS
 // set up routes
 app.use('/', inde***REMOVED***Router);
 app.use('/patients', patientsRouter);
-// app.use('/sensorData', sensorDataRouter); 
-// app.use('/devices', devicesRouter);
-// app.use('/physicians', physiciansRouter);
 
 // set up error handling
 app.use(function(err, req, res, ne***REMOVED***t) {
