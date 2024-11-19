@@ -33,37 +33,45 @@ long lastBeat = 0; //Time at which the last beat occurred
 float beatsPerMinute;
 int beatAvg;
 
-void setup()
-{
+const byte POWER_LEVEL = 0***REMOVED***FF; //  50.0mA - Presence detection of ~12 inch
+const byte SAMPLE_AVG = 4; // MAX30105_SAMPLEAVG_4
+const byte LED_MODE = 3; // /Watch all three LED channels
+const int SAMPLE_RATE = 400; // MAX30105_SAMPLERATE_200 , try 800
+const int PULSE_WIDTH = 411; // 18 bit resolution
+const int ADC_RANGE = 16384; // 16384 (62.5pA per LSB)
+
+void setup(){
   Serial.begin(115200);
   Serial.println("Initializing...");
   pinMode(D7, OUTPUT);
+  digitalWrite(D7, HIGH);
   // Initialize sensor
   if (!particleSensor.begin(Wire, I2C_SPEED_FAST)) //Use default I2C port, 400kHz speed
   {
-    Serial.println("MAX30105 was not found. Please check wiring/power. ");
+    Serial.println("MAX3010X was not found. Please check wiring/power. ");
     while (1);
   }
   Serial.println("Place your inde***REMOVED*** finger on the sensor with steady pressure.");
-    //  pinMode(led2, OUTPUT);
-    //  pinMode(photo_reg, INPUT);
+  //  pinMode(led2, OUTPUT);
 
-  particleSensor.setup(); //Configure sensor with default settings
+  //  particleSensor.setup(); //Configure sensor with default settings
+  //setup(byte powerLevel, byte sampleAverage, byte ledMode, int sampleRate, int pulseWidth, int adcRange) {
+  //  particleSensor.setup(0***REMOVED***FF, 4, 3, 400, 411, 16384); 
+  particleSensor.setup(POWER_LEVEL, SAMPLE_AVG, LED_MODE, SAMPLE_RATE, PULSE_WIDTH, ADC_RANGE); 
   particleSensor.setPulseAmplitudeRed(0***REMOVED***0A); //Turn Red LED to low to indicate sensor is running
   particleSensor.setPulseAmplitudeGreen(0); //Turn off Green LED
 }
 
 void loop()
 {
-    digitalWrite(D7, HIGH);
+     digitalWrite(D7, LOW);
   long irValue = particleSensor.getIR();
 
   if (checkForBeat(irValue) == true)
   {
-    //We sensed a beat!
+   //We sensed a beat!
     long delta = millis() - lastBeat;
     lastBeat = millis();
-
     beatsPerMinute = 60 / (delta / 1000.0);
 
     if (beatsPerMinute < 255 && beatsPerMinute > 20)
@@ -88,8 +96,7 @@ void loop()
   Serial.println();
   if (irValue < 50000)
     Serial.print(" No finger?");
-  delay(1000);  
-  digitalWrite(D7, LOW);
-  delay(1000);  
+    particleSensor.setPulseAmplitudeGreen(0***REMOVED***0A); //Turn off Green LED
+
 }
 
