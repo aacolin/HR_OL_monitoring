@@ -2,16 +2,17 @@ var e***REMOVED***press = require('e***REMOVED***press');
 var router = e***REMOVED***press.Router();
 const jwt = require("jwt-simple");
 const bcrypt = require("bcryptjs");
-const mongoose = require('mongoose');
 const fs = require('fs');
 const secret = fs.readFileSync(__dirname + '/../jwt/secret').toString();
 const Patient = require('../models/patient');
+const { log } = require('console');
 
 const PatientE***REMOVED***ists = 'A patient with this email address already e***REMOVED***ists. Please use a different email address.';
 const InvalidData = 'Your request contains invalid data or missing fields. Please correct and try again.'
 const ServerError = 'An une***REMOVED***pected error occurred on the server while processing your request please try again later.'
 const PatientCreated = 'Patient account created successfully.';
-
+const PatientNotFound = 'Patient not found.';
+const InvalidUserNameOrPassword = 'Invalid username or password.';
 
 router.post('/signup', async function(req, res) {
     
@@ -58,6 +59,27 @@ router.post('/signup', async function(req, res) {
                 .json({ message: ServerError });
         }
     }
+});
+
+
+
+router.post('/login', async function(req, res) {
+
+    const loginFormData = req.body;
+   
+    try{
+        if (!loginFormData.email || !loginFormData.password) {
+            throw new Error(InvalidUserNameOrPassword);
+        }
+    }catch(err){
+        if (err.message === InvalidUserNameOrPassword) {
+            console.log(err.message);
+            return res
+                .status(400)
+                .json({ message: InvalidUserNameOrPassword });
+        }
+    }
+
 });
 
 module.e***REMOVED***ports = router;

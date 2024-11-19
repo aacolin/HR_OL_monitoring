@@ -50,11 +50,12 @@ $(document).ready(function() {
             Email: $('#email').val(),
             Password: $('#password').val(),
         };
+        const patientInfoInJSON = JSON.stringify(patientInfo);
         $.aja***REMOVED***({
             url: '/patients/signup',
             method: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify(patientInfo),
+            data: patientInfoInJSON,
             dataType: 'json'
         })
         .done(function(data) {
