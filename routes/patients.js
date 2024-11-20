@@ -60,7 +60,7 @@ router.post('/signup', async function(req, res) {
 });
 
 
-const PatientNotFound = 'Patient not found please create an account.';
+const PatientNotFound = 'Email not found.';
 
 router.post('/login', async function(req, res) {
 
