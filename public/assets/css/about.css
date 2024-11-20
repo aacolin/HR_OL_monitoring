@@ -1,0 +1,189 @@
+
+/*--------------------------------------------------------------
+# About Section
+--------------------------------------------------------------*/
+.about .content h3 {
+  font-size: 16p***REMOVED***;
+  font-weight: 500;
+  line-height: 19p***REMOVED***;
+  padding: 10p***REMOVED*** 20p***REMOVED***;
+  background: color-mi***REMOVED***(in srgb, var(--accent-color), transparent 95%);
+  color: var(--accent-color);
+  border-radius: 7p***REMOVED***;
+  display: inline-block;
+}
+
+.about .content h2 {
+  font-weight: 700;
+}
+
+.about .content p:last-child {
+  margin-bottom: 0;
+}
+
+.about .content .read-more {
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  font-family: var(--heading-font);
+  font-weight: 500;
+  font-size: 16p***REMOVED***;
+  letter-spacing: 1p***REMOVED***;
+  padding: 12p***REMOVED*** 24p***REMOVED***;
+  border-radius: 5p***REMOVED***;
+  transition: 0.3s;
+  display: inline-fle***REMOVED***;
+  align-items: center;
+  justify-content: center;
+}
+
+.about .content .read-more i {
+  font-size: 18p***REMOVED***;
+  margin-left: 5p***REMOVED***;
+  line-height: 0;
+  transition: 0.3s;
+}
+
+.about .content .read-more:hover {
+  background: color-mi***REMOVED***(in srgb, var(--accent-color), transparent 20%);
+  padding-right: 19p***REMOVED***;
+}
+
+.about .content .read-more:hover i {
+  margin-left: 10p***REMOVED***;
+}
+
+.about .icon-bo***REMOVED*** {
+  background-color: var(--surface-color);
+  padding: 50p***REMOVED*** 40p***REMOVED***;
+  bo***REMOVED***-shadow: 0p***REMOVED*** 10p***REMOVED*** 50p***REMOVED*** rgba(0, 0, 0, 0.1);
+  border-radius: 10p***REMOVED***;
+  transition: all 0.3s ease-out 0s;
+}
+
+.about .icon-bo***REMOVED*** i {
+  width: 80p***REMOVED***;
+  height: 80p***REMOVED***;
+  border-radius: 50%;
+  display: inline-fle***REMOVED***;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24p***REMOVED***;
+  font-size: 32p***REMOVED***;
+  line-height: 0;
+  transition: all 0.4s ease-out 0s;
+  background-color: color-mi***REMOVED***(in srgb, var(--accent-color), transparent 95%);
+  color: var(--accent-color);
+}
+
+.about .icon-bo***REMOVED*** h3 {
+  margin-bottom: 10p***REMOVED***;
+  font-size: 24p***REMOVED***;
+  font-weight: 700;
+}
+
+.about .icon-bo***REMOVED*** p {
+  margin-bottom: 0;
+}
+
+.about .icon-bo***REMOVED***:hover i {
+  background-color: var(--accent-color);
+  color: var(--contrast-color);
+}
+
+.about .icon-bo***REMOVED***es .col-md-6:nth-child(2) .icon-bo***REMOVED***,
+.about .icon-bo***REMOVED***es .col-md-6:nth-child(4) .icon-bo***REMOVED*** {
+  margin-top: -40p***REMOVED***;
+}
+
+@media (ma***REMOVED***-width: 768p***REMOVED***) {
+
+  .about .icon-bo***REMOVED***es .col-md-6:nth-child(2) .icon-bo***REMOVED***,
+  .about .icon-bo***REMOVED***es .col-md-6:nth-child(4) .icon-bo***REMOVED*** {
+    margin-top: 0;
+  }
+}
+
+/*--------------------------------------------------------------
+# Featured (Team) Section
+--------------------------------------------------------------*/
+.featured .card {
+  background-color: var(--surface-color);
+  color: var(--default-color);
+  bo***REMOVED***-shadow: 0p***REMOVED*** 2p***REMOVED*** 12p***REMOVED*** rgba(0, 0, 0, 0.1);
+  border-radius: 15p***REMOVED***;
+  margin-bottom: 20p***REMOVED***;
+  border: 0;
+  height: 100%;
+  position: relative;
+}
+
+.featured .card .img {
+  display: fle***REMOVED***;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  padding-top: 20p***REMOVED***;
+  margin-bottom: 0; /* Remove margin */
+}
+
+.featured .card .img img {
+  border-radius: 10p***REMOVED***; /* Adjust the value to round the corners as desired */
+  margin-bottom: 0; /* Remove margin */
+  display: block; /* Ensure the image is displayed as a block element */
+  width: 70%; /* Adjust the width as needed */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.featured .card .member-description {
+  te***REMOVED***t-align: justify;
+  margin-top: 0;
+  padding-top: 0;
+  margin-bottom: 0; /* Ensure no margin at the bottom */
+  padding-bottom: 0; /* Ensure no padding at the bottom */
+}
+
+.featured .card .icon {
+  color: var(--accent-color);
+  background-color: color-mi***REMOVED***(in srgb, var(--accent-color) 10%, white 100%);
+  border: 4p***REMOVED*** solid var(--background-color);
+  width: 72p***REMOVED***;
+  height: 72p***REMOVED***;
+  te***REMOVED***t-align: center;
+  position: absolute;
+  border-radius: 50%;
+  left: calc(50% - 32p***REMOVED***);
+  bottom: -36p***REMOVED***;
+  display: fle***REMOVED***;
+  align-items: center;
+  justify-content: center;
+  font-size: 28p***REMOVED***;
+  line-height: 0;
+  transition: 0.3s;
+}
+
+.featured .card:hover .icon {
+  background-color: var(--accent-color);
+  color: var(--contrast-color);
+}
+
+.featured .card h2 {
+  te***REMOVED***t-align: center;
+  font-weight: 700;
+  font-size: 24p***REMOVED***;
+  padding: 0;
+  margin: 50p***REMOVED*** 0 12p***REMOVED*** 0;
+}
+
+.featured .card h2 a {
+  color: var(--heading-color);
+}
+
+.featured .card h2 a:hover {
+  color: var(--accent-color);
+}
+
+.featured .card p {
+  font-size: 14p***REMOVED***;
+  line-height: 24p***REMOVED***;
+  margin-bottom: 0;
+  padding: 0 30p***REMOVED*** 30p***REMOVED*** 30p***REMOVED***;
+}

@@ -1,0 +1,588 @@
+/**
+* Template Name: SoftLand
+* Template URL: https://bootstrapmade.com/softland-bootstrap-app-landing-page-template/
+* Updated: Aug 07 2024 with Bootstrap v5.3.3
+* Author: BootstrapMade.com
+* License: https://bootstrapmade.com/license/
+*/
+
+/*--------------------------------------------------------------
+# Font & Color Variables
+# Help: https://bootstrapmade.com/color-system/
+--------------------------------------------------------------*/
+/* Fonts */
+:root {
+  --default-font: "Roboto",  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --heading-font: "Raleway",  sans-serif;
+  --nav-font: "Poppins",  sans-serif;
+}
+
+/* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
+:root { 
+  --background-color: #ffffff; /* Background color for the entire website, including individual sections */
+  --default-color: #212529; /* Default color used for the majority of the te***REMOVED***t content across the entire website */
+  --heading-color: #2d465e; /* Color for headings, subheadings and title throughout the website */
+  --accent-color: #559bcc; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
+  --surface-color: #ffffff; /* The surface color is used as a background of bo***REMOVED***ed elements within sections, such as cards, icon bo***REMOVED***es, or other elements that require a visual separation from the global background. */
+  --contrast-color: #ffffff; /* Contrast color for te***REMOVED***t, ensuring readability against backgrounds of accent, heading, or default colors. */
+}
+
+/* Nav Menu Colors - The following color variables are used specifically for the navigation menu. They are separate from the global colors to allow for more customization options */
+:root {
+  --nav-color: rgba(255, 255, 255, 0.5);  /* The default color of the main navmenu links */
+  --nav-hover-color: #ffffff; /* Applied to main navmenu links when they are hovered over or active */
+  --nav-mobile-background-color: #ffffff; /* Used as the background color for mobile navigation menu */
+  --nav-dropdown-background-color: #ffffff; /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
+  --nav-dropdown-color: #212529; /* Used for navigation links of the dropdown items in the navigation menu. */
+  --nav-dropdown-hover-color: #559bcc; /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
+}
+
+/* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
+
+.light-background {
+  --background-color: #f1f3f8;
+  --surface-color: #ffffff;
+}
+
+.dark-background {
+  --background-color: #142e6c;
+  --default-color: #ffffff;
+  --heading-color: #ffffff;
+  --surface-color: #1c4097;
+  --contrast-color: #ffffff;
+}
+
+/* Smooth scroll */
+:root {
+  scroll-behavior: smooth;
+}
+
+/*--------------------------------------------------------------
+# General Styling & Shared Classes
+--------------------------------------------------------------*/
+body {
+  color: var(--default-color);
+  background-color: var(--background-color);
+  font-family: var(--default-font);
+}
+
+a {
+  color: var(--accent-color);
+  te***REMOVED***t-decoration: none;
+  transition: 0.3s;
+}
+
+a:hover {
+  color: color-mi***REMOVED***(in srgb, var(--accent-color), transparent 25%);
+  te***REMOVED***t-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--heading-color);
+  font-family: var(--heading-font);
+}
+
+/*--------------------------------------------------------------
+# Global Header
+--------------------------------------------------------------*/
+.header {
+  --background-color: rgba(255, 255, 255, 0);
+  --default-color: #ffffff;
+  --heading-color: #ffffff;
+  color: var(--default-color);
+  background-color: var(--background-color);
+  padding: 15p***REMOVED*** 0;
+  transition: all 0.5s;
+  z-inde***REMOVED***: 997;
+}
+
+.header .logo {
+  line-height: 1;
+}
+
+.header .logo img {
+  ma***REMOVED***-height: 32p***REMOVED***;
+  margin-right: 8p***REMOVED***;
+}
+
+.header .logo h1 {
+  font-size: 30p***REMOVED***;
+  margin: 0;
+  font-weight: 700;
+  color: var(--heading-color);
+}
+
+.scrolled .header {
+  bo***REMOVED***-shadow: 0p***REMOVED*** 0 18p***REMOVED*** rgba(0, 0, 0, 0.1);
+}
+
+/* Global Header on Scroll
+------------------------------*/
+.scrolled .header {
+  --background-color: rgba(20, 46, 108, 0.9);
+}
+
+/*--------------------------------------------------------------
+# Global Footer
+--------------------------------------------------------------*/
+.footer {
+  color: var(--default-color);
+  background-color: var(--background-color);
+  font-size: 14p***REMOVED***;
+  te***REMOVED***t-align: center;
+  padding: 30p***REMOVED*** 0;
+  position: relative;
+}
+
+.footer h3 {
+  font-size: 36p***REMOVED***;
+  font-weight: 700;
+  position: relative;
+  padding: 0;
+  margin: 0 0 15p***REMOVED*** 0;
+}
+
+.footer p {
+  font-size: 15;
+  font-style: italic;
+  padding: 0;
+  margin: 0 0 30p***REMOVED*** 0;
+}
+
+.footer .social-links {
+  margin: 0 0 30p***REMOVED*** 0;
+}
+
+.footer .social-links a {
+  font-size: 16p***REMOVED***;
+  display: fle***REMOVED***;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  line-height: 1;
+  margin: 0 4p***REMOVED***;
+  border-radius: 50%;
+  te***REMOVED***t-align: center;
+  width: 36p***REMOVED***;
+  height: 36p***REMOVED***;
+  transition: 0.3s;
+}
+
+.footer .social-links a:hover {
+  background: color-mi***REMOVED***(in srgb, var(--accent-color), transparent 20%);
+  te***REMOVED***t-decoration: none;
+}
+
+.footer .copyright {
+  padding-top: 25p***REMOVED***;
+  border-top: 1p***REMOVED*** solid color-mi***REMOVED***(in srgb, var(--default-color), transparent 90%);
+}
+
+.footer .credits {
+  font-size: 13p***REMOVED***;
+  padding-top: 5p***REMOVED***;
+}
+
+/*--------------------------------------------------------------
+# Preloader
+--------------------------------------------------------------*/
+#preloader {
+  position: fi***REMOVED***ed;
+  inset: 0;
+  z-inde***REMOVED***: 999999;
+  overflow: hidden;
+  background: var(--background-color);
+  transition: all 0.6s ease-out;
+}
+
+#preloader:before {
+  content: "";
+  position: fi***REMOVED***ed;
+  top: calc(50% - 30p***REMOVED***);
+  left: calc(50% - 30p***REMOVED***);
+  border: 6p***REMOVED*** solid #ffffff;
+  border-color: var(--accent-color) transparent var(--accent-color) transparent;
+  border-radius: 50%;
+  width: 60p***REMOVED***;
+  height: 60p***REMOVED***;
+  animation: animate-preloader 1.5s linear infinite;
+}
+
+@keyframes animate-preloader {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/*--------------------------------------------------------------
+# Scroll Top Button
+--------------------------------------------------------------*/
+.scroll-top {
+  position: fi***REMOVED***ed;
+  visibility: hidden;
+  opacity: 0;
+  right: 15p***REMOVED***;
+  bottom: 15p***REMOVED***;
+  z-inde***REMOVED***: 99999;
+  background-color: var(--accent-color);
+  width: 40p***REMOVED***;
+  height: 40p***REMOVED***;
+  border-radius: 4p***REMOVED***;
+  transition: all 0.4s;
+}
+
+.scroll-top i {
+  font-size: 24p***REMOVED***;
+  color: var(--contrast-color);
+  line-height: 0;
+}
+
+.scroll-top:hover {
+  background-color: color-mi***REMOVED***(in srgb, var(--accent-color), transparent 20%);
+  color: var(--contrast-color);
+}
+
+.scroll-top.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+/*--------------------------------------------------------------
+# Disable aos animation delay on mobile devices
+--------------------------------------------------------------*/
+@media screen and (ma***REMOVED***-width: 768p***REMOVED***) {
+  [data-aos-delay] {
+    transition-delay: 0 !important;
+  }
+}
+
+/*--------------------------------------------------------------
+# Global Page Titles & Breadcrumbs
+--------------------------------------------------------------*/
+.page-title {
+  color: var(--default-color);
+  background-color: var(--background-color);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 160p***REMOVED*** 0 80p***REMOVED*** 0;
+  te***REMOVED***t-align: center;
+  position: relative;
+}
+
+.page-title:before {
+  content: "";
+  background-color: color-mi***REMOVED***(in srgb, var(--background-color), transparent 50%);
+  position: absolute;
+  inset: 0;
+}
+
+.page-title h1 {
+  font-size: 42p***REMOVED***;
+  font-weight: 700;
+  margin-bottom: 10p***REMOVED***;
+}
+
+.page-title .breadcrumbs ol {
+  display: fle***REMOVED***;
+  fle***REMOVED***-wrap: wrap;
+  list-style: none;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  font-size: 16p***REMOVED***;
+  font-weight: 400;
+}
+
+.page-title .breadcrumbs ol li+li {
+  padding-left: 10p***REMOVED***;
+}
+
+.page-title .breadcrumbs ol li+li::before {
+  content: "/";
+  display: inline-block;
+  padding-right: 10p***REMOVED***;
+  color: color-mi***REMOVED***(in srgb, var(--default-color), transparent 50%);
+}
+
+/*--------------------------------------------------------------
+# Global Sections
+--------------------------------------------------------------*/
+section,
+.section {
+  color: var(--default-color);
+  background-color: var(--background-color);
+  padding: 60p***REMOVED*** 0;
+  scroll-margin-top: 90p***REMOVED***;
+  overflow: clip;
+}
+
+@media (ma***REMOVED***-width: 1199p***REMOVED***) {
+
+  section,
+  .section {
+    scroll-margin-top: 66p***REMOVED***;
+  }
+}
+
+/*--------------------------------------------------------------
+# Global Section Titles
+--------------------------------------------------------------*/
+.section-title {
+  te***REMOVED***t-align: center;
+  padding-bottom: 60p***REMOVED***;
+  position: relative;
+}
+
+.section-title h2 {
+  font-size: 32p***REMOVED***;
+  font-weight: 700;
+  margin-bottom: 15p***REMOVED***;
+}
+
+.section-title p {
+  margin-bottom: 0;
+}
+
+/*--------------------------------------------------------------
+# Hero Section
+--------------------------------------------------------------*/
+.hero {
+  width: 100%;
+  min-height: 80vh;
+  position: relative;
+  padding: 120p***REMOVED*** 0 60p***REMOVED*** 0;
+  display: fle***REMOVED***;
+  align-items: center;
+  background: url(../img/hero-bg.jpg);
+}
+
+.hero:before {
+  content: "";
+  background: color-mi***REMOVED***(in srgb, var(--background-color), transparent 30%);
+  position: absolute;
+  inset: 0;
+  z-inde***REMOVED***: 2;
+}
+
+.hero .container {
+  position: relative;
+  z-inde***REMOVED***: 3;
+}
+
+.hero h2 {
+  margin: 0;
+  font-size: 48p***REMOVED***;
+  font-weight: 700;
+  line-height: 56p***REMOVED***;
+}
+
+.hero p {
+  color: color-mi***REMOVED***(in srgb, var(--default-color), transparent 30%);
+  margin: 5p***REMOVED*** 0 10p***REMOVED*** 0;
+  font-size: 20p***REMOVED***;
+  font-weight: 400;
+}
+
+.hero .download-btn {
+  color: var(--contrast-default);
+  background: color-mi***REMOVED***(in srgb, var(--default-color), transparent 90%);
+  font-family: var(--heading-font);
+  font-weight: 500;
+  font-size: 15p***REMOVED***;
+  padding: 8p***REMOVED*** 30p***REMOVED*** 10p***REMOVED*** 30p***REMOVED***;
+  border-radius: 3p***REMOVED***;
+  transition: 0.5s;
+  display: fle***REMOVED***;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero .download-btn+.download-btn {
+  margin-left: 20p***REMOVED***;
+}
+
+.hero .download-btn:hover {
+  background: var(--accent-color);
+  color: var(--contrast-color);
+}
+
+.hero .download-btn i {
+  font-size: 16p***REMOVED***;
+  line-height: 0;
+  margin-right: 8p***REMOVED***;
+}
+
+.hero .hero-img {
+  position: relative;
+  min-height: 600p***REMOVED***;
+}
+
+.hero .hero-img .phone-1 {
+  margin-top: 20p***REMOVED***;
+  position: absolute;
+  left: 0;
+  bo***REMOVED***-shadow: 0 15p***REMOVED*** 50p***REMOVED*** 0 rgba(0, 0, 0, 0.5);
+  border-radius: 30p***REMOVED***;
+  width: 250p***REMOVED***;
+}
+
+.hero .hero-img .phone-2 {
+  position: absolute;
+  left: 0;
+  bo***REMOVED***-shadow: 0 15p***REMOVED*** 50p***REMOVED*** 0 rgba(0, 0, 0, 0.5);
+  border-radius: 30p***REMOVED***;
+  width: 250p***REMOVED***;
+  margin-top: 70p***REMOVED***;
+  margin-left: 100p***REMOVED***;
+}
+
+@media screen and (ma***REMOVED***-width: 992p***REMOVED***) {
+  .hero .hero-img {
+    te***REMOVED***t-align: center;
+    overflow: hidden;
+    min-height: 600p***REMOVED***;
+  }
+
+  .hero .hero-img .phone-1,
+  .hero .hero-img .phone-2 {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media (ma***REMOVED***-width: 768p***REMOVED***) {
+  .hero h2 {
+    font-size: 28p***REMOVED***;
+    line-height: 36p***REMOVED***;
+  }
+
+  .hero p {
+    font-size: 18p***REMOVED***;
+    line-height: 24p***REMOVED***;
+    margin-bottom: 30p***REMOVED***;
+  }
+
+  .hero .download-btn {
+    font-size: 14p***REMOVED***;
+    padding: 8p***REMOVED*** 20p***REMOVED*** 10p***REMOVED*** 20p***REMOVED***;
+  }
+}
+
+
+/*--------------------------------------------------------------
+# Cards Section
+--------------------------------------------------------------*/
+.cards .steps-img img {
+  ma***REMOVED***-width: 575p***REMOVED***;
+}
+
+
+
+@media (ma***REMOVED***-width: 575p***REMOVED***) {
+  .cards .steps-img img {
+    ma***REMOVED***-width: 100%;
+  }
+}
+
+.cards .card-item {
+  background: color-mi***REMOVED***(in srgb, var(--default-color), transparent 97%);
+  padding: 50p***REMOVED*** 30p***REMOVED***;
+  transition: all ease-in-out 0.3s;
+  height: 100%;
+  position: relative;
+}
+
+.cards .card-item span {
+  color: var(--accent-color);
+  display: block;
+  font-size: 28p***REMOVED***;
+  font-weight: 700;
+}
+
+.cards .card-item h4 {
+  font-size: 24p***REMOVED***;
+  font-weight: 600;
+  padding: 0;
+  margin: 20p***REMOVED*** 0;
+}
+
+.cards .card-item h4 a {
+  color: var(--heading-color);
+}
+
+.cards .card-item p {
+  font-size: 15p***REMOVED***;
+  color: color-mi***REMOVED***(in srgb, var(--default-color), transparent 40%);
+  margin: 0;
+  padding: 0;
+}
+
+.cards .card-item:hover {
+  background: var(--accent-color);
+  padding: 30p***REMOVED*** 30p***REMOVED*** 70p***REMOVED*** 30p***REMOVED***;
+}
+
+.cards .card-item:hover span,
+.cards .card-item:hover h4 a,
+.cards .card-item:hover p {
+  color: var(--contrast-color);
+}
+
+/*--------------------------------------------------------------
+# Features Section
+--------------------------------------------------------------*/
+.features .features-item {
+  color: color-mi***REMOVED***(in srgb, var(--default-color), transparent 20%);
+}
+
+.features .features-item+.features-item {
+  margin-top: 100p***REMOVED***;
+}
+
+@media (ma***REMOVED***-width: 640p***REMOVED***) {
+  .features .features-item+.features-item {
+    margin-top: 40p***REMOVED***;
+  }
+}
+
+.features .features-item h3 {
+  font-weight: 700;
+  font-size: 26p***REMOVED***;
+}
+
+.features .features-item ul {
+  list-style: none;
+  padding: 0;
+}
+
+.features .features-item ul li {
+  padding-bottom: 10p***REMOVED***;
+  display: fle***REMOVED***;
+  align-items: center;
+}
+
+.features .features-item ul li:last-child {
+  padding-bottom: 0;
+}
+
+.features .features-item ul i {
+  font-size: 20p***REMOVED***;
+  padding-right: 4p***REMOVED***;
+  color: var(--accent-color);
+}
+
+.features .features-item p:last-child {
+  margin-bottom: 0;
+}
+

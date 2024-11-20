@@ -1,0 +1,89 @@
+
+
+/* Patient Login Form Styles */
+.card {
+    margin-top: 50p***REMOVED***;
+    bo***REMOVED***-shadow: 4p***REMOVED*** 4p***REMOVED*** 8p***REMOVED*** rgba(0, 0, 0, 0.5);
+    border-radius: 10p***REMOVED***;
+  }
+  
+  .card-body {
+    padding: 30p***REMOVED***;
+  }
+  
+  .card-title {
+    margin-bottom: 20p***REMOVED***;
+    font-size: 24p***REMOVED***;
+    font-weight: 700;
+  }
+  
+  .form-group {
+    margin-bottom: 15p***REMOVED***;
+  }
+  
+  .form-control {
+    border-radius: 5p***REMOVED***;
+    padding: 10p***REMOVED***;
+  }
+  
+  .btn-block {
+    width: 100%;
+    padding: 10p***REMOVED***;
+    border-radius: 5p***REMOVED***;
+  }
+  
+  .btn-primary {
+    background-color: #3985bf;
+    border-color: #3985bf;
+    
+  }
+  
+  .btn-primary:hover {
+    background-color: #164582;
+    border-color: #164582;
+  }
+  .te***REMOVED***t-white {
+    te***REMOVED***t-align: center;
+    margin-bottom: 20p***REMOVED***;
+  }
+
+  .card-body .create-account {
+    color: black; /* Change te***REMOVED***t color to black */
+    font-size: 14p***REMOVED***; /* Adjust font size as needed */
+    te***REMOVED***t-align: center; /* Center the te***REMOVED***t */
+    margin-top: 10p***REMOVED***; /* Add some margin to the top */
+  }
+
+  /* Style for form labels */
+.form-group label {
+  font-size: 16p***REMOVED***; /* Adjust font size as needed */
+  color: #333; /* Change te***REMOVED***t color */
+  font-weight: 500; /* Adjust font weight */
+  margin-bottom: 10p***REMOVED***; /* Add some margin to the bottom */
+  display: block; /* Ensure the label is displayed as a block element */
+}
+.form-check label {
+    font-size: 13p***REMOVED***; /* Adjust font size as needed */
+    color: #333; /* Change te***REMOVED***t color */
+    font-weight: 500; /* Adjust font weight */
+    display: block; /* Ensure the label is displayed as a block element */
+}
+
+.successfulSignUp {
+  display: none;
+  te***REMOVED***t-align: center;
+  color: green !important;
+  font-weight: bold !important;
+}
+
+.errorDiv {
+  margin-top: 10p***REMOVED***;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 14p***REMOVED***;
+  margin-top: 2p***REMOVED***;
+  font-size:0.8em;
+  te***REMOVED***t-align:left;
+}
