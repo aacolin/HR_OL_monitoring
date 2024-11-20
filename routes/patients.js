@@ -92,23 +92,20 @@ router.post('/login', async function(req, res) {
         }
     }catch(err){
         if (err.message === InvalidUserNameOrPassword) {
-            console.log(err.message);
             return res
                 .status(400)
                 .json({ message: InvalidUserNameOrPassword });
         }
         if (err.message === PatientNotFound) {
-            console.log(err.message);
             return res
                 .status(400)
                 .json({ message: PatientNotFound });
         }
-        // else {
-        //     console.log(err.message);
-        //     return res
-        //         .status(500)
-        //         .json({ message: ServerError });
-        // }
+        else {
+            return res
+                .status(500)
+                .json({ message: ServerError });
+        }
     }
 
 });
