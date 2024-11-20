@@ -32,7 +32,7 @@ $(document).ready(function() {
             if ($('#rememberMe').checked) {
                 window.localStorage.setItem('patient-token', data.patientToken);
             }
-            window.location.href = '/home.html';
+            window.location.href = '/user-profile.html';
         }).fail(function(err){
             errorMessages.push(err.responseJSON.message);
             displayErrorMessages(errorMessages);

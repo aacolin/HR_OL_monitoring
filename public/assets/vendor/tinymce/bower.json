@@ -1,0 +1,27 @@
+{
+	"name": "tinymce",
+	"description": "Web based JavaScript HTML WYSIWYG editor control.",
+	"license": "GPL-2.0-or-later",
+	"keywords": [
+		"wysiwyg",
+		"tinymce",
+		"richte***REMOVED***t",
+		"javascript",
+		"html",
+		"te***REMOVED***t",
+		"rich editor",
+		"rich te***REMOVED***t editor",
+		"rte",
+		"rich te***REMOVED***t",
+		"contenteditable",
+		"editing"
+	],
+	"homepage": "https://www.tiny.cloud/",
+	"ignore": [
+		"README.md",
+		"composer.json",
+		"package.json",
+		".npmignore",
+		"CHANGELOG.md"
+	]
+}

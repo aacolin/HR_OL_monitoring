@@ -1,0 +1,63 @@
+{
+  "name": "et",
+  "options": {
+    "months": [
+      "jaanuar",
+      "veebruar",
+      "märts",
+      "aprill",
+      "mai",
+      "juuni",
+      "juuli",
+      "august",
+      "september",
+      "oktoober",
+      "november",
+      "detsember"
+    ],
+    "shortMonths": [
+      "jaan",
+      "veebr",
+      "märts",
+      "apr",
+      "mai",
+      "juuni",
+      "juuli",
+      "aug",
+      "sept",
+      "okt",
+      "nov",
+      "dets"
+    ],
+    "days": [
+      "pühapäev",
+      "esmaspäev",
+      "teisipäev",
+      "kolmapäev",
+      "neljapäev",
+      "reede",
+      "laupäev"
+    ],
+    "shortDays": [
+      "P",
+      "E",
+      "T",
+      "K",
+      "N",
+      "R",
+      "L"
+    ],
+    "toolbar": {
+      "e***REMOVED***portToSVG": "Lae alla SVG",
+      "e***REMOVED***portToPNG": "Lae alla PNG",
+      "e***REMOVED***portToCSV": "Lae alla CSV",
+      "menu": "Menüü",
+      "selection": "Valik",
+      "selectionZoom": "Valiku suum",
+      "zoomIn": "Suurenda",
+      "zoomOut": "Vähenda",
+      "pan": "Panoraamimine",
+      "reset": "Lähtesta suum"
+    }
+  }
+}

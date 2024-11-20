@@ -1,0 +1,12 @@
+e***REMOVED***port * from './controllers/inde***REMOVED***.js';
+e***REMOVED***port * from './core/inde***REMOVED***.js';
+e***REMOVED***port * from './elements/inde***REMOVED***.js';
+e***REMOVED***port * from './platform/inde***REMOVED***.js';
+e***REMOVED***port * from './plugins/inde***REMOVED***.js';
+e***REMOVED***port * from './scales/inde***REMOVED***.js';
+import * as controllers from './controllers/inde***REMOVED***.js';
+import * as elements from './elements/inde***REMOVED***.js';
+import * as plugins from './plugins/inde***REMOVED***.js';
+import * as scales from './scales/inde***REMOVED***.js';
+e***REMOVED***port { controllers, elements, plugins, scales, };
+e***REMOVED***port declare const registerables: (typeof controllers | typeof elements | typeof plugins | typeof scales)[];

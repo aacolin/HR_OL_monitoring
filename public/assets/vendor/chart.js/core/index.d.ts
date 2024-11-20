@@ -1,0 +1,15 @@
+e***REMOVED***port type { DateAdapter, TimeUnit } from './core.adapters.js';
+e***REMOVED***port { default as _adapters } from './core.adapters.js';
+e***REMOVED***port { default as Animation } from './core.animation.js';
+e***REMOVED***port { default as Animations } from './core.animations.js';
+e***REMOVED***port { default as animator } from './core.animator.js';
+e***REMOVED***port { default as Chart } from './core.controller.js';
+e***REMOVED***port { default as DatasetController } from './core.datasetController.js';
+e***REMOVED***port { default as defaults } from './core.defaults.js';
+e***REMOVED***port { default as Element } from './core.element.js';
+e***REMOVED***port { default as Interaction } from './core.interaction.js';
+e***REMOVED***port { default as layouts } from './core.layouts.js';
+e***REMOVED***port { default as plugins } from './core.plugins.js';
+e***REMOVED***port { default as registry } from './core.registry.js';
+e***REMOVED***port { default as Scale } from './core.scale.js';
+e***REMOVED***port { default as Ticks } from './core.ticks.js';
