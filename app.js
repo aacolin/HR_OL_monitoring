@@ -8,6 +8,7 @@ var httpError = require('http-errors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var favicon = require('serve-favicon');
+
 var app = e***REMOVED***press();
 
 // set up middlewares
@@ -34,6 +35,11 @@ var patientsRouter = require('./routes/patients');
 
 app.use('/', inde***REMOVED***Router);
 app.use('/patients', patientsRouter);
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, ne***REMOVED***t) {
