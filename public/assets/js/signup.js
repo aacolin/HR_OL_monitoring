@@ -44,7 +44,7 @@ $(document).ready(function() {
             displayErrorMessages(errorMessages);
             return;
         }
-        let patientInfo = {
+        const patientInfo = {
             FirstName: $('#firstName').val(),
             LastName: $('#lastName').val(),
             Email: $('#email').val(),
@@ -59,7 +59,6 @@ $(document).ready(function() {
             dataType: 'json'
         })
         .done(function(data) {
-            window.localStorage.setItem('patient-token', data.patientToken);
             window.localStorage.setItem('signup-success', 'true');
             window.location.href = '/login.html';
         })

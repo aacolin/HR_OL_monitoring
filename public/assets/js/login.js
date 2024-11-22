@@ -1,17 +1,32 @@
 
-document.addEventListener('DOMContentLoaded', function() {
-    if (window.localStorage.getItem('signup-success') === 'true') {
-        document.querySelector('.successfulSignUp').style.display = 'block';
-        window.localStorage.removeItem('signup-success');
-    }
-});
-
-
-
 $(document).ready(function() {
+
+     // Check if the token e***REMOVED***ists in local storage
+     const token = window.localStorage.getItem('patient-token');
+     if (token) {
+        // alert ('token e***REMOVED***ists = ' + token);
+         $.aja***REMOVED***({
+            url: '/patients/token-auth',
+            method: 'GET',
+            contentType: 'application/json',
+            headers: {'***REMOVED***-auth': token},
+            dataType: 'json',
+         }).done(function(data) {
+             if (data.status === 200) {
+                // alert('token validation successful. User ' + data.message);
+                 window.location.href = 'user-profile.html';
+             }
+         }).fail(function(err) {
+            alert('error: ' + err.status + ' ' + err.responseJSON.message);
+            //  window.localStorage.removeItem('patient-token');
+         });
+     }
+ 
+    // Handle the form submission
     $('#logInForm').on('submit', function(event) {
         event.preventDefault();
         var errorMessages = [];
+
         const loginFormFields = {
             Email: $('#email').val(),
             Password: $('#password').val(),
@@ -27,17 +42,24 @@ $(document).ready(function() {
             method: 'POST',
             contentType: 'application/json',
             data: credentialsInJSON,
-            dataType: 'json',
-        }).done(function(data) {
-            if ($('#rememberMe').checked) {
+            dataType: 'json'
+        })
+        .done(function(data) {
+            if ($('#rememberMe').is(':checked')) {
                 window.localStorage.setItem('patient-token', data.patientToken);
             }
             window.location.href = '/user-profile.html';
-        }).fail(function(err){
+        })
+        .fail(function(err){
             errorMessages.push(err.responseJSON.message);
             displayErrorMessages(errorMessages);
         });
     });
+    // Display the successful sign up message
+    if (window.localStorage.getItem('signup-success') === 'true') {
+        $('.successfulSignUp').show();
+        window.localStorage.removeItem('signup-success');
+    }
 });
 
 function displayErrorMessages(messages) {
