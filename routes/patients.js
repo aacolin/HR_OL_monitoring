@@ -14,61 +14,12 @@ const InvalidUserNameOrPassword = 'Invalid username or password.';
 const PatientNotFound = 'Email not found.';
 const AllFieldsRequired = 'All fields are required: First Name, Last Name, email, password'
 
-router.post('/validate-token', async function(req, res) {
-    
-    // try {
-       
-    //     const { token } = req.body
-    //     const copyToken = token;
-
-    //     console.log("Token from body = " + token);
-    //     console.log("copyToken = " + copyToken);
-    //     const copyTokenDecoded = jwt.decode(copyToken, secret);
-    //     console.log("copyTokenDecoded = " + copyTokenDecoded.email);
-
-    //     if (typeof token !== 'string') {
-    //         console.log("Invalid token format.");
-    //         throw new Error('Invalid token format');
-    //     }
-    //     if (typeof token === 'string') {
-    //         console.log("Token is a string. token = " + token);
-    //     }
-      
-    //     const tokenDecoded = jwt.decode(token, secret);
-    //     console.log("Token Decoded = " + tokenDecoded.Email);
-    
-    //     const patientEmail = tokenDecoded.Email;
-    //     if ( typeof patientEmail !== 'string') {
-    //         console.log("Invalid email format.");
-    //         throw new Error('Invalid email format');
-    //     }
-
-    //     const e***REMOVED***istingPatient = await Patient.findOne({ email: tokenDecoded });
-    //     if (!e***REMOVED***istingPatient) {
-    //         throw new Error(PatientNotFound);
-    //     }
-    //     if (e***REMOVED***istingPatient) {
-    //         return res.status(200).json({ valid: true });
-    //     }
-    // }
-    // catch (err) {
-    //     if (err.message === PatientNotFound) {
-    //         return res
-    //             .status(400)
-    //             .json({ message: PatientNotFound });
-    //     }
-    //     console.log(err);
-    //     // return res.status(500).json({ message: ServerError });
-    // }
-
-});
 
 
 router.get('/token-auth', async function(req, res) {
     
     // check if X-Auth-Token header is present
     if (!req.headers['***REMOVED***-auth']) {
-        // console.log("No auth token found in the header.");
         return res.status(401).json({ message: 'Unauthorized' });
     }
     
@@ -154,11 +105,7 @@ router.post('/signup', async function(req, res) {
     }
 });
 
-
-
-
 router.post('/login', async function(req, res) {
-
     try{
         
         const userEmail = req.body.Email;
@@ -209,4 +156,52 @@ router.post('/login', async function(req, res) {
 });
 
 
+router.post('/validate-token', async function(req, res) {
+    
+    // try {
+       
+    //     const { token } = req.body
+    //     const copyToken = token;
+
+    //     console.log("Token from body = " + token);
+    //     console.log("copyToken = " + copyToken);
+    //     const copyTokenDecoded = jwt.decode(copyToken, secret);
+    //     console.log("copyTokenDecoded = " + copyTokenDecoded.email);
+
+    //     if (typeof token !== 'string') {
+    //         console.log("Invalid token format.");
+    //         throw new Error('Invalid token format');
+    //     }
+    //     if (typeof token === 'string') {
+    //         console.log("Token is a string. token = " + token);
+    //     }
+      
+    //     const tokenDecoded = jwt.decode(token, secret);
+    //     console.log("Token Decoded = " + tokenDecoded.Email);
+    
+    //     const patientEmail = tokenDecoded.Email;
+    //     if ( typeof patientEmail !== 'string') {
+    //         console.log("Invalid email format.");
+    //         throw new Error('Invalid email format');
+    //     }
+
+    //     const e***REMOVED***istingPatient = await Patient.findOne({ email: tokenDecoded });
+    //     if (!e***REMOVED***istingPatient) {
+    //         throw new Error(PatientNotFound);
+    //     }
+    //     if (e***REMOVED***istingPatient) {
+    //         return res.status(200).json({ valid: true });
+    //     }
+    // }
+    // catch (err) {
+    //     if (err.message === PatientNotFound) {
+    //         return res
+    //             .status(400)
+    //             .json({ message: PatientNotFound });
+    //     }
+    //     console.log(err);
+    //     // return res.status(500).json({ message: ServerError });
+    // }
+
+});
 module.e***REMOVED***ports = router;

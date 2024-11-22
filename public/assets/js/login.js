@@ -4,7 +4,6 @@ $(document).ready(function() {
      // Check if the token e***REMOVED***ists in local storage
      const token = window.localStorage.getItem('patient-token');
      if (token) {
-        // alert ('token e***REMOVED***ists = ' + token);
          $.aja***REMOVED***({
             url: '/patients/token-auth',
             method: 'GET',
@@ -13,12 +12,10 @@ $(document).ready(function() {
             dataType: 'json',
          }).done(function(data) {
              if (data.status === 200) {
-                // alert('token validation successful. User ' + data.message);
                  window.location.href = 'user-profile.html';
              }
          }).fail(function(err) {
             alert('error: ' + err.status + ' ' + err.responseJSON.message);
-            //  window.localStorage.removeItem('patient-token');
          });
      }
  
