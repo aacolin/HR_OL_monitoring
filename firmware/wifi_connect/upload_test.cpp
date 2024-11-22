@@ -3,22 +3,10 @@
 #include "MAX30105.h"
 #include "heartRate.h"
 
-
-
-// Define server and endpoint
-//const char* server = "192.168.50.71";
-//const char* endpoint = "/sensor/data";
-
-// Define the JSON payload
-String payload = "{\"avgHeartBeat\":12345, \"o2Lvl\":95, \"deviceName\":\"Argon\"}";
-
-
-
 // Use the STARTUP() macro to set the default antenna
 // to use system boot time.
 // In this case it would be set to the chip antenna
 STARTUP(WiFi.selectAntenna(ANT_INTERNAL));
-
 
 // Let Device OS manage the connection to the Particle Cloud
 // SYSTEM_MODE(AUTOMATIC);
@@ -28,13 +16,14 @@ SYSTEM_MODE(SEMI_AUTOMATIC);
 // Run the application and system concurrently in separate threads
  SYSTEM_THREAD(ENABLED);
 
-TCPClient client;
-MAX30105 particleSensor;
+TCPClient client;           // for http
+MAX30105 particleSensor;    // MX10302 sensor
+
 // wifi and server setting
 const char* server = "192.168.50.71"; // Replace with your local server IP this is my usb interface 
-const int port = 3000;                // Port number
-const char* ssid = SSID;       // Replace with your Wi-Fi SSID
-const char* password = PASSWORD; // Replace with your Wi-Fi password
+const int port = 3000;                // serverPort number
+const char* ssid = SSID;          // Replace with your Wi-Fi SSID
+const char* password = PASSWORD;    // Replace with your Wi-Fi password
 
 //heart beat sesor setting
 const byte POWER_LEVEL = 0***REMOVED***FF; //  50.0mA - Presence detection of ~12 inch
@@ -43,8 +32,6 @@ const byte LED_MODE = 3;       // /Watch all three LED channels
 const int SAMPLE_RATE = 400;   // MAX30105_SAMPLERATE_200 , try 800
 const int PULSE_WIDTH = 411;   // 18 bit resolution
 const int ADC_RANGE = 16384;   // 16384 (62.5pA per LSB)
-
-
 
 // average HB setting
 const byte RATE_SIZE = 4; //Increase this for more averaging. 4 is good.
@@ -64,7 +51,7 @@ void m***REMOVED***30102Setup(){
     Serial.println("Place your inde***REMOVED*** finger on the sensor with steady pressure.");
     particleSensor.setup(POWER_LEVEL, SAMPLE_AVG, LED_MODE, SAMPLE_RATE, PULSE_WIDTH, ADC_RANGE); 
     particleSensor.setPulseAmplitudeRed(0***REMOVED***0A); //Turn Red LED to low to indicate sensor is running
-    particleSensor.setPulseAmplitudeGreen(0); //Turn off Green LED
+    particleSensor.setPulseAmplitudeGreen(0); //Turn off Green LED  
 }
 
 void sensorDataConsolePrint(long irValue){
@@ -77,23 +64,21 @@ void sensorDataConsolePrint(long irValue){
 void connectToWiFi() {
     WiFi.disconnect(); // Ensure we start fresh
     WiFi.on();         // Turn on Wi-Fi module
-    // SYNTAX
-
-    // Connects to a network with a specified authentication procedure.
-    // Options are WPA2, WPA, or WEP.
-    //WiFi.setCredentials("My_Router", "wepistheworst", WEP);
     WiFi.setCredentials(ssid, password, WPA2);
     WiFi.connect();
-
-    while (!WiFi.ready()){
-        Serial.println("Connecting . . .");
-        delay(100);
-  }
-
-  Serial.println(WiFi.localIP());
+    Serial.print("Connecting  to WIFI. . .");
+    unsigned long startTime = millis();
+    while (!WiFi.ready() && millis() - startTime < 30000) {  // with watch dog timer
+      Serial.print(" .");
+     
+      delay(100);
+    }
+    Serial.println();
+    Serial.println(WiFi.localIP());
   //Particle.connect();}
 }
 
+// this is not working, cont a complete json type is create with this fun
 String createJSONPayload(int avgHeartBeat, float o2Lvl, String deviceName) {
     char buf[256]; // Buffer for the JSON payload
     memset(buf, 0, sizeof(buf));
@@ -139,24 +124,12 @@ void sendPostRequest() {
     Serial.println("\nInside sendPostRequest() Loop");
     if (client.connect(server, port)) {
         Serial.println("Connected to server.");
-
-        // Create JSON payload using `JSONBufferWriter`
-        //int a = 42;
-       // float b = 3.14;
         const String deviceName = "Particle Argon";
         String jsonPayload = createJSONPayload(beatAvg, 0.0 , deviceName);
-        //Serial.println(jsonPayload);
-
-        //String payload = "{\"key\": \"value\"}";  // Make sure this is valid JSON
-
-        //String payload = "{\"Avg heartBeat\": avgHeartBeat,\"O2 Lvl\": 0.0,\"Device Name\": \"Argon\"}";  // Make sure this is valid JSON
-
         String payload = "{\"Avg heartBeat\": " + String(beatAvg) + 
-                 ", \"O2 Lvl\": " + String(0.0, 1) + // Using 1 digit of precision for float
+                 ", \"O2 Lvl\": " + String(0.00, 2) +                          // 2 digit precission
                  ", \"Device Name\": \"" + deviceName + "\"}";
-
-
-        Serial.println(payload);
+        // Serial.println(payload);
         // Construct HTTP POST request
         String postRequest = "POST /sensor/data HTTP/1.1\r\n";
         postRequest += "Host: " + String(server) + "\r\n";
@@ -166,9 +139,9 @@ void sendPostRequest() {
         //postRequest += jsonPayload;
         postRequest += payload;
 
-Serial.println(postRequest);  // Debug: Print the request to verify it
-//client.print(postRequest);    // Send request
- Serial.println("\n\n\n\n");
+        //Serial.println(postRequest);  // Debug: Print the request to verify it
+        //client.print(postRequest);    // Send request
+        //Serial.println("\n\n\n\n");
         // Send POST request
         client.print(postRequest);
         // Read response
@@ -176,13 +149,11 @@ Serial.println(postRequest);  // Debug: Print the request to verify it
         unsigned long startTime = millis();
         while ((client.connected() || client.available()) && millis() - startTime < 30000) {
               //  Serial.print("Stuck in Server Response");
-
             if (client.available()) {
                 char c = client.read(); //read byte at time
                 Serial.print(c);
                 //Serial.print("client.available()");
               //  lastDataTime = millis();  // Reset the timer when data is received
-
             }
         }
 
@@ -195,24 +166,9 @@ Serial.println(postRequest);  // Debug: Print the request to verify it
 
 void setup() {
     Serial.begin(115200);
-    //waitFor(Serial.isConnected, 10000); // Wait for serial connection
-    //connectToWiFi(); // Ensure device is connected to Wi-Fi
-    WiFi.disconnect(); // Ensure we start fresh
-    WiFi.on();         // Turn on Wi-Fi module
-    WiFi.setCredentials(ssid, password, WPA2);
-    WiFi.connect();
-    Serial.print("Connecting . . .");
-
-    // SYNTAX
-    //while (!WiFi.ready()){
-    unsigned long startTime = millis();
-    while (!WiFi.ready() && millis() - startTime < 30000) {
-      Serial.print(" .");
-     
-      delay(100);
-    }
-    Serial.println();
-    Serial.println(WiFi.localIP());
+    waitFor(Serial.isConnected, 10000); // Wait for serial connection
+    connectToWiFi(); // Ensure device is connected to Wi-Fi
+    
     m***REMOVED***30102Setup();
         // sendPostRequest(); // Send the POST request
 }
@@ -223,33 +179,3 @@ void loop() {
     sendPostRequest();
    // httpPost();
 }
-
-
-/*
-void httpPost() {
-  // Start serial communication for debugging
-  // Define the server and URL
-  const char *host = "localhost";  // Replace with the server's IP or domain
-  const char *url = "/sensor/data";  // The API endpoint
-  int port = 3000;  // The port number
-  
-  // JSON payload to send in the POST request
-  String payload = "{\"avgHeartBeat\":12345, \"o2Lvl\":95, \"deviceName\":\"Argon\"}";
-  
-  // Create headers for the request
-  String header = "Content-Type: application/json";
-
-  // Send the POST request
-  int statusCode = http.post(server, port, url, header, payload, response);
-
-  // Check if the request was successful
-  if (statusCode == 200) {
-    Serial.println("POST request successful");
-    Serial.println(response.body);  // Print the response body for debugging
-  } else {
-    Serial.print("Error: ");
-    Serial.println(response.body);  // Print the response body for debugging
-    Serial.println(statusCode);  // Print error code if request failed
-  }
-}
-*/
