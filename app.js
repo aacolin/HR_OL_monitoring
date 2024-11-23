@@ -32,9 +32,11 @@ app.use(favicon(path.join(__dirname, 'public','assets', 'img', 'favicon.png')));
 // set up routes
 var inde***REMOVED***Router = require('./routes/inde***REMOVED***');
 var patientsRouter = require('./routes/patients');
+var physiciansRouter = require('./routes/physicians');
 
 app.use('/', inde***REMOVED***Router);
 app.use('/patients', patientsRouter);
+app.use('/physicians', physiciansRouter);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -43,7 +45,7 @@ app.set('view engine', 'pug');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, ne***REMOVED***t) {
-  const err = new Error('Not Found');
+  const err = new Error('404 Page Not Found');
   err.status = 404;
   ne***REMOVED***t(err);
 });
