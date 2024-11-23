@@ -26,6 +26,7 @@
   <link href="assets/css/main.css" rel="stylesheet">
   <link href="assets/css/navigation.css" rel="stylesheet">
   <link href="assets/css/physician-login.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 
@@ -74,7 +75,10 @@
                 <div class="col-md-6">
                   <div class="card">
                     <div class="card-body">
-                      <form>
+                      <form id="logInForm">
+                        <div>
+                          <p class="successfulSignUp">Your account is ready!<br>Please sign in.</p>
+                        </div>
                         <div class="form-group">
                           <label for="email">Email address</label>
                           <input type="email" class="form-control" id="email" placeholder="user@email.com">
@@ -88,7 +92,10 @@
                           <label class="form-check-label" for="rememberMe">Remember me</label>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Login</button>
-                        <p class="create-account">Don't have an account? <a href="physician-signup.html">Create account</a></p>
+                        <div class="errorDiv" style="display:none">
+                          <p class="errorMessage"></p>
+                        </div>
+                        <p class="create-account">Don't have an account? <a href="signup.html">Create account</a></p>
                       </form>
                     </div>
                   </div>
@@ -127,13 +134,15 @@
 
   <!-- Preloader -->
   <div id="preloader"></div>
-
+  
+  
   <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/physician-login.js"></script>
 
 </body>
 

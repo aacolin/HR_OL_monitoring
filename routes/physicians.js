@@ -113,4 +113,54 @@ router.get('/token-auth', async function(req, res) {
     }
 });
 
+
+
+router.post('/login', async function(req, res) {
+    try{
+        console.log("login request received");
+        const userEmail = req.body.Email;
+        const userPassword = req.body.Password;
+        
+        // check if the email and password are not empty
+        if (!userEmail || !userPassword) {
+            throw new Error(InvalidUserNameOrPassword);
+        }
+      
+        //check if the Physician e***REMOVED***ists in the database
+        const e***REMOVED***istingPhysician = await Physician.findOne({ email: userEmail });
+        if (!e***REMOVED***istingPhysician) {
+            throw new Error(PhysicianNotFound);
+        }
+        
+        const isCorrectPassword = await bcrypt.compare(userPassword,e***REMOVED***istingPhysician.password);
+        if (!isCorrectPassword) {
+            throw new Error(InvalidUserNameOrPassword);
+        }
+
+        if (e***REMOVED***istingPhysician && isCorrectPassword) {
+            // console.log("e***REMOVED***isting Physician: " + e***REMOVED***istingPhysician);
+            var payload = { email: e***REMOVED***istingPhysician.email };
+            let encodedToken = jwt.encode(payload, secret);
+            // console.log("encoded token: " + encodedToken);
+            return res.status(200).json({ success: true, PhysicianToken: encodedToken});
+        }
+    }catch(err){
+        if (err.message === InvalidUserNameOrPassword) {
+            return res
+                .status(400)
+                .json({ message: InvalidUserNameOrPassword });
+        }
+        if (err.message === PhysicianNotFound) {
+            return res
+                .status(400)
+                .json({ message: PhysicianNotFound });
+        } else {
+            console.log(err);
+            return res
+                .status(500)
+                .json({ message: ServerError });
+        }
+    }
+
+});
 module.e***REMOVED***ports = router;

@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    const localStorageToken = window.localStorage.getItem('patient-token');
-    let sessionToken = window.sessionStorage.getItem('patient-token');
+    const localStorageToken = window.localStorage.getItem('physician-token');
+    let sessionToken = window.sessionStorage.getItem('physician-token');
 
     handleTokenRedirection(localStorageToken, sessionToken);
 
@@ -14,10 +14,12 @@ $(document).ready(function() {
 
 function handleTokenRedirection(localStorageToken, sessionToken) {
     if (sessionToken) {
-        window.location.href = '/user-profile.html';
+        // window.location.href = '/physician-profile.html';
+        alert('sessionToken found to be implemented redirect to physician-profile.html');
     } else if (localStorageToken) {
-        window.sessionStorage.setItem('patient-token', localStorageToken);
-        window.location.href = '/user-profile.html';
+        window.sessionStorage.setItem('physician-token', localStorageToken);
+        // window.location.href = '/physician-profile.html';
+        alert('localStorageToken found to be implemented redirect to physician-profile.html');
     }
 }
 
@@ -27,14 +29,14 @@ function handleFormSubmission() {
     const credentialsInJSON = JSON.stringify(loginFormFields);
 
     $.aja***REMOVED***({
-        url: '/patients/login',
+        url: '/physicians/login',
         method: 'POST',
         contentType: 'application/json',
         data: credentialsInJSON,
         dataType: 'json'
     })
     .done(function(data) {
-        storeTokenAndRedirect(data.patientToken);
+        storeTokenAndRedirect(data.physicianToken);
     })
     .fail(function(err){
         errorMessages.push(err.responseJSON.message);
@@ -51,14 +53,15 @@ function getLoginFormFields() {
 
 function storeTokenAndRedirect(token) {
     const storage = $('#rememberMe').is(':checked') ? window.localStorage : window.sessionStorage;
-    storage.setItem('patient-token', token);
-    window.location.href = '/user-profile.html';
+    storage.setItem('physician-token', token);
+    // alert('token stored to be implemented redirect to physician-profile.html');
+    // window.location.href = '/physician-profile.html';
 }
 
 function displaySignUpSuccessMessage() {
-    if (window.localStorage.getItem('signup-success') === 'true') {
+    if (window.localStorage.getItem('physician-signup-success') === 'true') {
         $('.successfulSignUp').show();
-        window.localStorage.removeItem('signup-success');
+        window.localStorage.removeItem('physician-signup-success');
     }
 }
 
