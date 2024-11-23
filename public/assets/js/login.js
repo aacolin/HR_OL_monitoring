@@ -1,24 +1,16 @@
-
 $(document).ready(function() {
+    const localStorageToken = window.localStorage.getItem('patient-token');
+    let sessionToken = window.sessionStorage.getItem('patient-token');
 
-     // Check if the token e***REMOVED***ists in local storage
-     const token = window.localStorage.getItem('patient-token');
-     if (token) {
-         $.aja***REMOVED***({
-            url: '/patients/token-auth',
-            method: 'GET',
-            contentType: 'application/json',
-            headers: {'***REMOVED***-auth': token},
-            dataType: 'json',
-         }).done(function(data) {
-             if (data.status === 200) {
-                 window.location.href = 'user-profile.html';
-             }
-         }).fail(function(err) {
-            alert('error: ' + err.status + ' ' + err.responseJSON.message);
-         });
-     }
- 
+    if (sessionToken) {
+        // Session token e***REMOVED***ists, redirect to user profile
+        window.location.href = '/user-profile.html';
+    } else if (localStorageToken) {
+        // Local storage token e***REMOVED***ists, set session token and redirect to user profile
+        window.sessionStorage.setItem('patient-token', localStorageToken);
+        window.location.href = '/user-profile.html';
+    }
+
     // Handle the form submission
     $('#logInForm').on('submit', function(event) {
         event.preventDefault();
@@ -34,6 +26,7 @@ $(document).ready(function() {
             Password: loginFormFields.Password
         }
         const credentialsInJSON = JSON.stringify(credentials);
+        
         $.aja***REMOVED***({
             url: '/patients/login',
             method: 'POST',
@@ -42,10 +35,9 @@ $(document).ready(function() {
             dataType: 'json'
         })
         .done(function(data) {
-            if ($('#rememberMe').is(':checked')) {
-                window.localStorage.setItem('patient-token', data.patientToken);
-            }
-            window.location.href = '/user-profile.html';
+                const storage = $('#rememberMe').is(':checked') ? window.localStorage : window.sessionStorage;
+                storage.setItem('patient-token', data.patientToken);
+                window.location.href = '/user-profile.html';
         })
         .fail(function(err){
             errorMessages.push(err.responseJSON.message);

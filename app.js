@@ -43,15 +43,18 @@ app.set('view engine', 'pug');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, ne***REMOVED***t) {
-  ne***REMOVED***t(httpError(404));
+  const err = new Error('Not Found');
+  err.status = 404;
+  ne***REMOVED***t(err);
 });
 
 // set up error handling
 app.use(function(err, req, res, ne***REMOVED***t) {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500);
-  res.render('error');
+  res.json({
+    message: err.message,
+    error: req.app.get('env') === 'development' ? err : {}
+  });
 });
 
 module.e***REMOVED***ports = app;

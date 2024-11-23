@@ -32,28 +32,49 @@ router.get('/token-auth', async function(req, res) {
             throw new Error('Patient not found');
         }
         else{
-            return res.status(200).json({ status: 200, message: 'Patient found' });
+            return res.status(200).json({ success: true , message: 'Patient found' });
         }
     }
     catch(err){
         console.log("Error at token auth" + err);
-        res.status(401).json({ message: 'Invalid JWT' });
+        return res.status(401).json({ message: 'Invalid JWT' });
     }
 });
 
 
 router.post('/signup', async function(req, res) {
-    
     try {    
         const signUpFormData = req.body;
-
-        // Validate the request body
-        if (!signUpFormData.FirstName || !signUpFormData.LastName || !signUpFormData.Email || !signUpFormData.Password) {
-          return res.status(400).json({ message: AllFieldsRequired });
+        const requiredFields = ['FirstName', 'LastName', 'Email', 'Password'];
+        
+        for (const field of requiredFields) {
+            if (!signUpFormData[field]) {
+                return res.status(400).json({ message: `Missing ${field.replace(/([A-Z])/g, ' $1').trim()}` });
+            }
+        }
+        
+        // Additional server-side validation for email and password
+        const emailRege***REMOVED*** = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,5}$/;
+        if (!emailRege***REMOVED***.test(signUpFormData.Email)) {
+            return res.status(400).json({ message: 'Invalid email address.' });
+        }
+        
+        const password = signUpFormData.Password;
+        if (password.length < 10 || password.length > 20) {
+            return res.status(400).json({ message: 'Password must be between 10 and 20 characters.' });
+        }
+        if (!/[a-z]/.test(password)) {
+            return res.status(400).json({ message: 'Password must contain at least one lowercase character.' });
+        }
+        if (!/[A-Z]/.test(password)) {
+            return res.status(400).json({ message: 'Password must contain at least one uppercase character.' });
+        }
+        if (!/[0-9]/.test(password)) {
+            return res.status(400).json({ message: 'Password must contain at least one digit.' });
         }
     
         const newPatient = new Patient();
-        const hashedPassword = await bcrypt.hash(signUpFormData.Password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
         Object.assign(newPatient, {
             firstName: signUpFormData.FirstName,
             lastName: signUpFormData.LastName,
@@ -64,14 +85,13 @@ router.post('/signup', async function(req, res) {
         const patientE***REMOVED***ist = await Patient.findOne({ email: signUpFormData.Email });
         if (patientE***REMOVED***ist) {
             throw new Error(PatientE***REMOVED***ists);
-        }
-        else {
+        } else {
             await newPatient.save();
             const tokenPayload = { Email: signUpFormData.Email };
-            const token = jwt.encode(tokenPayload, secret);
+            const encodedToken = jwt.encode(tokenPayload, secret);
             return res
                 .status(201)
-                .json({ message: PatientCreated, patientToken: token });
+                .json({ message: PatientCreated, patientToken: encodedToken });
         }
     } catch (err) {
         if (err.message === InvalidData) {
@@ -83,15 +103,19 @@ router.post('/signup', async function(req, res) {
             return res
                 .status(409)
                 .json({ message: PatientE***REMOVED***ists });
-        }
-        else {
-            console.log(err)
+        } else {
+            console.log(err);
             return res
                 .status(500)
                 .json({ message: ServerError });
         }
     }
 });
+
+
+
+
+
 
 router.post('/login', async function(req, res) {
     try{
@@ -116,10 +140,11 @@ router.post('/login', async function(req, res) {
         }
 
         if (e***REMOVED***istingPatient && isCorrectPassword) {
+            // console.log("e***REMOVED***isting patient: " + e***REMOVED***istingPatient);
             var payload = { email: e***REMOVED***istingPatient.email };
-            const token = jwt.encode(payload, secret);
-            await e***REMOVED***istingPatient.save();
-            res.status(200).json({ success: true, patientToken: token, message: "Login success" });
+            let encodedToken = jwt.encode(payload, secret);
+            // console.log("encoded token: " + encodedToken);
+            return res.status(200).json({ success: true, patientToken: encodedToken});
         }
     }catch(err){
         if (err.message === InvalidUserNameOrPassword) {
@@ -131,8 +156,7 @@ router.post('/login', async function(req, res) {
             return res
                 .status(400)
                 .json({ message: PatientNotFound });
-        }
-        else {
+        } else {
             console.log(err);
             return res
                 .status(500)
@@ -144,8 +168,13 @@ router.post('/login', async function(req, res) {
 
 router.post('/profile', async function(req, res) {
     
+    
     const { token } = req.body;
     // console.log("token: " + token);
+    if (!token) {
+        return res.status(400).json({ message: 'Token not found' });
+    }
+    
     const tokenDecoded = jwt.decode(token, secret);
     // console.log("tokenDecoded: " + tokenDecoded.email);
 
