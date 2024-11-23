@@ -224,5 +224,49 @@ router.put('/profile', async function(req, res) {
         return res.status(500).json({ message: ServerError });
     }
 });
+
+router.put('/change-password', async function(req, res) {
+    const { token, currentPassword, newPassword } = req.body;
+
+    if (!token) {
+        return res.status(400).json({ message: 'Token not found' });
+    }
+
+    const tokenDecoded = jwt.decode(token, secret);
+    const patient = await Patient.findOne({ email: tokenDecoded.email });
+
+    if (!patient) {
+        return res.status(404).json({ message: 'Patient not found' });
+    }
+
+    const isCorrectPassword = await bcrypt.compare(currentPassword, patient.password);
+    if (!isCorrectPassword) {
+        return res.status(400).json({ message: 'Current password is incorrect' });
+    }
+
+    if (newPassword.length < 10 || newPassword.length > 20) {
+        return res.status(400).json({ message: 'Password must be between 10 and 20 characters.' });
+    }
+    if (!/[a-z]/.test(newPassword)) {
+        return res.status(400).json({ message: 'Password must contain at least one lowercase character.' });
+    }
+    if (!/[A-Z]/.test(newPassword)) {
+        return res.status(400).json({ message: 'Password must contain at least one uppercase character.' });
+    }
+    if (!/[0-9]/.test(newPassword)) {
+        return res.status(400).json({ message: 'Password must contain at least one digit.' });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    patient.password = hashedNewPassword;
+
+    try {
+        await patient.save();
+        return res.status(200).json({ message: 'Password updated successfully' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: ServerError });
+    }
+});
     
 module.e***REMOVED***ports = router;

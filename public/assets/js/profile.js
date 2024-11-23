@@ -3,6 +3,7 @@ $(document).ready(function() {
     setupLogoutHandler();
     setupSaveProfileChangesHandler();
     setupCancelProfileChangesHandler();
+    setupChangePasswordHandler();
 });
 
 function handleTokenValidation() {
@@ -150,4 +151,70 @@ function setupCancelProfileChangesHandler() {
         $('#editLastName').val('');
         $('.errorDiv').hide();
     });
+}
+
+function setupChangePasswordHandler() {
+    $('#changePasswordForm').on('submit', function(event) {
+        event.preventDefault();
+        const currentPassword = $('#currentPassword').val();
+        const newPassword = $('#newPassword').val();
+        const reEnterNewPassword = $('#reEnternewPassword').val();
+        const errorMessages = [];
+
+        if (!currentPassword) {
+            errorMessages.push('Current Password cannot be empty.');
+        }
+        if (!newPassword) {
+            errorMessages.push('New Password cannot be empty.');
+        }
+        if (newPassword !== reEnterNewPassword) {
+            errorMessages.push('New Password and Re-enter New Password do not match.');
+        }
+        if (newPassword.length < 10 || newPassword.length > 20) {
+            errorMessages.push('Password must be between 10 and 20 characters.');
+        }
+        if (!/[a-z]/.test(newPassword)) {
+            errorMessages.push('Password must contain at least one lowercase character.');
+        }
+        if (!/[A-Z]/.test(newPassword)) {
+            errorMessages.push('Password must contain at least one uppercase character.');
+        }
+        if (!/[0-9]/.test(newPassword)) {
+            errorMessages.push('Password must contain at least one digit.');
+        }
+
+        if (errorMessages.length > 0) {
+            displayErrorMessages(errorMessages);
+            return;
+        }
+
+        // Proceed with changing the password
+        changePassword(currentPassword, newPassword);
+    });
+}
+
+function changePassword(currentPassword, newPassword) {
+    const token = window.sessionStorage.getItem('patient-token');
+    $.aja***REMOVED***({
+        url: '/patients/change-password',
+        method: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify({ token: token, currentPassword: currentPassword, newPassword: newPassword }),
+        dataType: 'json',
+    })
+    .done(function(data) {
+        alert('Password changed successfully.');
+        clearChangePasswordForm();
+        hideErrorMessages();
+        redirectToProfileOverview();
+    })
+    .fail(function(err) {
+        displayErrorMessages([err.responseJSON.message]);
+    });
+}
+
+function clearChangePasswordForm() {
+    $('#currentPassword').val('');
+    $('#newPassword').val('');
+    $('#reEnternewPassword').val('');
 }
