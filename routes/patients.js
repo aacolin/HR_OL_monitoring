@@ -194,5 +194,35 @@ router.post('/profile', async function(req, res) {
 
 
 });
+
+router.put('/profile', async function(req, res) {
+    const { token, firstName, lastName } = req.body;
+
+    if (!token) {
+        return res.status(400).json({ message: 'Token not found' });
+    }
+
+    const tokenDecoded = jwt.decode(token, secret);
+    const patient = await Patient.findOne({ email: tokenDecoded.email });
+
+    if (!patient) {
+        return res.status(404).json({ message: 'Patient not found' });
+    }
+
+    if (!firstName || !lastName) {
+        return res.status(400).json({ message: 'First Name and Last Name are required' });
+    }
+
+    patient.firstName = firstName;
+    patient.lastName = lastName;
+
+    try {
+        await patient.save();
+        return res.status(200).json({ message: 'Profile updated successfully' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: ServerError });
+    }
+});
     
 module.e***REMOVED***ports = router;
