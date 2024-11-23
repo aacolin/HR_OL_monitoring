@@ -4,6 +4,7 @@ $(document).ready(function() {
     setupSaveProfileChangesHandler();
     setupCancelProfileChangesHandler();
     setupChangePasswordHandler();
+    setupCancelPasswordChangesHandler(); // Ensure this is called
 });
 
 function handleTokenValidation() {
@@ -150,6 +151,14 @@ function setupCancelProfileChangesHandler() {
         $('#editFirstName').val('');
         $('#editLastName').val('');
         $('.errorDiv').hide();
+    });
+}
+
+function setupCancelPasswordChangesHandler() {
+    $('#cancelPasswordChanges').on('click', function(event) {
+        event.preventDefault();
+        clearChangePasswordForm();
+        hideErrorMessages();
     });
 }
 
