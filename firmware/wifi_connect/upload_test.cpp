@@ -2,6 +2,11 @@
 #include <Wire.h>
 #include "MAX30105.h"
 #include "heartRate.h"
+#include "spo2_algorithm.h"
+
+
+#define MAX_HEART_READ_ITR 50
+
 
 // Use the STARTUP() macro to set the default antenna
 // to use system boot time.
@@ -40,7 +45,7 @@ const char* ssid = SSID;          // Replace with your Wi-Fi SSID
 const char* password = PASSWORD;    // Replace with your Wi-Fi password
 
 //heart beat sesor setting
-const byte POWER_LEVEL = 0***REMOVED***FF; //  50.0mA - Presence detection of ~12 inch
+const byte POWER_LEVEL =  0***REMOVED***1F; //0***REMOVED***FF; //  50.0mA - Presence detection of ~12 inch
 const byte SAMPLE_AVG = 4;     // MAX30105_SAMPLEAVG_4
 const byte LED_MODE = 3;       // /Watch all three LED channels
 const int SAMPLE_RATE = 400;   // MAX30105_SAMPLERATE_200 , try 800
@@ -52,6 +57,8 @@ const byte RATE_SIZE = 4; //Increase this for more averaging. 4 is good.
 byte rates[RATE_SIZE]; //Array of heart rates
 byte rateSpot = 0;
 long lastBeat = 0; //Time at which the last beat occurred
+
+ int32_t spo2; //SPO2 value
 
 float beatsPerMinute;
 int beatAvg;
@@ -134,37 +141,43 @@ String createJSONPayload(int avgHeartBeat, float o2Lvl, String deviceName) {
 }
 
 
-int  readHearBeat(){
-
-  Serial.println("\nReading Sensor.");
+void  readHearBeat(){
+ // Serial.println("\n Measuring Heart Beat.");
    //Take average of readings
-  
-  long irValue = particleSensor.getIR();
- // while (beatAvg!= 0){
+  for (int i = 0; i<MAX_HEART_READ_ITR; i++){
+    long irValue = particleSensor.getIR();
     if (checkForBeat(irValue) == true){
-     //We sensed a beat!
+      Serial.println("We sensed a beat!");
+      //We sensed a beat!
       long delta = millis() - lastBeat;
       lastBeat = millis();
       beatsPerMinute = 60 / (delta / 1000.0);
-      if (beatsPerMinute < 255 && beatsPerMinute > 20){
+
+      if (beatsPerMinute < 255 && beatsPerMinute > 20)
+      {
         rates[rateSpot++] = (byte)beatsPerMinute; //Store this reading in the array
         rateSpot %= RATE_SIZE; //Wrap variable
-        beatAvg = 0;     
-        for (byte ***REMOVED*** = 0 ; ***REMOVED*** < RATE_SIZE ; ***REMOVED***++){
+
+        //Take average of readings
+        beatAvg = 0;
+        for (byte ***REMOVED*** = 0 ; ***REMOVED*** < RATE_SIZE ; ***REMOVED***++)
           beatAvg += rates[***REMOVED***];
-        }
         beatAvg /= RATE_SIZE;
       }
     }
-    sensorDataConsolePrint(irValue );
-    if (irValue < 50000){
+    else {Serial.println("No beat sensed !");}
+    Serial.print("IR=");
+    Serial.print(irValue);
+    Serial.print(", BPM=");
+    Serial.print(beatsPerMinute);
+    Serial.print(", Avg BPM=");
+    Serial.print(beatAvg);
+    Serial.println();
+    if (irValue < 50000)
       Serial.print(" No finger?");
       particleSensor.setPulseAmplitudeGreen(0***REMOVED***0A); //Turn off Green LED
     }
-     return beatAvg;
-  //}
 }
-
 void sendPostRequest() {
     
     Serial.println("\nInside sendPostRequest() Loop");
@@ -173,7 +186,7 @@ void sendPostRequest() {
         const String deviceName = "Particle Argon";
         String jsonPayload = createJSONPayload(beatAvg, 0.0 , deviceName);
         String payload = "{\"Avg heartBeat\": " + String(beatAvg) + 
-                 ", \"O2 Lvl\": " + String(0.00, 2) +                          // 2 digit precission
+                 ", \"O2 Lvl\": " + String(spo2) +
                  ", \"Device Name\": \"" + deviceName + "\"}";
         // Serial.println(payload);
         // Construct HTTP POST request header with JSON data
@@ -221,48 +234,134 @@ void m***REMOVED***30102Setup(){
   particleSensor.setPulseAmplitudeGreen(0); //Turn off Green LED  
 }
 
+void setupO2(){
+  byte ledBrightness = 60; //Options: 0=Off to 255=50mA
+  byte sampleAverage = 4; //Options: 1, 2, 4, 8, 16, 32
+  byte ledMode = 2; //Options: 1 = Red only, 2 = Red + IR, 3 = Red + IR + Green
+  byte sampleRate = 100; //Options: 50, 100, 200, 400, 800, 1000, 1600, 3200
+  int pulseWidth = 411; //Options: 69, 118, 215, 411
+  int adcRange = 4096; //Options: 2048, 4096, 8192, 16384
 
+  particleSensor.setup(ledBrightness, sampleAverage, ledMode, sampleRate, pulseWidth, adcRange); //Configure sensor with these settings
+
+}
+
+void readO2(){
+  int32_t bufferLength; //data length
+
+  bufferLength = 100; //buffer length of 100 stores 4 seconds of samples running at 25sps
+  uint32_t irBuffer[bufferLength]; //infrared LED sensor data
+  uint32_t redBuffer[bufferLength];  //red LED sensor data
+ 
+  int8_t validSPO2; //indicator to show if the SPO2 calculation is valid
+  int32_t heartRate; //heart rate value
+  int8_t validHeartRate; //indicator to show if the heart rate calculation is valid
+
+  byte pulseLED = 11; //Must be on PWM pin
+  byte readLED = 13; //Blinks with each data read
+  
+    //read the first 100 samples, and determine the signal range
+    for (int i = 0 ; i < bufferLength-1 ; i++){
+      while (particleSensor.available() == false){ //do we have new data?
+        particleSensor.check(); //Check the sensor for new data
+      }
+      redBuffer[i] = particleSensor.getRed();
+      irBuffer[i] = particleSensor.getIR();
+      particleSensor.ne***REMOVED***tSample(); //We're finished with this sample so move to ne***REMOVED***t sample
+
+      Serial.print(("i= %d  ", i)); Serial.print(F("red="));    Serial.print(redBuffer[i], DEC);
+      Serial.print(F(", ir="));    Serial.println(irBuffer[i], DEC);
+    }
+    //calculate heart rate and SpO2 after first 100 samples (first 4 seconds of samples)
+    ma***REMOVED***im_heart_rate_and_o***REMOVED***ygen_saturation(irBuffer, bufferLength, redBuffer, &spo2, &validSPO2, &heartRate, &validHeartRate);
+    //Continuously taking samples from MAX30102.  Heart rate and SpO2 are calculated every 1 second
+    //while (1){
+    for (int itr = 0 ; itr < 10 ; itr++){
+
+    //dumping the first 25 sets of samples in the memory and shift the last 75 sets of samples to the top
+    for (byte i = 25; i < 100; i++){
+      redBuffer[i - 25] = redBuffer[i];
+      irBuffer[i - 25] = irBuffer[i];
+    }
+    //take 25 sets of samples before calculating the heart rate.
+    for (byte i = 75; i < 100; i++){
+      while (particleSensor.available() == false) //do we have new data?
+        particleSensor.check(); //Check the sensor for new data
+
+      digitalWrite(readLED, !digitalRead(readLED)); //Blink onboard LED with every data read
+
+      redBuffer[i] = particleSensor.getRed();
+      irBuffer[i] = particleSensor.getIR();
+      particleSensor.ne***REMOVED***tSample(); //We're finished with this sample so move to ne***REMOVED***t sample
+
+        //send samples and calculation result to terminal program through UART
+      Serial.print(F("itr="));  Serial.print(itr, DEC); Serial.print(F("red="));  Serial.print(redBuffer[i], DEC); Serial.print(F(", ir="));   Serial.print(irBuffer[i], DEC);
+      Serial.print(F(", HR=")); Serial.print(heartRate, DEC); Serial.print(F(", HRvalid="));  Serial.print(validHeartRate, DEC);
+      Serial.print(F(", SPO2=")); Serial.print(spo2, DEC); Serial.print(F(", SPO2Valid="));  Serial.println(validSPO2, DEC);
+    }
+    //After gathering 25 new samples recalculate HR and SP02
+    ma***REMOVED***im_heart_rate_and_o***REMOVED***ygen_saturation(irBuffer, bufferLength, redBuffer, &spo2, &validSPO2, &heartRate, &validHeartRate);
+  }
+}
+  
 void setup() {
-    Serial.begin(115200);
-    waitFor(Serial.isConnected, 10000); // Wait for serial connection
-    connectToWiFi(); // Ensure device is connected to Wi-Fi
-    
-    m***REMOVED***30102Setup();
-        // sendPostRequest(); // Send the POST request
+  Serial.begin(115200);
+  waitFor(Serial.isConnected, 10000); // Wait for serial connection
+  connectToWiFi(); // Ensure device is connected to Wi-Fi
+  
+  m***REMOVED***30102Setup();
+      // sendPostRequest(); // Send the POST request
 }
 
 void loop() {
     // Repeat POST request every 10 seconds
     while(1){
+      unsigned long stateMachineEntryTime =0;
       switch (particleState){
         case  MEASURE_HEART_RATE :
-            Serial.println("Place your inde***REMOVED*** finger on the sensor with steady pressure for heart rate measurement.");
-            
-            for (int i = 0; i < WINDOW_SIZE; i++) {
-              int new_data = readHearBeat();
-              int avg = update_moving_average(new_data);
-              printf("Incoming data: %d, Moving Average: %d\n", new_data, avg);
-            }
-
-            particleState =  POST_TO_SERVER;
-            break;
+          Serial.println("Place your inde***REMOVED*** finger on the sensor with steady pressure for heart rate measurement.");
+          //init_buffer();
+          /* (int i = 0; i < WINDOW_SIZE; i++) {
+             int new_data = readHearBeat();
+             int avg = update_moving_average(new_data);
+             printf("Incoming data: %d, Moving Average: %d\n", new_data, avg);
+           }
+                     stateMachineEntryTime = millis();
+           Serial.print(" Measuring Heart beat .");
+          / while (stateMachineEntryTime < 60000) {  // with watch dog timer
+             //Serial.print(".");
+             readHearBeat();
+             delay(100);
+           }
+           */
+          readHearBeat();
+          particleState =  MEAUSURE_O2;
+         
+          break;
+        
+        case  MEAUSURE_O2 :
+          readO2();
+          if (spo2 == -999){ particleState = MEAUSURE_O2;}
+          else {particleState = POST_TO_SERVER;}
+          break;
           
-        case  POST_TO_SERVER :
-            sendPostRequest();
-            particleState = IDLE;
-            break;
+        case POST_TO_SERVER :
+          sendPostRequest();
+          beatAvg = 0;
+          particleState = IDLE;
+          break;
           
-        case  IDLE : 
-            delay(10000);    
-            particleState = MEASURE_HEART_RATE;
-            break;
+        case IDLE : 
+          delay(10000);    
+          particleState = MEASURE_HEART_RATE;
+          break;
           
         default:
-                // This block is e***REMOVED***ecuted if an invalid state is encountered
-            Serial.println("In Default state");
-            //readHearBeat();
-            particleState =  MEASURE_HEART_RATE;
-            break;
+          Serial.println("In Default state");
+          //readHearBeat();
+          particleState =  MEASURE_HEART_RATE;
+          init_buffer();
+          break;
           
       }
     //CLEAR_BUFFER_AFTER_POST,
