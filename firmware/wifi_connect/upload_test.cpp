@@ -5,7 +5,7 @@
 #include "spo2_algorithm.h"
 
 
-#define MAX_HEART_READ_ITR 50
+#define MAX_HEART_READ_ITR 300  // calibrate to your sensor
 
 
 // Use the STARTUP() macro to set the default antenna
@@ -276,7 +276,7 @@ void readO2(){
     ma***REMOVED***im_heart_rate_and_o***REMOVED***ygen_saturation(irBuffer, bufferLength, redBuffer, &spo2, &validSPO2, &heartRate, &validHeartRate);
     //Continuously taking samples from MAX30102.  Heart rate and SpO2 are calculated every 1 second
     //while (1){
-    for (int itr = 0 ; itr < 10 ; itr++){
+    for (int itr = 0 ; itr < 1 ; itr++){
 
     //dumping the first 25 sets of samples in the memory and shift the last 75 sets of samples to the top
     for (byte i = 25; i < 100; i++){
@@ -303,7 +303,19 @@ void readO2(){
     ma***REMOVED***im_heart_rate_and_o***REMOVED***ygen_saturation(irBuffer, bufferLength, redBuffer, &spo2, &validSPO2, &heartRate, &validHeartRate);
   }
 }
-  
+
+void flushSensorData(){
+  spo2 = 0;
+  beatAvg = 0;
+}
+void calibrateSensor(){
+  for (int itr = 0 ; itr < 3 ; itr++){
+    readHearBeat();
+    readO2();
+  }
+  flushSensorData();
+}
+
 void setup() {
   Serial.begin(115200);
   waitFor(Serial.isConnected, 10000); // Wait for serial connection
@@ -313,8 +325,9 @@ void setup() {
       // sendPostRequest(); // Send the POST request
 }
 
+
 void loop() {
-    // Repeat POST request every 10 seconds
+  calibrateSensor();
     while(1){
       unsigned long stateMachineEntryTime =0;
       switch (particleState){
@@ -347,7 +360,7 @@ void loop() {
           
         case POST_TO_SERVER :
           sendPostRequest();
-          beatAvg = 0;
+          flushSensorData();
           particleState = IDLE;
           break;
           
