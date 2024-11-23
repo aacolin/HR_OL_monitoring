@@ -4,7 +4,8 @@ $(document).ready(function() {
     setupSaveProfileChangesHandler();
     setupCancelProfileChangesHandler();
     setupChangePasswordHandler();
-    setupCancelPasswordChangesHandler(); // Ensure this is called
+    setupCancelPasswordChangesHandler();
+    setupTabSwitchHandlers(); // Rename this line
 });
 
 function handleTokenValidation() {
@@ -226,4 +227,22 @@ function clearChangePasswordForm() {
     $('#currentPassword').val('');
     $('#newPassword').val('');
     $('#reEnternewPassword').val('');
+}
+
+function setupTabSwitchHandlers() {
+    // clear form fields and error messages when switching tabs
+    $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function(event) {
+        const target = $(event.target).attr("data-bs-target");
+
+        if (target === "#profile-edit") {
+            clearProfileEditForm();
+            hideErrorMessages();
+        } else if (target === "#profile-change-password") {
+            clearChangePasswordForm();
+            hideErrorMessages();
+        } else if (target === "#profile-settings") {
+            // Add functionality to clear fields if needed in the future
+            // For now, just a comment to indicate it will be implemented soon
+        }
+    });
 }
