@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const fs = require('fs');
 const secret = fs.readFileSync(__dirname + '/../jwt/secret').toString();
 const Physician = require('../models/physician');
+const Patient = require('../models/patient'); // Add this line to import the Patient model
 
 const PhysicianE***REMOVED***ists = 'A physician with this email address already e***REMOVED***ists. Please use a different email address.';
 const InvalidData = 'Your request contains invalid data or missing fields. Please correct and try again.'
@@ -265,4 +266,53 @@ router.put('/change-password', async function(req, res) {
         return res.status(500).json({ message: ServerError });
     }
 });
+
+router.post('/physician-info', async function(req, res) {
+    const { token } = req.body;
+    // console.log('token at physician-info: ', token);
+
+    try {
+        if (token === '' || token === null) {
+            // create a dummy physician profile to send back
+            const physicianProfile = {
+                firstName: '',
+                lastName: '',
+                email: ''
+            }
+            return res.status(200).json({ physicianProfile: physicianProfile, message: 'No Physician Assigned' });
+        }
+        const physicianProfile = await Physician.findOne( { email: token} );
+        
+        if (!physicianProfile) {
+            return res.status(404).json({ message: 'Physician not found' });
+        }
+        return res.status(200).json({ physicianProfile: physicianProfile, message: 'Physician found' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: ServerError });
+    }
+});
+
+router.post('/physicians-list', async function(req, res) {
+    const { token } = req.body;
+
+    try {
+        const decodedToken = jwt.decode(token, secret);
+        // console.log('decoded token at physician list: ', decodedToken); 
+        const patient = await Patient.findOne( { email: decodedToken.email} );
+        if (!patient) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const physiciansList = await Physician.find({}, 'firstName lastName email');
+        return res.status(200).json({ physiciansList });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: ServerError });
+    }
+});
+
+
+
+
 module.e***REMOVED***ports = router;

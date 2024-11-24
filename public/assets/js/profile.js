@@ -1,11 +1,13 @@
 $(document).ready(function() {
     handleTokenValidation();
     setupLogoutHandler();
+    setupPhysicianListHandler();
     setupSaveProfileChangesHandler();
     setupCancelProfileChangesHandler();
     setupChangePasswordHandler();
     setupCancelPasswordChangesHandler();
-    setupTabSwitchHandlers(); // Rename this line
+    setupTabSwitchHandlers();
+    setupChangePhysicianHandler();
 });
 
 function handleTokenValidation() {
@@ -66,19 +68,51 @@ function getPatientProfile(token) {
         data: JSON.stringify({ token: token }),
         dataType: 'json',
     })
-    .done(function(data) {
-        displayPatientProfile(data.profile);
+    .done(function(serverResponse) {
+        const patient = serverResponse.patientProfile;
+
+        getPhysicianInfo(patient.physicianEmail).then(function(physician) {
+            displayPatientProfile(patient, physician);
+        }).catch(function(err) {
+            console.log('Error:', err);
+        });
     })
     .fail(function(err) {
         console.log('Error:', err);
     });
 }
 
-function displayPatientProfile(profile) {
-    const patientName = profile.firstName + ' ' + profile.lastName;
-    const patientEmail = profile.email;
-    $('#fullName').te***REMOVED***t(patientName);
+function getPhysicianInfo(physicianEmail) {
+    return new Promise(function(resolve, reject) {
+        const email = physicianEmail;
+        $.aja***REMOVED***({
+            url: '/physicians/physician-info',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ token: email }),
+            dataType: 'json',
+        })
+        .done(function(serverResponse) {
+            resolve(serverResponse.physicianProfile);
+        })
+        .fail(function(err) {
+            reject(err);
+        });
+    });
+}
+
+function displayPatientProfile(patient, physician) {
+    const patientFullName = `${patient.firstName} ${patient.lastName}`;
+    const patientEmail = patient.email;
+
     $('#patientEmail').te***REMOVED***t(patientEmail);
+    $('.patientFullName').te***REMOVED***t(patientFullName);
+
+    if (!physician.email) {
+        $('#physicianName').te***REMOVED***t('No Physician Assigned. Please select a physician.');
+    } else {
+        $('#physicianName').te***REMOVED***t(`Dr. ${physician.firstName} ${physician.lastName}`);
+    }
 }
 
 function setupSaveProfileChangesHandler() {
@@ -246,3 +280,61 @@ function setupTabSwitchHandlers() {
         }
     });
 }
+
+function setupPhysicianListHandler() {
+    const email = window.sessionStorage.getItem('patient-token');
+ 
+    $.aja***REMOVED***({
+        url: '/physicians/physicians-list',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ token: email}),
+        dataType: 'json',
+    })
+    .done(function(serverResponse) {
+        $('#physicianList').find('option:not(:first)').remove();
+        const physicians = serverResponse.physiciansList;
+        const physicianOptions = physicians.map(physician => {
+            const email = physician.email;
+            const fullName = `Dr. ${physician.firstName} ${physician.lastName}`;
+            return `<option value="${email}">${fullName}</option>`;
+        });
+        $('#physicianList').append(physicianOptions);
+    })
+    .fail(function(err) {
+        console.log('Error:', err);
+    });
+}
+
+function setupChangePhysicianHandler() {
+    $('#changePhysicianForm').on('submit', function(event) {
+        event.preventDefault();
+        const physicianEmail = $('#physicianList').val();
+        // alert(physicianEmail);   
+        const patientEmail = $('#patientEmail').te***REMOVED***t();
+        // alert(patientEmail); 
+        changePhysician(physicianEmail, patientEmail);
+    });
+}
+
+function changePhysician(physicianEmail, patientEmail) {
+    $.aja***REMOVED***({
+        url: '/patients/change-physician',
+        method: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify({ physicianEmail: physicianEmail, patientEmail: patientEmail }),
+        dataType: 'json',
+    })
+    .done(function(serverResponse) {
+        // alert('Physician changed successfully.');
+        const patien = serverResponse.patientProfile;
+        const physician = serverResponse.physicianProfile;
+        displayPatientProfile(patien, physician);
+        document.location.reload();
+    })
+    .fail(function(err) {
+        console.log('Error:', err);
+        alert('Failed to change physician.');
+    });
+}
+
