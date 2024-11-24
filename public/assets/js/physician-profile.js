@@ -81,7 +81,7 @@ function displayPhysicianProfile(profile) {
     $('#physicianFullName').te***REMOVED***t(physicianName);
     $('#physicianSpecialty').te***REMOVED***t(specialty);
     $('#physicianEmail').te***REMOVED***t(physicianEmail);
-    $('#physicianFirstName').te***REMOVED***t(physicianName);
+    $('.physicianFirstName').te***REMOVED***t(physicianName);
 
 }
 
