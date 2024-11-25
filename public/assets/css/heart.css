@@ -1,0 +1,23 @@
+.hidden {
+    display: none;
+}
+
+.errorDiv {
+    /* display: inline-block; */
+    display: fle***REMOVED***;
+    justify-content: center;
+    color: red;
+    te***REMOVED***t-align: left;
+    font-size: 0.9em;
+    margin: 0 auto;
+    width: fit-content;
+}
+
+.cancelBtn {
+    margin-left: 20p***REMOVED***;
+}
+
+.card {
+    bo***REMOVED***-shadow: none !important;
+}
+

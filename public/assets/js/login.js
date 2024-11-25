@@ -52,7 +52,7 @@ function getLoginFormFields() {
 function storeTokenAndRedirect(token) {
     const storage = $('#rememberMe').is(':checked') ? window.localStorage : window.sessionStorage;
     storage.setItem('patient-token', token);
-    window.location.href = '/user-profile.html';
+    window.location.href = '/heart-summary.html';
 }
 
 function displaySignUpSuccessMessage() {
