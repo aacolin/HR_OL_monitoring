@@ -1,0 +1,41 @@
+#references .container {
+  background-color: #e0f7fa; /* Light blue background */
+  bo***REMOVED***-shadow: 0 4p***REMOVED*** 8p***REMOVED*** rgba(0, 0, 0, 0.1); /* Shadow effect */
+  border-radius: 8p***REMOVED***; /* Rounded corners */
+  padding: 20p***REMOVED***; /* Padding inside the container */
+  margin: 0 auto; /* Center the container */
+  ma***REMOVED***-width: 71% !important; /* Ensure full width */
+}
+
+#references .section-header {
+  te***REMOVED***t-align: center; /* Center the te***REMOVED***t */
+  margin-bottom: 20p***REMOVED***; /* Space below the header */
+}
+
+#references .section-title {
+  font-size: 2em; /* Larger font size for the title */
+  color: #00796b; /* Darker shade of teal for the title */
+}
+
+#references .section-bg {
+  padding: 15p***REMOVED***; /* Padding inside the sections */
+  background-color: #ffffff; /* White background for sections */
+  border-radius: 8p***REMOVED***; /* Rounded corners for sections */
+  margin-bottom: 20p***REMOVED***; /* Space below each section */
+  width: 100% !important; /* Ensure full width */
+}
+
+#references .section-content {
+  background-color: #e0f7fa; /* Light blue background */
+  width: 100% !important; /* Ensure full width */
+  padding: 20p***REMOVED***; /* Padding inside the content */
+  border-radius: 8p***REMOVED***; /* Rounded corners */
+}
+
+#references .child-container {
+  width: 100% !important; /* Ensure full width for child containers */
+}
+
+.section-title{
+  color: rgb(0, 0, 90) !important; /* Blue color for headings */
+}
