@@ -5,7 +5,7 @@
 #include "spo2_algorithm.h"
 
 
-#define MAX_HEART_READ_ITR 300  // calibrate to your sensor
+#define MAX_HEART_READ_ITR 50
 
 
 // Use the STARTUP() macro to set the default antenna
@@ -39,14 +39,10 @@ ece513IOTProjState particleState = MEASURE_HEART_RATE;
 
 
 // wifi and server setting
-//const char* server = "192.168.50.71"; // Replace with your local server IP this is my usb interface , 
-const char* server = "18.191.214.37"; //amazon server
+const char* server = "192.168.50.71"; // Replace with your local server IP this is my usb interface 
 const int port = 3000;                // serverPort number
-//const char* ssid = SSID;          // Replace with your Wi-Fi SSID
-//const char* password = PASSWORD;    // Replace with your Wi-Fi password
-const char* ssid = "my_wifii";          // Replace with your Wi-Fi SSID
+const char* ssid = SSID;          // Replace with your Wi-Fi SSID
 const char* password = PASSWORD;    // Replace with your Wi-Fi password
-
 
 //heart beat sesor setting
 const byte POWER_LEVEL =  0***REMOVED***1F; //0***REMOVED***FF; //  50.0mA - Presence detection of ~12 inch
@@ -280,7 +276,7 @@ void readO2(){
     ma***REMOVED***im_heart_rate_and_o***REMOVED***ygen_saturation(irBuffer, bufferLength, redBuffer, &spo2, &validSPO2, &heartRate, &validHeartRate);
     //Continuously taking samples from MAX30102.  Heart rate and SpO2 are calculated every 1 second
     //while (1){
-    for (int itr = 0 ; itr < 1 ; itr++){
+    for (int itr = 0 ; itr < 10 ; itr++){
 
     //dumping the first 25 sets of samples in the memory and shift the last 75 sets of samples to the top
     for (byte i = 25; i < 100; i++){
@@ -307,19 +303,7 @@ void readO2(){
     ma***REMOVED***im_heart_rate_and_o***REMOVED***ygen_saturation(irBuffer, bufferLength, redBuffer, &spo2, &validSPO2, &heartRate, &validHeartRate);
   }
 }
-
-void flushSensorData(){
-  spo2 = 0;
-  beatAvg = 0;
-}
-void calibrateSensor(){
-  for (int itr = 0 ; itr < 3 ; itr++){
-    readHearBeat();
-    readO2();
-  }
-  flushSensorData();
-}
-
+  
 void setup() {
   Serial.begin(115200);
   waitFor(Serial.isConnected, 10000); // Wait for serial connection
@@ -329,9 +313,8 @@ void setup() {
       // sendPostRequest(); // Send the POST request
 }
 
-
 void loop() {
-  calibrateSensor();
+    // Repeat POST request every 10 seconds
     while(1){
       unsigned long stateMachineEntryTime =0;
       switch (particleState){
@@ -364,7 +347,7 @@ void loop() {
           
         case POST_TO_SERVER :
           sendPostRequest();
-          flushSensorData();
+          beatAvg = 0;
           particleState = IDLE;
           break;
           

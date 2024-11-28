@@ -34,11 +34,11 @@ float beatsPerMinute;
 int beatAvg;
 
 const byte POWER_LEVEL = 0***REMOVED***FF; //  50.0mA - Presence detection of ~12 inch
-const byte SAMPLE_AVG = 4; // MAX30105_SAMPLEAVG_4
-const byte LED_MODE = 3; // /Watch all three LED channels
-const int SAMPLE_RATE = 400; // MAX30105_SAMPLERATE_200 , try 800
-const int PULSE_WIDTH = 411; // 18 bit resolution
-const int ADC_RANGE = 16384; // 16384 (62.5pA per LSB)
+const byte SAMPLE_AVG = 4;     // MAX30105_SAMPLEAVG_4
+const byte LED_MODE = 3;       // /Watch all three LED channels
+const int SAMPLE_RATE = 400;   // MAX30105_SAMPLERATE_200 , try 800
+const int PULSE_WIDTH = 411;   // 18 bit resolution
+const int ADC_RANGE = 16384;   // 16384 (62.5pA per LSB)
 
 void setup(){
   Serial.begin(115200);
@@ -64,7 +64,7 @@ void setup(){
 
 void loop()
 {
-     digitalWrite(D7, LOW);
+  digitalWrite(D7, LOW);
   long irValue = particleSensor.getIR();
 
   if (checkForBeat(irValue) == true)

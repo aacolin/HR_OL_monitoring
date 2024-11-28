@@ -89,6 +89,7 @@ router.post('/login', async function(req, res) {
             const token = jwt.encode({ userEmail: e***REMOVED***istingPatient.email }, secret);
             await e***REMOVED***istingPatient.save();
             res.status(200).json({ success: true, patientToken: token, message: "Login success" });
+
         }
     }catch(err){
         if (err.message === InvalidUserNameOrPassword) {

@@ -49,6 +49,10 @@ app.use(function(err, req, res, ne***REMOVED***t) {
    // Send a response
    //res.status(200).send('Headers received');
 
+
+
+
+
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   //res.status(err.status || 500);

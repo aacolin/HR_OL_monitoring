@@ -1,0 +1,68 @@
+/* 
+ * Project myProject
+ * Author: Your Name
+ * Date: 
+ * For comprehensive documentation and e***REMOVED***amples, please visit:
+ * https://docs.particle.io/firmware/best-practices/firmware-template/
+ */
+
+// Include Particle Device OS APIs
+#include "Particle.h"
+
+
+
+// Use the STARTUP() macro to set the default antenna
+// to use system boot time.
+// In this case it would be set to the chip antenna
+STARTUP(WiFi.selectAntenna(ANT_INTERNAL));
+
+
+// Let Device OS manage the connection to the Particle Cloud
+// SYSTEM_MODE(AUTOMATIC);
+// doesn't immediately connect to the cloude 
+SYSTEM_MODE(SEMI_AUTOMATIC);
+
+// Run the application and system concurrently in separate threads
+ SYSTEM_THREAD(ENABLED);
+
+// Show system, cloud connectivity, and application logs over USB
+// View logs with CLI using 'particle serial monitor --follow'
+SerialLogHandler logHandler(LOG_LEVEL_INFO);
+
+
+const char *ssid =SSID;
+const char *password =PASSWORD;
+const char *authType = "WPA2";
+
+//Attempts to connect to the Wi-Fi network. If there are no credentials stored, this will enter listening mode (see below for how to avoid this.). If there are credentials stored, this will try the available credentials until connection is successful. When this function returns, the device may not have an IP address on the LAN; use WiFi.ready() to determine the connection status.
+
+
+void setup(){
+  Serial.begin(115200);
+  Serial.println("Initializing...");
+
+  // SYNTAX - enter listening mode
+  //WiFi.listen();
+  // Connects to a network with a specified authentication procedure.
+  // Options are WPA2, WPA, or WEP.
+  //WiFi.setCredentials("My_Router", "wepistheworst", WEP);
+  WiFi.setCredentials(ssid, password, WPA2);
+  WiFi.connect();
+
+  // SYNTAX
+  while (!WiFi.ready()){
+    Serial.println("Connecting . . .");
+    delay(100);
+  }
+
+  Serial.println(WiFi.localIP());
+  //Particle.connect();}
+}
+
+void loop()
+{
+  while (1);
+
+}
+
+
