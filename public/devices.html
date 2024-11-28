@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Patient Profile - Saguaro</title>
+  <title>Devices - Saguaro</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -40,7 +40,7 @@
   <!-- ======= Header ======= -->
   <header id="header" class="header fi***REMOVED***ed-top d-fle***REMOVED*** align-items-center">
     <div class="d-fle***REMOVED*** align-items-center justify-content-between">
-      <a href="user-profile.html" class="logo d-fle***REMOVED*** align-items-center">
+      <a href="devices.html" class="logo d-fle***REMOVED*** align-items-center">
         <img src="assets/img/logo.png" alt="">
         <span class="d-none d-lg-block">Saguaro</span>
       </a>
@@ -143,7 +143,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link " href="user-profile.html">
+        <a class="nav-link collapsed" href="user-profile.html">
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>
@@ -151,7 +151,7 @@
 
 
       <li class="nav-item">
-        <a class="nav-link collapsed " href="devices.html">
+        <a class="nav-link" href="devices.html">
           <i class="b***REMOVED*** b***REMOVED***-pulse"></i>
           <span>Devices</span>
         </a>
@@ -179,12 +179,12 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Profile</h1>
+      <h1>Devices</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="heart-summary.html">Home</a></li>
-          <li class="breadcrumb-item">Users</li>
-          <li class="breadcrumb-item active">Profile</li>
+          <li class="breadcrumb-item"><a href="devices.html">Home</a></li>
+          <li class="breadcrumb-item">Devices</li>
+          <li class="breadcrumb-item active">Settings</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -197,7 +197,7 @@
             <div class="card-body profile-card pt-4 d-fle***REMOVED*** fle***REMOVED***-column align-items-center">
 
               <!-- <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"> -->
-              <h2 class="userName patientFullName">User</h2>
+              <h2 class="userName deviceName">Device Name</h2>
             </div>
           </div>
 
@@ -211,19 +211,7 @@
               <ul class="nav nav-tabs nav-tabs-bordered">
 
                 <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
-                </li>
-
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit" id="editProfileTab">Edit Profile</button>
-                </li>
-
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings" id="editPhysiciansTab">Physicians</button>
-                </li>
-
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password" id="changePasswordTab">Change Password</button>
+                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Details</button>
                 </li>
 
               </ul>
@@ -231,130 +219,26 @@
 
                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
                   
-                  <h5 class="card-title" >Patient Details</h5>
+                  <h5 class="card-title">Device Information</h5>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label" >Name:</div>
-                    <div class="col-lg-9 col-md-8 patientFullName" id="fullName">Full name</div>
+                    <div class="col-lg-9 col-md-8 deviceName">Device Id</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label" >Device Id:</div>
+                    <div class="col-lg-9 col-md-8 currentDevice" id="deviceId">Device Id</div>
                   </div>
 
                   <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Current Device:</div>
-                    <div class="col-lg-9 col-md-8">Device</div>
+                    <div class="col-lg-3 col-md-4 label">Serial No. :</div>
+                    <div class="col-lg-9 col-md-8" id="serialNumber">Serial No</div>
                   </div>
 
                   <div class="row">
-                    <div class="col-lg-3 col-md-4 label">App Version:</div>
-                    <div class="col-lg-9 col-md-8">3.0.16</div>
+                    <div class="col-lg-3 col-md-4 label">Firmware Version:</div>
+                    <div class="col-lg-9 col-md-8" id="firmwareVersion">1.0.0</div>
                   </div>
-                  
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label" >Email:</div>
-                    <div class="col-lg-9 col-md-8" id="patientEmail">email@e***REMOVED***ample.com</div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Physician:</div>
-                    <div class="col-lg-9 col-md-8" id="physicianName">No physician assigned. Please select a physician</div>
-                  </div>
-
-                </div>
-
-                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-
-                  <!-- Profile Edit Form -->
-                  <form>
-                    <div class="row mb-3">
-                      <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
-                      <div class="col-md-8 col-lg-9">
-                        <!-- <img src="assets/img/profile-img.jpg" alt="Profile"> -->
-                        <div class="pt-2">
-                          <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                          <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="firstName" class="col-md-4 col-lg-3 col-form-label">First Name</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="firstName" type="te***REMOVED***t" class="form-control" id="editFirstName" value="">
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="last" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="last" type="te***REMOVED***t" class="form-control" id="editLastName" value="">
-                      </div>
-                    </div>
-                    <div class="errorDiv" ></div>
-
-                    <div class="te***REMOVED***t-center">
-                      
-                      
-                      <button type="submit" class="btn btn-primary" id="saveProfileChanges">Save Changes</button>
-                      <button type="button" class="btn btn-primary cancelBtn" id="cancelProfileChanges">Cancel</button>
-                    </div>
-                  </form><!-- End Profile Edit Form -->
-
-                </div>
-
-                <div class="tab-pane fade pt-3" id="profile-settings">
-
-                  <!-- Physicians Form -->
-                  <form id="changePhysicianForm">
-                    <div class="row mb-3">
-                      <label for="physician" class="col-md-4 col-lg-3 col-form-label">Physician</label>
-                      <div class="col-md-8 col-lg-9">
-                        <select name="physician" class="form-select" id="physicianList">
-                          <option selected>Choose Physician</option>
-                          <option value="1">Dr. John Doe</option>
-                          <option value="2">Dr. Jane Doe</option>
-                          <option value="3">Dr. John Smith</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class="te***REMOVED***t-center">
-                      <button type="submit" class="btn btn-primary" id="changePhysicianBtn">Change Physician</button>
-                    </div>
-                  </form><!-- End settings Form -->
-
-                </div>
-
-                <div class="tab-pane fade pt-3" id="profile-change-password">
-                  <!-- Change Password Form -->
-                  <form id="changePasswordForm">
-
-                    <div class="row mb-3">
-                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="password" type="password" class="form-control" id="currentPassword">
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="newpassword" type="password" class="form-control" id="newPassword">
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="renewpassword" type="password" class="form-control" id="reEnternewPassword">
-                      </div>
-                    </div>
-
-                    <div class="errorDiv" ></div>
-
-                    <div class="te***REMOVED***t-center">
-                      <button type="submit" class="btn btn-primary">Change Password</button>
-                      <button type="button" class="btn btn-primary cancelBtn" id="cancelPasswordChanges">Cancel</button>
-                    </div>
-                  </form><!-- End Change Password Form -->
-
                 </div>
 
               </div><!-- End Bordered Tabs -->
@@ -384,10 +268,10 @@
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   
   <!-- Template Prject JS Files -->
-  <script src="assets/js/profile.js"></script>
- 
+  <script src="assets/js/devices.js"></script>
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+
 
 </body>
 
