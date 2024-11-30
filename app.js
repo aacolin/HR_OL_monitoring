@@ -11,7 +11,7 @@ var favicon = require('serve-favicon');
 
 var app = e***REMOVED***press();
 
-// set up middlewares
+// Middleware setup
 app.use(logger('dev'));     // Show HTTP requests in the console
 app.use(e***REMOVED***press.json());    // Parse JSON bodies
 // app.use(e***REMOVED***press.urlencoded({ e***REMOVED***tended: false }));   // Parse URL-encoded bodies
@@ -33,10 +33,13 @@ app.use(favicon(path.join(__dirname, 'public','assets', 'img', 'favicon.png')));
 var inde***REMOVED***Router = require('./routes/inde***REMOVED***');
 var patientsRouter = require('./routes/patients');
 var physiciansRouter = require('./routes/physicians');
+var devicesRouter = require('./routes/devices');
 
+// Routes
 app.use('/', inde***REMOVED***Router);
 app.use('/patients', patientsRouter);
 app.use('/physicians', physiciansRouter);
+app.use('/devices', devicesRouter);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

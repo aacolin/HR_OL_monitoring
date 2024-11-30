@@ -1,14 +1,8 @@
 $(document).ready(function() {
-    // generate a new access token in cli by running the following command
-    // particle token create --e***REMOVED***pires-in 3600
-    // token will be valid for 3600 seconds = 1 hour
-    const deviceId = 'DEVICE_ID'; // Replace with your actual device ID
-    const accessToken = 'ACCESS_TOKEN'; // Replace with your actual access token
     handleTokenValidation();
-    fetchDeviceInfo(deviceId, accessToken);
+    handleDeviceInformation();
     setupLogoutHandler();
 });
-
 
 function handleTokenValidation() {
     const localStorageToken = window.localStorage.getItem('patient-token');
@@ -50,6 +44,40 @@ function handleTokenValidationError() {
     redirectToHomePage();
 }
 
+function handleDeviceInformation() {
+    const token = window.sessionStorage.getItem('patient-token');
+    $.aja***REMOVED***({
+        url: '/devices/device-info',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ token }),
+        dataType: 'json',
+    }).done(function(device) {
+        // Handle the server response here
+        // alert('Device Information: ' + JSON.stringify(serverResponse));
+        displayDeviceInformation(device);
+    }).fail(function(err) {
+        console.error('Error fetching device information:', err);
+        // Handle the error appropriately
+        alert('Error ' + err.status + ' fetching device information: ' + JSON.stringify(err));
+    });
+}
+
+function displayDeviceInformation(device) {
+    const deviceName = device.product_id === 32 ? "Boron" : "Argon";
+    
+    updateDeviceImage(deviceName);
+    $('.deviceName').te***REMOVED***t(deviceName);
+    $('#deviceId').te***REMOVED***t(device.id);
+    $('#serialNumber').te***REMOVED***t(device.serial_number);
+    $('#firmwareVersion').te***REMOVED***t(device.system_firmware_version);
+}
+
+function updateDeviceImage(deviceName) {
+    const imageUrl = `assets/img/${deviceName}_Board.jpg`;
+    $('#deviceImageDiv').html(`<img src="${imageUrl}" alt="device-image" class="device-picture">`);
+}
+
 function setupLogoutHandler() {
     $('.logout').on('click', function(event){
         event.preventDefault();
@@ -58,33 +86,4 @@ function setupLogoutHandler() {
         document.body.classList.add('hidden');
         redirectToHomePage();
     });
-}
-
-
-function fetchDeviceInfo(deviceId, accessToken) {
-    $.aja***REMOVED***({
-        url: `https://api.particle.io/v1/devices/${deviceId}`,
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${accessToken}`
-        }
-    })
-    .done(handleSuccess)
-    .fail(handleError)
-    .always(function() {
-        console.log('Request completed');
-    });
-}
-
-function handleSuccess(response) {
-    // console.log('Device Info:', response);
-    const device = response;
-    $('.deviceName').te***REMOVED***t(device.name);
-    $('#deviceId').te***REMOVED***t(device.id);
-    $('#serialNumber').te***REMOVED***t(device.serial_number);
-    $('#firmwareVersion').te***REMOVED***t(device.system_firmware_version);
-}
-
-function handleError(err) {
-    console.error('Error:', err);
 }

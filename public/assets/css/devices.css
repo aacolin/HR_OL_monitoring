@@ -1,0 +1,37 @@
+.profile-card {
+    display: fle***REMOVED***;
+    fle***REMOVED***-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: auto; /* Adjust height to auto */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+}
+
+.device-picture {
+    width: 50%; /* Adjust width as needed */
+    height: auto; /* Adjust height as needed */
+    object-fit: cover;
+    display: block;
+    margin: 20p***REMOVED*** auto 20p***REMOVED*** auto; /* Add small space above the image and center it horizontally */
+    padding: 0; /* Remove padding */
+}
+
+.hidden {
+    display: none;
+}
+
+.errorDiv {
+    /* display: inline-block; */
+    display: fle***REMOVED***;
+    justify-content: center;
+    color: red;
+    te***REMOVED***t-align: left;
+    font-size: 0.9em;
+    margin: 0 auto;
+    width: fit-content;
+}
+
+.cancelBtn {
+    margin-left: 20p***REMOVED***;
+}
