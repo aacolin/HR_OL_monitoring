@@ -232,7 +232,7 @@ function changeDevice(token, deviceId) {
         data: JSON.stringify({ token, deviceId }),
         dataType: 'json',
     }).done(function(device) {
-        alert('Device changed successfully');
+        // alert('Device changed successfully');
         window.location.reload();
     }).fail(function(err) {
         console.error('Error fetching device information:', err);
