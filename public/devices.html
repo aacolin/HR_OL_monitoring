@@ -210,41 +210,82 @@
 
           <div class="card">
             <div class="card-body pt-3">
-              <!-- Bordered Tabs -->
-              <ul class="nav nav-tabs nav-tabs-bordered">
 
-                <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Details</button>
+              <!-- Default Tabs -->
+              <ul class="nav nav-tabs d-fle***REMOVED***" id="myTabjustified" role="tablist">
+                
+                <li class="nav-item fle***REMOVED***-fill" role="presentation">
+                  <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-justified" type="button" role="tab" aria-controls="home" aria-selected="true">Details</button>
                 </li>
-
+                <li class="nav-item fle***REMOVED***-fill" role="presentation">
+                  <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-justified" type="button" role="tab" aria-controls="profile" aria-selected="false">Add Device</button>
+                </li>
+                <li class="nav-item fle***REMOVED***-fill" role="presentation">
+                  <button class="nav-link w-100" id="change-tab" data-bs-toggle="tab" data-bs-target="#change-justified" type="button" role="tab" aria-controls="change" aria-selected="false">Change Devices</button>
+                </li>
               </ul>
-              <div class="tab-content pt-2">
-
-                <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                  
+              <div class="tab-content pt-2" id="myTabjustifiedContent">
+                <div class="tab-pane fade show active deviceCard" id="home-justified" role="tabpanel" aria-labelledby="home-tab">
                   <h5 class="card-title">Device Information</h5>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label" >Name:</div>
+                  <div class="row mb-3">
+                    <div class="col-lg-3 col-md-4 label">Name:</div>
                     <div class="col-lg-9 col-md-8 deviceName">Device Name</div>
                   </div>
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label" >Device Id:</div>
+                  <div class="row mb-3">
+                    <div class="col-lg-3 col-md-4 label">Device Id:</div>
                     <div class="col-lg-9 col-md-8 currentDevice" id="deviceId">Device Id</div>
                   </div>
-
-                  <div class="row">
+                  <div class="row mb-3">
                     <div class="col-lg-3 col-md-4 label">Serial No. :</div>
                     <div class="col-lg-9 col-md-8" id="serialNumber">Device Serial No</div>
                   </div>
-
-                  <div class="row">
+                  <div class="row mb-3">
                     <div class="col-lg-3 col-md-4 label">Firmware Version:</div>
                     <div class="col-lg-9 col-md-8" id="firmwareVersion">Device Firmware Version</div>
                   </div>
                 </div>
+                
+                <div class="tab-pane fade deviceCard" id="profile-justified" role="tabpanel" aria-labelledby="profile-tab">
+                  <h5 class="card-title">Add a new device to your account</h5>
+                  <div class="row mb-3">
+                    <div class="col-lg-3 col-md-4 label">Device Id:</div>
+                    <div class="col-lg-9 col-md-8">
+                      <input type="te***REMOVED***t" class="form-control" id="newDeviceId" placeholder="Enter Device Id">
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-lg-3 col-md-4 label">Device Name:</div>
+                    <div class="col-lg-9 col-md-8">
+                      <input type="te***REMOVED***t" class="form-control" id="newDeviceName" placeholder="Enter Device Name (Optional)">
+                    </div>
+                  </div>
+                  <div class="errorDiv" ></div>
+                  <div class="row">
+                    <div class="col-lg-12 d-fle***REMOVED*** justify-content-end">
+                      <button type="submit" class=" btn btn-primary me-2" id="addDeviceButton">Add Device</button>
+                      <button type="button" class="btn btn-secondary" id="cancelButton">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade deviceCard" id="change-justified" role="tabpanel" aria-labelledby="change-tab">
+                  <h5 class="card-title">Change Device</h5>
+                  <div class="row mb-3">
+                    <div class="col-lg-3 col-md-4 label">Select Device:</div>
+                    <div class="col-lg-9 col-md-8">
+                      <select class="form-control" id="deviceSelector">
+                      </select>
+                    </div>
+                  </div>
+                  <div class="errorDiv" ></div>
+                  <div class="row">
+                    <div class="col-lg-12 d-fle***REMOVED*** justify-content-end">
+                      <button type="button" class="btn btn-primary" id="changeDeviceButton">Change Device</button>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- End Default Tabs -->
 
-              </div><!-- End Bordered Tabs -->
+              
 
             </div>
           </div>
@@ -272,6 +313,11 @@
   
   <!-- Template Prject JS Files -->
   <script src="assets/js/devices.js"></script>
+  <script>
+    $(document).ready(function() {
+      setupTabSwitchHandlers();
+    });
+  </script>
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
 

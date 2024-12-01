@@ -8,6 +8,7 @@ $(document).ready(function() {
     setupCancelPasswordChangesHandler();
     setupTabSwitchHandlers();
     setupChangePhysicianHandler();
+    getPatientDeviceInfo();
 });
 
 function handleTokenValidation() {
@@ -335,6 +336,29 @@ function changePhysician(physicianEmail, patientEmail) {
     .fail(function(err) {
         console.log('Error:', err);
         alert('Failed to change physician.');
+    });
+}
+
+function getPatientDeviceInfo() {
+    const token = window.sessionStorage.getItem('patient-token');
+    $.aja***REMOVED***({
+        url: '/devices/device-info',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ token }),
+        dataType: 'json',
+    })
+    .done(function(serverResponse) {
+       
+        const deviceName = serverResponse.product_id === 32 ? "Photon" : "Argon";
+        const firmwareVersion = serverResponse.system_firmware_version;
+        $('#currentDevice').te***REMOVED***t(deviceName);
+        $('#firmwareVersion').te***REMOVED***t(firmwareVersion);
+        
+    })
+    .fail(function(err) {
+        console.error('Error fetching device list:', err);
+        alert('Error ' + err.status + ' fetching device list: ' + JSON.stringify(err));
     });
 }
 

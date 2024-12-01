@@ -110,9 +110,9 @@ router.post('/device-info', async function(req, res) {
         }
 
         const deviceId = patient.devices[0];
-        if (!deviceId) {
-            return res.status(404).json({ message: 'Device not found, please add a device' });
-        }
+        // if (!deviceId) {
+        //     return res.status(404).json({ message: 'Device not found, please add a device' });
+        // }
 
         verifyParticleAccessToken()
             .then(validToken => getDeviceInfoFromParticle(deviceId, validToken))
@@ -128,5 +128,52 @@ router.post('/device-info', async function(req, res) {
         return res.status(500).json({ message: 'Server error' });
     }
 });
+
+
+router.post('/add-device', async function(req, res) {
+    const { token, deviceId } = req.body;
+    const tokenDecoded = jwt.decode(token, secret);
+    const patientEmail = tokenDecoded.email;
+
+    if (!patientEmail) {
+        return res.status(400).json({ message: 'Invalid token' });
+    }
+
+    try {
+        const patient = await getPatientByEmail(patientEmail);
+        if (!patient) {
+            return res.status(404).json({ message: 'Patient not found' });
+        }
+
+        // Check if the deviceId already e***REMOVED***ists in the patient's devices list
+        if (patient.devices.includes(deviceId)) {
+            return res.status(400).json({ message: 'Device already added' });
+        }
+        
+        // validate the device id with Particle Cloud
+        verifyParticleAccessToken()
+            .then(validToken => getDeviceInfoFromParticle(deviceId, validToken))
+            .then(async deviceInfo => {
+                patient.devices.push(deviceId);
+                await patient.save();
+                res.json({ message: 'Device added successfully', deviceInfo });
+            })
+            .catch(err => {
+                console.log('Error adding device:' + err.statusCode);
+                if (err.statusCode === 403) {
+                    res.status(403).json({ message: 'Invalid Device Id' });
+                } else if (err.statusCode) {
+                    res.status(err.statusCode).json(err.body);
+                } else {
+                    res.status(500).json({ message: 'Server error' });
+                }
+            });
+    } catch (err) {
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
+
 
 module.e***REMOVED***ports = router;

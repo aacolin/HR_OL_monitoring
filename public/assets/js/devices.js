@@ -1,7 +1,12 @@
 $(document).ready(function() {
     handleTokenValidation();
     handleDeviceInformation();
+    handleAddDeviceButton();
+    handleCancelButton();
+    setupDeviceList();
+    handleChangeDeviceButton();
     setupLogoutHandler();
+    setupTabSwitchHandlers();
 });
 
 function handleTokenValidation() {
@@ -44,6 +49,8 @@ function handleTokenValidationError() {
     redirectToHomePage();
 }
 
+
+
 function handleDeviceInformation() {
     const token = window.sessionStorage.getItem('patient-token');
     $.aja***REMOVED***({
@@ -53,18 +60,32 @@ function handleDeviceInformation() {
         data: JSON.stringify({ token }),
         dataType: 'json',
     }).done(function(device) {
-        // Handle the server response here
-        // alert('Device Information: ' + JSON.stringify(serverResponse));
+        if (!device) {
+            hideDeviceInformation();
+        }
         displayDeviceInformation(device);
     }).fail(function(err) {
+        if (err.status === 403) {
+            hideDeviceInformation();
+            return;
+        }
         console.error('Error fetching device information:', err);
         // Handle the error appropriately
-        alert('Error ' + err.status + ' fetching device information: ' + JSON.stringify(err));
+        // alert('Error ' + err.status + ' fetching device information: ' + JSON.stringify(err));
     });
 }
 
+function hideDeviceInformation() {
+    // const deviceName = device.product_id === 32 ? "Photon" : "Argon";
+    
+    // updateDeviceImage(deviceName);
+    $('.deviceName').te***REMOVED***t('Please add a device');
+    $('#deviceId').te***REMOVED***t('');
+    $('#serialNumber').te***REMOVED***t('');
+    $('#firmwareVersion').te***REMOVED***t('');
+}
 function displayDeviceInformation(device) {
-    const deviceName = device.product_id === 32 ? "Boron" : "Argon";
+    const deviceName = device.product_id === 32 ? "Photon" : "Argon";
     
     updateDeviceImage(deviceName);
     $('.deviceName').te***REMOVED***t(deviceName);
@@ -85,5 +106,137 @@ function setupLogoutHandler() {
         window.localStorage.removeItem("patient-token");
         document.body.classList.add('hidden');
         redirectToHomePage();
+    });
+}
+function handleAddDeviceButton() {
+    $('#addDeviceButton').on('click', function(event) {
+        event.preventDefault();
+        const token = window.sessionStorage.getItem('patient-token');
+        const deviceId = $('#newDeviceId').val();
+        if (checkForEmptyDeviceID(deviceId)) {
+            addDevice(token, deviceId);
+        }
+    });
+}
+
+function addDevice(token, deviceId) {
+    $.aja***REMOVED***({
+        url: '/devices/add-device',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ token, deviceId })
+    }).done(function(response) {
+        // Handle success response
+        console.log('Device added successfully:', response);
+        alert('Device added successfully');
+        clearForm();
+        window.location.reload();
+        // Optionally, update the UI to reflect the new device
+    }).fail(function(serverResponse) {
+        const errorMessage = serverResponse.responseJSON ? serverResponse.responseJSON.message : 'An error occurred';
+        $('.errorDiv').te***REMOVED***t(errorMessage).show();
+        if (serverResponse.status === 403) {
+            $('#newDeviceId').focus();
+        }
+    });
+}
+
+function checkForEmptyDeviceID(deviceId) {
+    if (!deviceId || deviceId === '' || deviceId === null) {
+        $('.errorDiv').te***REMOVED***t('Device ID is required').show();
+        $('#newDeviceId').focus();
+        return false;
+    }
+    $('.errorDiv').hide();
+    return true;
+}
+
+function handleCancelButton() {
+    $('#cancelButton').on('click', function(event) {
+        event.preventDefault();
+        clearForm();
+        $('#newDeviceId').focus();
+    });
+}
+
+function clearForm() {
+    $('#newDeviceId').val('');
+    $('#newDeviceName').val('');
+    $('.errorDiv').hide();
+}
+
+function setupTabSwitchHandlers() {
+    $('button[data-bs-toggle="tab"]').on('shown.bs.tab', function(event) {
+        const target = $(event.target).attr("data-bs-target");
+
+        if (target === "#profile-justified") {
+            clearForm();
+            $('.errorDiv').hide();
+            
+        } else if (target === "#home-justified") {
+        }
+    });
+}
+
+function setupDeviceList() {
+    const token = window.sessionStorage.getItem('patient-token');
+    $.aja***REMOVED***({
+        url: '/patients/profile',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ token }),
+        dataType: 'json',
+    }).done(function(serverResponse) {
+        //const devices = serverResponse.patientProfile.devices;
+        // alert('Devices: ' + JSON.stringify(devices));
+        displayDeviceList( serverResponse);
+    }).fail(function(err) {
+        console.error('Error fetching device list:', err);
+        // Handle the error appropriately
+        alert('Error ' + err.status + ' fetching device list: ' + JSON.stringify(err));
+    });
+}
+
+function displayDeviceList(serverResponse) {
+  const deviceSelector = $('#deviceSelector');
+  deviceSelector.empty();
+  deviceSelector.append('<option value="default">Select Device</option>');
+  
+  const deviceList = serverResponse.patientProfile.devices;
+  for (let i = 0; i < deviceList.length; i++) {
+    const deviceOption = `<option value="${i}">${deviceList[i]}</option>`;
+    deviceSelector.append(deviceOption);
+  }
+}
+
+function handleChangeDeviceButton() {
+    $('#changeDeviceButton').on('click', function(event) {
+        event.preventDefault();
+        const deviceInde***REMOVED*** = $('#deviceSelector').val();
+        // alert('Device Inde***REMOVED***: ' + deviceInde***REMOVED***);
+        if (deviceInde***REMOVED*** === 'default') {
+            $('.errorDiv').te***REMOVED***t('Please select a device').show();
+            return;
+        }
+        const token = window.sessionStorage.getItem('patient-token');
+        const deviceId = $('#deviceSelector option:selected').te***REMOVED***t();
+        changeDevice(token, deviceId);
+    });
+}
+
+function changeDevice(token, deviceId) {
+    $.aja***REMOVED***({
+        url: '/patients/change-device',
+        method: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify({ token, deviceId }),
+        dataType: 'json',
+    }).done(function(device) {
+        alert('Device changed successfully');
+        window.location.reload();
+    }).fail(function(err) {
+        console.error('Error fetching device information:', err);
+        // Handle the error appropriately
+        alert('Error ' + err.status + ' fetching device information: ' + JSON.stringify(err));
     });
 }
