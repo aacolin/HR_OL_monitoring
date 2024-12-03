@@ -334,4 +334,39 @@ router.put('/change-device', async function(req, res) {
     }
 });
 
+router.put('/remove-device', async function(req, res) {
+    const { token, deviceId } = req.body;
+
+    if (!token) {
+        return res.status(400).json({ message: 'Token not found' });
+    }
+
+    const tokenDecoded = jwt.decode(token, secret);
+    const patient = await Patient.findOne({ email: tokenDecoded.email });
+
+    if (!patient) {
+        return res.status(404).json({ message: 'Patient not found' });
+    }
+    if (!deviceId) {
+        return res.status(400).json({ message: 'Device ID is required' });
+    }
+    
+    // delete the old device (deviceId) from the patient's devices list 
+    const deviceInde***REMOVED*** = patient.devices.inde***REMOVED***Of(deviceId);
+    if (deviceInde***REMOVED*** > -1) {
+        patient.devices.splice(deviceInde***REMOVED***, 1);
+    }
+
+    try {
+        await patient.save();
+        return res.status(200).json({ message: 'Device Removed Successfully' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: ServerError });
+    }
+    
+});
+
+
+
 module.e***REMOVED***ports = router;

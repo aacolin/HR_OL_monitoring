@@ -4,6 +4,7 @@ $(document).ready(function() {
     handleAddDeviceButton();
     handleCancelButton();
     setupDeviceList();
+    handleRemoveDeviceButton();
     handleChangeDeviceButton();
     setupLogoutHandler();
     setupTabSwitchHandlers();
@@ -128,7 +129,7 @@ function addDevice(token, deviceId) {
     }).done(function(response) {
         // Handle success response
         console.log('Device added successfully:', response);
-        alert('Device added successfully');
+        alert('Device: '+ deviceId + ' added successfully');
         clearForm();
         window.location.reload();
         // Optionally, update the UI to reflect the new device
@@ -238,5 +239,45 @@ function changeDevice(token, deviceId) {
         console.error('Error fetching device information:', err);
         // Handle the error appropriately
         alert('Error ' + err.status + ' fetching device information: ' + JSON.stringify(err));
+    });
+}
+
+
+function handleRemoveDeviceButton() {
+
+   
+
+    $('#removeDeviceButton').on('click', function(event) {
+        event.preventDefault();
+        if ($('#deviceSelector').val() === 'default') {
+            // $('#removeDeviceButton').prop('disabled', true);
+            $('.errorDiv').te***REMOVED***t('Please select a device').show();
+            return;
+        }
+        const token = window.sessionStorage.getItem('patient-token');
+        const deviceId = $('#deviceId').te***REMOVED***t();
+        removeDevice(token, deviceId);
+    });
+}
+
+function removeDevice(token, deviceId) {
+    $.aja***REMOVED***({
+        url: '/patients/remove-device',
+        method: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify({ token, deviceId }),
+        dataType: 'json',
+    }).done(function(response) {
+        // Handle success response
+        console.log('Device removed successfully:', response);
+        alert('Device removed successfully');
+        window.location.reload();
+        // Optionally, update the UI to reflect the new device
+    }).fail(function(serverResponse) {
+        const errorMessage = serverResponse.responseJSON ? serverResponse.responseJSON.message : 'An error occurred';
+        $('.errorDiv').te***REMOVED***t(errorMessage).show();
+        if (serverResponse.status === 403) {
+            $('#newDeviceId').focus();
+        }
     });
 }
