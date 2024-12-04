@@ -4,29 +4,34 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Real Time Sensor Data</title>
+    <title>Heart Rate and SpO2 Data</title>
     <script src="https://cdnjs.cloudflare.com/aja***REMOVED***/libs/Chart.js/2.9.4/Chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script src= "assets/js/plot-graph.js"></script>
   </head>
 
+  <body>
+      <div class="container">
+          <h1>Heart Rate and SpO2 Data</h1>
+          
+          <!-- Button to trigger data fetching and plotting -->
+          <button id="showAllData">Show All Graph</button>
+          
+          <!--<input type="button" value="Show graph">    -->
 
-
-<body>
-<h1> real time sensor data</h1>
-
-<div id="chart">
-  <input type="button" value="show graph">
-
-
-    <ul id="heart_beat"> </ul> 
-  </div>
+          <div>
+              <h2>Heart Rate (BPM)</h2>
+              <canvas id="heartRateChart"></canvas>
+          </div>
+          
+          <div>
+              <h2>SpO2 Levels (%)</h2>
+              <canvas id="spo2Chart"></canvas>
+          </div>
+      </div>
   
-
-
-</body>
-</html>
-
-
+      
+  </body>
+  </html>
+  
 

@@ -1,0 +1,121 @@
+$(document).ready(function() {
+    // Event listener for button click
+    $('#fetchDataBtn').click(function () {
+       // alert('button clicked');
+        const deviceId = "johndoedevice123";
+        //console.log("button clicked");
+        //  drawGraph();
+        $.aja***REMOVED***({
+            url: `sensor/plotData?deviceId=${deviceId}`,
+            method: 'GET',
+            contentType: 'application/json',
+            dataType: 'json',
+        }).done(function(data) {
+            console.log('getting data from aja***REMOVED*** call');
+            
+            // Process the data into the format needed for the graph
+            const spo2Data = data.map(entry => ({
+                ***REMOVED***: new Date(entry.published_at).getTime(), // Time as ***REMOVED***-a***REMOVED***is
+                y: entry.O2Lvl // SpO2 data as y-a***REMOVED***is
+            }));
+
+            console.log(spo2Data);  // This will now correctly log the mapped data
+
+        // Create the heart rate chart
+        const heartRateCt***REMOVED*** = document.getElementById('heartRateChart').getConte***REMOVED***t('2d');
+        const heartRateChart = new Chart(heartRateCt***REMOVED***, {
+            type: 'scatter', // Scatter plot type
+            data: {
+                datasets: [{
+                    label: 'Heart Rate (BPM)',
+                    data: heartRateData, // The data points for heart rate
+                    backgroundColor: 'rgb(75, 192, 192)', // Point color
+                    borderColor: 'rgb(75, 192, 192)',
+                    borderWidth: 1,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    ***REMOVED***A***REMOVED***es: [{
+                        type: 'time', // Use time scale for ***REMOVED***-a***REMOVED***is
+                        time: {
+                            unit: 'minute',
+                            tooltipFormat: 'll HH:mm' // Formatting for tooltips
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Time'
+                        },
+                        ticks: {
+                            autoSkip: true,
+                            ma***REMOVED***TicksLimit: 10
+                        }
+                    }],
+                    yA***REMOVED***es: [{
+                        ticks: {
+                            min: 50,  // Minimum heart rate
+                            ma***REMOVED***: 120, // Ma***REMOVED***imum heart rate
+                            stepSize: 10
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Heart Rate (BPM)'
+                        }
+                    }]
+                }
+            }
+        });
+
+        // Create the SpO2 chart
+        const spo2Ct***REMOVED*** = document.getElementById('spo2Chart').getConte***REMOVED***t('2d');
+        const spo2Chart = new Chart(spo2Ct***REMOVED***, {
+            type: 'scatter', // Scatter plot type
+            data: {
+                datasets: [{
+                    label: 'SpO2 (%)',
+                    data: spo2Data, // The data points for SpO2 levels
+                    backgroundColor: 'rgb(255, 99, 132)', // Point color
+                    borderColor: 'rgb(255, 99, 132)',
+                    borderWidth: 1,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    ***REMOVED***A***REMOVED***es: [{
+                        type: 'time', // Use time scale for ***REMOVED***-a***REMOVED***is
+                        time: {
+                            unit: 'minute',
+                            tooltipFormat: 'll HH:mm' // Formatting for tooltips
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Time'
+                        },
+                        ticks: {
+                            autoSkip: true,
+                            ma***REMOVED***TicksLimit: 10
+                        }
+                    }],
+                    yA***REMOVED***es: [{
+                        ticks: {
+                            min: 90,  // Minimum SpO2 level
+                            ma***REMOVED***: 100, // Ma***REMOVED***imum SpO2 level
+                            stepSize: 2
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'SpO2 (%)'
+                        }
+                    }]
+                }
+            }
+        });
+        }).fail(function(err){
+            errorMessages.push(err.responseJSON.message);
+            displayErrorMessages(errorMessages);
+        });d
+    });
+});
+
