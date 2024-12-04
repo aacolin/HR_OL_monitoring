@@ -48,6 +48,7 @@ function validateTokenWithServer(token) {
 
 function handleTokenValidationError() {
     window.localStorage.removeItem('patient-token');
+    window.sessionStorage.removeItem('patient-token');
     redirectToHomePage();
 }
 

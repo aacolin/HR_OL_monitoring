@@ -110,9 +110,9 @@ router.post('/device-info', async function(req, res) {
         }
 
         const deviceId = patient.devices[0];
-        // if (!deviceId) {
-        //     return res.status(404).json({ message: 'Device not found, please add a device' });
-        // }
+        if (!deviceId) {
+            return res.status(404).json({ message: 'Device not found, please add a device' });
+        }
 
         verifyParticleAccessToken()
             .then(validToken => getDeviceInfoFromParticle(deviceId, validToken))
