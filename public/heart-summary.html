@@ -14,7 +14,7 @@
 
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -28,14 +28,8 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
   <link href="assets/css/heart.css" rel="stylesheet">
+  <link href="assets/css/data-simulator.css" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Updated: Apr 20 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 
 <body class="hidden">
@@ -188,6 +182,9 @@
                 <li class="nav-item fle***REMOVED***-fill" role="presentation">
                   <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-justified" type="button" role="tab" aria-controls="profile" aria-selected="false">Weekly</button>
                 </li>
+                <li class="nav-item fle***REMOVED***-fill" role="presentation">
+                  <button class="nav-link w-100" id="data-simulator-tab" data-bs-toggle="tab" data-bs-target="#data-simulator-justified" type="button" role="tab" aria-controls="data-simulator" aria-selected="false">Simulator</button>
+                </li>
               </ul>
               <div class="tab-content pt-2" id="myTabjustifiedContent">
                 <div class="tab-pane fade show active" id="home-justified" role="tabpanel" aria-labelledby="home-tab">
@@ -195,7 +192,10 @@
                     <div class="card-header card-title">Heart Rate</div>
                     <div class="card-body">
                       <br>
-                      <div id="heartRateChart"></div> <!-- End Line Chart -->
+                      <div id="heartRateChart">
+                        <!-- java Script will generate a simple graph -->
+
+                      </div> <!-- End Line Chart -->
                     </div>
                     <div class="card-footer"></div>
                   </div><!-- End Card with header and footer -->
@@ -210,6 +210,46 @@
                   </div><!-- End Card with header and footer -->
                 </div>
                 <div class="tab-pane fade" id="profile-justified" role="tabpanel" aria-labelledby="profile-tab">
+                </div>
+                <div class="tab-pane fade" id="data-simulator-justified" role="tabpanel" aria-labelledby="data-simulator-tab">
+                  <div class="card">
+                    <div class="card-header card-title">Heart Rate and Blood O***REMOVED***igen Saturation Simulator</div>
+                    <div class="card-body">
+                      <div class="form-container">
+                        <form id="dataForm">
+                            <div class="form-group">
+                                <label for="deviceId">Device:</label>
+                                <select id="deviceId" name="deviceId">
+                                  <option value="" disabled selected>Select your device</option>
+                                  <option value="device1">Device 1</option>
+                                  <option value="device2">Device 2</option>
+                                  <option value="device3">Device 3</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="startDate">Start Date & Time:</label>
+                                <input type="datetime-local" id="startDate" name="startDate" >
+                            </div>
+                            <div class="form-group">
+                                <label for="endDate">End Date & Time:</label>
+                                <input type="datetime-local" id="endDate" name="endDate" >
+                            </div>
+                            <div class="form-group">
+                                <label for="interval">Interval:</label>
+                                <input type="number" id="interval" min="1" ma***REMOVED***="10000" name="interval" placeholder="Data interval in minutes" >
+                            </div>
+                            <div class="form-group">
+                                <input class="formButtons" type="submit" value="Start Simulation">
+                                <input class="formButtons" type="button" value="Cancel" id="cancelButton">
+                            </div>
+                            <div class="errorDiv" style="display:none">
+                              <p class="errorMessage"></p>
+                            </div>
+                        </form>
+                      </div>
+                    </div>
+                    <div class="card-footer"></div>
+                  </div>
                 </div>
               </div><!-- End Default Tabs -->
             </div>
@@ -240,7 +280,8 @@
   <script src="assets/vendor/tinymce/tinymce.min.js"></script>
 
 
-  <Script src="assets/js/heart.js"></script>
+  <script src="assets/js/heart.js"></script>
+  <script src="assets/js/data-simulator.js"></script>
   <script src="assets/js/main.js"></script>
  
 

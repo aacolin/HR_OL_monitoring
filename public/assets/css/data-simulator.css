@@ -1,0 +1,81 @@
+body {
+    font-family: 'Nunito', sans-serif;
+    align-items: left;
+    height: 100vh;
+    margin: 0;
+    background-color: #f8f9fa; /* Light grey background */
+  }
+.form-container {
+    width: 25% !important; /* Set width to 50% */
+    margin: 20p***REMOVED***; /* Add margin for spacing */
+    padding: 20p***REMOVED***;
+    background-color: #fff;
+    border-radius: 8p***REMOVED***;
+    bo***REMOVED***-shadow: 0 2p***REMOVED*** 4p***REMOVED*** rgba(0, 0, 0, 0.1);
+    /* Remove float and use fle***REMOVED***bo***REMOVED*** for alignment */
+    display: block;
+    fle***REMOVED***-direction: column;
+    align-items: fle***REMOVED***-start;
+}
+
+.form-group {
+   
+    margin-bottom: 15p***REMOVED***;
+}
+
+
+label {
+  
+    display: block;
+    margin-bottom: 5p***REMOVED***;
+}
+
+input[type="te***REMOVED***t"],
+input[type="datetime-local"],
+input[type="number"],
+input[type="submit"],
+input[type="button"] {
+    width: calc(100% - 20p***REMOVED***);
+    padding: 10p***REMOVED***;
+    margin-bottom: 10p***REMOVED***;
+    border-radius: 4p***REMOVED***;
+    border: 1p***REMOVED*** solid #ccc;
+}
+
+select#deviceId {
+    width: 100%;
+    padding: 10p***REMOVED***;
+    margin-bottom: 10p***REMOVED***;
+    border-radius: 4p***REMOVED***;
+    border: 1p***REMOVED*** solid #ccc;
+    background-color: white;
+}
+
+input[type="te***REMOVED***t"],
+input[type="datetime-local"],
+input[type="number"] {
+    width: 100%; 
+}
+
+input[type="submit"],
+input[type="button"] {
+    width: 60%;
+    cursor: pointer;
+    background-color: #3985bf;
+    color: white;
+    border: none;
+    display: block;
+    margin: 0 auto; /* Center the buttons */
+    margin-bottom: 10p***REMOVED***;
+}
+
+input[type="submit"]:hover,
+input[type="button"]:hover {
+    background-color: #164582;
+}
+
+.errorDiv {
+    color: red;
+    font-size: 0.9em;
+}
+
