@@ -199,7 +199,7 @@ function setupDeviceList() {
 }
 
 function displayDeviceList(serverResponse) {
-  const deviceSelector = $('#deviceSelector');
+  const deviceSelector = $('.deviceIdSelector');
   deviceSelector.empty();
   deviceSelector.append('<option value="default">Select Device</option>');
   
@@ -213,14 +213,14 @@ function displayDeviceList(serverResponse) {
 function handleChangeDeviceButton() {
     $('#changeDeviceButton').on('click', function(event) {
         event.preventDefault();
-        const deviceInde***REMOVED*** = $('#deviceSelector').val();
+        const deviceInde***REMOVED*** = $('#changeDeviceSelector').val();
         // alert('Device Inde***REMOVED***: ' + deviceInde***REMOVED***);
         if (deviceInde***REMOVED*** === 'default') {
             $('.errorDiv').te***REMOVED***t('Please select a device').show();
             return;
         }
         const token = window.sessionStorage.getItem('patient-token');
-        const deviceId = $('#deviceSelector option:selected').te***REMOVED***t();
+        const deviceId = $('#changeDeviceSelector option:selected').te***REMOVED***t();
         changeDevice(token, deviceId);
     });
 }
@@ -249,7 +249,7 @@ function handleRemoveDeviceButton() {
 
     $('#removeDeviceButton').on('click', function(event) {
         event.preventDefault();
-        if ($('#deviceSelector').val() === 'default') {
+        if ($('#removeDeviceSelector').val() === 'default') {
             // $('#removeDeviceButton').prop('disabled', true);
             $('.errorDiv').te***REMOVED***t('Please select a device').show();
             return;

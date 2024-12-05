@@ -221,10 +221,10 @@
                   <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-justified" type="button" role="tab" aria-controls="profile" aria-selected="false">Add Device</button>
                 </li>
                 <li class="nav-item fle***REMOVED***-fill" role="presentation">
-                  <button class="nav-link w-100" id="change-tab" data-bs-toggle="tab" data-bs-target="#remove-justified" type="button" role="tab" aria-controls="remove" aria-selected="false">Remove Device</button>
+                  <button class="nav-link w-100" id="change-tab" data-bs-toggle="tab" data-bs-target="#change-justified" type="button" role="tab" aria-controls="change" aria-selected="false">Change Device</button>
                 </li>
                 <li class="nav-item fle***REMOVED***-fill" role="presentation">
-                  <button class="nav-link w-100" id="change-tab" data-bs-toggle="tab" data-bs-target="#change-justified" type="button" role="tab" aria-controls="change" aria-selected="false">Change Device</button>
+                  <button class="nav-link w-100" id="change-tab" data-bs-toggle="tab" data-bs-target="#remove-justified" type="button" role="tab" aria-controls="remove" aria-selected="false">Remove Device</button>
                 </li>
               </ul>
               <div class="tab-content pt-2" id="myTabjustifiedContent">
@@ -271,12 +271,29 @@
                   </div>
                 </div>
                 
+                <div class="tab-pane fade deviceCard" id="change-justified" role="tabpanel" aria-labelledby="change-tab">
+                  <h5 class="card-title">Change Device</h5>
+                  <div class="row mb-3">
+                    <div class="col-lg-3 col-md-4 label">Select Device:</div>
+                    <div class="col-lg-9 col-md-8">
+                      <select class="form-control deviceIdSelector" id="changeDeviceSelector">
+                      </select>
+                    </div>
+                  </div>
+                  <div class="errorDiv" ></div>
+                  <div class="row">
+                    <div class="col-lg-12 d-fle***REMOVED*** justify-content-end">
+                      <button type="button" class="btn btn-primary" id="changeDeviceButton">Change Device</button>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="tab-pane fade deviceCard" id="remove-justified" role="tabpanel" aria-labelledby="change-tab">
                   <h5 class="card-title">Remove Device</h5>
                   <div class="row mb-3">
                     <div class="col-lg-3 col-md-4 label">Select Device:</div>
                     <div class="col-lg-9 col-md-8">
-                      <select class="form-control" id="deviceSelector">
+                      <select class="form-control deviceIdSelector" id="removeDeviceSelector">
                       </select>
                     </div>
                   </div>
@@ -288,22 +305,7 @@
                   </div>
                 </div>
                 
-                <div class="tab-pane fade deviceCard" id="change-justified" role="tabpanel" aria-labelledby="change-tab">
-                  <h5 class="card-title">Change Device</h5>
-                  <div class="row mb-3">
-                    <div class="col-lg-3 col-md-4 label">Select Device:</div>
-                    <div class="col-lg-9 col-md-8">
-                      <select class="form-control" id="deviceSelector">
-                      </select>
-                    </div>
-                  </div>
-                  <div class="errorDiv" ></div>
-                  <div class="row">
-                    <div class="col-lg-12 d-fle***REMOVED*** justify-content-end">
-                      <button type="button" class="btn btn-primary" id="changeDeviceButton">Change Device</button>
-                    </div>
-                  </div>
-                </div>
+                
               </div><!-- End Default Tabs -->
 
               
