@@ -182,8 +182,7 @@ router.post('/profile', async function(req, res) {
 
     if (!patienInDatabase) {
         return res.status(404).json({ message: 'Patient not found' });
-    }
-    else {
+    } else {
         const patientProfile = {
             firstName: patienInDatabase.firstName,
             lastName: patienInDatabase.lastName,
@@ -191,6 +190,7 @@ router.post('/profile', async function(req, res) {
             devices: patienInDatabase.devices,
             physicianEmail: patienInDatabase.physicianEmail
         };
+        // console.log("Patient profile sent. patientProfile = ", patientProfile);
         return res.status(200).json({ message: 'Patient found', patientProfile: patientProfile });
     }
 
