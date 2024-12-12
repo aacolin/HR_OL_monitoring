@@ -6,7 +6,7 @@
 
 #define DEBUG_PRINT
 
-#define MAX_HEART_READ_ITR 300  // calibrate to your sensor
+#define MAX_HEART_READ_ITR 3 //300  // calibrate to your sensor
 
 #define RED_COLOR RGB.color(255, 0, 0)
 #define GREEN_COLOR RGB.color(0, 255, 0)                // after successful post to the server
@@ -52,11 +52,12 @@ typedef enum {
   CHECK_CONNECTIVITY,
   POST_TO_SERVER,
   CLEAR_BUFFER_AFTER_POST,
-  IDLE
+  CHK_TIME,
+  WAIT_SAMPLING_PERIOD
 } ece513IOTProjState;
 
 // Beginning state
-ece513IOTProjState particleState = MEASURE_HEART_RATE;
+ece513IOTProjState particleState = CHK_TIME;
 // TX buffer
 char t***REMOVED***Buffer[256]; // Buffer for the JSON payload
 
@@ -191,8 +192,7 @@ void  readHearBeat(){
     Serial.print(", Avg BPM=");
     Serial.print(beatAvg);
     Serial.println();
-    if (irValue < 50000)
-      Serial.print(" No finger?");
+    if (irValue < 50000) { Serial.print(" No finger?");}
     particleSensor.setPulseAmplitudeGreen(0***REMOVED***0A); //Turn off Green LED
   }
 }
@@ -243,8 +243,14 @@ void m***REMOVED***30102Setup(){
   MAGENTA_COLOR;
   //Use default I2C port, 400kHz speed
   if (!particleSensor.begin(Wire, I2C_SPEED_FAST)) {
-    Serial.println("MAX3010X was not found. Please check wiring/power. ");
+    Serial.println("---------------------------------");
+    Serial.println("   AX3010X was not found         ");
+    Serial.println("---------------------------------");
     while (1);
+  } else {
+      Serial.println("---------------------------------");
+      Serial.println("   AX3010X  found                ");
+      Serial.println("---------------------------------");
   }
   particleSensor.setup(POWER_LEVEL, SAMPLE_AVG, LED_MODE, SAMPLE_RATE, PULSE_WIDTH, ADC_RANGE); 
   particleSensor.setPulseAmplitudeRed(0***REMOVED***0A); //Turn Red LED to low to indicate sensor is running
@@ -331,9 +337,10 @@ void calibrateSensor(){
   }
   flushSensorData();
   OFF_COLOR;
+  Serial.println("---------------------------------");
+  Serial.println("           Sensor Calibrated     ");
+  Serial.println("---------------------------------");
 }
-
-
 
 bool checkFiveMinutes() {
   unsigned long currentMillis = millis();
@@ -352,6 +359,9 @@ bool checkDelayOrFiveMinutes() {
   // Check if the delay has finished
   if (delayStartTime > 0 && currentMillis - delayStartTime >= measurementIntervalInMS) {
       delayStartTime = 0; // Reset delay timer after it finishes
+        Serial.println("---------------------------------");
+        Serial.println("           WDT  UP               ");
+        Serial.println("---------------------------------");
       return true;  // Delay has finished
   }
   /*
@@ -360,15 +370,21 @@ bool checkDelayOrFiveMinutes() {
       previousMillis = currentMillis;  // Reset the 5-minute timer
       return true;  // 5 minutes have passed
   } */
-  if (checkFiveMinutes()){  WHITE_COLOR;  return true;}
+  if (checkFiveMinutes()){
+    WHITE_COLOR;
+    Serial.println("---------------------------------");
+    Serial.println("           5 MIN  UP             ");
+    Serial.println("---------------------------------");
+    return true;
+  }
   return false; // Neither the delay nor 5 minutes have passed
 }
 
-
-
-                     //cariable name                 //function
 int setmeasurementIntervalInMS(String sensorCaptureRate){
-   Serial.print("from cloud sensorCaptureRate = ");
+  Serial.println("---------------------------------");
+  Serial.println(" CLOUD Variable Received         ");
+  Serial.println("---------------------------------");
+  Serial.print("from cloud sensorCaptureRate = ");
   Serial.println(sensorCaptureRate);
   unsigned long setTimeInMin = sensorCaptureRate.toInt();
   if(setTimeInMin > 0 ){measurementIntervalInMS = setTimeInMin * MIN_TO_MS; Serial.print("measurementIntervalInMS = "); Serial.print(measurementIntervalInMS); Serial.println();return 1;}
@@ -376,37 +392,63 @@ int setmeasurementIntervalInMS(String sensorCaptureRate){
 }
 
 int cloudLedCntrl(String command){
- // look for the matching argument "coffee" <-- ma***REMOVED*** of 64 characters long
+  // look for the matching argument "coffee" <-- ma***REMOVED*** of 64 characters long
   if(command == "1") {digitalWrite(MY_LED, HIGH); return 1;}
   else {digitalWrite(MY_LED, LOW); return -1;}  
+}
+
+
+bool isItTimeToCheckTheBeat(){
+  Serial.println("---------------------------------");
+  Serial.println("           Checking Time         ");
+  Serial.println("---------------------------------");
+  if(Time.hour() >= 6 && Time.hour() <= 22){
+     Serial.println("Heart Rate measurment time is valid");
+     
+     return true;
+  } else {Serial.println("Not a valid time to take measurement, valid time is 6 AM to 10 PM"); return false;}
 }
 
 void setup() {
   Serial.begin(115200);
   waitFor(Serial.isConnected, 10000); // Wait for serial connection
+  m***REMOVED***30102Setup();  // sensor setup
+
   pinMode(MY_LED, OUTPUT);  // Enable control of the RGB LED
   RGB.control(true);                            // INTERNAL RGB CNTRL
+  connectToWiFi(); // Connect to Wifi
+
   Particle.variable("sensor_rd_val",t***REMOVED***Buffer);  // particle cloud variable 
                        //variable name                 //function
-   Particle.function("meas_int", setmeasurementIntervalInMS);      // register the cloud function
-   Particle.function("led_on_off", cloudLedCntrl);
-  connectToWiFi(); // Connect to Wifi
-  m***REMOVED***30102Setup(); // sensor setup
+  Particle.function("meas_int", setmeasurementIntervalInMS);      // register the cloud function
+  Particle.function("led_on_off", cloudLedCntrl);
+  waitFor(Time.isValid, 60000);  // Wait for time to be synchronized with Particle Device Cloud (requires active connection)
+  Time.zone(-7);   // az is UTC -7
+
 }
-
-
 
 void loop() {
   // digitalWrite(MY_LED, HIGH);
   
   calibrateSensor();
   while(1){
-    unsigned long stateMachineEntryTime =0;
     switch (particleState){
+      case CHK_TIME :
+        if(isItTimeToCheckTheBeat()){  /// may be combine the while logic with this
+          particleState = MEASURE_HEART_RATE;
+        } else{
+          particleState = CHK_TIME;
+          delay(measurementIntervalInMS);  // wait dealy time and then check the time again
+        }
+        break;
+
       case  MEASURE_HEART_RATE :
         BLUE_COLOR;
         //digitalWrite(MY_LED, HIGH);
-        Serial.println("Place your inde***REMOVED*** finger on the sensor with steady pressure for heart rate measurement.");
+        
+        Serial.println("---------------------------------");
+        Serial.println("          Measuring HeartBeat    ");
+        Serial.println("---------------------------------");
         readHearBeat();
         particleState =  MEAUSURE_O2;
         OFF_COLOR;       
@@ -415,7 +457,9 @@ void loop() {
       case  MEAUSURE_O2 :
         BLUE_COLOR;
         // digitalWrite(MY_LED, HIGH);
-        Serial.println("Reading O2, place you inde***REMOVED*** finer into the sensor");
+        Serial.println("---------------------------------");
+        Serial.println("          Measuring SPO2         ");
+        Serial.println("---------------------------------");
         readO2();
         if (spo2 == -999){ particleState = MEAUSURE_O2;}
         else {particleState = POST_TO_SERVER;}
@@ -425,10 +469,15 @@ void loop() {
       case POST_TO_SERVER :
         // sendPostRequest();
         // digitalWrite(MY_LED, LOW);
-        Serial.println("Creating a payload");
+        Serial.println("");
+        Serial.println("---------------------------------");
+        Serial.println("       Creating JSON payload     ");
+        Serial.println("---------------------------------");
         createJSONPayload(beatAvg, spo2 , "ARGON");
         if (WiFi.ready() && Particle.publish("ma***REMOVED***30102_data_capture_event", t***REMOVED***Buffer)){   // check wifi connection
-          Serial.println("Posted to the server");
+          Serial.println("---------------------------------");
+          Serial.println("       Posted to the server      ");
+          Serial.println("---------------------------------");
           GREEN_COLOR;
           flushSensorData();
           delay(5000);            
@@ -436,32 +485,37 @@ void loop() {
         }
         else{
           YELLOW_COLOR;
-          Serial.println("Couldnpt post to the server");
+          Serial.println("---------------------------------");
+          Serial.println(" Couldn't post to the server     ");
+          Serial.println("---------------------------------");
           delay(5000);            // flash yellow foa  5  sec
           OFF_COLOR;
         }
-        particleState = IDLE;
+        particleState = WAIT_SAMPLING_PERIOD;
         break;
           
-      case IDLE :
+      case WAIT_SAMPLING_PERIOD :  // WatchDOG
         // digitalWrite(MY_LED, LOW);
+        Serial.println("---------------------------------");
+        Serial.println("           Waiting for Fs        ");
+        Serial.println("---------------------------------");
 
         delayStartTime = millis();  // Set the starting time for the delay
-
-
         // delay(measurementIntervalInMS);
+        
         while (!checkDelayOrFiveMinutes()){
           delay(100);
         }  /// wait until 5 mins e***REMOVED***pier or user delay e***REMOVED***pires 
-        
+        particleState = CHK_TIME;
         // tomorrow do the delay or 5 minutes this
         // create a partifunction to manipulate measurementIntervalInMS
-        particleState = MEASURE_HEART_RATE;
         break;
-          
+         
       default:
         // digitalWrite(MY_LED, LOW);
-        Serial.println("In Default state");
+        Serial.println("---------------------------------");
+        Serial.println("           In Default State      ");
+        Serial.println("---------------------------------");
         //readHearBeat();
         particleState =  MEASURE_HEART_RATE;
         init_buffer();
