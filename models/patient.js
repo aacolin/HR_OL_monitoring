@@ -6,6 +6,7 @@ const patientSchema = new db.Schema({
     email:          { type: String, default: '' },
     physicianEmail: { type: String, default: '' },
     password:       { type: String, default: '' },
+    devices:        { type: Array, default: [] },
     lastAccess:     { type: Date, default: Date.now },
  });
 

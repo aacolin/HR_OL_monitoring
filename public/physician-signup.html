@@ -27,6 +27,7 @@
   <link href="assets/css/main.css" rel="stylesheet">
   <link href="assets/css/navigation.css" rel="stylesheet">
   <link href="assets/css/physician-signup.css" rel="stylesheet">
+  
 
 </head>
 
@@ -48,6 +49,8 @@
             <ul>
               <li><a href="inde***REMOVED***.html#about">Project</a></li>
               <li><a href="inde***REMOVED***.html#team">Team</a></li>
+              <li><a href="reference.html">Documentation</a></li>
+
             </ul>
           </li>
           <li class="dropdown"><a href="#physicians"><span>Physicians</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
@@ -65,40 +68,57 @@
 
   <main class="main">
 
+
     <!-- Hero Section -->
     <section id="hero" class="hero section dark-background">
       <div class="container">
-        <div class="row gy-4">
+        <div class="row gy-4"> 
           <div class="col-lg-8 d-fle***REMOVED*** fle***REMOVED***-column justify-content-center align-items te***REMOVED***t-center te***REMOVED***t-md-start" data-aos="fade-up">
-            <h2 class="te***REMOVED***t-white">Physician Sign Up</h2>
+            <h2 class="te***REMOVED***t-white">Sign Up</h2>
             <div class="container">
               <div class="row justify-content-center">
                 <div class="col-md-6">
                   <div class="card">
                     <div class="card-body">
-                      <form>
-                        <div class="form-group">
-                          <label for="first_name">Name</label>
-                          <input type="te***REMOVED***t" class="form-control" id="first_name" placeholder="First Name">
+                      <form id="signUpForm">
+                        <label for="firstName">First Name</label>
+                        <input type="te***REMOVED***t" class="signupTe***REMOVED***tbo***REMOVED***" id="firstName" placeholder="First name">
+                        <label for="lastName">Last Name</label>
+                        <input type="te***REMOVED***t" class="signupTe***REMOVED***tbo***REMOVED***" id="lastName" placeholder="Last name">
+                        <label for="specialty">Specialty</label>
+                          <select class="signupTe***REMOVED***tbo***REMOVED***" id="specialty">
+                            <option value="" disabled selected>Select your specialty</option>
+                            <option value="Nurse Practitioner (NP)">Nurse Practitioner (NP)</option>
+                            <option value="Physician Assistant (PA)">Physician Assistant (PA)</option>
+                            <option value="Cardiologist">Cardiologist</option>
+                            <option value="Electrophysiologist">Electrophysiologist</option>
+                            <option value="Pediatrician">Pediatrician</option>
+                            <option value="Cardiovascular Surgeon">Cardiovascular Surgeon</option>
+                            <option value="General Practitioner (GP)">General Practitioner (GP)</option>
+                            <option value="Endocrinologist">Endocrinologist</option>
+                            <option value="Cardiac Rehabilitation Specialist">Cardiac Rehabilitation Specialist</option>
+                            <option value="Clinical Nurse Specialist (CNS)">Clinical Nurse Specialist (CNS)</option>
+                            <option value="Geriatrician">Geriatrician</option>
+                            <option value="Primary Care Provider (PCP)">Primary Care Provider (PCP)</option>
+                            <option value="Attending Cardiologist">Attending Cardiologist</option>
+                            <option value="Heart Health Consultant">Heart Health Consultant</option>
+                            <option value="Cardiac Nurse Specialist">Cardiac Nurse Specialist</option>
+                            <option value="Heart Rhythm Specialist">Heart Rhythm Specialist</option>
+                          </select>
+            
+                        <label for="email">Email address</label>
+                        <input type="email" class="signupTe***REMOVED***tbo***REMOVED***" id="email" placeholder="user@email.com">
+                        <label for="password">Password</label>
+                        <input type="password" class="signupTe***REMOVED***tbo***REMOVED***" id="password" placeholder="Password">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" class="signupTe***REMOVED***tbo***REMOVED***" id="confirmPassword" placeholder="Confirm Password">
+                        <button type="submit" id="signupBtn" class="signupBtn">Sign Up</button>
+                        <div class="errorDiv" style="display:none">
+                          <p class="errorMessage"></p>
                         </div>
-                        <div class="form-group">
-                          <label for="last_name">Last Name</label>
-                          <input type="te***REMOVED***t" class="form-control" id="last_name" placeholder="Last Name">
-                        </div>
-                        <div class="form-group">
-                          <label for="email">Email address</label>
-                          <input type="email" class="form-control" id="email" placeholder="user@email.com">
-                        </div>
-                        <div class="form-group">
-                          <label for="password">Password</label>
-                          <input type="password" class="form-control" id="password" placeholder="Password">
-                        </div>
-                        <div class="form-group">
-                          <label for="confirm_password">Confirm Password</label>
-                          <input type="password" class="form-control" id="confirm_password" placeholder="Confirm Password">
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
-                        <p class="create-account">Already have an account? Login <a href="physician-login.html">here</a></p>
+                        <p class="create-account">
+                          Already have an account? Login <a href="physician-login.html">here</a>
+                        </p>
                       </form>
                     </div>
                   </div>
@@ -110,7 +130,7 @@
         </div>
       </div>
     </section><!-- /Hero Section -->
-
+ 
   </main>
 
   <footer id="footer" class="footer dark-background">
@@ -138,13 +158,18 @@
   <!-- Preloader -->
   <div id="preloader"></div>
 
+ 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
   <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
-
+  <!-- Project JS Files -->
+  <script src="assets/js/physician-signup.js"></script>
+  
 </body>
 
 </html>

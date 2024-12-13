@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const fs = require('fs');
 const secret = fs.readFileSync(__dirname + '/../jwt/secret').toString();
 const Patient = require('../models/patient');
+const Physician = require('../models/physician'); // Add this line to import the Physician model
 
 const PatientE***REMOVED***ists = 'A patient with this email address already e***REMOVED***ists. Please use a different email address.';
 const InvalidData = 'Your request contains invalid data or missing fields. Please correct and try again.'
@@ -176,20 +177,21 @@ router.post('/profile', async function(req, res) {
     }
     
     const tokenDecoded = jwt.decode(token, secret);
-    // console.log("tokenDecoded: " + tokenDecoded.email);
 
     const patienInDatabase = await Patient.findOne({ email: tokenDecoded.email });
 
     if (!patienInDatabase) {
         return res.status(404).json({ message: 'Patient not found' });
-    }
-    else {
+    } else {
         const patientProfile = {
             firstName: patienInDatabase.firstName,
             lastName: patienInDatabase.lastName,
-            email: patienInDatabase.email
+            email: patienInDatabase.email,
+            devices: patienInDatabase.devices,
+            physicianEmail: patienInDatabase.physicianEmail
         };
-        return res.status(200).json({ message: 'Patient found', profile: patientProfile });
+        // console.log("Patient profile sent. patientProfile = ", patientProfile);
+        return res.status(200).json({ message: 'Patient found', patientProfile: patientProfile });
     }
 
 
@@ -215,6 +217,7 @@ router.put('/profile', async function(req, res) {
 
     patient.firstName = firstName;
     patient.lastName = lastName;
+    
 
     try {
         await patient.save();
@@ -268,5 +271,102 @@ router.put('/change-password', async function(req, res) {
         return res.status(500).json({ message: ServerError });
     }
 });
+
+router.put('/change-physician', async function(req, res) {
+    const patientEmail = req.body.patientEmail;
+    const physicianEmail = req.body.physicianEmail;
+
+    console.log("physicianEmail: " + physicianEmail);
+    console.log("patientEmail: " + patientEmail);
+
+    try {
+        const physician = await Physician.findOne({ email: physicianEmail });
+        if (!physician) {
+            return res.status(404).json({ message: 'Physician not found' });
+        }
+        const patient = await Patient.findOne({ email: patientEmail });
+        if (!patient) {
+            return res.status(404).json({ message: 'Patient not found' });
+        }
+        patient.physicianEmail = physicianEmail;
+        await patient.save();
+
+        return res.status(200).json({ patientProfile: patient, physicianProfile: physician, message: 'Physician changed successfully' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: 'An une***REMOVED***pected error occurred on the server while processing your request. Please try again later.' });
+    }
+});
+
+router.put('/change-device', async function(req, res) {
+    const { token, deviceId } = req.body;
+
+    if (!token) {
+        return res.status(400).json({ message: 'Token not found' });
+    }
+
+    const tokenDecoded = jwt.decode(token, secret);
+    const patient = await Patient.findOne({ email: tokenDecoded.email });
+
+    if (!patient) {
+        return res.status(404).json({ message: 'Patient not found' });
+    }
+
+    if (!deviceId) {
+        return res.status(400).json({ message: 'Device ID is required' });
+    }
+
+    // delete the old device (deviceId) from the patient's devices list 
+    const deviceInde***REMOVED*** = patient.devices.inde***REMOVED***Of(deviceId);
+    if (deviceInde***REMOVED*** > -1) {
+        patient.devices.splice(deviceInde***REMOVED***, 1);
+    }
+
+    // add the new device (deviceId) to the patient's devices list at the beginning of the list
+    patient.devices.unshift(deviceId);
+
+    try {
+        await patient.save();
+        return res.status(200).json({ message: 'Device changed successfully' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: ServerError });
+    }
+});
+
+router.put('/remove-device', async function(req, res) {
+    const { token, deviceId } = req.body;
+
+    if (!token) {
+        return res.status(400).json({ message: 'Token not found' });
+    }
+
+    const tokenDecoded = jwt.decode(token, secret);
+    const patient = await Patient.findOne({ email: tokenDecoded.email });
+
+    if (!patient) {
+        return res.status(404).json({ message: 'Patient not found' });
+    }
+    if (!deviceId) {
+        return res.status(400).json({ message: 'Device ID is required' });
+    }
     
+    // delete the old device (deviceId) from the patient's devices list 
+    const deviceInde***REMOVED*** = patient.devices.inde***REMOVED***Of(deviceId);
+    if (deviceInde***REMOVED*** > -1) {
+        patient.devices.splice(deviceInde***REMOVED***, 1);
+    }
+
+    try {
+        await patient.save();
+        return res.status(200).json({ message: 'Device Removed Successfully' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: ServerError });
+    }
+    
+});
+
+
+
 module.e***REMOVED***ports = router;

@@ -11,7 +11,7 @@ var favicon = require('serve-favicon');
 
 var app = e***REMOVED***press();
 
-// set up middlewares
+// Middleware setup
 app.use(logger('dev'));     // Show HTTP requests in the console
 app.use(e***REMOVED***press.json());    // Parse JSON bodies
 // app.use(e***REMOVED***press.urlencoded({ e***REMOVED***tended: false }));   // Parse URL-encoded bodies
@@ -32,9 +32,14 @@ app.use(favicon(path.join(__dirname, 'public','assets', 'img', 'favicon.png')));
 // set up routes
 var inde***REMOVED***Router = require('./routes/inde***REMOVED***');
 var patientsRouter = require('./routes/patients');
+var physiciansRouter = require('./routes/physicians');
+var devicesRouter = require('./routes/devices');
 
+// Routes
 app.use('/', inde***REMOVED***Router);
 app.use('/patients', patientsRouter);
+app.use('/physicians', physiciansRouter);
+app.use('/devices', devicesRouter);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -43,7 +48,7 @@ app.set('view engine', 'pug');
 
 // catch 404 and forward to error handler
 app.use(function(req, res, ne***REMOVED***t) {
-  const err = new Error('Not Found');
+  const err = new Error('404 Page Not Found');
   err.status = 404;
   ne***REMOVED***t(err);
 });

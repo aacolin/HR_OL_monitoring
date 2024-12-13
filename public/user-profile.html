@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>User Profile - Saguaro</title>
+  <title>Patient Profile - Saguaro</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -20,6 +20,7 @@
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="assets/vendor/bo***REMOVED***icons/css/bo***REMOVED***icons.min.css" rel="stylesheet">
+  <link href="assets/vendor/remi***REMOVED***icon/remi***REMOVED***icon.css" rel="stylesheet">
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
@@ -71,12 +72,12 @@
 
           <a class="nav-link nav-profile d-fle***REMOVED*** align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <!-- <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"> -->
-            <span class="d-none d-md-block dropdown-toggle ps-2 userName">User</span>
+            <span class="d-none d-md-block dropdown-toggle ps-2">Menu</span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6 class="userName">User</h6>
+              <h6 class="userName patientFullName">User</h6>
             </li>
             <li>
               <hr class="dropdown-divider">
@@ -135,21 +136,29 @@
       <li class="nav-heading">Patient</li>
 
       <li class="nav-item">
+        <a class="nav-link collapsed" href="heart-summary.html">
+          <i class="ri ri-heart-pulse-line"></i>
+          <span>Heart</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link " href="user-profile.html">
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>
       </li>
 
+
       <li class="nav-item">
-        <a class="nav-link collapsed " href="">
+        <a class="nav-link collapsed " href="devices.html">
           <i class="b***REMOVED*** b***REMOVED***-pulse"></i>
           <span>Devices</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="">
+        <a class="nav-link collapsed" href="faq.html">
           <i class="bi bi-question-circle"></i>
           <span>F.A.Q</span>
         </a>
@@ -173,7 +182,7 @@
       <h1>Profile</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="user-profile.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="heart-summary.html">Home</a></li>
           <li class="breadcrumb-item">Users</li>
           <li class="breadcrumb-item active">Profile</li>
         </ol>
@@ -188,7 +197,7 @@
             <div class="card-body profile-card pt-4 d-fle***REMOVED*** fle***REMOVED***-column align-items-center">
 
               <!-- <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"> -->
-              <h2 class="userName">User</h2>
+              <h2 class="userName patientFullName">User</h2>
             </div>
           </div>
 
@@ -226,17 +235,17 @@
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label" >Name:</div>
-                    <div class="col-lg-9 col-md-8" id="fullName">Full name</div>
+                    <div class="col-lg-9 col-md-8 patientFullName" id="fullName">Full name</div>
                   </div>
 
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Current Device:</div>
-                    <div class="col-lg-9 col-md-8">Device</div>
+                    <div class="col-lg-9 col-md-8" id="currentDevice" >Device</div>
                   </div>
 
                   <div class="row">
-                    <div class="col-lg-3 col-md-4 label">App Version:</div>
-                    <div class="col-lg-9 col-md-8">3.0.16</div>
+                    <div class="col-lg-3 col-md-4 label">Firmware Version:</div>
+                    <div class="col-lg-9 col-md-8" id="firmwareVersion">1.0.0</div>
                   </div>
                   
                   <div class="row">
@@ -245,7 +254,7 @@
                   </div>
                   <div class="row">
                     <div class="col-lg-3 col-md-4 label">Physician:</div>
-                    <div class="col-lg-9 col-md-8">Dr. John Doe</div>
+                    <div class="col-lg-9 col-md-8" id="physicianName">No physician assigned. Please select a physician</div>
                   </div>
 
                 </div>
@@ -293,11 +302,11 @@
                 <div class="tab-pane fade pt-3" id="profile-settings">
 
                   <!-- Physicians Form -->
-                  <form>
+                  <form id="changePhysicianForm">
                     <div class="row mb-3">
                       <label for="physician" class="col-md-4 col-lg-3 col-form-label">Physician</label>
                       <div class="col-md-8 col-lg-9">
-                        <select name="physician" class="form-select" id="physician">
+                        <select name="physician" class="form-select" id="physicianList">
                           <option selected>Choose Physician</option>
                           <option value="1">Dr. John Doe</option>
                           <option value="2">Dr. Jane Doe</option>
@@ -307,7 +316,7 @@
                     </div>
 
                     <div class="te***REMOVED***t-center">
-                      <button type="submit" class="btn btn-primary">Change Physician</button>
+                      <button type="submit" class="btn btn-primary" id="changePhysicianBtn">Change Physician</button>
                     </div>
                   </form><!-- End settings Form -->
 
