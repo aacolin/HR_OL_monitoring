@@ -1,81 +1,137 @@
-University of Arizona [2024 Fall ECE413/513]\
-Final Project - Team X
-======
+# University of Arizona [2024 Fall ECE 413/513]
 
-\[Please briefly state the function and purpose of this Git Repo\]\
-You can fle***REMOVED***ibly change this Readme.md file according to your needs.
+# Final Project - Heart Rate Monitoring Project
 
-**Team members:**
+## Overview
+This project implements the **Heart Track** application, an IoT-enabled system for monitoring heart rate and blood o***REMOVED***ygen saturation levels. It integrates hardware, backend services, and a responsive web application to provide a seamless user e***REMOVED***perience for individuals or physicians (for advanced functionality).
 
-- Member 1
-- Member 2
-- Member 3
+## Features
+- Periodic heart rate and blood o***REMOVED***ygen saturation monitoring using the MAX30102 sensor.
+- IoT device integration with configurable measurement schedules.
+- Responsive web application for monitoring and visualization.
+- Secure backend with RESTful API endpoints and token-based authentication.
 
-Demo:
----------
-- Demo URL: \[Provide your project link running on AWS.\]
-- Test Infomation: \[Please provide the test account information and the info about how to update device value.\]
+---
 
-Videos:
----------
-- Pitch Video: \[PROVIDE YOUR YOUTUBE VIDEO LINK HERE\]
-- User E***REMOVED***perience: \[PROVIDE YOUR YOUTUBE VIDEO LINK HERE\]
-- Code Implements: \[PROVIDE YOUR YOUTUBE VIDEO LINK HERE\]
+## Team Members
+- Member 1: Aaron Colin   - aaroncolin@arizona.edu
+- Member 2: Ashish Khadka - khadka***REMOVED***ashish@arizona.edu
+- Member 3: Taron Bashar  - taronbashar@arizona.edu 
 
-Get Start
----------
-E***REMOVED***ample how to install and launch your project.
-```
-Command Block 1 E***REMOVED***ample
-```
-E***REMOVED***plain each command and what it is used for.
-```
-Command Block 2 E***REMOVED***ample
-```
+---
 
-Require Modules
-----------
-Please fill in all the modules you use in the project and make them hyperlinked and describe it. 
+## Project Structure
 
-| Module | Description |
-| --- | --- |
-| [Module 1](https://) | ... |
-| [Module 2](https://) | ... |
-| [Module 3](https://) | ... |
-| [Module 4](https://) | ... |
-| [Module 5](https://) | ... |
-| [Module 6](https://) | ... |
-| [Module 7](https://) | ... |
+| Folder/File     | Description                                       |
+|---------------- |------- -------------------------------------------|
+| `app.js`        | Entry point for the Node.js server.               |
+| `routes/`       | API route definitions.                            |
+| `models/`       | Mongoose schemas for MongoDB collections.         |
+| `public/`       | Static assets (CSS, JS, images) for the frontend. |
+| `views/`        | EJS templates for rendering the frontend.         |
+| `firmware/`     | Embedded code for the IoT device.                 |
+| `node_modules/` | Node.js dependencies (e***REMOVED***cluded via `.gitignore`). |
+| `package.json`  | Project metadata and dependencies.                |
+| `README.md`     | Documentation for the project.                    |
 
-APIs
-----------
+---
 
-- API Class 1 – Route: /Route1/\*
+## Hardware Requirements
 
-|APIs|Description|HTTP Method|
-| :- | :- | :- |
-|API\_1|Description 1|GET|
-|API\_2|Description 1|POST|
-|API\_3|Description 1|GET|
-|API\_4|Description 1|POST|
-|...|...|...|
+- IoT Development Board: Particle Photon or Argon.
+- Heart Rate Sensor: MAX30102 Pulse Detection Module.
+- Breadboard, jumper wires, and micro USB cable.
 
-- API Class 2 – Route: /Route2/\*
+---
 
-......
+## Installation and Setup
 
-- API Class 3 – Route: /Route3/\*
+1. Clone the repository:
+   ```bash
+   git clone [repo-url]
+   cd [repo-folder]
+   ```
 
-......
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-Project file structure description
-----------
-- Please use .gitignore to e***REMOVED***clude the "node_module" folder and other unnecessary files to keep the Project clean.
-- Please include your package.json and package-lock.json files so that others can install dependent modules through these two files when they download your Project.
+3. Start the server:
+   ```bash
+   npm start
+   ```
 
-|Folder|Description|Note|
-| :- | :- | :- |
-|Folder 1|Description 1|Note 1|
-|Folder 2|Description 2|Note 2|
-|Folder 3|Description 3|Note 3|
-|Folder 4|Description 4|Note 4|
+4. Flash firmware to the IoT device (see `firmware/README.md` for details):
+   ```bash
+   particle flash [device-name] [firmware-file]
+   ```
+
+---
+
+## API Documentation
+
+|  Endpoint           | Method | Description             |
+|---------------------|--------|-------------------------|
+| `/api/login`        |  POST  | User login.             |
+| `/api/register`     |  POST  | User registration.      |
+| `/api/device`       |  POST  | Add/remove devices.     |
+| `/api/measurements` |  GET   | Fetch measurement data. |
+
+---
+
+## Web Application Features
+- **Login/Logout:** Secure user authentication.
+- **Weekly Summary:** View average, minimum, and ma***REMOVED***imum heart rate for the past 7 days.
+- **Daily Details:** Visualize time-series data for heart rate and blood o***REMOVED***ygen levels.
+- **Responsive Design:** Optimized for desktop, tablet, and mobile devices.
+
+---
+
+## Default Login Credentials
+
+### Patient Account
+- **Username:** patient@e***REMOVED***ample.com
+- **Password:** patient123
+
+### Physician Account
+- **Username:** physician@e***REMOVED***ample.com
+- **Password:** doctor123
+
+---
+
+## Missing Sections
+The following sections are incomplete and require input:
+- **Videos:** Links to pitch and demo videos.
+- **Live Server URL:** AWS or hosting link.
+- **Secure Code Mitigation:** Details of identified and mitigated vulnerabilities.
+
+---
+
+## Lessons Learned
+1. Importance of modularizing backend and frontend code for maintainability.
+2. Challenges in real-time data synchronization between the IoT device and the server.
+3. Insights into the secure implementation of token-based authentication.
+
+---
+
+## Challenges
+- **Hardware Integration:** Stabilizing measurements from the MAX30102 sensor.
+- **Frontend Responsiveness:** Ensuring seamless design across devices.
+- **Error Handling:** Managing offline device scenarios and delayed data uploads.
+
+---
+
+## References
+- [Node.js Documentation](https://nodejs.org/en/docs/)
+- [MAX30102 Datasheet](https://datasheet.e***REMOVED***ample.com)
+- [Particle Photon Documentation](https://docs.particle.io/)
+
+---
+
+## Contribution
+|  Team Member  | Backend (%) | Frontend (%) | Firmware (%) | Documentation (%) |
+|---------------|-------------|--------------|--------------|-------------------|
+| Aaron Colin   |     40      |      60      |      20      |        30         |
+| Ashish Khadka |     40      |      30      |      60      |        30         |
+| Taron Bashar  |     20      |      10      |      20      |        40         |
