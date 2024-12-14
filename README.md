@@ -16,23 +16,23 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 ## Team Members
 - Member 1: Aaron Colin   - aaroncolin@arizona.edu
 - Member 2: Ashish Khadka - khadka***REMOVED***ashish@arizona.edu
-- Member 3: Taron Bashar  - taronbashar@arizona.edu 
+- Member 3: Taron Bashar  - taronbashar@arizona.edu
 
 ---
 
 ## Project Structure
 
-| Folder/File     | Description                                       |
-|---------------- |------- -------------------------------------------|
-| `app.js`        | Entry point for the Node.js server.               |
-| `routes/`       | API route definitions.                            |
-| `models/`       | Mongoose schemas for MongoDB collections.         |
-| `public/`       | Static assets (CSS, JS, images) for the frontend. |
-| `views/`        | EJS templates for rendering the frontend.         |
-| `firmware/`     | Embedded code for the IoT device.                 |
-| `node_modules/` | Node.js dependencies (e***REMOVED***cluded via `.gitignore`). |
-| `package.json`  | Project metadata and dependencies.                |
-| `README.md`     | Documentation for the project.                    |
+| Folder/File          | Description                                                                                 |
+|----------------------|---------------------------------------------------------------------------------------------|
+| `app.js`             | Entry point for the Node.js server.                                                         |
+| `routes/`            | API route definitions.                                                                      |
+| `models/`            | Mongoose schemas for MongoDB collections.                                                   |
+| `public/`            | Static assets (CSS, JS, images) for the frontend.                                           |
+| `views/`             | EJS templates for rendering the frontend.                                                   |
+| `firmware/`          | Embedded code for the IoT device.                                                           |
+| `node_modules/`      | Node.js dependencies (e***REMOVED***cluded via `.gitignore`).                                           |
+| `package.json`       | Project metadata and dependencies.                                                          |
+| `README.md`          | Documentation for the project.                                                              |
 
 ---
 
@@ -71,12 +71,12 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 
 ## API Documentation
 
-|  Endpoint           | Method | Description             |
-|---------------------|--------|-------------------------|
-| `/api/login`        |  POST  | User login.             |
-| `/api/register`     |  POST  | User registration.      |
-| `/api/device`       |  POST  | Add/remove devices.     |
-| `/api/measurements` |  GET   | Fetch measurement data. |
+| Endpoint             | Method | Description                          |
+|----------------------|--------|--------------------------------------|
+| `/api/login`         | POST   | User login.                         |
+| `/api/register`      | POST   | User registration.                  |
+| `/api/device`        | POST   | Add/remove devices.                 |
+| `/api/measurements`  | GET    | Fetch measurement data.             |
 
 ---
 
