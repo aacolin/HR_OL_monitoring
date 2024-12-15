@@ -4,15 +4,18 @@
 #include "heartRate.h"
 #include "spo2_algorithm.h"
 
-#define DEBUG_PRINT
+// #define DEBUG_PRINT
 
-#define MAX_HEART_READ_ITR 3 //300  // calibrate to your sensor
+#define MAX_HEART_READ_ITR 4 //300  // calibrate to your sensor
+#define ONE_DAY_MILLIS 24 * 60 * 60 * 1000 
+
+
 
 #define RED_COLOR RGB.color(255, 0, 0)
-#define GREEN_COLOR RGB.color(0, 255, 0)                // after successful post to the server
-#define BLUE_COLOR RGB.color(0, 0, 255)                // while measing
-#define WHITE_COLOR RGB.color(255, 255, 255)          // 5 minutes has e***REMOVED***pired
-#define PURPLE_COLOR RGB.color(128, 0, 128)           // calibration
+#define GREEN_COLOR RGB.color(0, 255, 0)             // after successful post to the server
+#define BLUE_COLOR RGB.color(0, 0, 255)              // while measing
+#define WHITE_COLOR RGB.color(255, 255, 255)         // 5 minutes has e***REMOVED***pired
+#define PURPLE_COLOR RGB.color(128, 0, 128)          // calibration
 #define YELLOW_COLOR RGB.color(255, 255, 0)          // failure to post, wifi or server not available
 #define CYAN_COLOR RGB.color(0, 255, 255)            // searching wifi 
 #define MAGENTA_COLOR RGB.color(255, 0, 255)         // searching sensor
@@ -22,14 +25,17 @@ const pin_t MY_LED = D11;
 
 // time interval and measurement frequency settings
 const int MILLI_SEC = 1000;
+
 // unsigned long  measurementIntervalInMS = 120000;   // delay in millisecond
 
+
+// all time declarations
+time32_t uni***REMOVED***Time = 0;
 unsigned long  measurementIntervalInMS = 300;   // delay in millisecond
 unsigned long delayStartTime = 0; 
 unsigned long previousMillis = 0;  // Store the last time the event occurred
 const long FIVE_MIN_IN_MS = 5 * 60 * 1000;  // 5 minutes in milliseconds (5 * 60 * 1000)
 const unsigned long MIN_TO_MS = 60 * MILLI_SEC;
-time32_t uni***REMOVED***Time = 0;
 
 
 // Use the STARTUP() macro to set the default antenna
@@ -85,7 +91,7 @@ const int port = 3000;                // serverPort number
 // const char* ssid = SSID;          // Replace with your Wi-Fi SSIDp_
 //const char* password = PASSWORD;    // Replace with your Wi-Fi password
 const char* ssid = "my_wifii";          // Replace with your Wi-Fi SSID
-const char* password = PASSWORD;    // Replace with your Wi-Fi password
+const char* password = "WIFI_PASSWORD!";    // Replace with your Wi-Fi password
 
 
 //heart beat sesor setting
@@ -149,14 +155,15 @@ void  readHearBeat(){
   //Take average of readings
   for (int i = 0; i<MAX_HEART_READ_ITR; i++){
     long irValue = particleSensor.getIR();
-    if (checkForBeat(irValue) == true){
+     if (checkForBeat(irValue) == true){
+    // if (irValue >= 50000){
       Serial.println("We sensed a beat!");
       //We sensed a beat!
       long delta = millis() - lastBeat;
       lastBeat = millis();
       beatsPerMinute = 60 / (delta / 1000.0);
 
-      if (beatsPerMinute < 255 && beatsPerMinute > 20){
+      if (beatsPerMinute < 255 && beatsPerMinute > 50){
         rates[rateSpot++] = (byte)beatsPerMinute; //Store this reading in the array
         rateSpot %= RATE_SIZE; //Wrap variable
         //Take average of readings
@@ -166,16 +173,6 @@ void  readHearBeat(){
         beatAvg /= RATE_SIZE;
       }
     }
-    else {Serial.println("No beat sensed !");}
-    // Serial.print("IR=");
-    // Serial.print(irValue);
-    // Serial.print(", BPM=");
-    // Serial.print(beatsPerMinute);
-    // Serial.print(", Avg BPM=");
-    // Serial.print(beatAvg);
-    // Serial.println();
-    if (irValue < 50000) { Serial.print(" No finger?");}
-    particleSensor.setPulseAmplitudeGreen(0***REMOVED***0A); //Turn off Green LED
   }
 }
 
@@ -231,9 +228,10 @@ void readO2(){
     redBuffer[i] = particleSensor.getRed();
     irBuffer[i] = particleSensor.getIR();
     particleSensor.ne***REMOVED***tSample(); //We're finished with this sample so move to ne***REMOVED***t sample
-
+    #ifdef DEBUG_PRINT
     Serial.print(("i= %d  ", i)); Serial.print(F("red="));    Serial.print(redBuffer[i], DEC);
     Serial.print(F(", ir="));    Serial.println(irBuffer[i], DEC);
+    #endif
   }
   //calculate heart rate and SpO2 after first 100 samples (first 4 seconds of samples)
   ma***REMOVED***im_heart_rate_and_o***REMOVED***ygen_saturation(irBuffer, bufferLength, redBuffer, &spo2, &validSPO2, &heartRate, &validHeartRate);
@@ -247,8 +245,7 @@ void readO2(){
     for (byte i = 75; i < 100; i++){
       while (particleSensor.available() == false) //do we have new data?
         particleSensor.check(); //Check the sensor for new data
-
-      digitalWrite(readLED, !digitalRead(readLED)); //Blink onboard LED with every data read
+        digitalWrite(readLED, !digitalRead(readLED)); //Blink onboard LED with every data read
 
       redBuffer[i] = particleSensor.getRed();
       irBuffer[i] = particleSensor.getIR();
@@ -272,15 +269,16 @@ void flushSensorData(){
 
 void calibrateSensor(){
   PURPLE_COLOR;
+  Serial.println("---------------------------------");
+  Serial.println("            Calibrating  Sensor  ");
+  Serial.println("---------------------------------");
   for (int itr = 0 ; itr < 3 ; itr++){
     readHearBeat();
     readO2();
   }
   flushSensorData();
   OFF_COLOR;
-  Serial.println("---------------------------------");
-  Serial.println("           Sensor Calibrated     ");
-  Serial.println("---------------------------------");
+  
 }
 
 bool checkFiveMinutes() {
@@ -348,6 +346,27 @@ void wrStruct() {
     
 }
 
+void readStruct () {
+    Serial.println("Reading data from sturct.\n");
+    //for (int i = 0; i < total_data_written ; i++) {
+       // Serial.print(" SPO2 = ");
+       // Serial.print(measurements[i].SPO2);
+       // Serial.print("\t Heart Rate = ");
+       // Serial.print(measurements[i].heartRate);
+       // Serial.print("\t Timestamp =");
+       // Serial.println(measurements[i].uni***REMOVED***Timestamp);
+       // Serial.println();
+        spo2 = measurements[total_data_written-1].SPO2;
+        beatAvg = measurements[total_data_written-1].heartRate;
+        uni***REMOVED***Time= measurements[total_data_written-1].uni***REMOVED***Timestamp;
+        //delay(2000);
+
+
+    //}
+    //delay(5000);
+   // total_data_written = 0;
+;
+}
 
 
 // verifies time of ohe day and returns whether  it is good time to sample or not
@@ -381,14 +400,12 @@ void setup() {
 }
 
 void loop() {
-  // digitalWrite(MY_LED, HIGH);
-  
   calibrateSensor();
   while(1){
     switch (particleState){
-      // identify if it right time ot measure or not
-      case CHK_TIME :
-        if(isItTimeToCheckTheBeat()){  /// may be combine the while logic with this
+
+      case CHK_TIME :                            // identify if it right time ot measure or not
+        if(isItTimeToCheckTheBeat()){           /// may be combine the while logic with this
           particleState = MEASURE_HEART_RATE;
         } else{
           particleState = CHK_TIME;
@@ -397,14 +414,23 @@ void loop() {
         break;
       // take samples for hearbeat
       case  MEASURE_HEART_RATE :
-        uni***REMOVED***Time = Time.now();
+        Serial.println("Please place your inde***REMOVED*** finger on the sensor.");
+        uni***REMOVED***Time = Time.now();       // time stamp for struct
+        delayStartTime = millis();  // Set the starting time for the delay
         BLUE_COLOR;
         //digitalWrite(MY_LED, HIGH);
         Serial.println("---------------------------------");
         Serial.println("          Measuring HeartBeat    ");
         Serial.println("---------------------------------");
         readHearBeat();
-        particleState =  MEAUSURE_O2;
+          Serial.print("BPM=");      Serial.print(beatsPerMinute);
+          Serial.print("Avg BPM=");  Serial.println(beatAvg);
+        if ((beatAvg > 40 ) && (beatAvg < 255)){    // valid heart rate for living
+          particleState = MEAUSURE_O2 ;  // dead man
+        }
+        else{
+          particleState =  MEASURE_HEART_RATE;
+        }
         OFF_COLOR;       
         break;
         
@@ -416,8 +442,10 @@ void loop() {
         Serial.println("          Measuring SPO2         ");
         Serial.println("---------------------------------");
         readO2();
-        if (spo2 == -999){ particleState = MEAUSURE_O2;}
-        else if (WiFi.ready() ){
+        if (!(spo2 > 50) && (spo2 <= 100)){  // valid living SPO2
+         particleState = MEAUSURE_O2;
+        }       // 
+        if (WiFi.ready() ){
           particleState = POST_TO_SERVER;
           Serial.println("---------------------------------");
           Serial.println("       Creating JSON payload     ");
@@ -429,10 +457,12 @@ void loop() {
       
       // post the captured data to server    
       case POST_TO_SERVER :
+        createJSONPayload(beatAvg, spo2 , uni***REMOVED***Time); 
+        Serial.print("Sending this data to server :");
+        Serial.println(t***REMOVED***Buffer);
         if( Particle.publish("ma***REMOVED***30102_data_capture_event", t***REMOVED***Buffer)){
           GREEN_COLOR;
           Serial.println("");
-          createJSONPayload(beatAvg, spo2 , uni***REMOVED***Time); 
           Serial.println("---------------------------------");
           Serial.println("       Posted to the server      ");
           Serial.println("---------------------------------");
@@ -440,6 +470,18 @@ void loop() {
           flushSensorData();
           delay(5000);            
           OFF_COLOR;
+          if (total_data_written != 0){ // post all the offline contents
+            readStruct();
+            particleState = POST_TO_SERVER;
+            total_data_written = total_data_written -1;
+            Serial.print("Total Contents Remaining in the Struct : ");
+            Serial.println(total_data_written);
+          }
+          else{
+            particleState = WAIT_SAMPLING_PERIOD;
+            Serial.print("Published all the offiline contents ");
+            Serial.println(total_data_written);
+          }
         }
         else{ particleState = SAVE_DATA_OFFLINE;}
         break;
@@ -463,22 +505,24 @@ void loop() {
         Serial.println("---------------------------------");
         Serial.println("           Waiting for Fs        ");
         Serial.println("---------------------------------");
-
-        delayStartTime = millis();  // Set the starting time for the delay
-        
         while (!checkDelayOrFiveMinutes()){
           delay(100);
-        }  /// wait until 5 mins e***REMOVED***pier or user delay e***REMOVED***pires 
-        particleState = CHK_TIME;
+        }  /// wait until 5 mins e***REMOVED***pier or user delay e***REMOVED***pires
+                    
+        particleState =  CHECK_CONNECTIVITY;
+        //particleState = CHK_TIME;
         break;
          
-      default:
+      case CHECK_CONNECTIVITY:
         // digitalWrite(MY_LED, LOW);
         Serial.println("---------------------------------");
         Serial.println("           In Default State      ");
         Serial.println("---------------------------------");
-        //readHearBeat();
-        particleState =  MEASURE_HEART_RATE;
+        if (!Particle.connected()) {
+          Serial.println("Lost connection, attempting reconnect...");
+          connectToWiFi();
+        }
+        particleState = CHK_TIME;
         break;
     }         
   }
