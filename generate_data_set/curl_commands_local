@@ -1,0 +1,48 @@
+// not in use
+// creates hardcoded user
+curl http://localhost:3000/sensor/create
+curl -X POST http://localhost:3000/sensor/create
+
+curl -X POST -H "Content-Type: application/json" -d '{"avgHeartBeat":12345, "o2Lvl" : 95, "deviceName" : "Argon" }' http://localhost:3000/sensor/save
+
+
+1) create HardCoded User
+curl -X POST http://localhost:3000/sensor/create \
+-H "Content-Type: application/json" \
+-d '{
+  "firstName": "John", 
+  "lastName": "Doe", 
+  "email": "john.doe@e***REMOVED***ample.com", 
+  "physicianEmail": "physician@e***REMOVED***ample.com", 
+  "password": "securepassword123",
+  "deviceId": "johndoedevice123"
+}'
+
+curl -X POST http://localhost:3000/sensor/receiveEvent \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event": "ma***REMOVED***30102_data_capture_event",
+    "data": "{\"heartBeat\": 75, \"O2Lvl\": 96, \"deviceName\": \"ARGON\"}",
+    "published_at": "2024-12-03T11:00:00Z",
+    "coreid": "johndoedevice123",
+  }'
+
+
+
+2) Curl to create new user
+curl -X POST http://localhost:3000/sensor/receiveEvent \
+  -H "Content-Type: application/json" \
+  -d '{
+    "event": "ma***REMOVED***30102_data_capture_event",
+    "data": "{\"heartBeat\": 75, \"O2Lvl\": 96, \"deviceName\": \"ARGON\"}",
+    "published_at": "2024-12-03T11:00:00Z",
+    "coreid": "e00fce68d3b6b43244c35726",
+  }'
+
+
+3) curl -X GET http://localhost:3000/sensor/readAll
+4) curl -X POST http://localhost:3000/sensor/deleteAll
+
+5) curl -X GET "http://localhost:3000/sensor/plotData" -H "deviceid: johndoedevice123"
+
+

@@ -8,7 +8,21 @@ const patientSchema = new db.Schema({
     password:       { type: String, default: '' },
     devices:        { type: Array, default: [] },
     lastAccess:     { type: Date, default: Date.now },
- });
+    deviceId :      [{ type: String, default: ''}],
+    events: [{
+    eventName: { type: String, default: '' },
+    deviceId :{ type: String, default: '' },
+    published_at: { type: Date, required: true },
+    deviceName: { type: String, default: '' },
+    eventDescription: { type: String, default: '' },
+    eventPublishedTime: { type: String, default: '' },
+    eventPublishedDate: { type: String, default: '' },
+    heartRate: { type: Number, default: 0 },
+    SpO2: { type: Number, default: 0 },
+    }],
+});
+
+
 
  const Patient = db.model("Patient", patientSchema);
 

@@ -10,6 +10,7 @@ var logger = require('morgan');
 var favicon = require('serve-favicon');
 
 var app = e***REMOVED***press();
+var sensorRouter = require('./routes/sensor');
 
 // Middleware setup
 app.use(logger('dev'));     // Show HTTP requests in the console
@@ -40,6 +41,7 @@ app.use('/', inde***REMOVED***Router);
 app.use('/patients', patientsRouter);
 app.use('/physicians', physiciansRouter);
 app.use('/devices', devicesRouter);
+app.use('/sensor', sensorRouter);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -55,11 +57,30 @@ app.use(function(req, res, ne***REMOVED***t) {
 
 // set up error handling
 app.use(function(err, req, res, ne***REMOVED***t) {
-  res.status(err.status || 500);
+  console.log('Received data app.js :', req.body);
+  console.log('Received data app.js :', req.header);
+
+   // You can also log specific headers, for e***REMOVED***ample:
+   console.log('Content-Type:', req.get('Content-Type'));
+   console.log('Host:', req.get('Host'));
+   console.log('Content-Length:', req.get('Content-Length'));
+
+   // Send a response
+   //res.status(200).send('Headers received');
+
+
+
+
+
+  //res.status(err.status || 500);
   res.json({
     message: err.message,
     error: req.app.get('env') === 'development' ? err : {}
+  //res.status(err.status || 500).json({ message: msgStr, err: err });
+  res.status(err.status || 500).json(msgStr);
+  //res.render('error');
   });
+  console.log('Received data 404:', req.body);
 });
 
 module.e***REMOVED***ports = app;
