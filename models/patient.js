@@ -10,6 +10,7 @@ const patientSchema = new db.Schema({
     deviceId :      [{ type: String, default: ''}],
     events: [{
     eventName: { type: String, default: '' },
+    deviceId :{ type: String, default: '' },
     published_at: { type: Date, required: true },
     deviceName: { type: String, default: '' },
     eventDescription: { type: String, default: '' },
