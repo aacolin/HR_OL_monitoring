@@ -47,7 +47,6 @@ app.use('/sensor', sensorRouter);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-
 // catch 404 and forward to error handler
 app.use(function(req, res, ne***REMOVED***t) {
   const err = new Error('404 Page Not Found');
@@ -57,30 +56,11 @@ app.use(function(req, res, ne***REMOVED***t) {
 
 // set up error handling
 app.use(function(err, req, res, ne***REMOVED***t) {
-  console.log('Received data app.js :', req.body);
-  console.log('Received data app.js :', req.header);
-
-   // You can also log specific headers, for e***REMOVED***ample:
-   console.log('Content-Type:', req.get('Content-Type'));
-   console.log('Host:', req.get('Host'));
-   console.log('Content-Length:', req.get('Content-Length'));
-
-   // Send a response
-   //res.status(200).send('Headers received');
-
-
-
-
-
-  //res.status(err.status || 500);
+  res.status(err.status || 500);
   res.json({
     message: err.message,
     error: req.app.get('env') === 'development' ? err : {}
-  //res.status(err.status || 500).json({ message: msgStr, err: err });
-  res.status(err.status || 500).json(msgStr);
-  //res.render('error');
   });
-  console.log('Received data 404:', req.body);
 });
 
 module.e***REMOVED***ports = app;
