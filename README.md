@@ -71,12 +71,20 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 
 ## API Documentation
 
-| Endpoint             | Method | Description                          |
-|----------------------|--------|--------------------------------------|
-| `/api/login`         | POST   | User login.                         |
-| `/api/register`      | POST   | User registration.                  |
-| `/api/device`        | POST   | Add/remove devices.                 |
-| `/api/measurements`  | GET    | Fetch measurement data.             |
+## **API Documentation**
+
+| **Endpoint**              | **Method** | **Description**                               |
+|---------------------------|------------|-----------------------------------------------|
+| `/api/login`              | POST       | User login.                                   |
+| `/api/register`           | POST       | User registration.                            |
+| `/api/devices`            | GET        | Retrieve a list of devices for the user.      |
+| `/api/devices/add`        | POST       | Add a new IoT device to the user’s account.   |
+| `/api/devices/remove`     | POST       | Remove an IoT device from the user’s account. |
+| `/api/measurements`       | GET        | Fetch heart rate and SpO2 measurement data.   |
+| `/api/patients`           | GET        | Retrieve patient data for physicians.         |
+| `/api/patients/update`    | PUT        | Update patient information or device links.   |
+| `/api/physicians`         | GET        | Retrieve aggregated patient data.             |
+| `/api/physicians/manage`  | POST       | Manage patient accounts and linked devices.   |  
 
 ---
 
@@ -108,30 +116,3 @@ The following sections are incomplete and require input:
 
 ---
 
-## Lessons Learned
-1. Importance of modularizing backend and frontend code for maintainability.
-2. Challenges in real-time data synchronization between the IoT device and the server.
-3. Insights into the secure implementation of token-based authentication.
-
----
-
-## Challenges
-- **Hardware Integration:** Stabilizing measurements from the MAX30102 sensor.
-- **Frontend Responsiveness:** Ensuring seamless design across devices.
-- **Error Handling:** Managing offline device scenarios and delayed data uploads.
-
----
-
-## References
-- [Node.js Documentation](https://nodejs.org/en/docs/)
-- [MAX30102 Datasheet](https://datasheet.e***REMOVED***ample.com)
-- [Particle Photon Documentation](https://docs.particle.io/)
-
----
-
-## Contribution
-|  Team Member  | Backend (%) | Frontend (%) | Firmware (%) | Documentation (%) |
-|---------------|-------------|--------------|--------------|-------------------|
-| Aaron Colin   |     40      |      60      |      20      |        30         |
-| Ashish Khadka |     40      |      30      |      60      |        30         |
-| Taron Bashar  |     20      |      10      |      20      |        40         |
