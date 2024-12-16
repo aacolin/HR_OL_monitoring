@@ -69,14 +69,20 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 
 ---
 
-## API Documentation
+## **API Documentation**
 
-| Endpoint             | Method | Description                          |
-|----------------------|--------|--------------------------------------|
-| `/api/login`         | POST   | User login.                         |
-| `/api/register`      | POST   | User registration.                  |
-| `/api/device`        | POST   | Add/remove devices.                 |
-| `/api/measurements`  | GET    | Fetch measurement data.             |
+| **Endpoint**              | **Method** | **Description**                               |
+|---------------------------|------------|-----------------------------------------------|
+| `/api/login`              | POST       | User login.                                   |
+| `/api/register`           | POST       | User registration.                            |
+| `/api/devices`            | GET        | Retrieve a list of devices for the user.      |
+| `/api/devices/add`        | POST       | Add a new IoT device to the user’s account.   |
+| `/api/devices/remove`     | POST       | Remove an IoT device from the user’s account. |
+| `/api/measurements`       | GET        | Fetch heart rate and SpO2 measurement data.   |
+| `/api/patients`           | GET        | Retrieve patient data for physicians.         |
+| `/api/patients/update`    | PUT        | Update patient information or device links.   |
+| `/api/physicians`         | GET        | Retrieve aggregated patient data.             |
+| `/api/physicians/manage`  | POST       | Manage patient accounts and linked devices.   |  
 
 ---
 
