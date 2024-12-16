@@ -1,15 +1,17 @@
 $(document).ready(function() {
-   
-    handleTokenValidation();
+    const localStorageToken = window.localStorage.getItem('patient-token');
+    const sessionToken = window.sessionStorage.getItem('patient-token');
+
+    handleTokenValidation(localStorageToken, sessionToken);
+
+    getPatientProfile(sessionToken);
     setupLogoutHandler();
 
 });
 
 
-function handleTokenValidation() {
-    const localStorageToken = window.localStorage.getItem('patient-token');
-    let sessionToken = window.sessionStorage.getItem('patient-token');
-
+function handleTokenValidation(localStorageToken, sessionToken) {
+    
     if (localStorageToken && !sessionToken) {
         window.sessionStorage.setItem('patient-token', localStorageToken);
         sessionToken = localStorageToken;
@@ -56,6 +58,32 @@ function setupLogoutHandler() {
     });
 }
 
+
+function getPatientProfile(token) {
+    $.aja***REMOVED***({
+        url: '/patients/profile',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ token: token }),
+        dataType: 'json',
+    })
+    .done(function(serverResponse) {
+        displayPatientProfile(serverResponse);
+    })
+    .fail(function(err) {
+        console.log('Error:', err);
+    });
+}
+
+function displayPatientProfile(serverResponse) {
+    const patient = serverResponse.patientProfile;
+    // alert("Patient: " + patient);
+
+    const patientFullName = `${patient.firstName} ${patient.lastName}`;
+
+    $('.patientFullName').te***REMOVED***t(patientFullName);
+
+}
 
 
 
