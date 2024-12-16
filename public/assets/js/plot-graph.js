@@ -7,12 +7,12 @@ var particleClientSecret ="particle";		 //  process.env.PARTICLE_CLIENT_SECRET;
 
 
 
-$(document).ready(function() {
-
-  $('#changeSamplingStartTimeBtn').on('click', showPatientGraph); 
-  
-
-});
+// $(document).ready(function() {
+// 
+//   $('#changeSamplingStartTimeBtn').on('click', showPatientGraph); 
+//   
+// 
+// });
 
 
 
@@ -448,11 +448,11 @@ function changeStopSamplingTime(){
 
 
 
-// $(function() {
-//     $('#showAllDataBtn').click(drawGraph);
-//     $('#changeSamplingStartTimeBtn').click(changeSamplingStartTime);
-//     $('#plotPatientGraphBtn').click(showPatientGraph);
-//     $('#changeSamplingFreqBtn').click(changeIOTSamplingFreq);
-//     $('#changeStopSamplingTimeBtn').click(changeStopSamplingTime);
-// });
+ $(function() {
+     $('#showAllDataBtn').click(drawGraph);
+     $('#changeSamplingStartTimeBtn').click(changeSamplingStartTime);
+     $('#plotPatientGraphBtn').click(showPatientGraph);
+     $('#changeSamplingFreqBtn').click(changeIOTSamplingFreq);
+     $('#changeStopSamplingTimeBtn').click(changeStopSamplingTime);
+ });
 
