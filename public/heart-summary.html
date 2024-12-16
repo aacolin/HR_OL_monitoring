@@ -179,6 +179,10 @@
                 <li class="nav-item fle***REMOVED***-fill" role="presentation">
                   <button class="nav-link w-100" id="data-simulator-tab" data-bs-toggle="tab" data-bs-target="#data-simulator-justified" type="button" role="tab" aria-controls="data-simulator" aria-selected="false">Simulator</button>
                 </li>
+                <!-- add a tab for IoT -->
+                 <li class="nav-item fle***REMOVED***-fill" role="presentation">
+                  <button class="nav-link w-100" id="iot-tab" data-bs-toggle="tab" data-bs-target="#iot-justified" type="button" role="tab" aria-controls="iot" aria-selected="false">IoT</button>
+                </li>
               </ul>
               <div class="tab-content pt-2" id="myTabjustifiedContent">
                 <div class="tab-pane fade show active" id="home-justified" role="tabpanel" aria-labelledby="home-tab">
@@ -221,6 +225,7 @@
                     <div class="card-footer"></div>
                   </div>
                 </div>
+
                 <div class="tab-pane fade" id="data-simulator-justified" role="tabpanel" aria-labelledby="data-simulator-tab">
                   <div class="card">
                     <div class="card-header card-title">Heart Rate Simulator</div>
@@ -260,11 +265,67 @@
                         </form>
                         
                       </div>
+
+
+
                       <input class="formButtons" id="resetSimulationButton" type="button" value="Reset Simulation" style="display: none;">
                     </div>
                     <div class="card-footer"></div>
                   </div>
                 </div>
+
+                <div class="tab-pane fade" id="data-IoT-justified" role="tabpanel" aria-labelledby="data-IoT-tab"></div>
+                <div class="tab-pane fade" id="iot-justified" role="tabpanel" aria-labelledby="iot-tab">
+                  <div class="card">
+                    <div class="card-header card-title">IoT Data</div>
+                    <div class="card-body">
+                      <br>
+                      <div id="IotData">
+                        <h1>Sensor Data Visualization</h1>
+
+                          <label for="timePeriod">Select Time Period: </label>
+                          <select id="timePeriod">
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                          </select>
+
+                          <label for="deviceId">Enter Device ID: </label>
+                          <input type="te***REMOVED***t" id="deviceId" placeholder="Device ID" />
+
+                          <button id="plotPatientGraphBtn">Show Graph</button>
+                          <br>
+                          <label for="startSamplingTime">Measurement to start from  </label>
+                          <input type="te***REMOVED***t" id="startSamplingTime" placeholder=" 24 Hr format" />
+                          <button id="changeSamplingStartTimeBtn">Set Start Time</button>
+
+                          <br>
+                          <label for="stopSamplingTime">Measurement to start to  </label>
+                          <input type="te***REMOVED***t" id="stopSamplingTime" placeholder="24 Hr format" >
+                          <button id="changeStopSamplingTimeBtn">Set Stop Time</button>
+
+                          <br>
+                          <label for="samplingFreq">Interval of measurement  </label>
+                          <input type="te***REMOVED***t" id="samplingFreq" placeholder="Enter Time in minute" >
+                          <button id="changeSamplingFreqBtn">Set IOT Sampling Frequency</button>
+
+                          <!-- Two separate canvases for Heart Rate and SpO2 -->
+                          <h2>Heart Rate</h2>
+                          <canvas id="heartRateChart"></canvas>
+
+                          <h2>SpO2</h2>
+                          <canvas id="SpO2Chart"></canvas>
+                      </div>
+                      <div id="iotChart">
+                        <!-- java Script will generate a simple graph -->
+
+                      </div> <!-- End Line Chart -->
+                    </div>
+                    <div class="card-footer"></div>
+                  </div><!-- End Card with header and footer -->
+
+
+
+
               </div><!-- End Default Tabs -->
             </div>
           </div>
@@ -297,6 +358,7 @@
   <script src="assets/js/heart.js"></script>
   <script src="assets/js/simulator.js"></script>
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/iot.js"></script>
  
 
 </body>

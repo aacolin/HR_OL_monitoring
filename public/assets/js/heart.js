@@ -1,3 +1,5 @@
+
+
 $(document).ready(function() {
     const localStorageToken = window.localStorage.getItem('patient-token');
     const sessionToken = window.sessionStorage.getItem('patient-token');
@@ -6,8 +8,15 @@ $(document).ready(function() {
 
     getPatientProfile(sessionToken);
     setupLogoutHandler();
-
 });
+
+
+
+
+
+
+
+
 
 
 function handleTokenValidation(localStorageToken, sessionToken) {

@@ -6,6 +6,19 @@ var particleClientSecret ="particle";		 //  process.env.PARTICLE_CLIENT_SECRET;
 
 
 
+
+$(document).ready(function() {
+
+  $('#changeSamplingStartTimeBtn').on('click', showPatientGraph); 
+  
+
+});
+
+
+
+
+
+
 function drawGraph(){
     //alert('button clicked');
     const deviceId = "johndoedevice123";
@@ -129,21 +142,21 @@ function getDateRanges(rangeType) {
 
 function showPatientGraph() {
 	alert('patientGraph');
-    const rangeType = document.getElementById('timePeriod').value;
-    const deviceId = document.getElementById('deviceId').value;
-    const now = new Date();
-    // console.log("Calculating Range for " + rangeType);
-    const {startDate, endDate} = getDateRanges(rangeType);
+    // const rangeType = document.getElementById('timePeriod').value;
+    // const deviceId = document.getElementById('deviceId').value;
+    // const now = new Date();
+    // // console.log("Calculating Range for " + rangeType);
+    // const {startDate, endDate} = getDateRanges(rangeType);
 
-    //fetch(`sensor/getDataByTimePeriod?startDate=${startDate}&endDate=${endDate}&deviceId=${deviceId}`)
-    if( rangeType === 'weekly' || rangeType === 'monthly'){
-      weekelyMonthly(startDate, endDate, rangeType);
-    }
-    else {
-        const aDay = new Date().toISOString(); // UTC time in ISO format
+    // //fetch(`sensor/getDataByTimePeriod?startDate=${startDate}&endDate=${endDate}&deviceId=${deviceId}`)
+    // if( rangeType === 'weekly' || rangeType === 'monthly'){
+    //   weekelyMonthly(startDate, endDate, rangeType);
+    // }
+    // else {
+    //     const aDay = new Date().toISOString(); // UTC time in ISO format
 
-        dailyFetch(rangeType, aDay, deviceId);
-    }
+    //     dailyFetch(rangeType, aDay, deviceId);
+    // }
 }
 
 function dailyFetch(rangeType, aDay,  deviceId){
@@ -435,11 +448,11 @@ function changeStopSamplingTime(){
 
 
 
-$(function() {
-    $('#showAllDataBtn').click(drawGraph);
-    $('#changeSamplingStartTimeBtn').click(changeSamplingStartTime);
-    $('#plotPatientGraphBtn').click(showPatientGraph);
-    $('#changeSamplingFreqBtn').click(changeIOTSamplingFreq);
-    $('#changeStopSamplingTimeBtn').click(changeStopSamplingTime);
-});
+// $(function() {
+//     $('#showAllDataBtn').click(drawGraph);
+//     $('#changeSamplingStartTimeBtn').click(changeSamplingStartTime);
+//     $('#plotPatientGraphBtn').click(showPatientGraph);
+//     $('#changeSamplingFreqBtn').click(changeIOTSamplingFreq);
+//     $('#changeStopSamplingTimeBtn').click(changeStopSamplingTime);
+// });
 

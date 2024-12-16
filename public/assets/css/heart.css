@@ -24,3 +24,56 @@
 #resetSimulationButton {
     width: 25%;
 }
+
+#IotData {
+    margin: 20p***REMOVED*** 0;
+}
+
+#IotData h1 {
+    font-size: 1.5em;
+    margin-bottom: 20p***REMOVED***;
+}
+
+#IotData label {
+    display: block;
+    margin-top: 10p***REMOVED***;
+    font-weight: bold;
+}
+
+#IotData select,
+#IotData input[type="te***REMOVED***t"] {
+    width: 100%;
+    padding: 10p***REMOVED***;
+    margin-top: 5p***REMOVED***;
+    margin-bottom: 10p***REMOVED***;
+    border: 1p***REMOVED*** solid #ddd;
+    border-radius: 4p***REMOVED***;
+}
+
+#IotData button {
+    display: inline-block;
+    padding: 10p***REMOVED*** 20p***REMOVED***;
+    margin-top: 10p***REMOVED***;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4p***REMOVED***;
+    cursor: pointer;
+}
+
+#IotData button:hover {
+    background-color: #0056b3;
+}
+
+#IotData h2 {
+    font-size: 1.2em;
+    margin-top: 20p***REMOVED***;
+}
+
+#IotData canvas {
+    width: 100%;
+    height: 300p***REMOVED***;
+    margin-top: 10p***REMOVED***;
+    border: 1p***REMOVED*** solid #ddd;
+    border-radius: 4p***REMOVED***;
+}
