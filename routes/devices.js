@@ -12,11 +12,11 @@ const request = require('request');
 const qs = require('qs');
 
 // fetch PARTICLE_ACCESS_TOKEN
-var particleAccessToken = process.env.PARTICLE_ACCESS_TOKEN;
-var particleUserName = process.env.PARTICLE_USERNAME;
-var particlePassword = process.env.PARTICLE_PASSWORD;
-var particleClientId = process.env.PARTICLE_CLIENT_ID;
-var particleClientSecret = process.env.PARTICLE_CLIENT_SECRET;
+var particleAccessToken = PERTICLE_ACCESS_TOKEN; // process.env.PARTICLE_ACCESS_TOKEN;
+var particleUserName = PARTICLE_ACCOUNT_USERNAME; //process.env.PARTICLE_USERNAME;
+var particlePassword =PARTICLE_ACCOUNT_PASSWORD;          // process.env.PARTICLE_PASSWORD;
+var particleClientId = "particle"        	 //process.env.PARTICLE_CLIENT_ID;
+var particleClientSecret ="particle";		 //  process.env.PARTICLE_CLIENT_SECRET;
 
 // Function to verify the Particle access token
 async function verifyParticleAccessToken() {

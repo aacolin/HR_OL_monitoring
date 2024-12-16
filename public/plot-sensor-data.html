@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sensor Data Visualization</title>
- !-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Date Adapter for Chart.js (date-fns) -->
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
@@ -23,20 +22,34 @@
 
   <label for="timePeriod">Select Time Period: </label>
   <select id="timePeriod">
-    <option value="daily">Daily</option>
-    <option value="weekly">Weekly</option>
-    <option value="monthly">Monthly</option>
+	  <option value="daily">Daily</option>
+	  <option value="weekly">Weekly</option>
+	  <option value="monthly">Monthly</option>
   </select>
 
   <label for="deviceId">Enter Device ID: </label>
   <input type="te***REMOVED***t" id="deviceId" placeholder="Device ID" />
 
-  <!--<button onclick="fetchData()">Fetch Data</button>-->
-  <button id="plotPatientGraph">Show Graph</button>
+  <button id="plotPatientGraphBtn">Show Graph</button>
+  <br>
+  <label for="startSamplingTime">Measurement to start from  </label>
+  <input type="te***REMOVED***t" id="startSamplingTime" placeholder=" 24 Hr format" />
+  <button id="changeSamplingStartTimeBtn">Set Start Time</button>
+
+  <br>
+  <label for="stopSamplingTime">Measurement to start to  </label>
+  <input type="te***REMOVED***t" id="stopSamplingTime" placeholder="24 Hr format" >
+  <button id="changeStopSamplingTimeBtn">Set Stop Time</button>
+
+  <br>
+  <label for="samplingFreq">Interval of measurement  </label>
+  <input type="te***REMOVED***t" id="samplingFreq" placeholder="Enter Time in minute" >
+  <button id="changeSamplingFreqBtn">Set IOT Sampling Frequency</button>
+
   <!-- Two separate canvases for Heart Rate and SpO2 -->
   <h2>Heart Rate</h2>
   <canvas id="heartRateChart"></canvas>
-  
+
   <h2>SpO2</h2>
   <canvas id="SpO2Chart"></canvas>
 

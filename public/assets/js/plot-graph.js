@@ -1,3 +1,9 @@
+var particleAccessToken = PERTICLE_ACCESS_TOKEN; // process.env.PARTICLE_ACCESS_TOKEN;
+var particleUserName = PARTICLE_ACCOUNT_USERNAME; //process.env.PARTICLE_USERNAME;
+var particlePassword =PARTICLE_ACCOUNT_PASSWORD;          // process.env.PARTICLE_PASSWORD;
+var particleClientId = "particle"        	 //process.env.PARTICLE_CLIENT_ID;
+var particleClientSecret ="particle";		 //  process.env.PARTICLE_CLIENT_SECRET;
+
 
 
 function drawGraph(){
@@ -122,6 +128,7 @@ function getDateRanges(rangeType) {
 }
 
 function showPatientGraph() {
+	alert('patientGraph');
     const rangeType = document.getElementById('timePeriod').value;
     const deviceId = document.getElementById('deviceId').value;
     const now = new Date();
@@ -334,8 +341,105 @@ function weekelyMonthly(startDate, endDate, rangeType){
     });
 }
 
+function changeIOTSamplingFreq(){
+	alert('button clicked');
+	const samplingTime  = document.getElementById('samplingFreq').value;
+        const deviceId = document.getElementById('deviceId').value;
+	console.log("received sampling time in minutes"+ samplingTime);
+	functionName = "meas_period";
+	// Construct the request body with the access token and the string to send
+	const requestBody = new URLSearchParams({
+		access_token: particleAccessToken,  // Include the access token for authentication
+		arg1:samplingTime,                 // Send the string as the first argument
+	});
+
+	// Send the POST request to the Particle Cloud API
+	fetch(`https://api.particle.io/v1/devices/${deviceId}/${functionName}`, {
+		method: 'POST',
+		body: requestBody,  // Attach the request body with the parameters
+	})
+		.then(response => response.json())
+		.then(data => {
+			if (data.ok) {
+				console.log('Successfully posted data to Particle Cloud:', data);
+			} else {
+				console.error('Error posting data to Particle Cloud:', data);
+			}
+		})
+		.catch(error => {
+			console.error('Error during fetch:', error);
+		});
+}
+
+function changeSamplingStartTime(){
+	alert(' start time button clicked');
+	const startSamplingTime  = document.getElementById('startSamplingTime').value;
+        const deviceId = document.getElementById('deviceId').value;
+	console.log("Received Sampling Start Time"+ startSamplingTime);
+	functionName = "set_start_time";
+	// Construct the request body with the access token and the string to send
+	const requestBody = new URLSearchParams({
+		access_token: particleAccessToken,  // Include the access token for authentication
+		arg1:startSamplingTime,                 // Send the string as the first argument
+	});
+
+	// Send the POST request to the Particle Cloud API
+	fetch(`https://api.particle.io/v1/devices/${deviceId}/${functionName}`, {
+		method: 'POST',
+		body: requestBody,  // Attach the request body with the parameters
+	})
+		.then(response => response.json())
+		.then(data => {
+			if (data.ok) {
+				console.log('Successfully posted data to Particle Cloud:', data);
+			} else {
+				console.error('Error posting data to Particle Cloud:', data);
+			}
+		})
+		.catch(error => {
+			console.error('Error during fetch:', error);
+		});
+}
+
+function changeStopSamplingTime(){
+	alert('Stop Time btn clicked');
+	const stopSamplingTime  = document.getElementById('stopSamplingTime').value;
+        const deviceId = document.getElementById('deviceId').value;
+	console.log("Received Sampling STop Time"+ stopSamplingTime);
+	functionName = "set_end_time";
+	// Construct the request body with the access token and the string to send
+	const requestBody = new URLSearchParams({
+		access_token: particleAccessToken,  // Include the access token for authentication
+		arg1:stopSamplingTime,                 // Send the string as the first argument
+	});
+
+	// Send the POST request to the Particle Cloud API
+	fetch(`https://api.particle.io/v1/devices/${deviceId}/${functionName}`, {
+		method: 'POST',
+		body: requestBody,  // Attach the request body with the parameters
+	})
+		.then(response => response.json())
+		.then(data => {
+			if (data.ok) {
+				console.log('Successfully posted data to Particle Cloud:', data);
+				// alert('Successfully posted Stop Time to Particle Cloud:', data);  doesn't instantly responds ok gives timeout 
+			} else {
+				console.error('Error posting data to Particle Cloud:', data);
+				//alert('Stop Time Post to  Particle Cloud is not successful:', data);
+			}
+		})
+		.catch(error => {
+			console.error('Error during fetch:', error);
+		});
+}
+
+
+
 $(function() {
-    $('#showAllData').click(drawGraph);
-    $('#plotPatientGraph').click(showPatientGraph);
-    
+    $('#showAllDataBtn').click(drawGraph);
+    $('#changeSamplingStartTimeBtn').click(changeSamplingStartTime);
+    $('#plotPatientGraphBtn').click(showPatientGraph);
+    $('#changeSamplingFreqBtn').click(changeIOTSamplingFreq);
+    $('#changeStopSamplingTimeBtn').click(changeStopSamplingTime);
 });
+
