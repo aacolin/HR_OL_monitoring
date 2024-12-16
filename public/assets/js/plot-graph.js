@@ -5,27 +5,13 @@ var particleClientId = "particle"        	 //process.env.PARTICLE_CLIENT_ID;
 var particleClientSecret ="particle";		 //  process.env.PARTICLE_CLIENT_SECRET;
 
 
-
-
-// $(document).ready(function() {
-// 
-//   $('#changeSamplingStartTimeBtn').on('click', showPatientGraph); 
-//   
-// 
-// });
-
-
-
-
-
-
 function drawGraph(){
     //alert('button clicked');
-    const deviceId = "johndoedevice123";
+    const iotDeviceId = "johndoedevice123";
     //console.log("button clicked");
     //  drawGraph();
     $.aja***REMOVED***({
-        url: `sensor/plotData?deviceId=${deviceId}`,
+        url: `sensor/plotData?iotDeviceId=${iotDeviceId}`,
         method: 'GET',
         contentType: 'application/json',
         //data: credentialsInJSON,
@@ -143,29 +129,30 @@ function getDateRanges(rangeType) {
 function showPatientGraph() {
 	alert('patientGraph');
     // const rangeType = document.getElementById('timePeriod').value;
-    // const deviceId = document.getElementById('deviceId').value;
+    // const iotDeviceId = document.getElementById('iotDeviceId').value;
     // const now = new Date();
     // // console.log("Calculating Range for " + rangeType);
     // const {startDate, endDate} = getDateRanges(rangeType);
 
-    // //fetch(`sensor/getDataByTimePeriod?startDate=${startDate}&endDate=${endDate}&deviceId=${deviceId}`)
+    // //fetch(`sensor/getDataByTimePeriod?startDate=${startDate}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`)
     // if( rangeType === 'weekly' || rangeType === 'monthly'){
     //   weekelyMonthly(startDate, endDate, rangeType);
     // }
     // else {
     //     const aDay = new Date().toISOString(); // UTC time in ISO format
 
-    //     dailyFetch(rangeType, aDay, deviceId);
+    //     dailyFetch(rangeType, aDay, iotDeviceId);
     // }
 }
 
-function dailyFetch(rangeType, aDay,  deviceId){
+function dailyFetch(rangeType, aDay,  iotDeviceId){
+  if (iotDeviceId ===""){ alert ('Please enter a valid device ID'); return;}
   console.log("received daily" + aDay + " " +  rangeType);
   // const DEC_FIRST_WK = "2024-12-08T07:00:00.000Z";
-  // const MONTHLY_QUERY = fetch(`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&deviceId=${deviceId}`)`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&deviceId=${deviceId}`
-  // rangeType === 'monthly'){fetch(`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&deviceId=${deviceId}`)}
-  // else{fetch(`sensor/usrLogs?startDate=${DEC_FIRST_WK}&endDate=${endDate}&deviceId=${deviceId}`)}
-  fetch(`sensor/usrDayLog?aDay=${aDay}&deviceId=${deviceId}`)
+  // const MONTHLY_QUERY = fetch(`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`)`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`
+  // rangeType === 'monthly'){fetch(`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`)}
+  // else{fetch(`sensor/usrLogs?startDate=${DEC_FIRST_WK}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`)}
+  fetch(`sensor/usrDayLog?aDay=${aDay}&iotDeviceId=${iotDeviceId}`)
   .then(response => response.json())
   .then(data => {
    if (Array.isArray(data) && data.length > 0) {
@@ -260,10 +247,10 @@ function dailyFetch(rangeType, aDay,  deviceId){
 function weekelyMonthly(startDate, endDate, rangeType){
   console.log("received montly and weekely" + startDate + " " +  endDate);
   // const DEC_FIRST_WK = "2024-12-08T07:00:00.000Z";
-  // const MONTHLY_QUERY = fetch(`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&deviceId=${deviceId}`)`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&deviceId=${deviceId}`
-  // rangeType === 'monthly'){fetch(`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&deviceId=${deviceId}`)}
-  // else{fetch(`sensor/usrLogs?startDate=${DEC_FIRST_WK}&endDate=${endDate}&deviceId=${deviceId}`)}
-  fetch(`sensor/usrMonthlyLogs?startDate=${startDate}&endDate=${endDate}&deviceId=${deviceId}`)
+  // const MONTHLY_QUERY = fetch(`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`)`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`
+  // rangeType === 'monthly'){fetch(`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`)}
+  // else{fetch(`sensor/usrLogs?startDate=${DEC_FIRST_WK}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`)}
+  fetch(`sensor/usrMonthlyLogs?startDate=${startDate}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`)
   .then(response => response.json())
   .then(data => {
    if (Array.isArray(data) && data.length > 0) {
@@ -355,10 +342,16 @@ function weekelyMonthly(startDate, endDate, rangeType){
 }
 
 function changeIOTSamplingFreq(){
-	alert('button clicked');
+	// alert('Change Sampling frequency button clicked');
 	const samplingTime  = document.getElementById('samplingFreq').value;
-        const deviceId = document.getElementById('deviceId').value;
+        const iotDeviceId = document.getElementById('iotDeviceId').value;
+	
+	console.log("device ID received" + iotDeviceId);
 	console.log("received sampling time in minutes"+ samplingTime);
+	
+	if (iotDeviceId.trim() === ""){ alert ('Please enter a valid device ID'); return;}
+        if (samplingTime === "" || samplingTime=== "0"){ alert ('Please enter a Non Zero Sampling Time Interval '); return;}
+
 	functionName = "meas_period";
 	// Construct the request body with the access token and the string to send
 	const requestBody = new URLSearchParams({
@@ -367,7 +360,7 @@ function changeIOTSamplingFreq(){
 	});
 
 	// Send the POST request to the Particle Cloud API
-	fetch(`https://api.particle.io/v1/devices/${deviceId}/${functionName}`, {
+	fetch(`https://api.particle.io/v1/devices/${iotDeviceId}/${functionName}`, {
 		method: 'POST',
 		body: requestBody,  // Attach the request body with the parameters
 	})
@@ -385,10 +378,15 @@ function changeIOTSamplingFreq(){
 }
 
 function changeSamplingStartTime(){
-	alert(' start time button clicked');
+	// alert(' start time button clicked');
 	const startSamplingTime  = document.getElementById('startSamplingTime').value;
-        const deviceId = document.getElementById('deviceId').value;
+        const iotDeviceId = document.getElementById('iotDeviceId').value;
+
 	console.log("Received Sampling Start Time"+ startSamplingTime);
+        
+	if (iotDeviceId ===""){ alert ('Please enter a valid device ID'); return;}
+        if (startSamplingTime=== "" || startSamplingTime=== "0"){ alert ('Please enter a Non Zero Start  Time'); return;}
+
 	functionName = "set_start_time";
 	// Construct the request body with the access token and the string to send
 	const requestBody = new URLSearchParams({
@@ -397,7 +395,7 @@ function changeSamplingStartTime(){
 	});
 
 	// Send the POST request to the Particle Cloud API
-	fetch(`https://api.particle.io/v1/devices/${deviceId}/${functionName}`, {
+	fetch(`https://api.particle.io/v1/devices/${iotDeviceId}/${functionName}`, {
 		method: 'POST',
 		body: requestBody,  // Attach the request body with the parameters
 	})
@@ -415,9 +413,13 @@ function changeSamplingStartTime(){
 }
 
 function changeStopSamplingTime(){
-	alert('Stop Time btn clicked');
+// 	alert('Stop Time btn clicked');
 	const stopSamplingTime  = document.getElementById('stopSamplingTime').value;
-        const deviceId = document.getElementById('deviceId').value;
+        const iotDeviceId = document.getElementById('iotDeviceId').value;
+
+	if (iotDeviceId ===""){ alert ('Please enter a valid device ID'); return;}
+        if (stopSamplingTime==="" || stopSamplingTime==="0"){ alert ('Please enter a Non Zero Stop Time'); return;}
+	
 	console.log("Received Sampling STop Time"+ stopSamplingTime);
 	functionName = "set_end_time";
 	// Construct the request body with the access token and the string to send
@@ -427,7 +429,7 @@ function changeStopSamplingTime(){
 	});
 
 	// Send the POST request to the Particle Cloud API
-	fetch(`https://api.particle.io/v1/devices/${deviceId}/${functionName}`, {
+	fetch(`https://api.particle.io/v1/devices/${iotDeviceId}/${functionName}`, {
 		method: 'POST',
 		body: requestBody,  // Attach the request body with the parameters
 	})
