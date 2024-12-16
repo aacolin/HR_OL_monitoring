@@ -6,7 +6,7 @@
 
 // #define DEBUG_PRINT
 
-#define MAX_HEART_READ_ITR 4 //300  // calibrate to your sensor
+#define MAX_HEART_READ_ITR 4                        //300  // calibrate to your sensor
 #define ONE_DAY_MILLIS 24 * 60 * 60 * 1000 
 
 
@@ -26,12 +26,12 @@ const pin_t MY_LED = D11;
 // time interval and measurement frequency settings
 const int MILLI_SEC = 1000;
 
-// unsigned long  measurementIntervalInMS = 120000;   // delay in millisecond
+unsigned long  measurementIntervalInMS = 120000;   // delay in millisecond
 
 
 // all time declarations
 
-unsigned long  measurementIntervalInMS = 300;   // delay in millisecond
+//unsigned long  measurementIntervalInMS = 300;   // delay in millisecond
 unsigned long sensorValRdTimeInMS = 0; 
 unsigned long previousMillis = 0;  // Store the last time the event occurred
 const long FIVE_MIN_IN_MS = 5 * 60 * 1000;  // 5 minutes in milliseconds (5 * 60 * 1000)
@@ -51,8 +51,11 @@ SYSTEM_MODE(SEMI_AUTOMATIC);
 // Run the application and system concurrently in separate threads
 SYSTEM_THREAD(ENABLED);
 
-TCPClient client;           // for http
-MAX30105 particleSensor;    // MX10302 sensor
+// This allows for USB serial debug logs
+// SerialLogHandler logHandler;                      // too many messages, system debug
+
+TCPClient client;                                    // for http
+MAX30105 particleSensor;                             // MX10302 sensor
 
 // Define the states of the traffic light
 typedef enum {
@@ -68,30 +71,28 @@ typedef enum {
 
 // Define a struct to hold SPO2, heart rate, and Uni***REMOVED*** timestamp
 struct sensorDataStruct {
-    float SPO2;            // Blood o***REMOVED***ygen saturation
-    int heartRate;         // Heart rate in beats per minute
-    time32_t uni***REMOVED***Timestamp;  // Uni***REMOVED*** timestamp for the measurement
+  float SPO2;               // Blood o***REMOVED***ygen saturation
+  int heartRate;            // Heart rate in beats per minute
+  time32_t uni***REMOVED***Timestamp;  // Uni***REMOVED*** timestamp for the measurement
 };
-int32_t spo2; //SPO2 value
 
+int32_t spo2; //SPO2 value
 float beatsPerMinute;
 int beatAvg;
-
 const int MAX_SAMPLES = 1024;
 
 
-// Beginning  of synchronous state
-ece513IOTProjState particleState = CHK_TIME;
-char t***REMOVED***Buffer[256]; // Buffer for the JSON payload
+ece513IOTProjState particleState = CHK_TIME;               // Beginning  of synchronous state
+char t***REMOVED***Buffer[256];                                        // Buffer for the JSON payload
 
 // wifi and server setting
-//const char* server = "192.168.50.71"; // Replace with your local server IP this is my usb interface , 
-//const char* server = "18.191.214.37"; //amazon server
-const int port = 3000;                // serverPort number
-// const char* ssid = SSID;          // Replace with your Wi-Fi SSIDp_
-//const char* password = PASSWORD;    // Replace with your Wi-Fi password
-const char* ssid = "my_wifii";          // Replace with your Wi-Fi SSID
-const char* password = "WIFI_PASSWORD!";    // Replace with your Wi-Fi password
+//const char* server = "192.168.50.71";   // Replace with your local server IP this is my usb interface , 
+//const char* server = "18.191.214.37";   //amazon server
+const int port = 3000;                    // serverPort number
+// const char* ssid = SSID;            // Replace with your Wi-Fi SSIDp_
+//const char* password = PASSWORD;      // Replace with your Wi-Fi password
+const char* ssid = "my_wifii";            // Replace with your Wi-Fi SSID
+const char* password = "WIFI_PASSWORD!";      // Replace with your Wi-Fi password
 
 
 //heart beat sesor setting
@@ -103,10 +104,10 @@ const int PULSE_WIDTH = 411;   // 18 bit resolution
 const int ADC_RANGE = 16384;   // 16384 (62.5pA per LSB)
 
 // average HB setting
-const byte RATE_SIZE = 4; //Increase this for more averaging. 4 is good.
-byte rates[RATE_SIZE]; //Array of heart rates
+const byte RATE_SIZE = 4;       //Increase this for more averaging. 4 is good.
+byte rates[RATE_SIZE];          //Array of heart rates
 byte rateSpot = 0;
-long lastBeat = 0; //Time at which the last beat occurred
+long lastBeat = 0;                      //Time at which the last beat occurred
 
 // print sensor val that we got
 void sensorDataConsolePrint(long irValue){
@@ -119,8 +120,8 @@ void sensorDataConsolePrint(long irValue){
 // connect to wif 
 void connectToWiFi() {
   CYAN_COLOR;
-  WiFi.disconnect(); // Ensure we start fresh
-  WiFi.on();         // Turn on Wi-Fi module
+  WiFi.disconnect();                                            // Ensure we start fresh
+  WiFi.on();                                                    // Turn on Wi-Fi module
   WiFi.setCredentials(ssid, password, WPA2);
   WiFi.connect();
   Serial.print("Connecting  to WIFI. . .");
@@ -150,24 +151,19 @@ void createJSONPayload(int avgHeartBeat, float o2Lvl, time32_t sampledTime) {
 
 // read hearbeat
 int  readHearBeat(){
-  // Serial.println("\n Measuring Heart Beat.");
-  //Take average of readings
-  for (int i = 0; i<MAX_HEART_READ_ITR; i++){
+  for (int i = 0; i<MAX_HEART_READ_ITR; i++){    //Take average of readings
     long irValue = particleSensor.getIR();
      if (checkForBeat(irValue) == true){
-    // if (irValue >= 50000){
       Serial.println("We sensed a beat!");
       //We sensed a beat!
       long delta = millis() - lastBeat;
       lastBeat = millis();
       beatsPerMinute = 60 / (delta / 1000.0);
-
       if (beatsPerMinute < 255 && beatsPerMinute > 50){
         rates[rateSpot++] = (byte)beatsPerMinute; //Store this reading in the array
         rateSpot %= RATE_SIZE; //Wrap variable
-        //Take average of readings
         beatAvg = 0;
-        for (byte ***REMOVED*** = 0 ; ***REMOVED*** < RATE_SIZE ; ***REMOVED***++)
+        for (byte ***REMOVED*** = 0 ; ***REMOVED*** < RATE_SIZE ; ***REMOVED***++)          //Take average of readings
           beatAvg += rates[***REMOVED***];
         beatAvg /= RATE_SIZE;
       }
@@ -316,22 +312,36 @@ bool checkDelayOrFiveMinutes() {
   }
   return false; // Neither the delay nor 5 minutes have passed
 }
-int setMeasurementTime(String jsonString) {
-  JSONValue outerObj = JSONValue::parseCopy(jsonString);
-  JSONObjectIterator iter(outerObj);
-  Serial.println("---------------------------------");
-  Serial.println(" CLOUD Variable Received         ");
-  Serial.println("---------------------------------");
-  Serial.print("from cloud JSON STRING = ");
-  Serial.println(jsonString);
 
-   while(iter.ne***REMOVED***t()) {
-      Log.info("key=%s value=%s", 
-        (const char *) iter.name(), 
-        (const char *) iter.value().toString());
-    }
- return 1;
+struct measuringTime {
+  int startTime = 6;  // 6 Am to 
+  int endTime = 22;   // 10 PM Sampling Time unless changed
+} samplingTime;
+
+int setStartTime(String startTime) {
+  Serial.println("---------------------------------");
+  Serial.println(" CLOUD Variable StartTimeReceived");
+  Serial.println("---------------------------------");
+  Serial.println(startTime);
+  if(startTime == ""){ return -1;}
+  else{ samplingTime.startTime = startTime.toInt();
+        Serial.print(" New Sampling Start Time Set : ");
+        Serial.println(samplingTime.startTime);  return 1;}
 }
+
+int setEndTime(String endTime) {
+  Serial.println("---------------------------------");
+  Serial.println(" CLOUD Variable EndTimeReceived  ");
+  Serial.println("---------------------------------");
+  Serial.println(endTime);
+  if(endTime == ""){ return -1;}
+  else{ samplingTime.endTime = endTime.toInt();
+        Serial.print(" New Sampling End Time Set : ");
+        Serial.println(samplingTime.endTime);  return 1;}
+}
+
+
+
 // cloud function that sets 
 int setVeasurementIntervalInMS(String sensorCaptureRate){
   Serial.println("---------------------------------");
@@ -379,12 +389,20 @@ bool isItTimeToCheckTheBeat(){
   Serial.println("---------------------------------");
   Serial.println("           Checking Time         ");
   Serial.println("---------------------------------");
-  if(Time.hour() >= 6 && Time.hour() <= 23){
+  if(Time.hour() >= samplingTime.startTime && Time.hour() <= samplingTime.endTime){ // takes 24 hour format
     Serial.println("Heart Rate measurment time is valid");
 
      return true;
-  } else {Serial.println("Not a valid time to take measurement, valid time is 6 AM to 10 PM"); return false;}
+  } else {
+      Serial.print("Not a valid time to take measurement, valid time is" );
+      Serial.print(samplingTime.startTime );
+      Serial.print(" to " );
+      Serial.println(samplingTime.endTime );
+      return false;
+    }
 }
+
+
 
 
 void setup() {
@@ -398,9 +416,10 @@ void setup() {
 
   Particle.variable("sensor_rd_val",t***REMOVED***Buffer);  // particle cloud variable 
                        //variable name                 //function
-  Particle.function("meas_period", setVeasurementIntervalInMS);      // register the cloud 
-  Particle.function("set_mea_time", setMeasurementTime);
-  Particle.function("led_on_off", cloudLedCntrl);
+  Particle.function("meas_period",    setVeasurementIntervalInMS);      // register the cloud 
+  Particle.function("set_start_time", setStartTime);
+  Particle.function("set_end_time",   setEndTime);
+  Particle.function("led_on_off",     cloudLedCntrl);
   waitFor(Time.isValid, 60000);  // Wait for time to be synchronized with Particle Device Cloud (requires active connection)
   Time.zone(-7);   // az is UTC -7
 
@@ -501,7 +520,7 @@ void loop() {
           }
           else{
             particleState = WAIT_SAMPLING_PERIOD;
-            Serial.print("Published all the offiline contents ");
+            Serial.print("No local content preset ");
             Serial.println(total_data_written);
           }
         } else{
