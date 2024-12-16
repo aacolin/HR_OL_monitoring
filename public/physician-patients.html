@@ -23,7 +23,7 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
-  <link href="assets/css/physician-profile.css" rel="stylesheet">
+  <link href="assets/css/physician-patients.css" rel="stylesheet">
 
   <!-- =======================================================
   * Template Name: NiceAdmin
@@ -76,14 +76,14 @@
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6 class="userName physicianFirstName">User</h6>
+              <h6 class="userName physicianFirstName" id="physicianFullName" >User</h6>
             </li>
             <li>
               <hr class="dropdown-divider">
             </li>
 
             <li>
-              <a class="dropdown-item d-fle***REMOVED*** align-items-center" href="physician-profile.html">
+              <a class="dropdown-item d-fle***REMOVED*** align-items-center" href="user-profile.html">
                 <i class="bi bi-person"></i>
                 <span>My Profile</span>
               </a>
@@ -135,14 +135,14 @@
       <li class="nav-heading">Patient</li>
 
       <li class="nav-item">
-        <a class="nav-link " href="physician-patients.html">
+        <a class="nav-link collapsed" href="physician-profile.html">
           <i class="bi bi-person"></i>
           <span>Physician Profile</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed " href="physician-patients.html">
+        <a class="nav-link  " href="">
           <i class="b***REMOVED*** b***REMOVED***-pulse"></i>
           <span>Patients</span>
         </a>
@@ -162,158 +162,96 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Physician Profile</h1>
+      <h1 id="physicianProfileName">Physician Profile</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="physician-profile.html">Home</a></li>
           <li class="breadcrumb-item">Physicians</li>
-          <li class="breadcrumb-item active">Profile</li>
+          <li class="breadcrumb-item active">Patients</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section profile">
-      <div class="row">
-        <div class="col-***REMOVED***l-4">
-
+    
+    <section class="section">
+      <div class="row">      
+        <div class="col-12">
           <div class="card">
-            <div class="card-body profile-card pt-4 d-fle***REMOVED*** fle***REMOVED***-column align-items-center">
+            <div class="card-body">
 
-              <!-- <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"> -->
-              <h2 class="userName physicianFirstName" id="physicianFirstName">User</h2>
-            </div>
-          </div>
+              <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownPatientslist" data-bs-toggle="dropdown" aria-e***REMOVED***panded="false">
+                  Select a Patient
+                </button>
 
-        </div>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownPatientsList">
+                          <!-- Patient names will be appended here -->
+                </ul>
+              </div>
 
-        <div class="col-***REMOVED***l-8">
+            <div id="patientGraphs" style="display: none;">
 
-          <div class="card">
-            <div class="card-body pt-3">
-              <!-- Bordered Tabs -->
-              <ul class="nav nav-tabs nav-tabs-bordered">
+              <h5 id="patientNameCard" class="card-title">Patient:</h5>
+              <!-- Detail Tabs -->
+              <ul class="nav nav-tabs d-fle***REMOVED***" id="myTabjustified" role="tablist">
 
-                <li class="nav-item">
-                  <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                <li class="nav-item fle***REMOVED***-fill" role="presentation">
+                  <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-justified" type="button" role="tab" aria-controls="home" aria-selected="true">Daily</button>
                 </li>
-
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit" id="editProfileTab">Edit Profile</button>
-                </li>
-
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password" id="changePasswordTab">Change Password</button>
-                </li>
-
                 
-
-              </ul>
-              <div class="tab-content pt-2">
-
-                <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                  
-                  <h5 class="card-title" >Physician Details</h5>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label" >Name:</div>
-                    <div class="col-lg-9 col-md-8" id="physicianFullName">Full name</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label">Specialty:</div>
-                    <div class="col-lg-9 col-md-8" id="physicianSpecialty">Specialty</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-lg-3 col-md-4 label" >Email:</div>
-                    <div class="col-lg-9 col-md-8" id="physicianEmail">email@e***REMOVED***ample.com</div>
-                  </div>
-                 
-
-                </div>
-
-                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-
-                  <!-- Profile Edit Form -->
-                  <form>
-                    <div class="row mb-3">
-                      <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
-                      <div class="col-md-8 col-lg-9">
-                        <!-- <img src="assets/img/profile-img.jpg" alt="Profile"> -->
-                        <div class="pt-2">
-                          <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                          <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="firstName" class="col-md-4 col-lg-3 col-form-label">First Name</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="firstName" type="te***REMOVED***t" class="form-control" id="editFirstName" value="">
-                      </div>
-                    </div>
-
-                    <div class="row mb-3">
-                      <label for="last" class="col-md-4 col-lg-3 col-form-label">Last Name</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="last" type="te***REMOVED***t" class="form-control" id="editLastName" value="">
-                      </div>
-                    </div>
-                    <div class="errorDiv" ></div>
-
-                    <div class="te***REMOVED***t-center">
-                      
-                      
-                      <button type="submit" class="btn btn-primary" id="saveProfileChanges">Save Changes</button>
-                      <button type="button" class="btn btn-primary cancelBtn" id="cancelProfileChanges">Cancel</button>
-                    </div>
-                  </form><!-- End Profile Edit Form -->
-
-                </div>
-
+                <li class="nav-item fle***REMOVED***-fill" role="presentation">
+                  <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-justified" type="button" role="tab" aria-controls="profile" aria-selected="false">Weekly</button>
+                </li>
                
+              </ul>
 
-                <div class="tab-pane fade pt-3" id="profile-change-password">
-                  <!-- Change Password Form -->
-                  <form id="changePasswordForm">
+              <div class="tab-content pt-2" id="myTabjustifiedContent">
+                <div class="tab-pane fade show active" id="home-justified" role="tabpanel" aria-labelledby="home-tab">
+                  <div class="card">
+                    <div class="card-header card-title">Heart Rate</div>
+                    <div class="card-body">
+                      <br>
+                      <div id="heartRateChart">
+                        <!-- java Script will generate a simple graph -->
 
-                    <div class="row mb-3">
-                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="password" type="password" class="form-control" id="currentPassword">
-                      </div>
+                      </div> <!-- End Line Chart -->
                     </div>
-
-                    <div class="row mb-3">
-                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="newpassword" type="password" class="form-control" id="newPassword">
-                      </div>
+                    <div class="card-footer"></div>
+                  </div><!-- End Card with header and footer -->
+                  <div class="card">
+                    <div class="card-header card-title">Blood O***REMOVED***igen Saturation</div>
+                    <div class="card-body">
+                      <!-- <h5 class="card-title">Heart Rate detailed View</h5> -->
+                      <br>
+                      <div id="bloodO***REMOVED***ygenChart"></div> <!-- End Line Chart -->
                     </div>
-
-                    <div class="row mb-3">
-                      <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
-                      <div class="col-md-8 col-lg-9">
-                        <input name="renewpassword" type="password" class="form-control" id="reEnternewPassword">
-                      </div>
-                    </div>
-
-                    <div class="errorDiv" ></div>
-
-                    <div class="te***REMOVED***t-center">
-                      <button type="submit" class="btn btn-primary">Change Password</button>
-                      <button type="button" class="btn btn-primary cancelBtn" id="cancelPasswordChanges">Cancel</button>
-                    </div>
-                  </form><!-- End Change Password Form -->
-
+                    <div class="card-footer"></div>
+                  </div>
                 </div>
-
-              </div><!-- End Bordered Tabs -->
+                <div class="tab-pane fade" id="profile-justified" role="tabpanel" aria-labelledby="profile-tab">
+                  <div class="card">
+                    <div class="card-header card-title">Average Heart Rate</div>
+                    <div class="card-body">
+                      <br>
+                      <div id="weeklyHeartRateChart"></div> <!-- End Line Chart -->
+                    </div>
+                    <div class="card-footer"></div>
+                  </div>
+                  <div class="card">
+                    <div class="card-header card-title">Average Blood O***REMOVED***igen Saturation</div>
+                    <div class="card-body">
+                      <br>
+                      <div id="weeklyO***REMOVED***ygenChart"></div> 
+                    </div>
+                    <div class="card-footer"></div>
+                  </div>
+                </div>
+                
+              </div><!-- End Default Tabs -->
+            </div>
 
             </div>
           </div>
-
         </div>
       </div>
     </section>
@@ -339,7 +277,8 @@
   <script src="assets/js/main.js"></script>
 
    <!-- Template Prject JS Files -->
-   <script src="assets/js/physician-profile.js"></script>
+   <script src="assets/js/physician-patients.js"></script>
+   
 
 </body>
 

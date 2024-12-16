@@ -367,6 +367,27 @@ router.put('/remove-device', async function(req, res) {
     
 });
 
+router.post('/patients-list', async function(req, res) {
+    const { email } = req.body;
+    if (!email) {
+        return res.status(400).json({ message: 'Email not found' });
+    }
+
+    try {
+        const physician = await Physician.findOne({ email: email });
+        if (!physician) {
+            return res.status(404).json({ message: 'Physician not found' });
+        }
+
+        const patients = await Patient.find({ physicianEmail: physician.email });
+        return res.status(200).json({ patients: patients });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: 'An une***REMOVED***pected error occurred on the server while processing your request. Please try again later.' });
+    }
+});
+
+
 
 
 module.e***REMOVED***ports = router;

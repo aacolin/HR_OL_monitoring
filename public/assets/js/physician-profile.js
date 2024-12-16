@@ -10,7 +10,7 @@ $(document).ready(function() {
 
 function handleTokenValidation() {
     const localStorageToken = window.localStorage.getItem('physician-token');
-    let sessionToken = window.sessionStorage.getItem('physician-token');
+    const sessionToken = window.sessionStorage.getItem('physician-token');
 
     if (localStorageToken && !sessionToken) {
         window.sessionStorage.setItem('physician-token', localStorageToken);
@@ -24,9 +24,7 @@ function handleTokenValidation() {
     }
 }
 
-function redirectToHomePage() {
-    window.location.href = '/home.html';
-}
+
 
 function validateTokenWithServer(token) {
     $.aja***REMOVED***({
@@ -46,6 +44,10 @@ function validateTokenWithServer(token) {
 function handleTokenValidationError() {
     window.localStorage.removeItem('physician-token');
     redirectToHomePage();
+}
+
+function redirectToHomePage() {
+    window.location.href = '/home.html';
 }
 
 function setupLogoutHandler() {
