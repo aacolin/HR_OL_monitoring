@@ -359,7 +359,7 @@ function getPatientDeviceInfo() {
     })
     .fail(function(err) {
         console.error('Error fetching device list:', err);
-        alert('Error ' + err.status + ' fetching device list: ' + JSON.stringify(err));
+        // alert('Error ' + err.status + ' fetching device list: ' + JSON.stringify(err));
     });
 }
 

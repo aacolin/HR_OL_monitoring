@@ -166,13 +166,13 @@ router.post('/login', async function(req, res) {
 router.post('/profile', async function(req, res) {
     
     const { token } = req.body;
-    console.log("token: " + token);
+    // console.log("token: " + token);
     if (!token) {
         return res.status(400).json({ message: 'Token not found' });
     }
     
     const tokenDecoded = jwt.decode(token, secret);
-    console.log("tokenDecoded: " + tokenDecoded.email);
+    // console.log("tokenDecoded: " + tokenDecoded.email);
 
     const physicianInDatabase = await Physician.findOne({ email: tokenDecoded.email });
 

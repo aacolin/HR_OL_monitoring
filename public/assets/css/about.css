@@ -1,4 +1,3 @@
-
 /*--------------------------------------------------------------
 # About Section
 --------------------------------------------------------------*/
@@ -186,4 +185,19 @@
   line-height: 24p***REMOVED***;
   margin-bottom: 0;
   padding: 0 30p***REMOVED*** 30p***REMOVED*** 30p***REMOVED***;
+}
+
+/*--------------------------------------------------------------
+# FAQ Section
+--------------------------------------------------------------*/
+.faq .card {
+  bo***REMOVED***-shadow: 0p***REMOVED*** 10p***REMOVED*** 50p***REMOVED*** rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+#faqTitle{
+  te***REMOVED***t-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding-top: 2%;
 }

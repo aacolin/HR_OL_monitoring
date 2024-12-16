@@ -1,4 +1,3 @@
-
 .hero {
     background: url(../img/doctors.jpeg) !important;
   }
@@ -91,4 +90,21 @@ color: red;
 margin-top: 2p***REMOVED***;
 font-size:0.8em;
 te***REMOVED***t-align:left;
+}
+
+.dropdownPatientslist {
+  width: 100%;
+  padding: 10p***REMOVED***;
+  border-radius: 5p***REMOVED***;
+  border: 1p***REMOVED*** solid #ccc;
+  background-color: #fff;
+  bo***REMOVED***-shadow: 4p***REMOVED*** 4p***REMOVED*** 8p***REMOVED*** rgba(0, 0, 0, 0.5);
+  margin-top: 15p***REMOVED***;
+  font-size: 16p***REMOVED***;
+  color: #333;
+}
+
+.dropdownPatientslist option {
+  padding: 10p***REMOVED***;
+  font-size: 16p***REMOVED***;
 }
