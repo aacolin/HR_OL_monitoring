@@ -148,10 +148,6 @@ function showPatientGraph() {
 function dailyFetch(rangeType, aDay,  iotDeviceId){
   if (iotDeviceId ===""){ alert ('Please enter a valid device ID'); return;}
   console.log("received daily" + aDay + " " +  rangeType);
-  // const DEC_FIRST_WK = "2024-12-08T07:00:00.000Z";
-  // const MONTHLY_QUERY = fetch(`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`)`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`
-  // rangeType === 'monthly'){fetch(`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`)}
-  // else{fetch(`sensor/usrLogs?startDate=${DEC_FIRST_WK}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`)}
   fetch(`sensor/usrDayLog?aDay=${aDay}&iotDeviceId=${iotDeviceId}`)
   .then(response => response.json())
   .then(data => {
@@ -243,13 +239,9 @@ function dailyFetch(rangeType, aDay,  iotDeviceId){
     });
 }
 
-
+// function to capture montly or weekly graph
 function weekelyMonthly(startDate, endDate, rangeType){
   console.log("received montly and weekely" + startDate + " " +  endDate);
-  // const DEC_FIRST_WK = "2024-12-08T07:00:00.000Z";
-  // const MONTHLY_QUERY = fetch(`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`)`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`
-  // rangeType === 'monthly'){fetch(`sensor/usrLogs?startDate=${startDate}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`)}
-  // else{fetch(`sensor/usrLogs?startDate=${DEC_FIRST_WK}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`)}
   fetch(`sensor/usrMonthlyLogs?startDate=${startDate}&endDate=${endDate}&iotDeviceId=${iotDeviceId}`)
   .then(response => response.json())
   .then(data => {
@@ -341,6 +333,8 @@ function weekelyMonthly(startDate, endDate, rangeType){
     });
 }
 
+
+// iot API call to change sampling frequency
 function changeIOTSamplingFreq(){
 	// alert('Change Sampling frequency button clicked');
 	const samplingTime  = document.getElementById('samplingFreq').value;
@@ -377,6 +371,8 @@ function changeIOTSamplingFreq(){
 		});
 }
 
+
+// iot api call to change start time of the day
 function changeSamplingStartTime(){
 	// alert(' start time button clicked');
 	const startSamplingTime  = document.getElementById('startSamplingTime').value;
@@ -412,6 +408,7 @@ function changeSamplingStartTime(){
 		});
 }
 
+// iot api call to change stop  time of the day
 function changeStopSamplingTime(){
 // 	alert('Stop Time btn clicked');
 	const stopSamplingTime  = document.getElementById('stopSamplingTime').value;
@@ -449,7 +446,7 @@ function changeStopSamplingTime(){
 }
 
 
-
+// DOM Ready function, event listenters
  $(function() {
      $('#showAllDataBtn').click(drawGraph);
      $('#changeSamplingStartTimeBtn').click(changeSamplingStartTime);
