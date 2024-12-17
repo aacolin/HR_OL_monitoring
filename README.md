@@ -123,7 +123,7 @@ The following sections are incomplete and require input:
    - [NGROK serving https port forwared and reverse pro***REMOVED***y technique ]( https://45a9-3-142-184-106.ngrok-free.app/user-profile.html)
 
 - **Project Documentation**
-   - [Project submission PDF File](https://gitlab.com/ece_iot/hart_rate_monitoring/-/blob/merge/staging/Project_Report.pdf?ref_type=heads)
+   - [Project submission PDF File](https://gitlab.com/ece_iot/hart_rate_monitoring/-/blob/main/Project_Report.pdf?ref_type=heads)
   - Secure Code Mitigation: See (https://gitlab.com/ece_iot/hart_rate_monitoring/-/blob/merge/staging/Project_Report.pdf?ref_type=heads)
 
 ---
