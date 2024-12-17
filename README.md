@@ -111,18 +111,20 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 
 ---
 
-## Missing Sections
+## Submission Links
 The following sections are incomplete and require input:
 - **Videos:** 
    - [Pitch and Live Demo]
-   - [Raw Demo Backup](https://drive.google.com/drive/u/1/folders/19Y4Z9uaJtyeHQ1QQ4LRNb56DIOh_jafz)
+   - [Uncut Raw Live Demo & ScreenShots ](https://drive.google.com/drive/u/1/folders/19Y4Z9uaJtyeHQ1QQ4LRNb56DIOh_jafz)
    
 
 - **Live Server URL:**  
    - [AWS serving http](http://ec2-3-142-184-106.us-east-2.compute.amazonaws.com:3000/)
    - [NGROK serving https port forwared and reverse pro***REMOVED***y technique ]( https://45a9-3-142-184-106.ngrok-free.app/user-profile.html)
 
-- **Secure Code Mitigation:** Details of identified and mitigated vulnerabilities.
+- **Project Documentation**
+   - [Project submission PDF File](https://gitlab.com/ece_iot/hart_rate_monitoring/-/blob/merge/staging/Project_Report.pdf?ref_type=heads)
+  - Secure Code Mitigation: See (https://gitlab.com/ece_iot/hart_rate_monitoring/-/blob/merge/staging/Project_Report.pdf?ref_type=heads)
 
 ---
 
