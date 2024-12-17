@@ -124,8 +124,8 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 The following sections are incomplete and require input:
 - **Videos:** 
    - [Pitch Video](https://drive.google.com/drive/u/1/folders/19Y4Z9uaJtyeHQ1QQ4LRNb56DIOh_jafz)
-   - [Live Video]()
-   - [Uncut Raw Live Demo & ScreenShots ](https://drive.google.com/drive/u/1/folders/1aLZ_jf4j2M1YmJ4V8Ho0g94beJIGht9c)
+   - [Live Demo](https://drive.google.com/drive/u/1/folders/19Y4Z9uaJtyeHQ1QQ4LRNb56DIOh_jafz)
+   - [Uncut Raw Live Demo & ScreenShots](https://drive.google.com/drive/u/1/folders/1aLZ_jf4j2M1YmJ4V8Ho0g94beJIGht9c)
    
 
 - **Live Server URL:**  
@@ -134,7 +134,7 @@ The following sections are incomplete and require input:
 
 - **Project Documentation**
   - [Project submission PDF File](https://gitlab.com/ece_iot/hart_rate_monitoring/-/blob/main/Project_Report.pdf)
-  - Secure Code Mitigation: See (https://gitlab.com/ece_iot/hart_rate_monitoring/-/blob/main/Project_Report.pdf))
+  - [Secure Code Mitigation](https://gitlab.com/ece_iot/hart_rate_monitoring/-/blob/main/Project_Report.pdf))
 
 ---
 

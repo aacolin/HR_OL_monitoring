@@ -1,6 +1,6 @@
 var particleAccessToken = PERTICLE_ACCESS_TOKEN; // process.env.PARTICLE_ACCESS_TOKEN;
-var particleUserName = PARTICLE_ACCOUNT_USERNAME; //process.env.PARTICLE_USERNAME;
-var particlePassword =PARTICLE_ACCOUNT_PASSWORD;          // process.env.PARTICLE_PASSWORD;
+var particleUserName = USERNAME; //process.env.PARTICLE_USERNAME;
+var particlePassword ="PARTICLE_PASSWORD";          // process.env.PARTICLE_PASSWORD;
 var particleClientId = "particle"        	 //process.env.PARTICLE_CLIENT_ID;
 var particleClientSecret ="particle";		 //  process.env.PARTICLE_CLIENT_SECRET;
 
