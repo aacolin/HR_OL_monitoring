@@ -276,6 +276,8 @@ void calibrateSensor(){
   for (int itr = 0 ; itr < 3 ; itr++){
     readHearBeat();
     readSPO2();
+    Serial.print(" Sensor Calibration itr : " );
+    Serial.println(itr);
   }
   flushSensorData();
   OFF_COLOR;
@@ -284,31 +286,33 @@ void calibrateSensor(){
 
 bool checkFiveMinutes() {
   unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= FIVE_MIN_IN_MS) {  // 5 minutes have passed, update the last time
-    previousMillis = currentMillis;
+
+  if (sensorValRdTimeInMS > 0 && currentMillis - sensorValRdTimeInMS >= FIVE_MIN_IN_MS) {
+    //reviousMillis = currentMillis;
     return true; // 5 minutes have passed
   }
   return false; // 5 minutes have not
 }
 
 
-// Function to check if delay or 5 minutes have passed
-bool checkDelayOrFiveMinutes() {
+// Function to check if  5 minutes have passed or sampling frequency ahs arrived 
+bool checkSamplingFreq() {
   unsigned long currentMillis = millis();
   // Check if the delay has finished
   if (sensorValRdTimeInMS > 0 && currentMillis - sensorValRdTimeInMS >= measurementIntervalInMS) {
     sensorValRdTimeInMS = 0; // Reset delay timer after it finishes
     Serial.println("---------------------------------");
-    Serial.println("           WDT  UP               ");
+    Serial.println("           Sampling Freq In      ");
     Serial.println("---------------------------------");
-    return true;  // Delay has finished
+    OFF_COLOR;
+    return true;  // sampling frequency 
   }
   if (checkFiveMinutes()){
     WHITE_COLOR;
     Serial.println("---------------------------------");
     Serial.println("           5 MIN  UP             ");
     Serial.println("---------------------------------");
-    return true;
+    return false;
   }
   return false; // Neither the delay nor 5 minutes have passed
 }
@@ -370,7 +374,7 @@ void wrStruct(int heartBeat, int O2, unsigned long uni***REMOVED***Time) {
   measurements[total_data_written].heartRate = heartBeat ;
   measurements[total_data_written].uni***REMOVED***Timestamp = uni***REMOVED***Time; 
   total_data_written = total_data_written +1;
-  Serial.print("Samples Wirtten ");
+  Serial.print("Samples Written Locally ");
   Serial.println(total_data_written);   
 }
 
@@ -432,6 +436,7 @@ void loop() {
   int heartBeat = 0;
   int O2 = 0;
   time32_t uni***REMOVED***Time = 0;
+  boolean Spo2status = false;
   while(1){
     switch (particleState){
 
@@ -447,25 +452,20 @@ void loop() {
       case  MEASURE_HEART_RATE :
         Serial.println("Please place your inde***REMOVED*** finger on the sensor.");
         uni***REMOVED***Time = Time.now();       // time stamp for struct
-        sensorValRdTimeInMS = millis();  // Set the starting time for the delay
+        sensorValRdTimeInMS = millis();  // time for 5 mins, last sample taken  
         BLUE_COLOR;
         //digitalWrite(MY_LED, HIGH);
         Serial.println("---------------------------------");
         Serial.println("          Measuring HeartBeat    ");
         Serial.println("---------------------------------");
         heartBeat = readHearBeat();
-        Serial.print("BPM=");      Serial.println(heartBeat);
         if ((heartBeat >= 50 && heartBeat < 255)){    // valid heart rate for living        
-          if (heartBeat == -999){                     // guard against unsigned int
-            particleState =  MEASURE_HEART_RATE;  
-          }
-          else {
-          particleState = MEAUSURE_O2 ;  // dead man
-          }
+           particleState = MEAUSURE_O2 ;  // valid range 
+           Serial.print("BPM=");      Serial.println(heartBeat);
+        } else {
+            particleState = MEASURE_HEART_RATE;  // dead man
         }
-        else{
-          particleState =  MEASURE_HEART_RATE;
-        }
+        
         OFF_COLOR;       
         break;
         
@@ -477,19 +477,28 @@ void loop() {
         Serial.println("          Measuring SPO2         ");
         Serial.println("---------------------------------");
         O2 = readSPO2();
-        if (!((O2 > 50) && (O2 <= 100))){  // valid living SPO2
-          if (O2 == -999){                 // guard against unsigned int 
+        if (((O2 > 50) && (O2 <= 100))){  // valid living SPO2
+            Spo2status = true;
+            Serial.print("          Measured SPO2        : ");
+            Serial.println(O2);
+
+        } else {
+            Spo2status = false;
             particleState = MEAUSURE_O2;
-          }
-        }       // 
-        if (WiFi.ready() ){
-          particleState = POST_TO_SERVER;
-          Serial.println("---------------------------------");
-          Serial.println("       Creating JSON payload     ");
-          Serial.println("---------------------------------");
         }
-        else {particleState =  SAVE_DATA_OFFLINE;}
-          OFF_COLOR;
+
+        if ( Spo2status){
+            if(WiFi.ready() ){
+                particleState = POST_TO_SERVER;
+                Serial.println("---------------------------------");
+                Serial.println("       Creating JSON payload     ");
+                Serial.println("---------------------------------");
+            }
+            else {
+                particleState =  SAVE_DATA_OFFLINE;
+                OFF_COLOR;
+            }
+        }
         break;
       
       // post the captured data to server    
@@ -551,7 +560,7 @@ void loop() {
         Serial.println("---------------------------------");
         Serial.println("           Waiting for Fs        ");
         Serial.println("---------------------------------");
-        while (!checkDelayOrFiveMinutes()){
+        while (!checkSamplingFreq()){
           delay(100);
         }  /// wait until 5 mins e***REMOVED***pier or user delay e***REMOVED***pires
         if ( firstSampleStoredTimeLocally >= ONE_DAY_MILLIS) { // clear struct, local storaged varlue
