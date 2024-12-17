@@ -26,12 +26,12 @@ const pin_t MY_LED = D11;
 // time interval and measurement frequency settings
 const int MILLI_SEC = 1000;
 
-unsigned long  measurementIntervalInMS = 120000;   // delay in millisecond
-
+// unsigned long  samplingPeriodInMS = 120000;   // for demo 2 mins
+unsigned long  samplingPeriodInMS =1800000 ;   // given requirements 
 
 // all time declarations
 
-//unsigned long  measurementIntervalInMS = 300;   // delay in millisecond
+//unsigned long  samplingPeriodInMS = 300;   // delay in millisecond
 unsigned long sensorValRdTimeInMS = 0; 
 unsigned long previousMillis = 0;  // Store the last time the event occurred
 const long FIVE_MIN_IN_MS = 5 * 60 * 1000;  // 5 minutes in milliseconds (5 * 60 * 1000)
@@ -299,7 +299,7 @@ bool checkFiveMinutes() {
 bool checkSamplingFreq() {
   unsigned long currentMillis = millis();
   // Check if the delay has finished
-  if (sensorValRdTimeInMS > 0 && currentMillis - sensorValRdTimeInMS >= measurementIntervalInMS) {
+  if (sensorValRdTimeInMS > 0 && currentMillis - sensorValRdTimeInMS >= samplingPeriodInMS) {
     sensorValRdTimeInMS = 0; // Reset delay timer after it finishes
     Serial.println("---------------------------------");
     Serial.println("           Sampling Freq In      ");
@@ -354,7 +354,7 @@ int setVeasurementIntervalInMS(String sensorCaptureRate){
   Serial.print("from cloud sensorCaptureRate = ");
   Serial.println(sensorCaptureRate);
   unsigned long setTimeInMin = sensorCaptureRate.toInt();
-  if(setTimeInMin > 0 ){measurementIntervalInMS = setTimeInMin * MIN_TO_MS; Serial.print("measurementIntervalInMS = "); Serial.print(measurementIntervalInMS); Serial.println();return 1;}
+  if(setTimeInMin > 0 ){samplingPeriodInMS = setTimeInMin * MIN_TO_MS; Serial.print("samplingPeriodInMS = "); Serial.print(samplingPeriodInMS); Serial.println();return 1;}
   else { return -1;}
 }
 
@@ -445,7 +445,7 @@ void loop() {
           particleState = MEASURE_HEART_RATE;
         } else{
           particleState = CHK_TIME;
-          delay(measurementIntervalInMS);  // wait dealy time and then check the time again
+          delay(200);  // wait dealy time and then check the time again
         }
         break;
       // take samples for hearbeat
