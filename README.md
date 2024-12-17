@@ -123,7 +123,8 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 ## Submission Links
 The following sections are incomplete and require input:
 - **Videos:** 
-   - [Pitch and Live Demo]
+   - [Pitch Video](https://drive.google.com/drive/u/1/folders/19Y4Z9uaJtyeHQ1QQ4LRNb56DIOh_jafz)
+   - [Live Video]()
    - [Uncut Raw Live Demo & ScreenShots ](https://drive.google.com/drive/u/1/folders/1aLZ_jf4j2M1YmJ4V8Ho0g94beJIGht9c)
    
 
