@@ -69,6 +69,15 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 
 ---
 
+## Tools Info and language version
+   - Mongo DB         : Version 8
+   - Nodejs           : Version 18
+   - C++ Compileer    : Particle Compiler
+   - Firmware Version :  6.1.1
+
+
+---
+
 ## API Documentation
 
 ## **API Documentation**
@@ -123,8 +132,8 @@ The following sections are incomplete and require input:
    - [NGROK serving https port forwared and reverse pro***REMOVED***y technique ]( https://45a9-3-142-184-106.ngrok-free.app/user-profile.html)
 
 - **Project Documentation**
-   - [Project submission PDF File](https://gitlab.com/ece_iot/hart_rate_monitoring/-/blob/main/Project_Report.pdf?ref_type=heads)
-  - Secure Code Mitigation: See (https://gitlab.com/ece_iot/hart_rate_monitoring/-/blob/merge/staging/Project_Report.pdf?ref_type=heads)
+  - [Project submission PDF File](https://gitlab.com/ece_iot/hart_rate_monitoring/-/blob/main/Project_Report.pdf)
+  - Secure Code Mitigation: See (https://gitlab.com/ece_iot/hart_rate_monitoring/-/blob/main/Project_Report.pdf))
 
 ---
 
