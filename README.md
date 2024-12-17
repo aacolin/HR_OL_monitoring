@@ -79,8 +79,8 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 | `/api/measurements`   | GET    | Fetch measurement data.                        |
 | `/sensor/data`        | POST   | Particle Server Endpoint reach                 |
 | `/sensor/readAll`     | GET    | Reads all the e***REMOVED***isting data in DB              |
-| `/sensor/userDayLog/` | GET    | Read user day activity from DB (in progress)   |
-| `/sensor/deleteAll/`  | POST   | Drops all the content of e***REMOVED***isting DB           |
+| `/sensor/userDayLog`  | GET    | Read user day activity from DB (in progress)   |
+| `/sensor/deleteAll`   | POST   | Drops all the content of e***REMOVED***isting DB           |
 
 
 ---
