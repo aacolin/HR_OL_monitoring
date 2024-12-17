@@ -49,7 +49,7 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 1. Clone the repository:
    ```bash
    git clone [repo-url]
-   cd [repo-folder]
+   cd [hart_rate_monitoring]
    ```
 
 2. Install dependencies:
@@ -71,12 +71,17 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 
 ## API Documentation
 
-| Endpoint             | Method | Description                          |
-|----------------------|--------|--------------------------------------|
-| `/api/login`         | POST   | User login.                         |
-| `/api/register`      | POST   | User registration.                  |
-| `/api/device`        | POST   | Add/remove devices.                 |
-| `/api/measurements`  | GET    | Fetch measurement data.             |
+| Endpoint              | Method | Description                                    |
+|-----------------------|--------|----------------------------------------        |
+| `/api/login`          | POST   | User login.                                    |
+| `/api/register`       | POST   | User registration.                             |
+| `/api/device`         | POST   | Add/remove devices.                            |
+| `/api/measurements`   | GET    | Fetch measurement data.                        |
+| `/sensor/data`        | POST   | Particle Server Endpoint reach                 |
+| `/sensor/readAll`     | GET    | Reads all the e***REMOVED***isting data in DB              |
+| `/sensor/userDayLog/` | GET    | Read user day activity from DB (in progress)   |
+| `/sensor/deleteAll/`  | POST   | Drops all the content of e***REMOVED***isting DB           |
+
 
 ---
 
@@ -102,8 +107,15 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 
 ## Missing Sections
 The following sections are incomplete and require input:
-- **Videos:** Links to pitch and demo videos.
-- **Live Server URL:** AWS or hosting link.
+- **Videos:** 
+   - [Pitch and Live Demo]
+   - [Raw Demo Backup](https://drive.google.com/drive/u/1/folders/19Y4Z9uaJtyeHQ1QQ4LRNb56DIOh_jafz)
+   
+
+- **Live Server URL:**  
+   - [AWS serving http](http://ec2-3-142-184-106.us-east-2.compute.amazonaws.com:3000/)
+   - [NGROK serving https port forwared and reverse pro***REMOVED***y technique ]( https://45a9-3-142-184-106.ngrok-free.app/user-profile.html)
+
 - **Secure Code Mitigation:** Details of identified and mitigated vulnerabilities.
 
 ---
@@ -124,8 +136,13 @@ The following sections are incomplete and require input:
 
 ## References
 - [Node.js Documentation](https://nodejs.org/en/docs/)
-- [MAX30102 Datasheet](https://datasheet.e***REMOVED***ample.com)
+- [MAX30102 Datasheet](https://www.analog.com/media/en/technical-documentation/data-sheets/MAX30102.pdf)
 - [Particle Photon Documentation](https://docs.particle.io/)
+- [Particle Argon Documentation](https://docs.particle.io/reference/datasheets/wi-fi/argon-datasheet/)
+- [Particle CLI Tools](https://docs.particle.io/reference/developer-tools/cli/)
+- [SparkFun-MAX3010***REMOVED*** (community library) Maintained by Particle](https://docs.particle.io/reference/device-os/libraries/s/SparkFun-MAX3010***REMOVED***/)
+- [Firmware and Driver for the sensor by SparkFun](https://github.com/sparkfun/SparkFun_MAX3010***REMOVED***_Sensor_Library/blob/master/src/MAX30105.h)
+- [Demonstartaion and how to MAX30105 Sensor by SparkFun](https://learn.sparkfun.com/tutorials/ma***REMOVED***30105-particle-and-pulse-o***REMOVED***-sensor-hookup-guide#e***REMOVED***ample-2---presence-sensing)
 
 ---
 
