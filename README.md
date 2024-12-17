@@ -94,10 +94,10 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 | `/api/patients/update`    | PUT        | Update patient information or device links.   |
 | `/api/physicians`         | GET        | Retrieve aggregated patient data.             |
 | `/api/physicians/manage`  | POST       | Manage patient accounts and linked devices.   |  
-| `/sensor/data`        | POST   | Particle Server Endpoint reach                 |
-| `/sensor/readAll`     | GET    | Reads all the e***REMOVED***isting data in DB              |
-| `/sensor/userDayLog`  | GET    | Read user day activity from DB (in progress)   |
-| `/sensor/deleteAll`   | POST   | Drops all the content of e***REMOVED***isting DB           |
+| `/sensor/data`            | POST       | Particle Server Endpoint reach                |
+| `/sensor/readAll`         | GET        | Reads all the e***REMOVED***isting data in DB             |
+| `/sensor/userDayLog`      | GET        | Read user day activity from DB (in progress)  |
+| `/sensor/deleteAll`       | POST       | Drops all the content of e***REMOVED***isting DB          |
 ---
 
 ## Web Application Features
@@ -124,7 +124,7 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 The following sections are incomplete and require input:
 - **Videos:** 
    - [Pitch and Live Demo]
-   - [Uncut Raw Live Demo & ScreenShots ](https://drive.google.com/drive/u/1/folders/19Y4Z9uaJtyeHQ1QQ4LRNb56DIOh_jafz)
+   - [Uncut Raw Live Demo & ScreenShots ](https://drive.google.com/drive/u/1/folders/1aLZ_jf4j2M1YmJ4V8Ho0g94beJIGht9c)
    
 
 - **Live Server URL:**  
