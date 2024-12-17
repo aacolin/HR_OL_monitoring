@@ -97,6 +97,7 @@ var timePeriodVar={
     endDate: ''
 };
 
+// generate range for start of week, month 
 function getDateRanges(rangeType) {
     const now = new Date();
     console.log("Calculating Range for " + rangeType);
@@ -145,6 +146,8 @@ function showPatientGraph() {
     // }
 }
 
+
+// daily catuture
 function dailyFetch(rangeType, aDay,  iotDeviceId){
   if (iotDeviceId ===""){ alert ('Please enter a valid device ID'); return;}
   console.log("received daily" + aDay + " " +  rangeType);
