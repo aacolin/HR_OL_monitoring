@@ -49,7 +49,7 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 1. Clone the repository:
    ```bash
    git clone [repo-url]
-   cd [hart_rate_monitoring]
+   cd [repo-folder]
    ```
 
 2. Install dependencies:
@@ -71,18 +71,24 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 
 ## API Documentation
 
-| Endpoint              | Method | Description                                    |
-|-----------------------|--------|----------------------------------------        |
-| `/api/login`          | POST   | User login.                                    |
-| `/api/register`       | POST   | User registration.                             |
-| `/api/device`         | POST   | Add/remove devices.                            |
-| `/api/measurements`   | GET    | Fetch measurement data.                        |
+## **API Documentation**
+
+| **Endpoint**              | **Method** | **Description**                               |
+|---------------------------|------------|-----------------------------------------------|
+| `/api/login`              | POST       | User login.                                   |
+| `/api/register`           | POST       | User registration.                            |
+| `/api/devices`            | GET        | Retrieve a list of devices for the user.      |
+| `/api/devices/add`        | POST       | Add a new IoT device to the user’s account.   |
+| `/api/devices/remove`     | POST       | Remove an IoT device from the user’s account. |
+| `/api/measurements`       | GET        | Fetch heart rate and SpO2 measurement data.   |
+| `/api/patients`           | GET        | Retrieve patient data for physicians.         |
+| `/api/patients/update`    | PUT        | Update patient information or device links.   |
+| `/api/physicians`         | GET        | Retrieve aggregated patient data.             |
+| `/api/physicians/manage`  | POST       | Manage patient accounts and linked devices.   |  
 | `/sensor/data`        | POST   | Particle Server Endpoint reach                 |
 | `/sensor/readAll`     | GET    | Reads all the e***REMOVED***isting data in DB              |
 | `/sensor/userDayLog`  | GET    | Read user day activity from DB (in progress)   |
 | `/sensor/deleteAll`   | POST   | Drops all the content of e***REMOVED***isting DB           |
-
-
 ---
 
 ## Web Application Features
