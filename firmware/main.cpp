@@ -89,10 +89,8 @@ char t***REMOVED***Buffer[256];                                        // Buffer
 //const char* server = "192.168.50.71";   // Replace with your local server IP this is my usb interface , 
 //const char* server = "18.191.214.37";   //amazon server
 const int port = 3000;                    // serverPort number
-// const char* ssid = SSID;            // Replace with your Wi-Fi SSIDp_
-//const char* password = PASSWORD;      // Replace with your Wi-Fi password
-const char* ssid = "my_wifii";            // Replace with your Wi-Fi SSID
-const char* password = "WIFI_PASSWORD!";      // Replace with your Wi-Fi password
+const char* ssid = "SSID";            // Replace with your Wi-Fi SSID
+const char* password = "PASSWORD";      // Replace with your Wi-Fi password
 
 
 //heart beat sesor setting
