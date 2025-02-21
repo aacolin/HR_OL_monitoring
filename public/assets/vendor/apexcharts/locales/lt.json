@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Sk", "Per", "An", "Tr", "Kt", "Pn", "Št"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Atsisiųsti SVG",
-      "e***REMOVED***portToPNG": "Atsisiųsti PNG",
-      "e***REMOVED***portToCSV": "Atsisiųsti CSV",
+      "exportToSVG": "Atsisiųsti SVG",
+      "exportToPNG": "Atsisiųsti PNG",
+      "exportToCSV": "Atsisiųsti CSV",
       "menu": "Menu",
       "selection": "Pasirinkimas",
       "selectionZoom": "Zoom: Pasirinkimas",

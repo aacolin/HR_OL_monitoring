@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.zh_CN',
   '\n' +
   '<dl>\n' +
   '  <dt>使菜单栏处于焦点</dt>\n' +
-  '  <dd>Windows 或 Linu***REMOVED***：Alt+F9</dd>\n' +
-  '  <dd>macOS：&#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows 或 Linux：Alt+F9</dd>\n' +
+  '  <dd>macOS：&#x2325;F9</dd>\n' +
   '  <dt>使工具栏处于焦点</dt>\n' +
-  '  <dd>Windows 或 Linu***REMOVED***：Alt+F10</dd>\n' +
-  '  <dd>macOS：&#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows 或 Linux：Alt+F10</dd>\n' +
+  '  <dd>macOS：&#x2325;F10</dd>\n' +
   '  <dt>使页脚处于焦点</dt>\n' +
-  '  <dd>Windows 或 Linu***REMOVED***：Alt+F11</dd>\n' +
-  '  <dd>macOS：&#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows 或 Linux：Alt+F11</dd>\n' +
+  '  <dd>macOS：&#x2325;F11</dd>\n' +
   '  <dt>使通知处于焦点</dt>\n' +
-  '  <dd>Windows 或 Linu***REMOVED***：Alt+F12</dd>\n' +
-  '  <dd>macOS：&#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows 或 Linux：Alt+F12</dd>\n' +
+  '  <dd>macOS：&#x2325;F12</dd>\n' +
   '  <dt>使上下文工具栏处于焦点</dt>\n' +
-  '  <dd>Windows、Linu***REMOVED*** 或 macOS：Ctrl+F9</dd>\n' +
+  '  <dd>Windows、Linux 或 macOS：Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>导航将在第一个 UI 项上开始，其中突出显示该项，或者对于页脚元素路径中的第一项，将为其添加下划线。</p>\n' +

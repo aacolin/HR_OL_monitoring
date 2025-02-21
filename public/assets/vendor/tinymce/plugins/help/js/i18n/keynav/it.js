@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.it',
   '\n' +
   '<dl>\n' +
   '  <dt>Impostare lo stato attivo per la barra dei menu</dt>\n' +
-  '  <dd>Windows o Linu***REMOVED***: ALT+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows o Linux: ALT+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Impostare lo stato attivo per la barra degli strumenti</dt>\n' +
-  '  <dd>Windows o Linu***REMOVED***: ALT+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows o Linux: ALT+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Impostare lo stato attivo per il piè di pagina</dt>\n' +
-  '  <dd>Windows o Linu***REMOVED***: ALT+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows o Linux: ALT+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Metti a fuoco la notifica</dt>\n' +
-  '  <dd>Windows o Linu***REMOVED***: ALT+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows o Linux: ALT+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>Impostare lo stato attivo per la barra degli strumenti contestuale</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** o macOS: CTRL+F9</dd>\n' +
+  '  <dd>Windows, Linux o macOS: CTRL+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   "<p>La navigazione inizierà dalla prima voce dell'interfaccia utente, che sarà evidenziata o sottolineata nel caso della prima voce\n" +

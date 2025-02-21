@@ -12,42 +12,42 @@ import {ChartArea, Padding, Point} from './geometric.js';
 import {LayoutItem, LayoutPosition} from './layout.js';
 import {ColorsPluginOptions} from '../plugins/plugin.colors.js';
 
-e***REMOVED***port {EasingFunction} from '../helpers/helpers.easing.js';
-e***REMOVED***port {default as ArcElement, ArcProps} from '../elements/element.arc.js';
-e***REMOVED***port {default as PointElement, PointProps} from '../elements/element.point.js';
-e***REMOVED***port {Animation, Animations, Animator, AnimationEvent} from './animation.js';
-e***REMOVED***port {Color} from './color.js';
-e***REMOVED***port {ChartArea, Point} from './geometric.js';
-e***REMOVED***port {LayoutItem, LayoutPosition} from './layout.js';
+export {EasingFunction} from '../helpers/helpers.easing.js';
+export {default as ArcElement, ArcProps} from '../elements/element.arc.js';
+export {default as PointElement, PointProps} from '../elements/element.point.js';
+export {Animation, Animations, Animator, AnimationEvent} from './animation.js';
+export {Color} from './color.js';
+export {ChartArea, Point} from './geometric.js';
+export {LayoutItem, LayoutPosition} from './layout.js';
 
-e***REMOVED***port interface ScriptableConte***REMOVED***t<TType e***REMOVED***tends ChartType> {
+export interface ScriptableContext<TType extends ChartType> {
   active: boolean;
   chart: Chart;
-  dataInde***REMOVED***: number;
+  dataIndex: number;
   dataset: UnionToIntersection<ChartDataset<TType>>;
-  datasetInde***REMOVED***: number;
+  datasetIndex: number;
   type: string;
   mode: string;
   parsed: UnionToIntersection<ParsedDataType<TType>>;
   raw: unknown;
 }
 
-e***REMOVED***port interface ScriptableLineSegmentConte***REMOVED***t {
+export interface ScriptableLineSegmentContext {
   type: 'segment',
   p0: PointElement,
   p1: PointElement,
-  p0DataInde***REMOVED***: number,
-  p1DataInde***REMOVED***: number,
-  datasetInde***REMOVED***: number
+  p0DataIndex: number,
+  p1DataIndex: number,
+  datasetIndex: number
 }
 
-e***REMOVED***port type Scriptable<T, TConte***REMOVED***t> = T | ((ct***REMOVED***: TConte***REMOVED***t, options: AnyObject) => T | undefined);
-e***REMOVED***port type ScriptableOptions<T, TConte***REMOVED***t> = { [P in keyof T]: Scriptable<T[P], TConte***REMOVED***t> };
-e***REMOVED***port type ScriptableAndScriptableOptions<T, TConte***REMOVED***t> = Scriptable<T, TConte***REMOVED***t> | ScriptableOptions<T, TConte***REMOVED***t>;
-e***REMOVED***port type ScriptableAndArray<T, TConte***REMOVED***t> = readonly T[] | Scriptable<T, TConte***REMOVED***t>;
-e***REMOVED***port type ScriptableAndArrayOptions<T, TConte***REMOVED***t> = { [P in keyof T]: ScriptableAndArray<T[P], TConte***REMOVED***t> };
+export type Scriptable<T, TContext> = T | ((ctx: TContext, options: AnyObject) => T | undefined);
+export type ScriptableOptions<T, TContext> = { [P in keyof T]: Scriptable<T[P], TContext> };
+export type ScriptableAndScriptableOptions<T, TContext> = Scriptable<T, TContext> | ScriptableOptions<T, TContext>;
+export type ScriptableAndArray<T, TContext> = readonly T[] | Scriptable<T, TContext>;
+export type ScriptableAndArrayOptions<T, TContext> = { [P in keyof T]: ScriptableAndArray<T[P], TContext> };
 
-e***REMOVED***port interface ParsingOptions {
+export interface ParsingOptions {
   /**
    * How to parse the dataset. The parsing can be disabled by specifying parsing: false at chart options or dataset. If parsing is disabled, data must be sorted and in the formats the associated chart type and scales use internally.
    */
@@ -63,14 +63,14 @@ e***REMOVED***port interface ParsingOptions {
   normalized: boolean;
 }
 
-e***REMOVED***port interface ControllerDatasetOptions e***REMOVED***tends ParsingOptions {
+export interface ControllerDatasetOptions extends ParsingOptions {
   /**
-   * The base a***REMOVED***is of the chart. '***REMOVED***' for vertical charts and 'y' for horizontal charts.
-   * @default '***REMOVED***'
+   * The base axis of the chart. 'x' for vertical charts and 'y' for horizontal charts.
+   * @default 'x'
    */
-  inde***REMOVED***A***REMOVED***is: '***REMOVED***' | 'y';
+  indexAxis: 'x' | 'y';
   /**
-   * How to clip relative to chartArea. Positive value allows overflow, negative value clips that many pi***REMOVED***els inside chartArea. 0 = clip at chartArea. Clipping can also be configured per side: `clip: {left: 5, top: false, right: -2, bottom: 0}`
+   * How to clip relative to chartArea. Positive value allows overflow, negative value clips that many pixels inside chartArea. 0 = clip at chartArea. Clipping can also be configured per side: `clip: {left: 5, top: false, right: -2, bottom: 0}`
    */
   clip: number | ChartArea | false;
   /**
@@ -93,22 +93,22 @@ e***REMOVED***port interface ControllerDatasetOptions e***REMOVED***tends Parsin
   hidden: boolean;
 }
 
-e***REMOVED***port interface BarControllerDatasetOptions
-  e***REMOVED***tends ControllerDatasetOptions,
-  ScriptableAndArrayOptions<BarOptions, ScriptableConte***REMOVED***t<'bar'>>,
-  ScriptableAndArrayOptions<CommonHoverOptions, ScriptableConte***REMOVED***t<'bar'>>,
+export interface BarControllerDatasetOptions
+  extends ControllerDatasetOptions,
+  ScriptableAndArrayOptions<BarOptions, ScriptableContext<'bar'>>,
+  ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext<'bar'>>,
   AnimationOptions<'bar'> {
   /**
-   * The ID of the ***REMOVED*** a***REMOVED***is to plot this dataset on.
+   * The ID of the x axis to plot this dataset on.
    */
-  ***REMOVED***A***REMOVED***isID: string;
+  xAxisID: string;
   /**
-   * The ID of the y a***REMOVED***is to plot this dataset on.
+   * The ID of the y axis to plot this dataset on.
    */
-  yA***REMOVED***isID: string;
+  yAxisID: string;
 
   /**
-   * Percent (0-1) of the available width each bar should be within the category width. 1.0 will take the whole category width and put the bars right ne***REMOVED***t to each other.
+   * Percent (0-1) of the available width each bar should be within the category width. 1.0 will take the whole category width and put the bars right next to each other.
    * @default 0.9
    */
   barPercentage: number;
@@ -119,17 +119,17 @@ e***REMOVED***port interface BarControllerDatasetOptions
   categoryPercentage: number;
 
   /**
-   * Manually set width of each bar in pi***REMOVED***els. If set to 'fle***REMOVED***', it computes "optimal" sample widths that globally arrange bars side by side. If not set (default), bars are equally sized based on the smallest interval.
+   * Manually set width of each bar in pixels. If set to 'flex', it computes "optimal" sample widths that globally arrange bars side by side. If not set (default), bars are equally sized based on the smallest interval.
    */
-  barThickness: number | 'fle***REMOVED***';
+  barThickness: number | 'flex';
 
   /**
    * Set this to ensure that bars are not sized thicker than this.
    */
-  ma***REMOVED***BarThickness: number;
+  maxBarThickness: number;
 
   /**
-   * Set this to ensure that bars have a minimum length in pi***REMOVED***els.
+   * Set this to ensure that bars have a minimum length in pixels.
    */
   minBarLength: number;
 
@@ -140,72 +140,72 @@ e***REMOVED***port interface BarControllerDatasetOptions
   pointStyle: PointStyle;
 
   /**
-   * Should the bars be grouped on inde***REMOVED*** a***REMOVED***is
+   * Should the bars be grouped on index axis
    * @default true
    */
   grouped: boolean;
 }
 
-e***REMOVED***port interface BarControllerChartOptions {
+export interface BarControllerChartOptions {
   /**
    * Should null or undefined values be omitted from drawing
    */
   skipNull?: boolean;
 }
 
-e***REMOVED***port type BarController = DatasetController
-e***REMOVED***port declare const BarController: ChartComponent & {
+export type BarController = DatasetController
+export declare const BarController: ChartComponent & {
   prototype: BarController;
-  new (chart: Chart, datasetInde***REMOVED***: number): BarController;
+  new (chart: Chart, datasetIndex: number): BarController;
 };
 
-e***REMOVED***port interface BubbleControllerDatasetOptions
-  e***REMOVED***tends ControllerDatasetOptions,
-  ScriptableAndArrayOptions<PointOptions, ScriptableConte***REMOVED***t<'bubble'>>,
-  ScriptableAndArrayOptions<PointHoverOptions, ScriptableConte***REMOVED***t<'bubble'>> {
+export interface BubbleControllerDatasetOptions
+  extends ControllerDatasetOptions,
+  ScriptableAndArrayOptions<PointOptions, ScriptableContext<'bubble'>>,
+  ScriptableAndArrayOptions<PointHoverOptions, ScriptableContext<'bubble'>> {
   /**
-   * The ID of the ***REMOVED*** a***REMOVED***is to plot this dataset on.
+   * The ID of the x axis to plot this dataset on.
    */
-  ***REMOVED***A***REMOVED***isID: string;
+  xAxisID: string;
   /**
-   * The ID of the y a***REMOVED***is to plot this dataset on.
+   * The ID of the y axis to plot this dataset on.
    */
-  yA***REMOVED***isID: string;
+  yAxisID: string;
 }
 
-e***REMOVED***port interface BubbleDataPoint e***REMOVED***tends Point {
+export interface BubbleDataPoint extends Point {
   /**
-   * Bubble radius in pi***REMOVED***els (not scaled).
+   * Bubble radius in pixels (not scaled).
    */
   r?: number;
 }
 
-e***REMOVED***port type BubbleController = DatasetController
-e***REMOVED***port declare const BubbleController: ChartComponent & {
+export type BubbleController = DatasetController
+export declare const BubbleController: ChartComponent & {
   prototype: BubbleController;
-  new (chart: Chart, datasetInde***REMOVED***: number): BubbleController;
+  new (chart: Chart, datasetIndex: number): BubbleController;
 };
 
-e***REMOVED***port interface LineControllerDatasetOptions
-  e***REMOVED***tends ControllerDatasetOptions,
-  ScriptableAndArrayOptions<PointPrefi***REMOVED***edOptions, ScriptableConte***REMOVED***t<'line'>>,
-  ScriptableAndArrayOptions<PointPrefi***REMOVED***edHoverOptions, ScriptableConte***REMOVED***t<'line'>>,
-  ScriptableOptions<Omit<LineOptions, keyof CommonElementOptions>, ScriptableConte***REMOVED***t<'line'>>,
-  ScriptableAndArrayOptions<CommonElementOptions, ScriptableConte***REMOVED***t<'line'>>,
-  ScriptableOptions<Omit<LineHoverOptions, keyof CommonHoverOptions>, ScriptableConte***REMOVED***t<'line'>>,
-  ScriptableAndArrayOptions<CommonHoverOptions, ScriptableConte***REMOVED***t<'line'>>,
+export interface LineControllerDatasetOptions
+  extends ControllerDatasetOptions,
+  ScriptableAndArrayOptions<PointPrefixedOptions, ScriptableContext<'line'>>,
+  ScriptableAndArrayOptions<PointPrefixedHoverOptions, ScriptableContext<'line'>>,
+  ScriptableOptions<Omit<LineOptions, keyof CommonElementOptions>, ScriptableContext<'line'>>,
+  ScriptableAndArrayOptions<CommonElementOptions, ScriptableContext<'line'>>,
+  ScriptableOptions<Omit<LineHoverOptions, keyof CommonHoverOptions>, ScriptableContext<'line'>>,
+  ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext<'line'>>,
   AnimationOptions<'line'> {
   /**
-   * The ID of the ***REMOVED*** a***REMOVED***is to plot this dataset on.
+   * The ID of the x axis to plot this dataset on.
    */
-  ***REMOVED***A***REMOVED***isID: string;
+  xAxisID: string;
   /**
-   * The ID of the y a***REMOVED***is to plot this dataset on.
+   * The ID of the y axis to plot this dataset on.
    */
-  yA***REMOVED***isID: string;
+  yAxisID: string;
 
   /**
-   * If true, lines will be drawn between points with no or null data. If false, points with NaN data will create a break in the line. Can also be a number specifying the ma***REMOVED***imum gap length to span. The unit of the value depends on the scale used.
+   * If true, lines will be drawn between points with no or null data. If false, points with NaN data will create a break in the line. Can also be a number specifying the maximum gap length to span. The unit of the value depends on the scale used.
    * @default false
    */
   spanGaps: boolean | number;
@@ -213,9 +213,9 @@ e***REMOVED***port interface LineControllerDatasetOptions
   showLine: boolean;
 }
 
-e***REMOVED***port interface LineControllerChartOptions {
+export interface LineControllerChartOptions {
   /**
-   * If true, lines will be drawn between points with no or null data. If false, points with NaN data will create a break in the line. Can also be a number specifying the ma***REMOVED***imum gap length to span. The unit of the value depends on the scale used.
+   * If true, lines will be drawn between points with no or null data. If false, points with NaN data will create a break in the line. Can also be a number specifying the maximum gap length to span. The unit of the value depends on the scale used.
    * @default false
    */
   spanGaps: boolean | number;
@@ -226,28 +226,28 @@ e***REMOVED***port interface LineControllerChartOptions {
   showLine: boolean;
 }
 
-e***REMOVED***port type LineController = DatasetController
-e***REMOVED***port declare const LineController: ChartComponent & {
+export type LineController = DatasetController
+export declare const LineController: ChartComponent & {
   prototype: LineController;
-  new (chart: Chart, datasetInde***REMOVED***: number): LineController;
+  new (chart: Chart, datasetIndex: number): LineController;
 };
 
-e***REMOVED***port type ScatterControllerDatasetOptions = LineControllerDatasetOptions;
+export type ScatterControllerDatasetOptions = LineControllerDatasetOptions;
 
-e***REMOVED***port type ScatterDataPoint = Point
+export type ScatterDataPoint = Point
 
-e***REMOVED***port type ScatterControllerChartOptions = LineControllerChartOptions;
+export type ScatterControllerChartOptions = LineControllerChartOptions;
 
-e***REMOVED***port type ScatterController = LineController
-e***REMOVED***port declare const ScatterController: ChartComponent & {
+export type ScatterController = LineController
+export declare const ScatterController: ChartComponent & {
   prototype: ScatterController;
-  new (chart: Chart, datasetInde***REMOVED***: number): ScatterController;
+  new (chart: Chart, datasetIndex: number): ScatterController;
 };
 
-e***REMOVED***port interface DoughnutControllerDatasetOptions
-  e***REMOVED***tends ControllerDatasetOptions,
-  ScriptableAndArrayOptions<ArcOptions, ScriptableConte***REMOVED***t<'doughnut'>>,
-  ScriptableAndArrayOptions<ArcHoverOptions, ScriptableConte***REMOVED***t<'doughnut'>>,
+export interface DoughnutControllerDatasetOptions
+  extends ControllerDatasetOptions,
+  ScriptableAndArrayOptions<ArcOptions, ScriptableContext<'doughnut'>>,
+  ScriptableAndArrayOptions<ArcHoverOptions, ScriptableContext<'doughnut'>>,
   AnimationOptions<'doughnut'> {
 
   /**
@@ -257,7 +257,7 @@ e***REMOVED***port interface DoughnutControllerDatasetOptions
   circumference: number;
 
   /**
-   * Arc offset (in pi***REMOVED***els).
+   * Arc offset (in pixels).
    */
   offset: number | number[];
 
@@ -281,7 +281,7 @@ e***REMOVED***port interface DoughnutControllerDatasetOptions
   spacing: number;
 }
 
-e***REMOVED***port interface DoughnutAnimationOptions {
+export interface DoughnutAnimationOptions {
   /**
    *   If true, the chart will animate in with a rotation animation. This property is in the options.animation object.
    * @default true
@@ -295,7 +295,7 @@ e***REMOVED***port interface DoughnutAnimationOptions {
   animateScale: boolean;
 }
 
-e***REMOVED***port interface DoughnutControllerChartOptions {
+export interface DoughnutControllerChartOptions {
   /**
    * Sweep to allow arcs to cover.
    * @default 360
@@ -304,21 +304,21 @@ e***REMOVED***port interface DoughnutControllerChartOptions {
 
   /**
    * The portion of the chart that is cut out of the middle. ('50%' - for doughnut, 0 - for pie)
-   * String ending with '%' means percentage, number means pi***REMOVED***els.
+   * String ending with '%' means percentage, number means pixels.
    * @default 50
    */
-  cutout: Scriptable<number | string, ScriptableConte***REMOVED***t<'doughnut'>>;
+  cutout: Scriptable<number | string, ScriptableContext<'doughnut'>>;
 
   /**
-   * Arc offset (in pi***REMOVED***els).
+   * Arc offset (in pixels).
    */
   offset: number | number[];
 
   /**
-   * The outer radius of the chart. String ending with '%' means percentage of ma***REMOVED***imum radius, number means pi***REMOVED***els.
+   * The outer radius of the chart. String ending with '%' means percentage of maximum radius, number means pixels.
    * @default '100%'
    */
-  radius: Scriptable<number | string, ScriptableConte***REMOVED***t<'doughnut'>>;
+  radius: Scriptable<number | string, ScriptableContext<'doughnut'>>;
 
   /**
    * Starting angle to draw arcs from.
@@ -335,9 +335,9 @@ e***REMOVED***port interface DoughnutControllerChartOptions {
   animation: false | DoughnutAnimationOptions;
 }
 
-e***REMOVED***port type DoughnutDataPoint = number;
+export type DoughnutDataPoint = number;
 
-e***REMOVED***port interface DoughnutController e***REMOVED***tends DatasetController {
+export interface DoughnutController extends DatasetController {
   readonly innerRadius: number;
   readonly outerRadius: number;
   readonly offsetX: number;
@@ -347,29 +347,29 @@ e***REMOVED***port interface DoughnutController e***REMOVED***tends DatasetContr
   calculateCircumference(value: number): number;
 }
 
-e***REMOVED***port declare const DoughnutController: ChartComponent & {
+export declare const DoughnutController: ChartComponent & {
   prototype: DoughnutController;
-  new (chart: Chart, datasetInde***REMOVED***: number): DoughnutController;
+  new (chart: Chart, datasetIndex: number): DoughnutController;
 };
 
-e***REMOVED***port interface DoughnutMetaE***REMOVED***tensions {
+export interface DoughnutMetaExtensions {
   total: number;
 }
 
-e***REMOVED***port type PieControllerDatasetOptions = DoughnutControllerDatasetOptions;
-e***REMOVED***port type PieControllerChartOptions = DoughnutControllerChartOptions;
-e***REMOVED***port type PieAnimationOptions = DoughnutAnimationOptions;
+export type PieControllerDatasetOptions = DoughnutControllerDatasetOptions;
+export type PieControllerChartOptions = DoughnutControllerChartOptions;
+export type PieAnimationOptions = DoughnutAnimationOptions;
 
-e***REMOVED***port type PieDataPoint = DoughnutDataPoint;
-e***REMOVED***port type PieMetaE***REMOVED***tensions = DoughnutMetaE***REMOVED***tensions;
+export type PieDataPoint = DoughnutDataPoint;
+export type PieMetaExtensions = DoughnutMetaExtensions;
 
-e***REMOVED***port type PieController = DoughnutController
-e***REMOVED***port declare const PieController: ChartComponent & {
+export type PieController = DoughnutController
+export declare const PieController: ChartComponent & {
   prototype: PieController;
-  new (chart: Chart, datasetInde***REMOVED***: number): PieController;
+  new (chart: Chart, datasetIndex: number): PieController;
 };
 
-e***REMOVED***port interface PolarAreaControllerDatasetOptions e***REMOVED***tends DoughnutControllerDatasetOptions {
+export interface PolarAreaControllerDatasetOptions extends DoughnutControllerDatasetOptions {
   /**
    * Arc angle to cover. - for polar only
    * @default circumference / (arc count)
@@ -377,9 +377,9 @@ e***REMOVED***port interface PolarAreaControllerDatasetOptions e***REMOVED***ten
   angle: number;
 }
 
-e***REMOVED***port type PolarAreaAnimationOptions = DoughnutAnimationOptions;
+export type PolarAreaAnimationOptions = DoughnutAnimationOptions;
 
-e***REMOVED***port interface PolarAreaControllerChartOptions {
+export interface PolarAreaControllerChartOptions {
   /**
    * Starting angle to draw arcs for the first item in a dataset. In degrees, 0 is at top.
    * @default 0
@@ -389,30 +389,30 @@ e***REMOVED***port interface PolarAreaControllerChartOptions {
   animation: false | PolarAreaAnimationOptions;
 }
 
-e***REMOVED***port interface PolarAreaController e***REMOVED***tends DoughnutController {
+export interface PolarAreaController extends DoughnutController {
   countVisibleElements(): number;
 }
-e***REMOVED***port declare const PolarAreaController: ChartComponent & {
+export declare const PolarAreaController: ChartComponent & {
   prototype: PolarAreaController;
-  new (chart: Chart, datasetInde***REMOVED***: number): PolarAreaController;
+  new (chart: Chart, datasetIndex: number): PolarAreaController;
 };
 
-e***REMOVED***port interface RadarControllerDatasetOptions
-  e***REMOVED***tends ControllerDatasetOptions,
-  ScriptableAndArrayOptions<PointOptions & PointHoverOptions & PointPrefi***REMOVED***edOptions & PointPrefi***REMOVED***edHoverOptions, ScriptableConte***REMOVED***t<'radar'>>,
-  ScriptableAndArrayOptions<LineOptions & LineHoverOptions, ScriptableConte***REMOVED***t<'radar'>>,
+export interface RadarControllerDatasetOptions
+  extends ControllerDatasetOptions,
+  ScriptableAndArrayOptions<PointOptions & PointHoverOptions & PointPrefixedOptions & PointPrefixedHoverOptions, ScriptableContext<'radar'>>,
+  ScriptableAndArrayOptions<LineOptions & LineHoverOptions, ScriptableContext<'radar'>>,
   AnimationOptions<'radar'> {
   /**
-   * The ID of the ***REMOVED*** a***REMOVED***is to plot this dataset on.
+   * The ID of the x axis to plot this dataset on.
    */
-  ***REMOVED***A***REMOVED***isID: string;
+  xAxisID: string;
   /**
-   * The ID of the y a***REMOVED***is to plot this dataset on.
+   * The ID of the y axis to plot this dataset on.
    */
-  yA***REMOVED***isID: string;
+  yAxisID: string;
 
   /**
-   * If true, lines will be drawn between points with no or null data. If false, points with NaN data will create a break in the line. Can also be a number specifying the ma***REMOVED***imum gap length to span. The unit of the value depends on the scale used.
+   * If true, lines will be drawn between points with no or null data. If false, points with NaN data will create a break in the line. Can also be a number specifying the maximum gap length to span. The unit of the value depends on the scale used.
    */
   spanGaps: boolean | number;
 
@@ -422,38 +422,38 @@ e***REMOVED***port interface RadarControllerDatasetOptions
   showLine: boolean;
 }
 
-e***REMOVED***port type RadarControllerChartOptions = LineControllerChartOptions;
+export type RadarControllerChartOptions = LineControllerChartOptions;
 
-e***REMOVED***port type RadarController = DatasetController
-e***REMOVED***port declare const RadarController: ChartComponent & {
+export type RadarController = DatasetController
+export declare const RadarController: ChartComponent & {
   prototype: RadarController;
-  new (chart: Chart, datasetInde***REMOVED***: number): RadarController;
+  new (chart: Chart, datasetIndex: number): RadarController;
 };
-interface ChartMetaCommon<TElement e***REMOVED***tends Element = Element, TDatasetElement e***REMOVED***tends Element = Element> {
+interface ChartMetaCommon<TElement extends Element = Element, TDatasetElement extends Element = Element> {
   type: string;
   controller: DatasetController;
   order: number;
 
   label: string;
-  inde***REMOVED***: number;
+  index: number;
   visible: boolean;
 
   stack: number;
 
-  inde***REMOVED***A***REMOVED***is: '***REMOVED***' | 'y';
+  indexAxis: 'x' | 'y';
 
   data: TElement[];
   dataset?: TDatasetElement;
 
   hidden: boolean;
 
-  ***REMOVED***A***REMOVED***isID?: string;
-  yA***REMOVED***isID?: string;
-  rA***REMOVED***isID?: string;
-  iA***REMOVED***isID: string;
-  vA***REMOVED***isID: string;
+  xAxisID?: string;
+  yAxisID?: string;
+  rAxisID?: string;
+  iAxisID: string;
+  vAxisID: string;
 
-  ***REMOVED***Scale?: Scale;
+  xScale?: Scale;
   yScale?: Scale;
   rScale?: Scale;
   iScale?: Scale;
@@ -464,38 +464,38 @@ interface ChartMetaCommon<TElement e***REMOVED***tends Element = Element, TDatas
   _parsed: unknown[];
 }
 
-e***REMOVED***port type ChartMeta<
-  TType e***REMOVED***tends ChartType = ChartType,
-  TElement e***REMOVED***tends Element = Element,
-  TDatasetElement e***REMOVED***tends Element = Element,
+export type ChartMeta<
+  TType extends ChartType = ChartType,
+  TElement extends Element = Element,
+  TDatasetElement extends Element = Element,
 > = DeepPartial<
-{ [key in ChartType]: ChartTypeRegistry[key]['metaE***REMOVED***tensions'] }[TType]
+{ [key in ChartType]: ChartTypeRegistry[key]['metaExtensions'] }[TType]
 > & ChartMetaCommon<TElement, TDatasetElement>;
 
-e***REMOVED***port interface ActiveDataPoint {
-  datasetInde***REMOVED***: number;
-  inde***REMOVED***: number;
+export interface ActiveDataPoint {
+  datasetIndex: number;
+  index: number;
 }
 
-e***REMOVED***port interface ActiveElement e***REMOVED***tends ActiveDataPoint {
+export interface ActiveElement extends ActiveDataPoint {
   element: Element;
 }
 
-e***REMOVED***port declare class Chart<
-  TType e***REMOVED***tends ChartType = ChartType,
+export declare class Chart<
+  TType extends ChartType = ChartType,
   TData = DefaultDataPoint<TType>,
   TLabel = unknown
 > {
   readonly platform: BasePlatform;
   readonly id: string;
   readonly canvas: HTMLCanvasElement;
-  readonly ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D;
+  readonly ctx: CanvasRenderingContext2D;
   readonly config: ChartConfiguration<TType, TData, TLabel> | ChartConfigurationCustomTypesPerDataset<TType, TData, TLabel>;
   readonly width: number;
   readonly height: number;
   readonly aspectRatio: number;
-  readonly bo***REMOVED***es: LayoutItem[];
-  readonly currentDevicePi***REMOVED***elRatio: number;
+  readonly boxes: LayoutItem[];
+  readonly currentDevicePixelRatio: number;
   readonly chartArea: ChartArea;
   readonly scales: { [key: string]: Scale };
   readonly attached: boolean;
@@ -516,7 +516,7 @@ e***REMOVED***port declare class Chart<
   buildOrUpdateScales(): void;
   buildOrUpdateControllers(): void;
   reset(): void;
-  update(mode?: UpdateMode | ((ct***REMOVED***: { datasetInde***REMOVED***: number }) => UpdateMode)): void;
+  update(mode?: UpdateMode | ((ctx: { datasetIndex: number }) => UpdateMode)): void;
   render(): void;
   draw(): void;
 
@@ -524,14 +524,14 @@ e***REMOVED***port declare class Chart<
   getElementsAtEventForMode(e: Event, mode: string, options: InteractionOptions, useFinalPosition: boolean): InteractionItem[];
 
   getSortedVisibleDatasetMetas(): ChartMeta[];
-  getDatasetMeta(datasetInde***REMOVED***: number): ChartMeta;
+  getDatasetMeta(datasetIndex: number): ChartMeta;
   getVisibleDatasetCount(): number;
-  isDatasetVisible(datasetInde***REMOVED***: number): boolean;
-  setDatasetVisibility(datasetInde***REMOVED***: number, visible: boolean): void;
-  toggleDataVisibility(inde***REMOVED***: number): void;
-  getDataVisibility(inde***REMOVED***: number): boolean;
-  hide(datasetInde***REMOVED***: number, dataInde***REMOVED***?: number): void;
-  show(datasetInde***REMOVED***: number, dataInde***REMOVED***?: number): void;
+  isDatasetVisible(datasetIndex: number): boolean;
+  setDatasetVisibility(datasetIndex: number, visible: boolean): void;
+  toggleDataVisibility(index: number): void;
+  getDataVisibility(index: number): boolean;
+  hide(datasetIndex: number, dataIndex?: number): void;
+  show(datasetIndex: number, dataIndex?: number): void;
 
   getActiveElements(): ActiveElement[];
   setActiveElements(active: ActiveDataPoint[]): void;
@@ -546,28 +546,28 @@ e***REMOVED***port declare class Chart<
 
   isPluginEnabled(pluginId: string): boolean;
 
-  getConte***REMOVED***t(): { chart: Chart, type: string };
+  getContext(): { chart: Chart, type: string };
 
   static readonly defaults: Defaults;
   static readonly overrides: Overrides;
   static readonly version: string;
   static readonly instances: { [key: string]: Chart };
   static readonly registry: Registry;
-  static getChart(key: string | CanvasRenderingConte***REMOVED***t2D | HTMLCanvasElement): Chart | undefined;
+  static getChart(key: string | CanvasRenderingContext2D | HTMLCanvasElement): Chart | undefined;
   static register(...items: ChartComponentLike[]): void;
   static unregister(...items: ChartComponentLike[]): void;
 }
 
-e***REMOVED***port declare const registerables: readonly ChartComponentLike[];
+export declare const registerables: readonly ChartComponentLike[];
 
-e***REMOVED***port declare type ChartItem =
+export declare type ChartItem =
   | string
-  | CanvasRenderingConte***REMOVED***t2D
+  | CanvasRenderingContext2D
   | HTMLCanvasElement
   | { canvas: HTMLCanvasElement }
-  | ArrayLike<CanvasRenderingConte***REMOVED***t2D | HTMLCanvasElement>;
+  | ArrayLike<CanvasRenderingContext2D | HTMLCanvasElement>;
 
-e***REMOVED***port declare enum UpdateModeEnum {
+export declare enum UpdateModeEnum {
   resize = 'resize',
   reset = 'reset',
   none = 'none',
@@ -577,32 +577,32 @@ e***REMOVED***port declare enum UpdateModeEnum {
   active = 'active'
 }
 
-e***REMOVED***port type UpdateMode = keyof typeof UpdateModeEnum;
+export type UpdateMode = keyof typeof UpdateModeEnum;
 
-e***REMOVED***port declare class DatasetController<
-  TType e***REMOVED***tends ChartType = ChartType,
-  TElement e***REMOVED***tends Element = Element,
-  TDatasetElement e***REMOVED***tends Element = Element,
+export declare class DatasetController<
+  TType extends ChartType = ChartType,
+  TElement extends Element = Element,
+  TDatasetElement extends Element = Element,
   TParsedData = ParsedDataType<TType>,
 > {
-  constructor(chart: Chart, datasetInde***REMOVED***: number);
+  constructor(chart: Chart, datasetIndex: number);
 
   readonly chart: Chart;
-  readonly inde***REMOVED***: number;
+  readonly index: number;
   readonly _cachedMeta: ChartMeta<TType, TElement, TDatasetElement>;
   enableOptionSharing: boolean;
   // If true, the controller supports the decimation
   // plugin. Defaults to `false` for all controllers
-  // e***REMOVED***cept the LineController
+  // except the LineController
   supportsDecimation: boolean;
 
   linkScales(): void;
   getAllParsedValues(scale: Scale): number[];
-  protected getLabelAndValue(inde***REMOVED***: number): { label: string; value: string };
+  protected getLabelAndValue(index: number): { label: string; value: string };
   updateElements(elements: TElement[], start: number, count: number, mode: UpdateMode): void;
   update(mode: UpdateMode): void;
-  updateInde***REMOVED***(datasetInde***REMOVED***: number): void;
-  protected getMa***REMOVED***Overflow(): boolean | number;
+  updateIndex(datasetIndex: number): void;
+  protected getMaxOverflow(): boolean | number;
   draw(): void;
   reset(): void;
   getDataset(): ChartDataset;
@@ -613,9 +613,9 @@ e***REMOVED***port declare class DatasetController<
   addElements(): void;
   buildOrUpdateElements(resetNewElements?: boolean): void;
 
-  getStyle(inde***REMOVED***: number, active: boolean): AnyObject;
+  getStyle(index: number, active: boolean): AnyObject;
   protected resolveDatasetElementOptions(mode: UpdateMode): AnyObject;
-  protected resolveDataElementOptions(inde***REMOVED***: number, mode: UpdateMode): AnyObject;
+  protected resolveDataElementOptions(index: number, mode: UpdateMode): AnyObject;
   /**
    * Utility for checking if the options are shared and should be animated separately.
    * @protected
@@ -631,39 +631,39 @@ e***REMOVED***port declare class DatasetController<
    * @protected
    */
 
-  protected updateElement(element: TElement | TDatasetElement, inde***REMOVED***: number | undefined, properties: AnyObject, mode: UpdateMode): void;
+  protected updateElement(element: TElement | TDatasetElement, index: number | undefined, properties: AnyObject, mode: UpdateMode): void;
   /**
    * Utility to animate the shared options, that are potentially affecting multiple elements.
    * @protected
    */
 
   protected updateSharedOptions(sharedOptions: AnyObject, mode: UpdateMode, newOptions: AnyObject): void;
-  removeHoverStyle(element: TElement, datasetInde***REMOVED***: number, inde***REMOVED***: number): void;
-  setHoverStyle(element: TElement, datasetInde***REMOVED***: number, inde***REMOVED***: number): void;
+  removeHoverStyle(element: TElement, datasetIndex: number, index: number): void;
+  setHoverStyle(element: TElement, datasetIndex: number, index: number): void;
 
   parse(start: number, count: number): void;
   protected parsePrimitiveData(meta: ChartMeta<TType, TElement, TDatasetElement>, data: AnyObject[], start: number, count: number): AnyObject[];
   protected parseArrayData(meta: ChartMeta<TType, TElement, TDatasetElement>, data: AnyObject[], start: number, count: number): AnyObject[];
   protected parseObjectData(meta: ChartMeta<TType, TElement, TDatasetElement>, data: AnyObject[], start: number, count: number): AnyObject[];
-  protected getParsed(inde***REMOVED***: number): TParsedData;
+  protected getParsed(index: number): TParsedData;
   protected applyStack(scale: Scale, parsed: unknown[]): number;
   protected updateRangeFromParsed(
-    range: { min: number; ma***REMOVED***: number },
+    range: { min: number; max: number },
     scale: Scale,
     parsed: unknown[],
     stack: boolean | string
   ): void;
-  protected getMinMa***REMOVED***(scale: Scale, canStack?: boolean): { min: number; ma***REMOVED***: number };
+  protected getMinMax(scale: Scale, canStack?: boolean): { min: number; max: number };
 }
 
-e***REMOVED***port interface DatasetControllerChartComponent e***REMOVED***tends ChartComponent {
+export interface DatasetControllerChartComponent extends ChartComponent {
   defaults: {
     datasetElementType?: string | null | false;
     dataElementType?: string | null | false;
   };
 }
 
-e***REMOVED***port interface Defaults e***REMOVED***tends CoreChartOptions<ChartType>, ElementChartOptions<ChartType>, PluginChartOptions<ChartType> {
+export interface Defaults extends CoreChartOptions<ChartType>, ElementChartOptions<ChartType>, PluginChartOptions<ChartType> {
 
   scale: ScaleOptionsByType;
   scales: {
@@ -683,7 +683,7 @@ e***REMOVED***port interface Defaults e***REMOVED***tends CoreChartOptions<Chart
    * If the values would be copied, the runtime change would not take effect. By routing, the
    * fallback is evaluated at each access, so its always up to date.
    *
-   * E***REMOVED***ample:
+   * Example:
    *
    *   defaults.route('elements.arc', 'backgroundColor', '', 'color')
    *    - reads the backgroundColor from defaults.color when undefined locally
@@ -697,7 +697,7 @@ e***REMOVED***port interface Defaults e***REMOVED***tends CoreChartOptions<Chart
   route(scope: string, name: string, targetScope: string, targetName: string): void;
 }
 
-e***REMOVED***port type Overrides = {
+export type Overrides = {
   [key in ChartType]:
   CoreChartOptions<key> &
   ElementChartOptions<key> &
@@ -707,32 +707,32 @@ e***REMOVED***port type Overrides = {
   ChartTypeRegistry[key]['chartOptions'];
 }
 
-e***REMOVED***port declare const defaults: Defaults;
-e***REMOVED***port interface InteractionOptions {
-  a***REMOVED***is?: string;
+export declare const defaults: Defaults;
+export interface InteractionOptions {
+  axis?: string;
   intersect?: boolean;
   includeInvisible?: boolean;
 }
 
-e***REMOVED***port interface InteractionItem {
+export interface InteractionItem {
   element: Element;
-  datasetInde***REMOVED***: number;
-  inde***REMOVED***: number;
+  datasetIndex: number;
+  index: number;
 }
 
-e***REMOVED***port type InteractionModeFunction = (
+export type InteractionModeFunction = (
   chart: Chart,
   e: ChartEvent,
   options: InteractionOptions,
   useFinalPosition?: boolean
 ) => InteractionItem[];
 
-e***REMOVED***port interface InteractionModeMap {
+export interface InteractionModeMap {
   /**
-   * Returns items at the same inde***REMOVED***. If the options.intersect parameter is true, we only return items if we intersect something
-   * If the options.intersect mode is false, we find the nearest item and return the items at the same inde***REMOVED*** as that item
+   * Returns items at the same index. If the options.intersect parameter is true, we only return items if we intersect something
+   * If the options.intersect mode is false, we find the nearest item and return the items at the same index as that item
    */
-  inde***REMOVED***: InteractionModeFunction;
+  index: InteractionModeFunction;
 
   /**
    * Returns items in the same dataset. If the options.intersect parameter is true, we only return items if we intersect something
@@ -749,18 +749,18 @@ e***REMOVED***port interface InteractionModeMap {
    */
   nearest: InteractionModeFunction;
   /**
-   * ***REMOVED*** mode returns the elements that hit-test at the current ***REMOVED*** coordinate
+   * x mode returns the elements that hit-test at the current x coordinate
    */
-  ***REMOVED***: InteractionModeFunction;
+  x: InteractionModeFunction;
   /**
    * y mode returns the elements that hit-test at the current y coordinate
    */
   y: InteractionModeFunction;
 }
 
-e***REMOVED***port type InteractionMode = keyof InteractionModeMap;
+export type InteractionMode = keyof InteractionModeMap;
 
-e***REMOVED***port declare const Interaction: {
+export declare const Interaction: {
   modes: InteractionModeMap;
 
   /**
@@ -768,28 +768,28 @@ e***REMOVED***port declare const Interaction: {
    */
   evaluateInteractionItems(
     chart: Chart,
-    a***REMOVED***is: InteractionA***REMOVED***is,
+    axis: InteractionAxis,
     position: Point,
-    handler: (element: Element & VisualElement, datasetInde***REMOVED***: number, inde***REMOVED***: number) => void,
+    handler: (element: Element & VisualElement, datasetIndex: number, index: number) => void,
     intersect?: boolean
   ): InteractionItem[];
 };
 
-e***REMOVED***port declare const layouts: {
+export declare const layouts: {
   /**
-   * Register a bo***REMOVED*** to a chart.
-   * A bo***REMOVED*** is simply a reference to an object that requires layout. eg. Scales, Legend, Title.
+   * Register a box to a chart.
+   * A box is simply a reference to an object that requires layout. eg. Scales, Legend, Title.
    * @param {Chart} chart - the chart to use
    * @param {LayoutItem} item - the item to add to be laid out
    */
-  addBo***REMOVED***(chart: Chart, item: LayoutItem): void;
+  addBox(chart: Chart, item: LayoutItem): void;
 
   /**
    * Remove a layoutItem from a chart
-   * @param {Chart} chart - the chart to remove the bo***REMOVED*** from
+   * @param {Chart} chart - the chart to remove the box from
    * @param {LayoutItem} layoutItem - the item to remove from the layout
    */
-  removeBo***REMOVED***(chart: Chart, layoutItem: LayoutItem): void;
+  removeBox(chart: Chart, layoutItem: LayoutItem): void;
 
   /**
    * Sets (or updates) options on the given `item`.
@@ -804,7 +804,7 @@ e***REMOVED***port declare const layouts: {
   ): void;
 
   /**
-   * Fits bo***REMOVED***es of the given chart into the given size by having each bo***REMOVED*** measure itself
+   * Fits boxes of the given chart into the given size by having each box measure itself
    * then running a fitting algorithm
    * @param {Chart} chart - the chart
    * @param {number} width - the width to fit into
@@ -813,7 +813,7 @@ e***REMOVED***port declare const layouts: {
   update(chart: Chart, width: number, height: number): void;
 };
 
-e***REMOVED***port interface Plugin<TType e***REMOVED***tends ChartType = ChartType, O = AnyObject> e***REMOVED***tends E***REMOVED***tendedPlugin<TType, O> {
+export interface Plugin<TType extends ChartType = ChartType, O = AnyObject> extends ExtendedPlugin<TType, O> {
   id: string;
 
   /**
@@ -917,28 +917,28 @@ e***REMOVED***port interface Plugin<TType e***REMOVED***tends ChartType = ChartT
    */
   afterDatasetsUpdate?(chart: Chart<TType>, args: { mode: UpdateMode, cancelable: true }, options: O): void;
   /**
-   * @desc Called before updating the `chart` dataset at the given `args.inde***REMOVED***`. If any plugin
+   * @desc Called before updating the `chart` dataset at the given `args.index`. If any plugin
    * returns `false`, the datasets update is cancelled until another `update` is triggered.
    * @param {Chart} chart - The chart instance.
    * @param {object} args - The call arguments.
-   * @param {number} args.inde***REMOVED*** - The dataset inde***REMOVED***.
+   * @param {number} args.index - The dataset index.
    * @param {object} args.meta - The dataset metadata.
    * @param {UpdateMode} args.mode - The update mode.
    * @param {object} options - The plugin options.
    * @returns {boolean} `false` to cancel the chart datasets drawing.
    */
-  beforeDatasetUpdate?(chart: Chart<TType>, args: { inde***REMOVED***: number; meta: ChartMeta, mode: UpdateMode, cancelable: true }, options: O): boolean | void;
+  beforeDatasetUpdate?(chart: Chart<TType>, args: { index: number; meta: ChartMeta, mode: UpdateMode, cancelable: true }, options: O): boolean | void;
   /**
-   * @desc Called after the `chart` datasets at the given `args.inde***REMOVED***` has been updated. Note
+   * @desc Called after the `chart` datasets at the given `args.index` has been updated. Note
    * that this hook will not be called if the datasets update has been previously cancelled.
    * @param {Chart} chart - The chart instance.
    * @param {object} args - The call arguments.
-   * @param {number} args.inde***REMOVED*** - The dataset inde***REMOVED***.
+   * @param {number} args.index - The dataset index.
    * @param {object} args.meta - The dataset metadata.
    * @param {UpdateMode} args.mode - The update mode.
    * @param {object} options - The plugin options.
    */
-  afterDatasetUpdate?(chart: Chart<TType>, args: { inde***REMOVED***: number; meta: ChartMeta, mode: UpdateMode, cancelable: false }, options: O): void;
+  afterDatasetUpdate?(chart: Chart<TType>, args: { index: number; meta: ChartMeta, mode: UpdateMode, cancelable: false }, options: O): void;
   /**
    * @desc Called before laying out `chart`. If any plugin returns `false`,
    * the layout update is cancelled until another `update` is triggered.
@@ -1040,28 +1040,28 @@ e***REMOVED***port interface Plugin<TType e***REMOVED***tends ChartType = ChartT
    */
   afterDatasetsDraw?(chart: Chart<TType>, args: EmptyObject, options: O, cancelable: false): void;
   /**
-   * @desc Called before drawing the `chart` dataset at the given `args.inde***REMOVED***` (datasets
+   * @desc Called before drawing the `chart` dataset at the given `args.index` (datasets
    * are drawn in the reverse order). If any plugin returns `false`, the datasets drawing
    * is cancelled until another `render` is triggered.
    * @param {Chart} chart - The chart instance.
    * @param {object} args - The call arguments.
-   * @param {number} args.inde***REMOVED*** - The dataset inde***REMOVED***.
+   * @param {number} args.index - The dataset index.
    * @param {object} args.meta - The dataset metadata.
    * @param {object} options - The plugin options.
    * @returns {boolean} `false` to cancel the chart datasets drawing.
    */
-  beforeDatasetDraw?(chart: Chart<TType>, args: { inde***REMOVED***: number; meta: ChartMeta }, options: O): boolean | void;
+  beforeDatasetDraw?(chart: Chart<TType>, args: { index: number; meta: ChartMeta }, options: O): boolean | void;
   /**
-   * @desc Called after the `chart` datasets at the given `args.inde***REMOVED***` have been drawn
+   * @desc Called after the `chart` datasets at the given `args.index` have been drawn
    * (datasets are drawn in the reverse order). Note that this hook will not be called
    * if the datasets drawing has been previously cancelled.
    * @param {Chart} chart - The chart instance.
    * @param {object} args - The call arguments.
-   * @param {number} args.inde***REMOVED*** - The dataset inde***REMOVED***.
+   * @param {number} args.index - The dataset index.
    * @param {object} args.meta - The dataset metadata.
    * @param {object} options - The plugin options.
    */
-  afterDatasetDraw?(chart: Chart<TType>, args: { inde***REMOVED***: number; meta: ChartMeta }, options: O): void;
+  afterDatasetDraw?(chart: Chart<TType>, args: { index: number; meta: ChartMeta }, options: O): void;
   /**
    * @desc Called before processing the specified `event`. If any plugin returns `false`,
    * the event will be discarded.
@@ -1122,13 +1122,13 @@ e***REMOVED***port interface Plugin<TType e***REMOVED***tends ChartType = ChartT
   defaults?: Partial<O>;
 }
 
-e***REMOVED***port declare type ChartComponentLike = ChartComponent | ChartComponent[] | { [key: string]: ChartComponent } | Plugin | Plugin[];
+export declare type ChartComponentLike = ChartComponent | ChartComponent[] | { [key: string]: ChartComponent } | Plugin | Plugin[];
 
 /**
- * Please use the module's default e***REMOVED***port which provides a singleton instance
- * Note: class is e***REMOVED***ported for typedoc
+ * Please use the module's default export which provides a singleton instance
+ * Note: class is exported for typedoc
  */
-e***REMOVED***port interface Registry {
+export interface Registry {
   readonly controllers: TypedRegistry<DatasetController>;
   readonly elements: TypedRegistry<Element>;
   readonly plugins: TypedRegistry<Plugin>;
@@ -1148,24 +1148,24 @@ e***REMOVED***port interface Registry {
   getScale(id: string): Scale | undefined;
 }
 
-e***REMOVED***port declare const registry: Registry;
+export declare const registry: Registry;
 
-e***REMOVED***port interface Tick {
+export interface Tick {
   value: number;
   label?: string | string[];
   major?: boolean;
 }
 
-e***REMOVED***port interface CoreScaleOptions {
+export interface CoreScaleOptions {
   /**
-   * Controls the a***REMOVED***is global visibility (visible when true, hidden when false). When display: 'auto', the a***REMOVED***is is visible only if at least one associated dataset is visible.
+   * Controls the axis global visibility (visible when true, hidden when false). When display: 'auto', the axis is visible only if at least one associated dataset is visible.
    * @default true
    */
   display: boolean | 'auto';
   /**
-   * Align pi***REMOVED***el values to device pi***REMOVED***els
+   * Align pixel values to device pixels
    */
-  alignToPi***REMOVED***els: boolean;
+  alignToPixels: boolean;
   /**
    * Background color of the scale area.
    */
@@ -1181,7 +1181,7 @@ e***REMOVED***port interface CoreScaleOptions {
    */
   clip: boolean;
   /**
-   * The weight used to sort the a***REMOVED***is. Higher weights are further away from the chart area.
+   * The weight used to sort the axis. Higher weights are further away from the chart area.
    * @default true
    */
   weight: number;
@@ -1190,93 +1190,93 @@ e***REMOVED***port interface CoreScaleOptions {
    */
   min: unknown;
   /**
-   * User defined ma***REMOVED***imum value for the scale, overrides ma***REMOVED***imum value from data.
+   * User defined maximum value for the scale, overrides maximum value from data.
    */
-  ma***REMOVED***: unknown;
+  max: unknown;
   /**
-   * Adjustment used when calculating the ma***REMOVED***imum data value.
+   * Adjustment used when calculating the maximum data value.
    */
   suggestedMin: unknown;
   /**
    * Adjustment used when calculating the minimum data value.
    */
-  suggestedMa***REMOVED***: unknown;
+  suggestedMax: unknown;
   /**
    * Callback called before the update process starts.
    */
-  beforeUpdate(a***REMOVED***is: Scale): void;
+  beforeUpdate(axis: Scale): void;
   /**
    * Callback that runs before dimensions are set.
    */
-  beforeSetDimensions(a***REMOVED***is: Scale): void;
+  beforeSetDimensions(axis: Scale): void;
   /**
    * Callback that runs after dimensions are set.
    */
-  afterSetDimensions(a***REMOVED***is: Scale): void;
+  afterSetDimensions(axis: Scale): void;
   /**
    * Callback that runs before data limits are determined.
    */
-  beforeDataLimits(a***REMOVED***is: Scale): void;
+  beforeDataLimits(axis: Scale): void;
   /**
    * Callback that runs after data limits are determined.
    */
-  afterDataLimits(a***REMOVED***is: Scale): void;
+  afterDataLimits(axis: Scale): void;
   /**
    * Callback that runs before ticks are created.
    */
-  beforeBuildTicks(a***REMOVED***is: Scale): void;
+  beforeBuildTicks(axis: Scale): void;
   /**
    * Callback that runs after ticks are created. Useful for filtering ticks.
    */
-  afterBuildTicks(a***REMOVED***is: Scale): void;
+  afterBuildTicks(axis: Scale): void;
   /**
    * Callback that runs before ticks are converted into strings.
    */
-  beforeTickToLabelConversion(a***REMOVED***is: Scale): void;
+  beforeTickToLabelConversion(axis: Scale): void;
   /**
    * Callback that runs after ticks are converted into strings.
    */
-  afterTickToLabelConversion(a***REMOVED***is: Scale): void;
+  afterTickToLabelConversion(axis: Scale): void;
   /**
    * Callback that runs before tick rotation is determined.
    */
-  beforeCalculateLabelRotation(a***REMOVED***is: Scale): void;
+  beforeCalculateLabelRotation(axis: Scale): void;
   /**
    * Callback that runs after tick rotation is determined.
    */
-  afterCalculateLabelRotation(a***REMOVED***is: Scale): void;
+  afterCalculateLabelRotation(axis: Scale): void;
   /**
    * Callback that runs before the scale fits to the canvas.
    */
-  beforeFit(a***REMOVED***is: Scale): void;
+  beforeFit(axis: Scale): void;
   /**
    * Callback that runs after the scale fits to the canvas.
    */
-  afterFit(a***REMOVED***is: Scale): void;
+  afterFit(axis: Scale): void;
   /**
    * Callback that runs at the end of the update process.
    */
-  afterUpdate(a***REMOVED***is: Scale): void;
+  afterUpdate(axis: Scale): void;
 }
 
-e***REMOVED***port interface Scale<O e***REMOVED***tends CoreScaleOptions = CoreScaleOptions> e***REMOVED***tends Element<unknown, O>, LayoutItem {
+export interface Scale<O extends CoreScaleOptions = CoreScaleOptions> extends Element<unknown, O>, LayoutItem {
   readonly id: string;
   readonly type: string;
-  readonly ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D;
+  readonly ctx: CanvasRenderingContext2D;
   readonly chart: Chart;
 
-  ma***REMOVED***Width: number;
-  ma***REMOVED***Height: number;
+  maxWidth: number;
+  maxHeight: number;
 
   paddingTop: number;
   paddingBottom: number;
   paddingLeft: number;
   paddingRight: number;
 
-  a***REMOVED***is: string;
+  axis: string;
   labelRotation: number;
   min: number;
-  ma***REMOVED***: number;
+  max: number;
   ticks: Tick[];
   getMatchingVisibleMetas(type?: string): ChartMeta[];
 
@@ -1285,24 +1285,24 @@ e***REMOVED***port interface Scale<O e***REMOVED***tends CoreScaleOptions = Core
   drawGrid(chartArea: ChartArea): void;
 
   /**
-   * @param {number} pi***REMOVED***el
+   * @param {number} pixel
    * @return {number}
    */
-  getDecimalForPi***REMOVED***el(pi***REMOVED***el: number): number;
+  getDecimalForPixel(pixel: number): number;
   /**
-   * Utility for getting the pi***REMOVED***el location of a percentage of scale
+   * Utility for getting the pixel location of a percentage of scale
    * The coordinate (0, 0) is at the upper-left corner of the canvas
    * @param {number} decimal
    * @return {number}
    */
-  getPi***REMOVED***elForDecimal(decimal: number): number;
+  getPixelForDecimal(decimal: number): number;
   /**
-   * Returns the location of the tick at the given inde***REMOVED***
+   * Returns the location of the tick at the given index
    * The coordinate (0, 0) is at the upper-left corner of the canvas
-   * @param {number} inde***REMOVED***
+   * @param {number} index
    * @return {number}
    */
-  getPi***REMOVED***elForTick(inde***REMOVED***: number): number;
+  getPixelForTick(index: number): number;
   /**
    * Used to get the label to display in the tooltip for the given value
    * @param {*} value
@@ -1316,34 +1316,34 @@ e***REMOVED***port interface Scale<O e***REMOVED***tends CoreScaleOptions = Core
   getLineWidthForValue(value: number): number;
 
   /**
-   * Returns the location of the given data point. Value can either be an inde***REMOVED*** or a numerical value
+   * Returns the location of the given data point. Value can either be an index or a numerical value
    * The coordinate (0, 0) is at the upper-left corner of the canvas
    * @param {*} value
-   * @param {number} [inde***REMOVED***]
+   * @param {number} [index]
    * @return {number}
    */
-  getPi***REMOVED***elForValue(value: number, inde***REMOVED***?: number): number;
+  getPixelForValue(value: number, index?: number): number;
 
   /**
-   * Used to get the data value from a given pi***REMOVED***el. This is the inverse of getPi***REMOVED***elForValue
+   * Used to get the data value from a given pixel. This is the inverse of getPixelForValue
    * The coordinate (0, 0) is at the upper-left corner of the canvas
-   * @param {number} pi***REMOVED***el
+   * @param {number} pixel
    * @return {*}
    */
-  getValueForPi***REMOVED***el(pi***REMOVED***el: number): number | undefined;
+  getValueForPixel(pixel: number): number | undefined;
 
   getBaseValue(): number;
   /**
-   * Returns the pi***REMOVED***el for the minimum chart value
+   * Returns the pixel for the minimum chart value
    * The coordinate (0, 0) is at the upper-left corner of the canvas
    * @return {number}
    */
-  getBasePi***REMOVED***el(): number;
+  getBasePixel(): number;
 
   init(options: O): void;
-  parse(raw: unknown, inde***REMOVED***?: number): unknown;
-  getUserBounds(): { min: number; ma***REMOVED***: number; minDefined: boolean; ma***REMOVED***Defined: boolean };
-  getMinMa***REMOVED***(canStack: boolean): { min: number; ma***REMOVED***: number };
+  parse(raw: unknown, index?: number): unknown;
+  getUserBounds(): { min: number; max: number; minDefined: boolean; maxDefined: boolean };
+  getMinMax(canStack: boolean): { min: number; max: number };
   getTicks(): Tick[];
   getLabels(): string[];
   getLabelItems(chartArea?: ChartArea): LabelItem[];
@@ -1371,28 +1371,28 @@ e***REMOVED***port interface Scale<O e***REMOVED***tends CoreScaleOptions = Core
 
   isFullSize(): boolean;
 }
-e***REMOVED***port declare class Scale {
-  constructor(cfg: {id: string, type: string, ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, chart: Chart});
+export declare class Scale {
+  constructor(cfg: {id: string, type: string, ctx: CanvasRenderingContext2D, chart: Chart});
 }
 
-e***REMOVED***port interface ScriptableScaleConte***REMOVED***t {
+export interface ScriptableScaleContext {
   chart: Chart;
   scale: Scale;
-  inde***REMOVED***: number;
+  index: number;
   tick: Tick;
 }
 
-e***REMOVED***port interface ScriptableScalePointLabelConte***REMOVED***t {
+export interface ScriptableScalePointLabelContext {
   chart: Chart;
   scale: Scale;
-  inde***REMOVED***: number;
+  index: number;
   label: string;
   type: string;
 }
 
-e***REMOVED***port interface RenderTe***REMOVED***tOpts {
+export interface RenderTextOpts {
   /**
-   * The fill color of the te***REMOVED***t. If unset, the e***REMOVED***isting
+   * The fill color of the text. If unset, the existing
    * fillStyle property of the canvas is unchanged.
    */
   color?: Color;
@@ -1404,9 +1404,9 @@ e***REMOVED***port interface RenderTe***REMOVED***tOpts {
   decorationWidth?: number;
 
   /**
-   * The ma***REMOVED*** width of the te***REMOVED***t in pi***REMOVED***els
+   * The max width of the text in pixels
    */
-  ma***REMOVED***Width?: number;
+  maxWidth?: number;
 
   /**
    * A rotation to be applied to the canvas
@@ -1415,41 +1415,41 @@ e***REMOVED***port interface RenderTe***REMOVED***tOpts {
   rotation?: number;
 
   /**
-   * Apply a strikethrough effect to the te***REMOVED***t
+   * Apply a strikethrough effect to the text
    */
   strikethrough?: boolean;
 
   /**
-   * The color of the te***REMOVED***t stroke. If unset, the e***REMOVED***isting
-   * strokeStyle property of the conte***REMOVED***t is unchanged
+   * The color of the text stroke. If unset, the existing
+   * strokeStyle property of the context is unchanged
    */
   strokeColor?: Color;
 
   /**
-   * The te***REMOVED***t stroke width. If unset, the e***REMOVED***isting
-   * lineWidth property of the conte***REMOVED***t is unchanged
+   * The text stroke width. If unset, the existing
+   * lineWidth property of the context is unchanged
    */
   strokeWidth?: number;
 
   /**
-   * The te***REMOVED***t alignment to use. If unset, the e***REMOVED***isting
-   * te***REMOVED***tAlign property of the conte***REMOVED***t is unchanged
+   * The text alignment to use. If unset, the existing
+   * textAlign property of the context is unchanged
    */
-  te***REMOVED***tAlign?: CanvasTe***REMOVED***tAlign;
+  textAlign?: CanvasTextAlign;
 
   /**
-   * The te***REMOVED***t baseline to use. If unset, the e***REMOVED***isting
-   * te***REMOVED***tBaseline property of the conte***REMOVED***t is unchanged
+   * The text baseline to use. If unset, the existing
+   * textBaseline property of the context is unchanged
    */
-  te***REMOVED***tBaseline?: CanvasTe***REMOVED***tBaseline;
+  textBaseline?: CanvasTextBaseline;
 
   /**
-   * If specified, a translation to apply to the conte***REMOVED***t
+   * If specified, a translation to apply to the context
    */
   translation?: [number, number];
 
   /**
-   * Underline the te***REMOVED***t
+   * Underline the text
    */
   underline?: boolean;
 
@@ -1459,41 +1459,41 @@ e***REMOVED***port interface RenderTe***REMOVED***tOpts {
   backdrop?: BackdropOptions;
 }
 
-e***REMOVED***port interface BackdropOptions {
+export interface BackdropOptions {
   /**
-   * Left position of backdrop as pi***REMOVED***el
+   * Left position of backdrop as pixel
    */
   left: number;
 
   /**
-   * Top position of backdrop as pi***REMOVED***el
+   * Top position of backdrop as pixel
    */
   top: number;
 
   /**
-   * Width of backdrop in pi***REMOVED***els
+   * Width of backdrop in pixels
    */
   width: number;
 
   /**
-   * Height of backdrop in pi***REMOVED***els
+   * Height of backdrop in pixels
    */
   height: number;
 
   /**
    * Color of label backdrops.
    */
-  color: Scriptable<Color, ScriptableScaleConte***REMOVED***t>;
+  color: Scriptable<Color, ScriptableScaleContext>;
 }
 
-e***REMOVED***port interface LabelItem {
+export interface LabelItem {
   label: string | string[];
   font: CanvasFontSpec;
-  te***REMOVED***tOffset: number;
-  options: RenderTe***REMOVED***tOpts;
+  textOffset: number;
+  options: RenderTextOpts;
 }
 
-e***REMOVED***port declare const Ticks: {
+export declare const Ticks: {
   formatters: {
     /**
      * Formatter for value labels
@@ -1504,23 +1504,23 @@ e***REMOVED***port declare const Ticks: {
     /**
      * Formatter for numeric ticks
      * @param tickValue the value to be formatted
-     * @param inde***REMOVED*** the position of the tickValue parameter in the ticks array
+     * @param index the position of the tickValue parameter in the ticks array
      * @param ticks the list of ticks being converted
      * @return string representation of the tickValue parameter
      */
-    numeric(tickValue: number, inde***REMOVED***: number, ticks: { value: number }[]): string;
+    numeric(tickValue: number, index: number, ticks: { value: number }[]): string;
     /**
      * Formatter for logarithmic ticks
      * @param tickValue the value to be formatted
-     * @param inde***REMOVED*** the position of the tickValue parameter in the ticks array
+     * @param index the position of the tickValue parameter in the ticks array
      * @param ticks the list of ticks being converted
      * @return string representation of the tickValue parameter
      */
-    logarithmic(tickValue: number, inde***REMOVED***: number, ticks: { value: number }[]): string;
+    logarithmic(tickValue: number, index: number, ticks: { value: number }[]): string;
   };
 };
 
-e***REMOVED***port interface TypedRegistry<T> {
+export interface TypedRegistry<T> {
   /**
    * @param {ChartComponent} item
    * @returns {string} The scope where items defaults were registered to.
@@ -1530,9 +1530,9 @@ e***REMOVED***port interface TypedRegistry<T> {
   unregister(item: ChartComponent): void;
 }
 
-e***REMOVED***port interface ChartEvent {
+export interface ChartEvent {
   type:
-  | 'conte***REMOVED***tmenu'
+  | 'contextmenu'
   | 'mouseenter'
   | 'mousedown'
   | 'mousemove'
@@ -1545,10 +1545,10 @@ e***REMOVED***port interface ChartEvent {
   | 'keyup'
   | 'resize';
   native: Event | null;
-  ***REMOVED***: number | null;
+  x: number | null;
   y: number | null;
 }
-e***REMOVED***port interface ChartComponent {
+export interface ChartComponent {
   id: string;
   defaults?: AnyObject;
   defaultRoutes?: { [property: string]: string };
@@ -1559,9 +1559,9 @@ e***REMOVED***port interface ChartComponent {
   afterUnregister?(): void;
 }
 
-e***REMOVED***port type InteractionA***REMOVED***is = '***REMOVED***' | 'y' | '***REMOVED***y' | 'r';
+export type InteractionAxis = 'x' | 'y' | 'xy' | 'r';
 
-e***REMOVED***port interface CoreInteractionOptions {
+export interface CoreInteractionOptions {
   /**
    * Sets which elements appear in the tooltip. See Interaction Modes for details.
    * @default 'nearest'
@@ -1574,9 +1574,9 @@ e***REMOVED***port interface CoreInteractionOptions {
   intersect: boolean;
 
   /**
-   * Defines which directions are used in calculating distances. Defaults to '***REMOVED***' for 'inde***REMOVED***' mode and '***REMOVED***y' in dataset and 'nearest' modes.
+   * Defines which directions are used in calculating distances. Defaults to 'x' for 'index' mode and 'xy' in dataset and 'nearest' modes.
    */
-  a***REMOVED***is: InteractionA***REMOVED***is;
+  axis: InteractionAxis;
 
   /**
    * if true, the invisible points that are outside of the chart area will also be included when evaluating interactions.
@@ -1585,20 +1585,20 @@ e***REMOVED***port interface CoreInteractionOptions {
   includeInvisible: boolean;
 }
 
-e***REMOVED***port interface CoreChartOptions<TType e***REMOVED***tends ChartType> e***REMOVED***tends ParsingOptions, AnimationOptions<TType> {
+export interface CoreChartOptions<TType extends ChartType> extends ParsingOptions, AnimationOptions<TType> {
 
   datasets: {
     [key in ChartType]: ChartTypeRegistry[key]['datasetOptions']
   }
 
   /**
-   * The base a***REMOVED***is of the chart. '***REMOVED***' for vertical charts and 'y' for horizontal charts.
-   * @default '***REMOVED***'
+   * The base axis of the chart. 'x' for vertical charts and 'y' for horizontal charts.
+   * @default 'x'
    */
-  inde***REMOVED***A***REMOVED***is: '***REMOVED***' | 'y';
+  indexAxis: 'x' | 'y';
 
   /**
-   * How to clip relative to chartArea. Positive value allows overflow, negative value clips that many pi***REMOVED***els inside chartArea. 0 = clip at chartArea. Clipping can also be configured per side: `clip: {left: 5, top: false, right: -2, bottom: 0}`
+   * How to clip relative to chartArea. Positive value allows overflow, negative value clips that many pixels inside chartArea. 0 = clip at chartArea. Clipping can also be configured per side: `clip: {left: 5, top: false, right: -2, bottom: 0}`
    */
   clip: number | ChartArea | false;
 
@@ -1606,17 +1606,17 @@ e***REMOVED***port interface CoreChartOptions<TType e***REMOVED***tends ChartTyp
    * base color
    * @see Defaults.color
    */
-  color: Scriptable<Color, ScriptableConte***REMOVED***t<TType>>;
+  color: Scriptable<Color, ScriptableContext<TType>>;
   /**
    * base background color
    * @see Defaults.backgroundColor
    */
-  backgroundColor: Scriptable<Color, ScriptableConte***REMOVED***t<TType>>;
+  backgroundColor: Scriptable<Color, ScriptableContext<TType>>;
   /**
    * base border color
    * @see Defaults.borderColor
    */
-  borderColor: Scriptable<Color, ScriptableConte***REMOVED***t<TType>>;
+  borderColor: Scriptable<Color, ScriptableContext<TType>>;
   /**
    * base font
    * @see Defaults.font
@@ -1639,7 +1639,7 @@ e***REMOVED***port interface CoreChartOptions<TType e***REMOVED***tends ChartTyp
   resizeDelay: number;
 
   /**
-   * Canvas aspect ratio (i.e. width / height, a value of 1 representing a square canvas). Note that this option is ignored if the height is e***REMOVED***plicitly defined either as attribute or via the style.
+   * Canvas aspect ratio (i.e. width / height, a value of 1 representing a square canvas). Note that this option is ignored if the height is explicitly defined either as attribute or via the style.
    * @default 2
    */
   aspectRatio: number;
@@ -1656,10 +1656,10 @@ e***REMOVED***port interface CoreChartOptions<TType e***REMOVED***tends ChartTyp
   onResize(chart: Chart, size: { width: number; height: number }): void;
 
   /**
-   * Override the window's default devicePi***REMOVED***elRatio.
-   * @default window.devicePi***REMOVED***elRatio
+   * Override the window's default devicePixelRatio.
+   * @default window.devicePixelRatio
    */
-  devicePi***REMOVED***elRatio: number;
+  devicePixelRatio: number;
 
   interaction: CoreInteractionOptions;
 
@@ -1683,36 +1683,36 @@ e***REMOVED***port interface CoreChartOptions<TType e***REMOVED***tends ChartTyp
 
   layout: Partial<{
     autoPadding: boolean;
-    padding: Scriptable<Padding, ScriptableConte***REMOVED***t<TType>>;
+    padding: Scriptable<Padding, ScriptableContext<TType>>;
   }>;
 }
 
-e***REMOVED***port type AnimationSpec<TType e***REMOVED***tends ChartType> = {
+export type AnimationSpec<TType extends ChartType> = {
   /**
    * The number of milliseconds an animation takes.
    * @default 1000
    */
-  duration?: Scriptable<number, ScriptableConte***REMOVED***t<TType>>;
+  duration?: Scriptable<number, ScriptableContext<TType>>;
   /**
    * Easing function to use
    * @default 'easeOutQuart'
    */
-  easing?: Scriptable<EasingFunction, ScriptableConte***REMOVED***t<TType>>;
+  easing?: Scriptable<EasingFunction, ScriptableContext<TType>>;
 
   /**
    * Delay before starting the animations.
    * @default 0
    */
-  delay?: Scriptable<number, ScriptableConte***REMOVED***t<TType>>;
+  delay?: Scriptable<number, ScriptableContext<TType>>;
 
   /**
    *   If set to true, the animations loop endlessly.
    * @default false
    */
-  loop?: Scriptable<boolean, ScriptableConte***REMOVED***t<TType>>;
+  loop?: Scriptable<boolean, ScriptableContext<TType>>;
 }
 
-e***REMOVED***port type AnimationsSpec<TType e***REMOVED***tends ChartType> = {
+export type AnimationsSpec<TType extends ChartType> = {
   [name: string]: false | AnimationSpec<TType> & {
     properties: string[];
 
@@ -1726,24 +1726,24 @@ e***REMOVED***port type AnimationsSpec<TType e***REMOVED***tends ChartType> = {
     /**
      * Start value for the animation. Current value is used when undefined
      */
-    from: Scriptable<Color | number | boolean, ScriptableConte***REMOVED***t<TType>>;
+    from: Scriptable<Color | number | boolean, ScriptableContext<TType>>;
     /**
      *
      */
-    to: Scriptable<Color | number | boolean, ScriptableConte***REMOVED***t<TType>>;
+    to: Scriptable<Color | number | boolean, ScriptableContext<TType>>;
   }
 }
 
-e***REMOVED***port type TransitionSpec<TType e***REMOVED***tends ChartType> = {
+export type TransitionSpec<TType extends ChartType> = {
   animation: AnimationSpec<TType>;
   animations: AnimationsSpec<TType>;
 }
 
-e***REMOVED***port type TransitionsSpec<TType e***REMOVED***tends ChartType> = {
+export type TransitionsSpec<TType extends ChartType> = {
   [mode: string]: TransitionSpec<TType>
 }
 
-e***REMOVED***port type AnimationOptions<TType e***REMOVED***tends ChartType> = {
+export type AnimationOptions<TType extends ChartType> = {
   animation: false | AnimationSpec<TType> & {
     /**
      * Callback called on each step of an animation.
@@ -1758,14 +1758,14 @@ e***REMOVED***port type AnimationOptions<TType e***REMOVED***tends ChartType> = 
   transitions: TransitionsSpec<TType>;
 };
 
-e***REMOVED***port interface FontSpec {
+export interface FontSpec {
   /**
-   * Default font family for all te***REMOVED***t, follows CSS font-family options.
+   * Default font family for all text, follows CSS font-family options.
    * @default "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif"
    */
   family: string;
   /**
-   * Default font size (in p***REMOVED***) for te***REMOVED***t. Does not apply to radialLinear scale point labels.
+   * Default font size (in px) for text. Does not apply to radialLinear scale point labels.
    * @default 12
    */
   size: number;
@@ -1779,54 +1779,54 @@ e***REMOVED***port interface FontSpec {
    */
   weight: 'normal' | 'bold' | 'lighter' | 'bolder' | number | null;
   /**
-   * Height of an individual line of te***REMOVED***t (see MDN).
+   * Height of an individual line of text (see MDN).
    * @default 1.2
    */
   lineHeight: number | string;
 }
 
-e***REMOVED***port interface CanvasFontSpec e***REMOVED***tends FontSpec {
+export interface CanvasFontSpec extends FontSpec {
   string: string;
 }
 
-e***REMOVED***port type Te***REMOVED***tAlign = 'left' | 'center' | 'right';
-e***REMOVED***port type Align = 'start' | 'center' | 'end';
+export type TextAlign = 'left' | 'center' | 'right';
+export type Align = 'start' | 'center' | 'end';
 
-e***REMOVED***port interface VisualElement {
-  draw(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, area?: ChartArea): void;
+export interface VisualElement {
+  draw(ctx: CanvasRenderingContext2D, area?: ChartArea): void;
   inRange(mouseX: number, mouseY: number, useFinalPosition?: boolean): boolean;
   inXRange(mouseX: number, useFinalPosition?: boolean): boolean;
   inYRange(mouseY: number, useFinalPosition?: boolean): boolean;
   getCenterPoint(useFinalPosition?: boolean): Point;
-  getRange?(a***REMOVED***is: '***REMOVED***' | 'y'): number;
+  getRange?(axis: 'x' | 'y'): number;
 }
 
-e***REMOVED***port interface CommonElementOptions {
+export interface CommonElementOptions {
   borderWidth: number;
   borderColor: Color;
   backgroundColor: Color;
 }
 
-e***REMOVED***port interface CommonHoverOptions {
+export interface CommonHoverOptions {
   hoverBorderWidth: number;
   hoverBorderColor: Color;
   hoverBackgroundColor: Color;
 }
 
-e***REMOVED***port interface Segment {
+export interface Segment {
   start: number;
   end: number;
   loop: boolean;
 }
 
-e***REMOVED***port interface ArcBorderRadius {
+export interface ArcBorderRadius {
   outerStart: number;
   outerEnd: number;
   innerStart: number;
   innerEnd: number;
 }
 
-e***REMOVED***port interface ArcOptions e***REMOVED***tends CommonElementOptions {
+export interface ArcOptions extends CommonElementOptions {
   /**
    * Arc stroke alignment.
    */
@@ -1853,7 +1853,7 @@ e***REMOVED***port interface ArcOptions e***REMOVED***tends CommonElementOptions
   borderRadius: number | ArcBorderRadius;
 
   /**
-   * Arc offset (in pi***REMOVED***els).
+   * Arc offset (in pixels).
    */
   offset: number;
 
@@ -1869,17 +1869,17 @@ e***REMOVED***port interface ArcOptions e***REMOVED***tends CommonElementOptions
   spacing: number
 }
 
-e***REMOVED***port interface ArcHoverOptions e***REMOVED***tends CommonHoverOptions {
+export interface ArcHoverOptions extends CommonHoverOptions {
   hoverBorderDash: number[];
   hoverBorderDashOffset: number;
   hoverOffset: number;
 }
 
-e***REMOVED***port interface LineProps {
+export interface LineProps {
   points: Point[]
 }
 
-e***REMOVED***port interface LineOptions e***REMOVED***tends CommonElementOptions {
+export interface LineOptions extends CommonElementOptions {
   /**
    * Line cap style. See MDN.
    * @default 'butt'
@@ -1923,49 +1923,49 @@ e***REMOVED***port interface LineOptions e***REMOVED***tends CommonElementOption
   /**
    * Both line and radar charts support a fill option on the dataset object which can be used to create area between two datasets or a dataset and a boundary, i.e. the scale origin, start or end
    */
-  fill: FillTarget | Comple***REMOVED***FillTarget;
+  fill: FillTarget | ComplexFillTarget;
   /**
-   * If true, lines will be drawn between points with no or null data. If false, points with NaN data will create a break in the line. Can also be a number specifying the ma***REMOVED***imum gap length to span. The unit of the value depends on the scale used.
+   * If true, lines will be drawn between points with no or null data. If false, points with NaN data will create a break in the line. Can also be a number specifying the maximum gap length to span. The unit of the value depends on the scale used.
    */
   spanGaps: boolean | number;
 
   segment: {
-    backgroundColor: Scriptable<Color|undefined, ScriptableLineSegmentConte***REMOVED***t>,
-    borderColor: Scriptable<Color|undefined, ScriptableLineSegmentConte***REMOVED***t>,
-    borderCapStyle: Scriptable<CanvasLineCap|undefined, ScriptableLineSegmentConte***REMOVED***t>;
-    borderDash: Scriptable<number[]|undefined, ScriptableLineSegmentConte***REMOVED***t>;
-    borderDashOffset: Scriptable<number|undefined, ScriptableLineSegmentConte***REMOVED***t>;
-    borderJoinStyle: Scriptable<CanvasLineJoin|undefined, ScriptableLineSegmentConte***REMOVED***t>;
-    borderWidth: Scriptable<number|undefined, ScriptableLineSegmentConte***REMOVED***t>;
+    backgroundColor: Scriptable<Color|undefined, ScriptableLineSegmentContext>,
+    borderColor: Scriptable<Color|undefined, ScriptableLineSegmentContext>,
+    borderCapStyle: Scriptable<CanvasLineCap|undefined, ScriptableLineSegmentContext>;
+    borderDash: Scriptable<number[]|undefined, ScriptableLineSegmentContext>;
+    borderDashOffset: Scriptable<number|undefined, ScriptableLineSegmentContext>;
+    borderJoinStyle: Scriptable<CanvasLineJoin|undefined, ScriptableLineSegmentContext>;
+    borderWidth: Scriptable<number|undefined, ScriptableLineSegmentContext>;
   };
 }
 
-e***REMOVED***port interface LineHoverOptions e***REMOVED***tends CommonHoverOptions {
+export interface LineHoverOptions extends CommonHoverOptions {
   hoverBorderCapStyle: CanvasLineCap;
   hoverBorderDash: number[];
   hoverBorderDashOffset: number;
   hoverBorderJoinStyle: CanvasLineJoin;
 }
 
-e***REMOVED***port interface LineElement<T e***REMOVED***tends LineProps = LineProps, O e***REMOVED***tends LineOptions = LineOptions>
-  e***REMOVED***tends Element<T, O>,
+export interface LineElement<T extends LineProps = LineProps, O extends LineOptions = LineOptions>
+  extends Element<T, O>,
   VisualElement {
-  updateControlPoints(chartArea: ChartArea, inde***REMOVED***A***REMOVED***is?: '***REMOVED***' | 'y'): void;
+  updateControlPoints(chartArea: ChartArea, indexAxis?: 'x' | 'y'): void;
   points: Point[];
   readonly segments: Segment[];
   first(): Point | false;
   last(): Point | false;
-  interpolate(point: Point, property: '***REMOVED***' | 'y'): undefined | Point | Point[];
-  pathSegment(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, segment: Segment, params: AnyObject): undefined | boolean;
-  path(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D): boolean;
+  interpolate(point: Point, property: 'x' | 'y'): undefined | Point | Point[];
+  pathSegment(ctx: CanvasRenderingContext2D, segment: Segment, params: AnyObject): undefined | boolean;
+  path(ctx: CanvasRenderingContext2D): boolean;
 }
 
-e***REMOVED***port declare const LineElement: ChartComponent & {
+export declare const LineElement: ChartComponent & {
   prototype: LineElement;
   new (cfg: AnyObject): LineElement;
 };
 
-e***REMOVED***port type PointStyle =
+export type PointStyle =
   | 'circle'
   | 'cross'
   | 'crossRot'
@@ -1980,14 +1980,14 @@ e***REMOVED***port type PointStyle =
   | HTMLImageElement
   | HTMLCanvasElement;
 
-e***REMOVED***port interface PointOptions e***REMOVED***tends CommonElementOptions {
+export interface PointOptions extends CommonElementOptions {
   /**
    * Point radius
    * @default 3
    */
   radius: number;
   /**
-   * E***REMOVED***tra radius added to point radius for hit detection.
+   * Extra radius added to point radius for hit detection.
    * @default 1
    */
   hitRadius: number;
@@ -2008,7 +2008,7 @@ e***REMOVED***port interface PointOptions e***REMOVED***tends CommonElementOptio
   drawActiveElementsOnTop: boolean;
 }
 
-e***REMOVED***port interface PointHoverOptions e***REMOVED***tends CommonHoverOptions {
+export interface PointHoverOptions extends CommonHoverOptions {
   /**
    * Point radius when hovered.
    * @default 4
@@ -2016,7 +2016,7 @@ e***REMOVED***port interface PointHoverOptions e***REMOVED***tends CommonHoverOp
   hoverRadius: number;
 }
 
-e***REMOVED***port interface PointPrefi***REMOVED***edOptions {
+export interface PointPrefixedOptions {
   /**
    * The fill color for points.
    */
@@ -2026,11 +2026,11 @@ e***REMOVED***port interface PointPrefi***REMOVED***edOptions {
    */
   pointBorderColor: Color;
   /**
-   * The width of the point border in pi***REMOVED***els.
+   * The width of the point border in pixels.
    */
   pointBorderWidth: number;
   /**
-   * The pi***REMOVED***el size of the non-displayed point that reacts to mouse events.
+   * The pixel size of the non-displayed point that reacts to mouse events.
    */
   pointHitRadius: number;
   /**
@@ -2047,7 +2047,7 @@ e***REMOVED***port interface PointPrefi***REMOVED***edOptions {
   pointStyle: PointStyle;
 }
 
-e***REMOVED***port interface PointPrefi***REMOVED***edHoverOptions {
+export interface PointPrefixedHoverOptions {
   /**
    * Point background color when hovered.
    */
@@ -2066,21 +2066,21 @@ e***REMOVED***port interface PointPrefi***REMOVED***edHoverOptions {
   pointHoverRadius: number;
 }
 
-e***REMOVED***port interface BarProps e***REMOVED***tends Point {
+export interface BarProps extends Point {
   base: number;
   horizontal: boolean;
   width: number;
   height: number;
 }
 
-e***REMOVED***port interface BarOptions e***REMOVED***tends Omit<CommonElementOptions, 'borderWidth'> {
+export interface BarOptions extends Omit<CommonElementOptions, 'borderWidth'> {
   /**
-   * The base value for the bar in data units along the value a***REMOVED***is.
+   * The base value for the bar in data units along the value axis.
    */
   base: number;
 
   /**
-   * Skipped (e***REMOVED***cluded) border: 'start', 'end', 'left',  'right', 'bottom', 'top', 'middle', false (none) or true (all).
+   * Skipped (excluded) border: 'start', 'end', 'left',  'right', 'bottom', 'top', 'middle', false (none) or true (all).
    * @default 'start'
    */
   borderSkipped: 'start' | 'end' | 'left' | 'right' | 'bottom' | 'top' | 'middle' | boolean;
@@ -2093,7 +2093,7 @@ e***REMOVED***port interface BarOptions e***REMOVED***tends Omit<CommonElementOp
 
   /**
    * Amount to inflate the rectangle(s). This can be used to hide artifacts between bars.
-   * Unit is pi***REMOVED***els. 'auto' translates to 0.33 pi***REMOVED***els when barPercentage * categoryPercentage is 1, else 0.
+   * Unit is pixels. 'auto' translates to 0.33 pixels when barPercentage * categoryPercentage is 1, else 0.
    * @default 'auto'
    */
   inflateAmount: number | 'auto';
@@ -2105,56 +2105,56 @@ e***REMOVED***port interface BarOptions e***REMOVED***tends Omit<CommonElementOp
   borderWidth: number | { top?: number, right?: number, bottom?: number, left?: number };
 }
 
-e***REMOVED***port interface BorderRadius {
+export interface BorderRadius {
   topLeft: number;
   topRight: number;
   bottomLeft: number;
   bottomRight: number;
 }
 
-e***REMOVED***port interface BarHoverOptions e***REMOVED***tends CommonHoverOptions {
+export interface BarHoverOptions extends CommonHoverOptions {
   hoverBorderRadius: number | BorderRadius;
 }
 
-e***REMOVED***port interface BarElement<
-  T e***REMOVED***tends BarProps = BarProps,
-  O e***REMOVED***tends BarOptions = BarOptions
-> e***REMOVED***tends Element<T, O>, VisualElement {}
+export interface BarElement<
+  T extends BarProps = BarProps,
+  O extends BarOptions = BarOptions
+> extends Element<T, O>, VisualElement {}
 
-e***REMOVED***port declare const BarElement: ChartComponent & {
+export declare const BarElement: ChartComponent & {
   prototype: BarElement;
   new (cfg: AnyObject): BarElement;
 };
 
-e***REMOVED***port interface ElementOptionsByType<TType e***REMOVED***tends ChartType> {
-  arc: ScriptableAndArrayOptions<ArcOptions & ArcHoverOptions, ScriptableConte***REMOVED***t<TType>>;
-  bar: ScriptableAndArrayOptions<BarOptions & BarHoverOptions, ScriptableConte***REMOVED***t<TType>>;
-  line: ScriptableAndArrayOptions<LineOptions & LineHoverOptions, ScriptableConte***REMOVED***t<TType>>;
-  point: ScriptableAndArrayOptions<PointOptions & PointHoverOptions, ScriptableConte***REMOVED***t<TType>>;
+export interface ElementOptionsByType<TType extends ChartType> {
+  arc: ScriptableAndArrayOptions<ArcOptions & ArcHoverOptions, ScriptableContext<TType>>;
+  bar: ScriptableAndArrayOptions<BarOptions & BarHoverOptions, ScriptableContext<TType>>;
+  line: ScriptableAndArrayOptions<LineOptions & LineHoverOptions, ScriptableContext<TType>>;
+  point: ScriptableAndArrayOptions<PointOptions & PointHoverOptions, ScriptableContext<TType>>;
 }
 
-e***REMOVED***port type ElementChartOptions<TType e***REMOVED***tends ChartType = ChartType> = {
+export type ElementChartOptions<TType extends ChartType = ChartType> = {
   elements: ElementOptionsByType<TType>
 };
 
-e***REMOVED***port declare class BasePlatform {
+export declare class BasePlatform {
   /**
-   * Called at chart construction time, returns a conte***REMOVED***t2d instance implementing
-   * the [W3C Canvas 2D Conte***REMOVED***t API standard]{@link https://www.w3.org/TR/2dconte***REMOVED***t/}.
-   * @param {HTMLCanvasElement} canvas - The canvas from which to acquire conte***REMOVED***t (platform specific)
+   * Called at chart construction time, returns a context2d instance implementing
+   * the [W3C Canvas 2D Context API standard]{@link https://www.w3.org/TR/2dcontext/}.
+   * @param {HTMLCanvasElement} canvas - The canvas from which to acquire context (platform specific)
    * @param options - The chart options
    */
-  acquireConte***REMOVED***t(
+  acquireContext(
     canvas: HTMLCanvasElement,
-    options?: CanvasRenderingConte***REMOVED***t2DSettings
-  ): CanvasRenderingConte***REMOVED***t2D | null;
+    options?: CanvasRenderingContext2DSettings
+  ): CanvasRenderingContext2D | null;
   /**
-   * Called at chart destruction time, releases any resources associated to the conte***REMOVED***t
-   * previously returned by the acquireConte***REMOVED***t() method.
-   * @param {CanvasRenderingConte***REMOVED***t2D} conte***REMOVED***t - The conte***REMOVED***t2d instance
+   * Called at chart destruction time, releases any resources associated to the context
+   * previously returned by the acquireContext() method.
+   * @param {CanvasRenderingContext2D} context - The context2d instance
    * @returns {boolean} true if the method succeeded, else false
    */
-  releaseConte***REMOVED***t(conte***REMOVED***t: CanvasRenderingConte***REMOVED***t2D): boolean;
+  releaseContext(context: CanvasRenderingContext2D): boolean;
   /**
    * Registers the specified listener on the given chart.
    * @param {Chart} chart - Chart from which to listen for event
@@ -2171,17 +2171,17 @@ e***REMOVED***port declare class BasePlatform {
    */
   removeEventListener(chart: Chart, type: string, listener: (e: ChartEvent) => void): void;
   /**
-   * @returns {number} the current devicePi***REMOVED***elRatio of the device this platform is connected to.
+   * @returns {number} the current devicePixelRatio of the device this platform is connected to.
    */
-  getDevicePi***REMOVED***elRatio(): number;
+  getDevicePixelRatio(): number;
   /**
-   * @param {HTMLCanvasElement} canvas - The canvas for which to calculate the ma***REMOVED***imum size
+   * @param {HTMLCanvasElement} canvas - The canvas for which to calculate the maximum size
    * @param {number} [width] - Parent element's content width
    * @param {number} [height] - Parent element's content height
    * @param {number} [aspectRatio] - The aspect ratio to maintain
-   * @returns { width: number, height: number } the ma***REMOVED***imum size available.
+   * @returns { width: number, height: number } the maximum size available.
    */
-  getMa***REMOVED***imumSize(canvas: HTMLCanvasElement, width?: number, height?: number, aspectRatio?: number): { width: number, height: number };
+  getMaximumSize(canvas: HTMLCanvasElement, width?: number, height?: number, aspectRatio?: number): { width: number, height: number };
   /**
    * @param {HTMLCanvasElement} canvas
    * @returns {boolean} true if the canvas is attached to the platform, false if not.
@@ -2194,42 +2194,42 @@ e***REMOVED***port declare class BasePlatform {
   updateConfig(config: ChartConfiguration | ChartConfigurationCustomTypesPerDataset): void;
 }
 
-e***REMOVED***port declare class BasicPlatform e***REMOVED***tends BasePlatform {}
-e***REMOVED***port declare class DomPlatform e***REMOVED***tends BasePlatform {}
+export declare class BasicPlatform extends BasePlatform {}
+export declare class DomPlatform extends BasePlatform {}
 
-e***REMOVED***port declare const Decimation: Plugin;
+export declare const Decimation: Plugin;
 
-e***REMOVED***port declare const enum DecimationAlgorithm {
+export declare const enum DecimationAlgorithm {
   lttb = 'lttb',
-  minma***REMOVED*** = 'min-ma***REMOVED***',
+  minmax = 'min-max',
 }
 interface BaseDecimationOptions {
   enabled: boolean;
   threshold?: number;
 }
 
-interface LttbDecimationOptions e***REMOVED***tends BaseDecimationOptions {
+interface LttbDecimationOptions extends BaseDecimationOptions {
   algorithm: DecimationAlgorithm.lttb | 'lttb';
   samples?: number;
 }
 
-interface MinMa***REMOVED***DecimationOptions e***REMOVED***tends BaseDecimationOptions {
-  algorithm: DecimationAlgorithm.minma***REMOVED*** | 'min-ma***REMOVED***';
+interface MinMaxDecimationOptions extends BaseDecimationOptions {
+  algorithm: DecimationAlgorithm.minmax | 'min-max';
 }
 
-e***REMOVED***port type DecimationOptions = LttbDecimationOptions | MinMa***REMOVED***DecimationOptions;
+export type DecimationOptions = LttbDecimationOptions | MinMaxDecimationOptions;
 
-e***REMOVED***port declare const Filler: Plugin;
-e***REMOVED***port interface FillerOptions {
+export declare const Filler: Plugin;
+export interface FillerOptions {
   drawTime: 'beforeDraw' | 'beforeDatasetDraw' | 'beforeDatasetsDraw';
   propagate: boolean;
 }
 
-e***REMOVED***port type FillTarget = number | string | { value: number } | 'start' | 'end' | 'origin' | 'stack' | 'shape' | boolean;
+export type FillTarget = number | string | { value: number } | 'start' | 'end' | 'origin' | 'stack' | 'shape' | boolean;
 
-e***REMOVED***port interface Comple***REMOVED***FillTarget {
+export interface ComplexFillTarget {
   /**
-   * The accepted values are the same as the filling mode values, so you may use absolute and relative dataset inde***REMOVED***es and/or boundaries.
+   * The accepted values are the same as the filling mode values, so you may use absolute and relative dataset indexes and/or boundaries.
    */
   target: FillTarget;
   /**
@@ -2242,44 +2242,44 @@ e***REMOVED***port interface Comple***REMOVED***FillTarget {
   below: Color;
 }
 
-e***REMOVED***port interface FillerControllerDatasetOptions {
+export interface FillerControllerDatasetOptions {
   /**
    * Both line and radar charts support a fill option on the dataset object which can be used to create area between two datasets or a dataset and a boundary, i.e. the scale origin, start or end
    */
-  fill: FillTarget | Comple***REMOVED***FillTarget;
+  fill: FillTarget | ComplexFillTarget;
 }
 
-e***REMOVED***port declare const Legend: Plugin;
+export declare const Legend: Plugin;
 
-e***REMOVED***port interface LegendItem {
+export interface LegendItem {
   /**
    * Label that will be displayed
    */
-  te***REMOVED***t: string;
+  text: string;
 
   /**
-   * Border radius of the legend bo***REMOVED***
+   * Border radius of the legend box
    * @since 3.1.0
    */
   borderRadius?: number | BorderRadius;
 
   /**
-   * Inde***REMOVED*** of the associated dataset
+   * Index of the associated dataset
    */
-  datasetInde***REMOVED***?: number;
+  datasetIndex?: number;
 
   /**
-   * Inde***REMOVED*** the associated label in the labels array
+   * Index the associated label in the labels array
    */
-  inde***REMOVED***?: number
+  index?: number
 
   /**
-   * Fill style of the legend bo***REMOVED***
+   * Fill style of the legend box
    */
   fillStyle?: Color;
 
   /**
-   * Font color for the te***REMOVED***t
+   * Font color for the text
    * Defaults to LegendOptions.labels.color
    */
   fontColor?: Color;
@@ -2290,41 +2290,41 @@ e***REMOVED***port interface LegendItem {
   hidden?: boolean;
 
   /**
-   * For bo***REMOVED*** border.
-   * @see https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingConte***REMOVED***t2D/lineCap
+   * For box border.
+   * @see https://developer.mozilla.org/en/docs/Web/API/CanvasRenderingContext2D/lineCap
    */
   lineCap?: CanvasLineCap;
 
   /**
-   * For bo***REMOVED*** border.
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingConte***REMOVED***t2D/setLineDash
+   * For box border.
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setLineDash
    */
   lineDash?: number[];
 
   /**
-   * For bo***REMOVED*** border.
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingConte***REMOVED***t2D/lineDashOffset
+   * For box border.
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineDashOffset
    */
   lineDashOffset?: number;
 
   /**
-   * For bo***REMOVED*** border.
-   * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingConte***REMOVED***t2D/lineJoin
+   * For box border.
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineJoin
    */
   lineJoin?: CanvasLineJoin;
 
   /**
-   * Width of bo***REMOVED*** border
+   * Width of box border
    */
   lineWidth?: number;
 
   /**
-   * Stroke style of the legend bo***REMOVED***
+   * Stroke style of the legend box
    */
   strokeStyle?: Color;
 
   /**
-   * Point style of the legend bo***REMOVED*** (only used if usePointStyle is true)
+   * Point style of the legend box (only used if usePointStyle is true)
    */
   pointStyle?: PointStyle;
 
@@ -2334,19 +2334,19 @@ e***REMOVED***port interface LegendItem {
   rotation?: number;
 
   /**
-   * Te***REMOVED***t alignment
+   * Text alignment
    */
-  te***REMOVED***tAlign?: Te***REMOVED***tAlign;
+  textAlign?: TextAlign;
 }
 
-e***REMOVED***port interface LegendElement<TType e***REMOVED***tends ChartType> e***REMOVED***tends Element<AnyObject, LegendOptions<TType>>, LayoutItem {
+export interface LegendElement<TType extends ChartType> extends Element<AnyObject, LegendOptions<TType>>, LayoutItem {
   chart: Chart<TType>;
-  ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D;
+  ctx: CanvasRenderingContext2D;
   legendItems?: LegendItem[];
   options: LegendOptions<TType>;
 }
 
-e***REMOVED***port interface LegendOptions<TType e***REMOVED***tends ChartType> {
+export interface LegendOptions<TType extends ChartType> {
   /**
    * Is the legend shown?
    * @default true
@@ -2363,15 +2363,15 @@ e***REMOVED***port interface LegendOptions<TType e***REMOVED***tends ChartType> 
    */
   align: Align;
   /**
-   * Ma***REMOVED***imum height of the legend, in pi***REMOVED***els
+   * Maximum height of the legend, in pixels
    */
-  ma***REMOVED***Height: number;
+  maxHeight: number;
   /**
-   * Ma***REMOVED***imum width of the legend, in pi***REMOVED***els
+   * Maximum width of the legend, in pixels
    */
-  ma***REMOVED***Width: number;
+  maxWidth: number;
   /**
-   * Marks that this bo***REMOVED*** should take the full width/height of the canvas (moving other bo***REMOVED***es). This is unlikely to need to be changed in day-to-day use.
+   * Marks that this box should take the full width/height of the canvas (moving other boxes). This is unlikely to need to be changed in day-to-day use.
    * @default true
    */
   fullSize: boolean;
@@ -2395,20 +2395,20 @@ e***REMOVED***port interface LegendOptions<TType e***REMOVED***tends ChartType> 
 
   labels: {
     /**
-     * Width of colored bo***REMOVED***.
+     * Width of colored box.
      * @default 40
      */
-    bo***REMOVED***Width: number;
+    boxWidth: number;
     /**
-     * Height of the coloured bo***REMOVED***.
+     * Height of the coloured box.
      * @default fontSize
      */
-    bo***REMOVED***Height: number;
+    boxHeight: number;
     /**
-     * Padding between the color bo***REMOVED*** and the te***REMOVED***t
+     * Padding between the color box and the text
      * @default 1
      */
-    bo***REMOVED***Padding: number;
+    boxPadding: number;
     /**
      * Color of label
      * @see Defaults.color
@@ -2418,9 +2418,9 @@ e***REMOVED***port interface LegendOptions<TType e***REMOVED***tends ChartType> 
      * Font of label
      * @see Defaults.font
      */
-    font: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableChartConte***REMOVED***t>;
+    font: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableChartContext>;
     /**
-     * Padding between rows of colored bo***REMOVED***es.
+     * Padding between rows of colored boxes.
      * @default 10
      */
     padding: number;
@@ -2429,7 +2429,7 @@ e***REMOVED***port interface LegendOptions<TType e***REMOVED***tends ChartType> 
      */
     pointStyleWidth: number;
     /**
-     * Generates legend items for each thing in the legend. Default implementation returns the te***REMOVED***t + styling for the color bo***REMOVED***. See Legend Item for details.
+     * Generates legend items for each thing in the legend. Default implementation returns the text + styling for the color box. See Legend Item for details.
      */
     generateLabels(chart: Chart): LegendItem[];
 
@@ -2449,12 +2449,12 @@ e***REMOVED***port interface LegendOptions<TType e***REMOVED***tends ChartType> 
     pointStyle: PointStyle;
 
     /**
-     * Te***REMOVED***t alignment
+     * Text alignment
      */
-    te***REMOVED***tAlign?: Te***REMOVED***tAlign;
+    textAlign?: TextAlign;
 
     /**
-     * Label style will match corresponding point style (size is based on the minimum value between bo***REMOVED***Width and font.size).
+     * Label style will match corresponding point style (size is based on the minimum value between boxWidth and font.size).
      * @default false
      */
     usePointStyle: boolean;
@@ -2476,10 +2476,10 @@ e***REMOVED***port interface LegendOptions<TType e***REMOVED***tends ChartType> 
    */
   rtl: boolean;
   /**
-   * This will force the te***REMOVED***t direction 'rtl' or 'ltr' on the canvas for rendering the legend, regardless of the css specified on the canvas
+   * This will force the text direction 'rtl' or 'ltr' on the canvas for rendering the legend, regardless of the css specified on the canvas
    * @default canvas's default
    */
-  te***REMOVED***tDirection: string;
+  textDirection: string;
 
   title: {
     /**
@@ -2495,20 +2495,20 @@ e***REMOVED***port interface LegendOptions<TType e***REMOVED***tends ChartType> 
     /**
      * see Fonts
      */
-    font: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableChartConte***REMOVED***t>;
+    font: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableChartContext>;
     position: 'center' | 'start' | 'end';
     padding?: number | ChartArea;
     /**
      * The string title.
      */
-    te***REMOVED***t: string;
+    text: string;
   };
 }
 
-e***REMOVED***port declare const SubTitle: Plugin;
-e***REMOVED***port declare const Title: Plugin;
+export declare const SubTitle: Plugin;
+export declare const Title: Plugin;
 
-e***REMOVED***port interface TitleOptions {
+export interface TitleOptions {
   /**
    * Alignment of the title.
    * @default 'center'
@@ -2525,31 +2525,31 @@ e***REMOVED***port interface TitleOptions {
    */
   position: 'top' | 'left' | 'bottom' | 'right';
   /**
-   * Color of te***REMOVED***t
+   * Color of text
    * @see Defaults.color
    */
   color: Color;
-  font: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableChartConte***REMOVED***t>;
+  font: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableChartContext>;
 
   /**
-   * Marks that this bo***REMOVED*** should take the full width/height of the canvas (moving other bo***REMOVED***es). If set to `false`, places the bo***REMOVED*** above/beside the
+   * Marks that this box should take the full width/height of the canvas (moving other boxes). If set to `false`, places the box above/beside the
    * chart area
    * @default true
    */
   fullSize: boolean;
   /**
-   *   Adds padding above and below the title te***REMOVED***t if a single number is specified. It is also possible to change top and bottom padding separately.
+   *   Adds padding above and below the title text if a single number is specified. It is also possible to change top and bottom padding separately.
    */
   padding: number | { top: number; bottom: number };
   /**
-   *   Title te***REMOVED***t to display. If specified as an array, te***REMOVED***t is rendered on multiple lines.
+   *   Title text to display. If specified as an array, text is rendered on multiple lines.
    */
-  te***REMOVED***t: string | string[];
+  text: string | string[];
 }
 
-e***REMOVED***port type TooltipXAlignment = 'left' | 'center' | 'right';
-e***REMOVED***port type TooltipYAlignment = 'top' | 'center' | 'bottom';
-e***REMOVED***port interface TooltipLabelStyle {
+export type TooltipXAlignment = 'left' | 'center' | 'right';
+export type TooltipYAlignment = 'top' | 'center' | 'bottom';
+export interface TooltipLabelStyle {
   borderColor: Color;
   backgroundColor: Color;
 
@@ -2577,18 +2577,18 @@ e***REMOVED***port interface TooltipLabelStyle {
    */
   borderRadius?: number | BorderRadius;
 }
-e***REMOVED***port interface TooltipModel<TType e***REMOVED***tends ChartType> e***REMOVED***tends Element<AnyObject, TooltipOptions<TType>> {
+export interface TooltipModel<TType extends ChartType> extends Element<AnyObject, TooltipOptions<TType>> {
   readonly chart: Chart<TType>;
 
   // The items that we are rendering in the tooltip. See Tooltip Item Interface section
   dataPoints: TooltipItem<TType>[];
 
   // Positioning
-  ***REMOVED***Align: TooltipXAlignment;
+  xAlign: TooltipXAlignment;
   yAlign: TooltipYAlignment;
 
   // X and Y properties are the top left of the tooltip
-  ***REMOVED***: number;
+  x: number;
   y: number;
   width: number;
   height: number;
@@ -2599,26 +2599,26 @@ e***REMOVED***port interface TooltipModel<TType e***REMOVED***tends ChartType> e
   // Body
   // The body lines that need to be rendered
   // Each object contains 3 parameters
-  // before: string[] // lines of te***REMOVED***t before the line with the color square
-  // lines: string[]; // lines of te***REMOVED***t to render as the main item with color square
-  // after: string[]; // lines of te***REMOVED***t to render after the main lines
+  // before: string[] // lines of text before the line with the color square
+  // lines: string[]; // lines of text to render as the main item with color square
+  // after: string[]; // lines of text to render after the main lines
   body: { before: string[]; lines: string[]; after: string[] }[];
-  // lines of te***REMOVED***t that appear after the title but before the body
+  // lines of text that appear after the title but before the body
   beforeBody: string[];
-  // line of te***REMOVED***t that appear after the body and before the footer
+  // line of text that appear after the body and before the footer
   afterBody: string[];
 
   // Title
-  // lines of te***REMOVED***t that form the title
+  // lines of text that form the title
   title: string[];
 
   // Footer
-  // lines of te***REMOVED***t that form the footer
+  // lines of text that form the footer
   footer: string[];
 
   // Styles to render for each item in body[]. This is the styling of the squares in the tooltip
   labelColors: TooltipLabelStyle[];
-  labelTe***REMOVED***tColors: Color[];
+  labelTextColors: Color[];
   labelPointStyles: { pointStyle: PointStyle; rotation: number }[];
 
   // 0 opacity is a hidden tooltip
@@ -2631,32 +2631,32 @@ e***REMOVED***port interface TooltipModel<TType e***REMOVED***tends ChartType> e
   setActiveElements(active: ActiveDataPoint[], eventPosition: Point): void;
 }
 
-e***REMOVED***port interface TooltipPosition e***REMOVED***tends Point {
-  ***REMOVED***Align?: TooltipXAlignment;
+export interface TooltipPosition extends Point {
+  xAlign?: TooltipXAlignment;
   yAlign?: TooltipYAlignment;
 }
 
-e***REMOVED***port type TooltipPositionerFunction<TType e***REMOVED***tends ChartType> = (
+export type TooltipPositionerFunction<TType extends ChartType> = (
   this: TooltipModel<TType>,
   items: readonly ActiveElement[],
   eventPosition: Point
 ) => TooltipPosition | false;
 
-e***REMOVED***port interface TooltipPositionerMap {
+export interface TooltipPositionerMap {
   average: TooltipPositionerFunction<ChartType>;
   nearest: TooltipPositionerFunction<ChartType>;
 }
 
-e***REMOVED***port type TooltipPositioner = keyof TooltipPositionerMap;
+export type TooltipPositioner = keyof TooltipPositionerMap;
 
-e***REMOVED***port interface Tooltip e***REMOVED***tends Plugin {
+export interface Tooltip extends Plugin {
   readonly positioners: TooltipPositionerMap;
 }
 
-e***REMOVED***port declare const Tooltip: Tooltip;
+export declare const Tooltip: Tooltip;
 
-e***REMOVED***port interface TooltipCallbacks<
-  TType e***REMOVED***tends ChartType,
+export interface TooltipCallbacks<
+  TType extends ChartType,
   Model = TooltipModel<TType>,
   Item = TooltipItem<TType>> {
 
@@ -2672,7 +2672,7 @@ e***REMOVED***port interface TooltipCallbacks<
   afterLabel(this: Model, tooltipItem: Item): string | string[] | void;
 
   labelColor(this: Model, tooltipItem: Item): TooltipLabelStyle | void;
-  labelTe***REMOVED***tColor(this: Model, tooltipItem: Item): Color | void;
+  labelTextColor(this: Model, tooltipItem: Item): Color | void;
   labelPointStyle(this: Model, tooltipItem: Item): { pointStyle: PointStyle; rotation: number } | void;
 
   beforeFooter(this: Model, tooltipItems: Item[]): string | string[] | void;
@@ -2680,8 +2680,8 @@ e***REMOVED***port interface TooltipCallbacks<
   afterFooter(this: Model, tooltipItems: Item[]): string | string[] | void;
 }
 
-e***REMOVED***port interface E***REMOVED***tendedPlugin<
-  TType e***REMOVED***tends ChartType,
+export interface ExtendedPlugin<
+  TType extends ChartType,
   O = AnyObject,
   Model = TooltipModel<TType>> {
   /**
@@ -2705,192 +2705,192 @@ e***REMOVED***port interface E***REMOVED***tendedPlugin<
   afterTooltipDraw?(chart: Chart, args: { tooltip: Model }, options: O): void;
 }
 
-e***REMOVED***port interface ScriptableTooltipConte***REMOVED***t<TType e***REMOVED***tends ChartType> {
+export interface ScriptableTooltipContext<TType extends ChartType> {
   chart: UnionToIntersection<Chart<TType>>;
   tooltip: UnionToIntersection<TooltipModel<TType>>;
   tooltipItems: TooltipItem<TType>[];
 }
 
-e***REMOVED***port interface TooltipOptions<TType e***REMOVED***tends ChartType = ChartType> e***REMOVED***tends CoreInteractionOptions {
+export interface TooltipOptions<TType extends ChartType = ChartType> extends CoreInteractionOptions {
   /**
    * Are on-canvas tooltips enabled?
    * @default true
    */
-  enabled: Scriptable<boolean, ScriptableTooltipConte***REMOVED***t<TType>>;
+  enabled: Scriptable<boolean, ScriptableTooltipContext<TType>>;
   /**
-   *   See e***REMOVED***ternal tooltip section.
+   *   See external tooltip section.
    */
-  e***REMOVED***ternal(this: TooltipModel<TType>, args: { chart: Chart; tooltip: TooltipModel<TType> }): void;
+  external(this: TooltipModel<TType>, args: { chart: Chart; tooltip: TooltipModel<TType> }): void;
   /**
    * The mode for positioning the tooltip
    */
-  position: Scriptable<TooltipPositioner, ScriptableTooltipConte***REMOVED***t<TType>>
+  position: Scriptable<TooltipPositioner, ScriptableTooltipContext<TType>>
 
   /**
    * Override the tooltip alignment calculations
    */
-  ***REMOVED***Align: Scriptable<TooltipXAlignment, ScriptableTooltipConte***REMOVED***t<TType>>;
-  yAlign: Scriptable<TooltipYAlignment, ScriptableTooltipConte***REMOVED***t<TType>>;
+  xAlign: Scriptable<TooltipXAlignment, ScriptableTooltipContext<TType>>;
+  yAlign: Scriptable<TooltipYAlignment, ScriptableTooltipContext<TType>>;
 
   /**
    * Sort tooltip items.
    */
   itemSort: (a: TooltipItem<TType>, b: TooltipItem<TType>, data: ChartData) => number;
 
-  filter: (e: TooltipItem<TType>, inde***REMOVED***: number, array: TooltipItem<TType>[], data: ChartData) => boolean;
+  filter: (e: TooltipItem<TType>, index: number, array: TooltipItem<TType>[], data: ChartData) => boolean;
 
   /**
    * Background color of the tooltip.
    * @default 'rgba(0, 0, 0, 0.8)'
    */
-  backgroundColor: Scriptable<Color, ScriptableTooltipConte***REMOVED***t<TType>>;
+  backgroundColor: Scriptable<Color, ScriptableTooltipContext<TType>>;
   /**
-   * Padding between the color bo***REMOVED*** and the te***REMOVED***t.
+   * Padding between the color box and the text.
    * @default 1
    */
-  bo***REMOVED***Padding: number;
+  boxPadding: number;
   /**
    * Color of title
    * @default '#fff'
    */
-  titleColor: Scriptable<Color, ScriptableTooltipConte***REMOVED***t<TType>>;
+  titleColor: Scriptable<Color, ScriptableTooltipContext<TType>>;
   /**
    * See Fonts
    * @default {weight: 'bold'}
    */
-  titleFont: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableTooltipConte***REMOVED***t<TType>>;
+  titleFont: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableTooltipContext<TType>>;
   /**
    * Spacing to add to top and bottom of each title line.
    * @default 2
    */
-  titleSpacing: Scriptable<number, ScriptableTooltipConte***REMOVED***t<TType>>;
+  titleSpacing: Scriptable<number, ScriptableTooltipContext<TType>>;
   /**
    * Margin to add on bottom of title section.
    * @default 6
    */
-  titleMarginBottom: Scriptable<number, ScriptableTooltipConte***REMOVED***t<TType>>;
+  titleMarginBottom: Scriptable<number, ScriptableTooltipContext<TType>>;
   /**
-   * Horizontal alignment of the title te***REMOVED***t lines.
+   * Horizontal alignment of the title text lines.
    * @default 'left'
    */
-  titleAlign: Scriptable<Te***REMOVED***tAlign, ScriptableTooltipConte***REMOVED***t<TType>>;
+  titleAlign: Scriptable<TextAlign, ScriptableTooltipContext<TType>>;
   /**
    * Spacing to add to top and bottom of each tooltip item.
    * @default 2
    */
-  bodySpacing: Scriptable<number, ScriptableTooltipConte***REMOVED***t<TType>>;
+  bodySpacing: Scriptable<number, ScriptableTooltipContext<TType>>;
   /**
    * Color of body
    * @default '#fff'
    */
-  bodyColor: Scriptable<Color, ScriptableTooltipConte***REMOVED***t<TType>>;
+  bodyColor: Scriptable<Color, ScriptableTooltipContext<TType>>;
   /**
    * See Fonts.
    * @default {}
    */
-  bodyFont: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableTooltipConte***REMOVED***t<TType>>;
+  bodyFont: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableTooltipContext<TType>>;
   /**
-   * Horizontal alignment of the body te***REMOVED***t lines.
+   * Horizontal alignment of the body text lines.
    * @default 'left'
    */
-  bodyAlign: Scriptable<Te***REMOVED***tAlign, ScriptableTooltipConte***REMOVED***t<TType>>;
+  bodyAlign: Scriptable<TextAlign, ScriptableTooltipContext<TType>>;
   /**
    * Spacing to add to top and bottom of each footer line.
    * @default 2
    */
-  footerSpacing: Scriptable<number, ScriptableTooltipConte***REMOVED***t<TType>>;
+  footerSpacing: Scriptable<number, ScriptableTooltipContext<TType>>;
   /**
    * Margin to add before drawing the footer.
    * @default 6
    */
-  footerMarginTop: Scriptable<number, ScriptableTooltipConte***REMOVED***t<TType>>;
+  footerMarginTop: Scriptable<number, ScriptableTooltipContext<TType>>;
   /**
    * Color of footer
    * @default '#fff'
    */
-  footerColor: Scriptable<Color, ScriptableTooltipConte***REMOVED***t<TType>>;
+  footerColor: Scriptable<Color, ScriptableTooltipContext<TType>>;
   /**
    * See Fonts
    * @default {weight: 'bold'}
    */
-  footerFont: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableTooltipConte***REMOVED***t<TType>>;
+  footerFont: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableTooltipContext<TType>>;
   /**
-   * Horizontal alignment of the footer te***REMOVED***t lines.
+   * Horizontal alignment of the footer text lines.
    * @default 'left'
    */
-  footerAlign: Scriptable<Te***REMOVED***tAlign, ScriptableTooltipConte***REMOVED***t<TType>>;
+  footerAlign: Scriptable<TextAlign, ScriptableTooltipContext<TType>>;
   /**
    * Padding to add to the tooltip
    * @default 6
    */
-  padding: Scriptable<Padding, ScriptableTooltipConte***REMOVED***t<TType>>;
+  padding: Scriptable<Padding, ScriptableTooltipContext<TType>>;
   /**
-   * E***REMOVED***tra distance to move the end of the tooltip arrow away from the tooltip point.
+   * Extra distance to move the end of the tooltip arrow away from the tooltip point.
    * @default 2
    */
-  caretPadding: Scriptable<number, ScriptableTooltipConte***REMOVED***t<TType>>;
+  caretPadding: Scriptable<number, ScriptableTooltipContext<TType>>;
   /**
-   * Size, in p***REMOVED***, of the tooltip arrow.
+   * Size, in px, of the tooltip arrow.
    * @default 5
    */
-  caretSize: Scriptable<number, ScriptableTooltipConte***REMOVED***t<TType>>;
+  caretSize: Scriptable<number, ScriptableTooltipContext<TType>>;
   /**
    * Radius of tooltip corner curves.
    * @default 6
    */
-  cornerRadius: Scriptable<number | BorderRadius, ScriptableTooltipConte***REMOVED***t<TType>>;
+  cornerRadius: Scriptable<number | BorderRadius, ScriptableTooltipContext<TType>>;
   /**
-   * Color to draw behind the colored bo***REMOVED***es when multiple items are in the tooltip.
+   * Color to draw behind the colored boxes when multiple items are in the tooltip.
    * @default '#fff'
    */
-  multiKeyBackground: Scriptable<Color, ScriptableTooltipConte***REMOVED***t<TType>>;
+  multiKeyBackground: Scriptable<Color, ScriptableTooltipContext<TType>>;
   /**
-   * If true, color bo***REMOVED***es are shown in the tooltip.
+   * If true, color boxes are shown in the tooltip.
    * @default true
    */
-  displayColors: Scriptable<boolean, ScriptableTooltipConte***REMOVED***t<TType>>;
+  displayColors: Scriptable<boolean, ScriptableTooltipContext<TType>>;
   /**
-   * Width of the color bo***REMOVED*** if displayColors is true.
+   * Width of the color box if displayColors is true.
    * @default bodyFont.size
    */
-  bo***REMOVED***Width: Scriptable<number, ScriptableTooltipConte***REMOVED***t<TType>>;
+  boxWidth: Scriptable<number, ScriptableTooltipContext<TType>>;
   /**
-   * Height of the color bo***REMOVED*** if displayColors is true.
+   * Height of the color box if displayColors is true.
    * @default bodyFont.size
    */
-  bo***REMOVED***Height: Scriptable<number, ScriptableTooltipConte***REMOVED***t<TType>>;
+  boxHeight: Scriptable<number, ScriptableTooltipContext<TType>>;
   /**
-   * Use the corresponding point style (from dataset options) instead of color bo***REMOVED***es, e***REMOVED***: star, triangle etc. (size is based on the minimum value between bo***REMOVED***Width and bo***REMOVED***Height)
+   * Use the corresponding point style (from dataset options) instead of color boxes, ex: star, triangle etc. (size is based on the minimum value between boxWidth and boxHeight)
    * @default false
    */
-  usePointStyle: Scriptable<boolean, ScriptableTooltipConte***REMOVED***t<TType>>;
+  usePointStyle: Scriptable<boolean, ScriptableTooltipContext<TType>>;
   /**
    * Color of the border.
    * @default 'rgba(0, 0, 0, 0)'
    */
-  borderColor: Scriptable<Color, ScriptableTooltipConte***REMOVED***t<TType>>;
+  borderColor: Scriptable<Color, ScriptableTooltipContext<TType>>;
   /**
    * Size of the border.
    * @default 0
    */
-  borderWidth: Scriptable<number, ScriptableTooltipConte***REMOVED***t<TType>>;
+  borderWidth: Scriptable<number, ScriptableTooltipContext<TType>>;
   /**
    * true for rendering the legends from right to left.
    */
-  rtl: Scriptable<boolean, ScriptableTooltipConte***REMOVED***t<TType>>;
+  rtl: Scriptable<boolean, ScriptableTooltipContext<TType>>;
 
   /**
-   * This will force the te***REMOVED***t direction 'rtl' or 'ltr on the canvas for rendering the tooltips, regardless of the css specified on the canvas
+   * This will force the text direction 'rtl' or 'ltr on the canvas for rendering the tooltips, regardless of the css specified on the canvas
    * @default canvas's default
    */
-  te***REMOVED***tDirection: Scriptable<string, ScriptableTooltipConte***REMOVED***t<TType>>;
+  textDirection: Scriptable<string, ScriptableTooltipContext<TType>>;
 
   animation: AnimationSpec<TType> | false;
   animations: AnimationsSpec<TType> | false;
   callbacks: TooltipCallbacks<TType>;
 }
 
-e***REMOVED***port interface TooltipItem<TType e***REMOVED***tends ChartType> {
+export interface TooltipItem<TType extends ChartType> {
   /**
    * The chart the tooltip is being shown on
    */
@@ -2902,12 +2902,12 @@ e***REMOVED***port interface TooltipItem<TType e***REMOVED***tends ChartType> {
   label: string;
 
   /**
-   * Parsed data values for the given `dataInde***REMOVED***` and `datasetInde***REMOVED***`
+   * Parsed data values for the given `dataIndex` and `datasetIndex`
    */
   parsed: UnionToIntersection<ParsedDataType<TType>>;
 
   /**
-   * Raw data values for the given `dataInde***REMOVED***` and `datasetInde***REMOVED***`
+   * Raw data values for the given `dataIndex` and `datasetIndex`
    */
   raw: unknown;
 
@@ -2922,14 +2922,14 @@ e***REMOVED***port interface TooltipItem<TType e***REMOVED***tends ChartType> {
   dataset: UnionToIntersection<ChartDataset<TType>>;
 
   /**
-   * Inde***REMOVED*** of the dataset the item comes from
+   * Index of the dataset the item comes from
    */
-  datasetInde***REMOVED***: number;
+  datasetIndex: number;
 
   /**
-   * Inde***REMOVED*** of this data item in the dataset
+   * Index of this data item in the dataset
    */
-  dataInde***REMOVED***: number;
+  dataIndex: number;
 
   /**
    * The chart element (point, arc, bar, etc.) for this tooltip item
@@ -2937,7 +2937,7 @@ e***REMOVED***port interface TooltipItem<TType e***REMOVED***tends ChartType> {
   element: Element;
 }
 
-e***REMOVED***port interface PluginOptionsByType<TType e***REMOVED***tends ChartType> {
+export interface PluginOptionsByType<TType extends ChartType> {
   colors: ColorsPluginOptions;
   decimation: DecimationOptions;
   filler: FillerOptions;
@@ -2946,11 +2946,11 @@ e***REMOVED***port interface PluginOptionsByType<TType e***REMOVED***tends Chart
   title: TitleOptions;
   tooltip: TooltipOptions<TType>;
 }
-e***REMOVED***port interface PluginChartOptions<TType e***REMOVED***tends ChartType> {
+export interface PluginChartOptions<TType extends ChartType> {
   plugins: PluginOptionsByType<TType>;
 }
 
-e***REMOVED***port interface BorderOptions {
+export interface BorderOptions {
   /**
    * @default true
    */
@@ -2958,17 +2958,17 @@ e***REMOVED***port interface BorderOptions {
   /**
    * @default []
    */
-  dash: Scriptable<number[], ScriptableScaleConte***REMOVED***t>;
+  dash: Scriptable<number[], ScriptableScaleContext>;
   /**
    * @default 0
    */
-  dashOffset: Scriptable<number, ScriptableScaleConte***REMOVED***t>;
+  dashOffset: Scriptable<number, ScriptableScaleContext>;
   color: Color;
   width: number;
   z: number;
 }
 
-e***REMOVED***port interface GridLineOptions {
+export interface GridLineOptions {
   /**
    * @default true
    */
@@ -2980,11 +2980,11 @@ e***REMOVED***port interface GridLineOptions {
   /**
    * @default 'rgba(0, 0, 0, 0.1)'
    */
-  color: ScriptableAndArray<Color, ScriptableScaleConte***REMOVED***t>;
+  color: ScriptableAndArray<Color, ScriptableScaleContext>;
   /**
    * @default 1
    */
-  lineWidth: ScriptableAndArray<number, ScriptableScaleConte***REMOVED***t>;
+  lineWidth: ScriptableAndArray<number, ScriptableScaleContext>;
   /**
    * @default true
    */
@@ -2996,15 +2996,15 @@ e***REMOVED***port interface GridLineOptions {
   /**
    * @default []
    */
-  tickBorderDash: Scriptable<number[], ScriptableScaleConte***REMOVED***t>;
+  tickBorderDash: Scriptable<number[], ScriptableScaleContext>;
   /**
    * @default 0
    */
-  tickBorderDashOffset: Scriptable<number, ScriptableScaleConte***REMOVED***t>;
+  tickBorderDashOffset: Scriptable<number, ScriptableScaleContext>;
   /**
    * @default 'rgba(0, 0, 0, 0.1)'
    */
-  tickColor: ScriptableAndArray<Color, ScriptableScaleConte***REMOVED***t>;
+  tickColor: ScriptableAndArray<Color, ScriptableScaleContext>;
   /**
    * @default 10
    */
@@ -3023,12 +3023,12 @@ e***REMOVED***port interface GridLineOptions {
   z: number;
 }
 
-e***REMOVED***port interface TickOptions {
+export interface TickOptions {
   /**
    * Color of label backdrops.
    * @default 'rgba(255, 255, 255, 0.75)'
    */
-  backdropColor: Scriptable<Color, ScriptableScaleConte***REMOVED***t>;
+  backdropColor: Scriptable<Color, ScriptableScaleContext>;
   /**
    * Padding of tick backdrop.
    * @default 2
@@ -3038,7 +3038,7 @@ e***REMOVED***port interface TickOptions {
   /**
    * Returns the string representation of the tick value as it should be displayed on the chart. See callback.
    */
-  callback: (this: Scale, tickValue: number | string, inde***REMOVED***: number, ticks: Tick[]) => string | string[] | number | number[] | null | undefined;
+  callback: (this: Scale, tickValue: number | string, index: number, ticks: Tick[]) => string | string[] | number | number[] | null | undefined;
   /**
    * If true, show tick labels.
    * @default true
@@ -3048,48 +3048,48 @@ e***REMOVED***port interface TickOptions {
    * Color of tick
    * @see Defaults.color
    */
-  color: ScriptableAndArray<Color, ScriptableScaleConte***REMOVED***t>;
+  color: ScriptableAndArray<Color, ScriptableScaleContext>;
   /**
    * see Fonts
    */
-  font: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableScaleConte***REMOVED***t>;
+  font: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableScaleContext>;
   /**
-   * Sets the offset of the tick labels from the a***REMOVED***is
+   * Sets the offset of the tick labels from the axis
    */
   padding: number;
   /**
    * If true, draw a background behind the tick labels.
    * @default false
    */
-  showLabelBackdrop: Scriptable<boolean, ScriptableScaleConte***REMOVED***t>;
+  showLabelBackdrop: Scriptable<boolean, ScriptableScaleContext>;
   /**
-   * The color of the stroke around the te***REMOVED***t.
+   * The color of the stroke around the text.
    * @default undefined
    */
-  te***REMOVED***tStrokeColor: Scriptable<Color, ScriptableScaleConte***REMOVED***t>;
+  textStrokeColor: Scriptable<Color, ScriptableScaleContext>;
   /**
-   * Stroke width around the te***REMOVED***t.
+   * Stroke width around the text.
    * @default 0
    */
-  te***REMOVED***tStrokeWidth: Scriptable<number, ScriptableScaleConte***REMOVED***t>;
+  textStrokeWidth: Scriptable<number, ScriptableScaleContext>;
   /**
-   * z-inde***REMOVED*** of tick layer. Useful when ticks are drawn on chart area. Values <= 0 are drawn under datasets, > 0 on top.
+   * z-index of tick layer. Useful when ticks are drawn on chart area. Values <= 0 are drawn under datasets, > 0 on top.
    * @default 0
    */
   z: number;
 
   major: {
     /**
-     * If true, major ticks are generated. A major tick will affect autoskipping and major will be defined on ticks in the scriptable options conte***REMOVED***t.
+     * If true, major ticks are generated. A major tick will affect autoskipping and major will be defined on ticks in the scriptable options context.
      * @default false
      */
     enabled: boolean;
   };
 }
 
-e***REMOVED***port type CartesianTickOptions = TickOptions & {
+export type CartesianTickOptions = TickOptions & {
   /**
-   * The number of ticks to e***REMOVED***amine when deciding how many labels will fit. Setting a smaller value will be faster, but may be less accurate when there is large variability in label length.
+   * The number of ticks to examine when deciding how many labels will fit. Setting a smaller value will be faster, but may be less accurate when there is large variability in label length.
    * @default ticks.length
    */
   sampleSize: number;
@@ -3099,31 +3099,31 @@ e***REMOVED***port type CartesianTickOptions = TickOptions & {
    */
   align: Align | 'inner';
   /**
-   *   If true, automatically calculates how many labels can be shown and hides labels accordingly. Labels will be rotated up to ma***REMOVED***Rotation before skipping any. Turn autoSkip off to show all labels no matter what.
+   *   If true, automatically calculates how many labels can be shown and hides labels accordingly. Labels will be rotated up to maxRotation before skipping any. Turn autoSkip off to show all labels no matter what.
    * @default true
    */
   autoSkip: boolean;
   /**
-   * Padding between the ticks on the horizontal a***REMOVED***is when autoSkip is enabled.
+   * Padding between the ticks on the horizontal axis when autoSkip is enabled.
    * @default 0
    */
   autoSkipPadding: number;
 
   /**
-   * How is the label positioned perpendicular to the a***REMOVED***is direction.
-   * This only applies when the rotation is 0 and the a***REMOVED***is position is one of "top", "left", "right", or "bottom"
+   * How is the label positioned perpendicular to the axis direction.
+   * This only applies when the rotation is 0 and the axis position is one of "top", "left", "right", or "bottom"
    * @default 'near'
    */
   crossAlign: 'near' | 'center' | 'far';
 
   /**
-   * Should the defined `min` and `ma***REMOVED***` values be presented as ticks even if they are not "nice".
+   * Should the defined `min` and `max` values be presented as ticks even if they are not "nice".
    * @default: true
    */
   includeBounds: boolean;
 
   /**
-   * Distance in pi***REMOVED***els to offset the label from the centre point of the tick (in the ***REMOVED*** direction for the ***REMOVED*** a***REMOVED***is, and the y direction for the y a***REMOVED***is). Note: this can cause labels at the edges to be cropped by the edge of the canvas
+   * Distance in pixels to offset the label from the centre point of the tick (in the x direction for the x axis, and the y direction for the y axis). Note: this can cause labels at the edges to be cropped by the edge of the canvas
    * @default 0
    */
   labelOffset: number;
@@ -3134,40 +3134,40 @@ e***REMOVED***port type CartesianTickOptions = TickOptions & {
    */
   minRotation: number;
   /**
-   * Ma***REMOVED***imum rotation for tick labels when rotating to condense labels. Note: Rotation doesn't occur until necessary. Note: Only applicable to horizontal scales.
+   * Maximum rotation for tick labels when rotating to condense labels. Note: Rotation doesn't occur until necessary. Note: Only applicable to horizontal scales.
    * @default 50
    */
-  ma***REMOVED***Rotation: number;
+  maxRotation: number;
   /**
-   * Flips tick labels around a***REMOVED***is, displaying the labels inside the chart instead of outside. Note: Only applicable to vertical scales.
+   * Flips tick labels around axis, displaying the labels inside the chart instead of outside. Note: Only applicable to vertical scales.
    * @default false
    */
   mirror: boolean;
   /**
-   *   Padding between the tick label and the a***REMOVED***is. When set on a vertical a***REMOVED***is, this applies in the horizontal (X) direction. When set on a horizontal a***REMOVED***is, this applies in the vertical (Y) direction.
+   *   Padding between the tick label and the axis. When set on a vertical axis, this applies in the horizontal (X) direction. When set on a horizontal axis, this applies in the vertical (Y) direction.
    * @default 0
    */
   padding: number;
   /**
-   * Ma***REMOVED***imum number of ticks and gridlines to show.
+   * Maximum number of ticks and gridlines to show.
    * @default 11
    */
-  ma***REMOVED***TicksLimit: number;
+  maxTicksLimit: number;
 }
 
-e***REMOVED***port interface ScriptableCartesianScaleConte***REMOVED***t {
+export interface ScriptableCartesianScaleContext {
   scale: keyof CartesianScaleTypeRegistry;
   type: string;
 }
 
-e***REMOVED***port interface ScriptableChartConte***REMOVED***t {
+export interface ScriptableChartContext {
   chart: Chart;
   type: string;
 }
 
-e***REMOVED***port interface CartesianScaleOptions e***REMOVED***tends CoreScaleOptions {
+export interface CartesianScaleOptions extends CoreScaleOptions {
   /**
-   * Scale boundary strategy (bypassed by min/ma***REMOVED*** time options)
+   * Scale boundary strategy (bypassed by min/max time options)
    * - `data`: make sure data are fully visible, ticks outside are removed
    * - `ticks`: make sure ticks are fully visible, data outside are truncated
    * @since 2.7.0
@@ -3176,12 +3176,12 @@ e***REMOVED***port interface CartesianScaleOptions e***REMOVED***tends CoreScale
   bounds: 'ticks' | 'data';
 
   /**
-   * Position of the a***REMOVED***is.
+   * Position of the axis.
    */
   position: 'left' | 'top' | 'right' | 'bottom' | 'center' | { [scale: string]: number };
 
   /**
-   * Stack group. A***REMOVED***es at the same `position` with same `stack` are stacked.
+   * Stack group. Axes at the same `position` with same `stack` are stacked.
    */
   stack?: string;
 
@@ -3192,9 +3192,9 @@ e***REMOVED***port interface CartesianScaleOptions e***REMOVED***tends CoreScale
   stackWeight?: number;
 
   /**
-   *   Which type of a***REMOVED***is this is. Possible values are: '***REMOVED***', 'y', 'r'. If not set, this is inferred from the first character of the ID which should be '***REMOVED***', 'y' or 'r'.
+   *   Which type of axis this is. Possible values are: 'x', 'y', 'r'. If not set, this is inferred from the first character of the ID which should be 'x', 'y' or 'r'.
    */
-  a***REMOVED***is: '***REMOVED***' | 'y' | 'r';
+  axis: 'x' | 'y' | 'r';
 
   /**
    * User defined minimum value for the scale, overrides minimum value from data.
@@ -3202,12 +3202,12 @@ e***REMOVED***port interface CartesianScaleOptions e***REMOVED***tends CoreScale
   min: number;
 
   /**
-   * User defined ma***REMOVED***imum value for the scale, overrides ma***REMOVED***imum value from data.
+   * User defined maximum value for the scale, overrides maximum value from data.
    */
-  ma***REMOVED***: number;
+  max: number;
 
   /**
-   *   If true, e***REMOVED***tra space is added to the both edges and the a***REMOVED***is is scaled to fit into the chart area. This is set to true for a bar chart by default.
+   *   If true, extra space is added to the both edges and the axis is scaled to fit into the chart area. This is set to true for a bar chart by default.
    * @default false
    */
   offset: boolean;
@@ -3218,21 +3218,21 @@ e***REMOVED***port interface CartesianScaleOptions e***REMOVED***tends CoreScale
 
   /** Options for the scale title. */
   title: {
-    /** If true, displays the a***REMOVED***is title. */
+    /** If true, displays the axis title. */
     display: boolean;
-    /** Alignment of the a***REMOVED***is title. */
+    /** Alignment of the axis title. */
     align: Align;
-    /** The te***REMOVED***t for the title, e.g. "# of People" or "Response Choices". */
-    te***REMOVED***t: string | string[];
-    /** Color of the a***REMOVED***is label. */
+    /** The text for the title, e.g. "# of People" or "Response Choices". */
+    text: string | string[];
+    /** Color of the axis label. */
     color: Color;
-    /** Information about the a***REMOVED***is title font. */
-    font: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableCartesianScaleConte***REMOVED***t>;
+    /** Information about the axis title font. */
+    font: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableCartesianScaleContext>;
     /** Padding to apply around scale labels. */
     padding: number | {
-      /** Padding on the (relative) top side of this a***REMOVED***is label. */
+      /** Padding on the (relative) top side of this axis label. */
       top: number;
-      /** Padding on the (relative) bottom side of this a***REMOVED***is label. */
+      /** Padding on the (relative) bottom side of this axis label. */
       bottom: number;
       /** This is a shorthand for defining top/bottom to the same values. */
       y: number;
@@ -3248,19 +3248,19 @@ e***REMOVED***port interface CartesianScaleOptions e***REMOVED***tends CoreScale
   ticks: CartesianTickOptions;
 }
 
-e***REMOVED***port type CategoryScaleOptions = Omit<CartesianScaleOptions, 'min' | 'ma***REMOVED***'> & {
+export type CategoryScaleOptions = Omit<CartesianScaleOptions, 'min' | 'max'> & {
   min: string | number;
-  ma***REMOVED***: string | number;
+  max: string | number;
   labels: string[] | string[][];
 };
 
-e***REMOVED***port type CategoryScale<O e***REMOVED***tends CategoryScaleOptions = CategoryScaleOptions> = Scale<O>
-e***REMOVED***port declare const CategoryScale: ChartComponent & {
+export type CategoryScale<O extends CategoryScaleOptions = CategoryScaleOptions> = Scale<O>
+export declare const CategoryScale: ChartComponent & {
   prototype: CategoryScale;
-  new <O e***REMOVED***tends CategoryScaleOptions = CategoryScaleOptions>(cfg: AnyObject): CategoryScale<O>;
+  new <O extends CategoryScaleOptions = CategoryScaleOptions>(cfg: AnyObject): CategoryScale<O>;
 };
 
-e***REMOVED***port type LinearScaleOptions = CartesianScaleOptions & {
+export type LinearScaleOptions = CartesianScaleOptions & {
 
   /**
    *  if true, scale will include 0 if it is not already included.
@@ -3272,9 +3272,9 @@ e***REMOVED***port type LinearScaleOptions = CartesianScaleOptions & {
    */
   suggestedMin?: number;
   /**
-   * Adjustment used when calculating the ma***REMOVED***imum data value.
+   * Adjustment used when calculating the maximum data value.
    */
-  suggestedMa***REMOVED***?: number;
+  suggestedMax?: number;
   /**
   * Percentage (string ending with %) or amount (number) for added room in the scale range above and below data.
   */
@@ -3292,7 +3292,7 @@ e***REMOVED***port type LinearScaleOptions = CartesianScaleOptions & {
     precision: number;
 
     /**
-     * User defined fi***REMOVED***ed step size for the scale
+     * User defined fixed step size for the scale
      */
     stepSize: number;
 
@@ -3303,21 +3303,21 @@ e***REMOVED***port type LinearScaleOptions = CartesianScaleOptions & {
   };
 };
 
-e***REMOVED***port type LinearScale<O e***REMOVED***tends LinearScaleOptions = LinearScaleOptions> = Scale<O>
-e***REMOVED***port declare const LinearScale: ChartComponent & {
+export type LinearScale<O extends LinearScaleOptions = LinearScaleOptions> = Scale<O>
+export declare const LinearScale: ChartComponent & {
   prototype: LinearScale;
-  new <O e***REMOVED***tends LinearScaleOptions = LinearScaleOptions>(cfg: AnyObject): LinearScale<O>;
+  new <O extends LinearScaleOptions = LinearScaleOptions>(cfg: AnyObject): LinearScale<O>;
 };
 
-e***REMOVED***port type LogarithmicScaleOptions = CartesianScaleOptions & {
+export type LogarithmicScaleOptions = CartesianScaleOptions & {
   /**
-   * Adjustment used when calculating the ma***REMOVED***imum data value.
+   * Adjustment used when calculating the maximum data value.
    */
   suggestedMin?: number;
   /**
    * Adjustment used when calculating the minimum data value.
    */
-  suggestedMa***REMOVED***?: number;
+  suggestedMax?: number;
 
   ticks: {
     /**
@@ -3327,13 +3327,13 @@ e***REMOVED***port type LogarithmicScaleOptions = CartesianScaleOptions & {
   };
 };
 
-e***REMOVED***port type LogarithmicScale<O e***REMOVED***tends LogarithmicScaleOptions = LogarithmicScaleOptions> = Scale<O>
-e***REMOVED***port declare const LogarithmicScale: ChartComponent & {
+export type LogarithmicScale<O extends LogarithmicScaleOptions = LogarithmicScaleOptions> = Scale<O>
+export declare const LogarithmicScale: ChartComponent & {
   prototype: LogarithmicScale;
-  new <O e***REMOVED***tends LogarithmicScaleOptions = LogarithmicScaleOptions>(cfg: AnyObject): LogarithmicScale<O>;
+  new <O extends LogarithmicScaleOptions = LogarithmicScaleOptions>(cfg: AnyObject): LogarithmicScale<O>;
 };
 
-e***REMOVED***port type TimeScaleTimeOptions = {
+export type TimeScaleTimeOptions = {
   /**
    * Custom parser for dates.
    */
@@ -3344,7 +3344,7 @@ e***REMOVED***port type TimeScaleTimeOptions = {
   round: false | TimeUnit;
   /**
    * If boolean and true and the unit is set to 'week', then the first day of the week will be Monday. Otherwise, it will be Sunday.
-   * If `number`, the inde***REMOVED*** of the first day of the week (0 - Sunday, 6 - Saturday).
+   * If `number`, the index of the first day of the week (0 - Sunday, 6 - Saturday).
    * @default false
    */
   isoWeekday: boolean | number;
@@ -3370,11 +3370,11 @@ e***REMOVED***port type TimeScaleTimeOptions = {
   minUnit: TimeUnit;
 };
 
-e***REMOVED***port type TimeScaleTickOptions = {
+export type TimeScaleTickOptions = {
   /**
    * Ticks generation input values:
    * - 'auto': generates "optimal" ticks based on scale size and time options.
-   * - 'data': generates ticks from data (including labels from data `{t|***REMOVED***|y}` objects).
+   * - 'data': generates ticks from data (including labels from data `{t|x|y}` objects).
    * - 'labels': generates ticks from user given `data.labels` values ONLY.
    * @see https://github.com/chartjs/Chart.js/pull/4507
    * @since 2.7.0
@@ -3388,13 +3388,13 @@ e***REMOVED***port type TimeScaleTickOptions = {
   stepSize: number;
 };
 
-e***REMOVED***port type TimeScaleOptions = Omit<CartesianScaleOptions, 'min' | 'ma***REMOVED***'> & {
+export type TimeScaleOptions = Omit<CartesianScaleOptions, 'min' | 'max'> & {
   min: string | number;
-  ma***REMOVED***: string | number;
+  max: string | number;
   suggestedMin: string | number;
-  suggestedMa***REMOVED***: string | number;
+  suggestedMax: string | number;
   /**
-   * Scale boundary strategy (bypassed by min/ma***REMOVED*** time options)
+   * Scale boundary strategy (bypassed by min/max time options)
    * - `data`: make sure data are fully visible, ticks outside are removed
    * - `ticks`: make sure ticks are fully visible, data outside are truncated
    * @since 2.7.0
@@ -3421,35 +3421,35 @@ e***REMOVED***port type TimeScaleOptions = Omit<CartesianScaleOptions, 'min' | '
   ticks: TimeScaleTickOptions;
 };
 
-e***REMOVED***port interface TimeScale<O e***REMOVED***tends TimeScaleOptions = TimeScaleOptions> e***REMOVED***tends Scale<O> {
+export interface TimeScale<O extends TimeScaleOptions = TimeScaleOptions> extends Scale<O> {
   format(value: number, format?: string): string;
   getDataTimestamps(): number[];
   getLabelTimestamps(): string[];
   normalize(values: number[]): number[];
 }
 
-e***REMOVED***port declare const TimeScale: ChartComponent & {
+export declare const TimeScale: ChartComponent & {
   prototype: TimeScale;
-  new <O e***REMOVED***tends TimeScaleOptions = TimeScaleOptions>(cfg: AnyObject): TimeScale<O>;
+  new <O extends TimeScaleOptions = TimeScaleOptions>(cfg: AnyObject): TimeScale<O>;
 };
 
-e***REMOVED***port type TimeSeriesScale<O e***REMOVED***tends TimeScaleOptions = TimeScaleOptions> = TimeScale<O>
-e***REMOVED***port declare const TimeSeriesScale: ChartComponent & {
+export type TimeSeriesScale<O extends TimeScaleOptions = TimeScaleOptions> = TimeScale<O>
+export declare const TimeSeriesScale: ChartComponent & {
   prototype: TimeSeriesScale;
-  new <O e***REMOVED***tends TimeScaleOptions = TimeScaleOptions>(cfg: AnyObject): TimeSeriesScale<O>;
+  new <O extends TimeScaleOptions = TimeScaleOptions>(cfg: AnyObject): TimeSeriesScale<O>;
 };
 
-e***REMOVED***port type RadialTickOptions = TickOptions & {
+export type RadialTickOptions = TickOptions & {
   /**
    * The Intl.NumberFormat options used by the default label formatter
    */
   format: Intl.NumberFormatOptions;
 
   /**
-   * Ma***REMOVED***imum number of ticks and gridlines to show.
+   * Maximum number of ticks and gridlines to show.
    * @default 11
    */
-  ma***REMOVED***TicksLimit: number;
+  maxTicksLimit: number;
 
   /**
    * if defined and stepSize is not specified, the step size will be rounded to this many decimal places.
@@ -3457,7 +3457,7 @@ e***REMOVED***port type RadialTickOptions = TickOptions & {
   precision: number;
 
   /**
-   * User defined fi***REMOVED***ed step size for the scale.
+   * User defined fixed step size for the scale.
    */
   stepSize: number;
 
@@ -3467,7 +3467,7 @@ e***REMOVED***port type RadialTickOptions = TickOptions & {
   count: number;
 }
 
-e***REMOVED***port type RadialLinearScaleOptions = CoreScaleOptions & {
+export type RadialLinearScaleOptions = CoreScaleOptions & {
   animate: boolean;
 
   startAngle: number;
@@ -3482,22 +3482,22 @@ e***REMOVED***port type RadialLinearScaleOptions = CoreScaleOptions & {
      * Color of angled lines.
      * @default 'rgba(0, 0, 0, 0.1)'
      */
-    color: Scriptable<Color, ScriptableScaleConte***REMOVED***t>;
+    color: Scriptable<Color, ScriptableScaleContext>;
     /**
      * Width of angled lines.
      * @default 1
      */
-    lineWidth: Scriptable<number, ScriptableScaleConte***REMOVED***t>;
+    lineWidth: Scriptable<number, ScriptableScaleContext>;
     /**
      * Length and spacing of dashes on angled lines. See MDN.
      * @default []
      */
-    borderDash: Scriptable<number[], ScriptableScaleConte***REMOVED***t>;
+    borderDash: Scriptable<number[], ScriptableScaleContext>;
     /**
      * Offset for line dashes. See MDN.
      * @default 0
      */
-    borderDashOffset: Scriptable<number, ScriptableScaleConte***REMOVED***t>;
+    borderDashOffset: Scriptable<number, ScriptableScaleContext>;
   };
 
   /**
@@ -3513,28 +3513,28 @@ e***REMOVED***port type RadialLinearScaleOptions = CoreScaleOptions & {
    */
   min: number;
   /**
-   * User defined ma***REMOVED***imum number for the scale, overrides ma***REMOVED***imum value from data.
+   * User defined maximum number for the scale, overrides maximum value from data.
    */
-  ma***REMOVED***: number;
+  max: number;
 
   pointLabels: {
     /**
      * Background color of the point label.
      * @default undefined
      */
-    backdropColor: Scriptable<Color, ScriptableScalePointLabelConte***REMOVED***t>;
+    backdropColor: Scriptable<Color, ScriptableScalePointLabelContext>;
     /**
      * Padding of label backdrop.
      * @default 2
      */
-    backdropPadding: Scriptable<number | ChartArea, ScriptableScalePointLabelConte***REMOVED***t>;
+    backdropPadding: Scriptable<number | ChartArea, ScriptableScalePointLabelContext>;
 
     /**
      * Border radius
      * @default 0
      * @since 3.8.0
      */
-    borderRadius: Scriptable<number | BorderRadius, ScriptableScalePointLabelConte***REMOVED***t>;
+    borderRadius: Scriptable<number | BorderRadius, ScriptableScalePointLabelContext>;
 
     /**
      * if true, point labels are shown. When `display: 'auto'`, the label is hidden if it overlaps with another label.
@@ -3545,21 +3545,21 @@ e***REMOVED***port type RadialLinearScaleOptions = CoreScaleOptions & {
      * Color of label
      * @see Defaults.color
      */
-    color: Scriptable<Color, ScriptableScalePointLabelConte***REMOVED***t>;
+    color: Scriptable<Color, ScriptableScalePointLabelContext>;
     /**
      */
-    font: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableScalePointLabelConte***REMOVED***t>;
+    font: ScriptableAndScriptableOptions<Partial<FontSpec>, ScriptableScalePointLabelContext>;
 
     /**
      * Callback function to transform data labels to point labels. The default implementation simply returns the current string.
      */
-    callback: (label: string, inde***REMOVED***: number) => string | string[] | number | number[];
+    callback: (label: string, index: number) => string | string[] | number | number[];
 
     /**
      * Padding around the pointLabels
      * @default 5
      */
-    padding: Scriptable<number, ScriptableScalePointLabelConte***REMOVED***t>;
+    padding: Scriptable<number, ScriptableScalePointLabelContext>;
 
     /**
      * if true, point labels are centered.
@@ -3569,9 +3569,9 @@ e***REMOVED***port type RadialLinearScaleOptions = CoreScaleOptions & {
   };
 
   /**
-   * Adjustment used when calculating the ma***REMOVED***imum data value.
+   * Adjustment used when calculating the maximum data value.
    */
-  suggestedMa***REMOVED***: number;
+  suggestedMax: number;
   /**
    * Adjustment used when calculating the minimum data value.
    */
@@ -3580,22 +3580,22 @@ e***REMOVED***port type RadialLinearScaleOptions = CoreScaleOptions & {
   ticks: RadialTickOptions;
 };
 
-e***REMOVED***port interface RadialLinearScale<O e***REMOVED***tends RadialLinearScaleOptions = RadialLinearScaleOptions> e***REMOVED***tends Scale<O> {
+export interface RadialLinearScale<O extends RadialLinearScaleOptions = RadialLinearScaleOptions> extends Scale<O> {
   setCenterPoint(leftMovement: number, rightMovement: number, topMovement: number, bottomMovement: number): void;
-  getInde***REMOVED***Angle(inde***REMOVED***: number): number;
+  getIndexAngle(index: number): number;
   getDistanceFromCenterForValue(value: number): number;
   getValueForDistanceFromCenter(distance: number): number;
-  getPointPosition(inde***REMOVED***: number, distanceFromCenter: number): { ***REMOVED***: number; y: number; angle: number };
-  getPointPositionForValue(inde***REMOVED***: number, value: number): { ***REMOVED***: number; y: number; angle: number };
-  getPointLabelPosition(inde***REMOVED***: number): ChartArea;
-  getBasePosition(inde***REMOVED***: number): { ***REMOVED***: number; y: number; angle: number };
+  getPointPosition(index: number, distanceFromCenter: number): { x: number; y: number; angle: number };
+  getPointPositionForValue(index: number, value: number): { x: number; y: number; angle: number };
+  getPointLabelPosition(index: number): ChartArea;
+  getBasePosition(index: number): { x: number; y: number; angle: number };
 }
-e***REMOVED***port declare const RadialLinearScale: ChartComponent & {
+export declare const RadialLinearScale: ChartComponent & {
   prototype: RadialLinearScale;
-  new <O e***REMOVED***tends RadialLinearScaleOptions = RadialLinearScaleOptions>(cfg: AnyObject): RadialLinearScale<O>;
+  new <O extends RadialLinearScaleOptions = RadialLinearScaleOptions>(cfg: AnyObject): RadialLinearScale<O>;
 };
 
-e***REMOVED***port interface CartesianScaleTypeRegistry {
+export interface CartesianScaleTypeRegistry {
   linear: {
     options: LinearScaleOptions;
   };
@@ -3613,29 +3613,29 @@ e***REMOVED***port interface CartesianScaleTypeRegistry {
   };
 }
 
-e***REMOVED***port interface RadialScaleTypeRegistry {
+export interface RadialScaleTypeRegistry {
   radialLinear: {
     options: RadialLinearScaleOptions;
   };
 }
 
-e***REMOVED***port interface ScaleTypeRegistry e***REMOVED***tends CartesianScaleTypeRegistry, RadialScaleTypeRegistry {
+export interface ScaleTypeRegistry extends CartesianScaleTypeRegistry, RadialScaleTypeRegistry {
 }
 
-e***REMOVED***port type ScaleType = keyof ScaleTypeRegistry;
+export type ScaleType = keyof ScaleTypeRegistry;
 
-e***REMOVED***port interface CartesianParsedData e***REMOVED***tends Point {
+export interface CartesianParsedData extends Point {
   // Only specified when stacked bars are enabled
   _stacks?: {
-    // Key is the stack ID which is generally the a***REMOVED***is ID
+    // Key is the stack ID which is generally the axis ID
     [key: string]: {
-      // Inner key is the datasetInde***REMOVED***
+      // Inner key is the datasetIndex
       [key: number]: number;
     }
   }
 }
 
-interface BarParsedData e***REMOVED***tends CartesianParsedData {
+interface BarParsedData extends CartesianParsedData {
   // Only specified if floating bars are show
   _custom?: {
     barStart: number;
@@ -3643,11 +3643,11 @@ interface BarParsedData e***REMOVED***tends CartesianParsedData {
     start: number;
     end: number;
     min: number;
-    ma***REMOVED***: number;
+    max: number;
   }
 }
 
-interface BubbleParsedData e***REMOVED***tends CartesianParsedData {
+interface BubbleParsedData extends CartesianParsedData {
   // The bubble radius value
   _custom: number;
 }
@@ -3656,12 +3656,12 @@ interface RadialParsedData {
   r: number;
 }
 
-e***REMOVED***port interface ChartTypeRegistry {
+export interface ChartTypeRegistry {
   bar: {
     chartOptions: BarControllerChartOptions;
     datasetOptions: BarControllerDatasetOptions;
     defaultDataPoint: number | [number, number] | null;
-    metaE***REMOVED***tensions: {};
+    metaExtensions: {};
     parsedDataType: BarParsedData,
     scales: keyof CartesianScaleTypeRegistry;
   };
@@ -3669,7 +3669,7 @@ e***REMOVED***port interface ChartTypeRegistry {
     chartOptions: LineControllerChartOptions;
     datasetOptions: LineControllerDatasetOptions & FillerControllerDatasetOptions;
     defaultDataPoint: ScatterDataPoint | number | null;
-    metaE***REMOVED***tensions: {};
+    metaExtensions: {};
     parsedDataType: CartesianParsedData;
     scales: keyof CartesianScaleTypeRegistry;
   };
@@ -3677,7 +3677,7 @@ e***REMOVED***port interface ChartTypeRegistry {
     chartOptions: ScatterControllerChartOptions;
     datasetOptions: ScatterControllerDatasetOptions;
     defaultDataPoint: ScatterDataPoint | number | null;
-    metaE***REMOVED***tensions: {};
+    metaExtensions: {};
     parsedDataType: CartesianParsedData;
     scales: keyof CartesianScaleTypeRegistry;
   };
@@ -3685,7 +3685,7 @@ e***REMOVED***port interface ChartTypeRegistry {
     chartOptions: unknown;
     datasetOptions: BubbleControllerDatasetOptions;
     defaultDataPoint: BubbleDataPoint;
-    metaE***REMOVED***tensions: {};
+    metaExtensions: {};
     parsedDataType: BubbleParsedData;
     scales: keyof CartesianScaleTypeRegistry;
   };
@@ -3693,7 +3693,7 @@ e***REMOVED***port interface ChartTypeRegistry {
     chartOptions: PieControllerChartOptions;
     datasetOptions: PieControllerDatasetOptions;
     defaultDataPoint: PieDataPoint;
-    metaE***REMOVED***tensions: PieMetaE***REMOVED***tensions;
+    metaExtensions: PieMetaExtensions;
     parsedDataType: number;
     scales: keyof CartesianScaleTypeRegistry;
   };
@@ -3701,7 +3701,7 @@ e***REMOVED***port interface ChartTypeRegistry {
     chartOptions: DoughnutControllerChartOptions;
     datasetOptions: DoughnutControllerDatasetOptions;
     defaultDataPoint: DoughnutDataPoint;
-    metaE***REMOVED***tensions: DoughnutMetaE***REMOVED***tensions;
+    metaExtensions: DoughnutMetaExtensions;
     parsedDataType: number;
     scales: keyof CartesianScaleTypeRegistry;
   };
@@ -3709,7 +3709,7 @@ e***REMOVED***port interface ChartTypeRegistry {
     chartOptions: PolarAreaControllerChartOptions;
     datasetOptions: PolarAreaControllerDatasetOptions;
     defaultDataPoint: number;
-    metaE***REMOVED***tensions: {};
+    metaExtensions: {};
     parsedDataType: RadialParsedData;
     scales: keyof RadialScaleTypeRegistry;
   };
@@ -3717,34 +3717,34 @@ e***REMOVED***port interface ChartTypeRegistry {
     chartOptions: RadarControllerChartOptions;
     datasetOptions: RadarControllerDatasetOptions & FillerControllerDatasetOptions;
     defaultDataPoint: number | null;
-    metaE***REMOVED***tensions: {};
+    metaExtensions: {};
     parsedDataType: RadialParsedData;
     scales: keyof RadialScaleTypeRegistry;
   };
 }
 
-e***REMOVED***port type ChartType = keyof ChartTypeRegistry;
+export type ChartType = keyof ChartTypeRegistry;
 
-e***REMOVED***port type ScaleOptionsByType<TScale e***REMOVED***tends ScaleType = ScaleType> =
+export type ScaleOptionsByType<TScale extends ScaleType = ScaleType> =
   { [key in ScaleType]: { type: key } & ScaleTypeRegistry[key]['options'] }[TScale]
 ;
 
 // Convenience alias for creating and manipulating scale options in user code
-e***REMOVED***port type ScaleOptions<TScale e***REMOVED***tends ScaleType = ScaleType> = DeepPartial<ScaleOptionsByType<TScale>>;
+export type ScaleOptions<TScale extends ScaleType = ScaleType> = DeepPartial<ScaleOptionsByType<TScale>>;
 
-e***REMOVED***port type DatasetChartOptions<TType e***REMOVED***tends ChartType = ChartType> = {
+export type DatasetChartOptions<TType extends ChartType = ChartType> = {
   [key in TType]: {
     datasets: ChartTypeRegistry[key]['datasetOptions'];
   };
 };
 
-e***REMOVED***port type ScaleChartOptions<TType e***REMOVED***tends ChartType = ChartType> = {
+export type ScaleChartOptions<TType extends ChartType = ChartType> = {
   scales: {
     [key: string]: ScaleOptionsByType<ChartTypeRegistry[TType]['scales']>;
   };
 };
 
-e***REMOVED***port type ChartOptions<TType e***REMOVED***tends ChartType = ChartType> = DeepPartial<
+export type ChartOptions<TType extends ChartType = ChartType> = DeepPartial<
 CoreChartOptions<TType> &
 ElementChartOptions<TType> &
 PluginChartOptions<TType> &
@@ -3753,29 +3753,29 @@ ScaleChartOptions<TType> &
 ChartTypeRegistry[TType]['chartOptions']
 >;
 
-e***REMOVED***port type DefaultDataPoint<TType e***REMOVED***tends ChartType> = DistributiveArray<ChartTypeRegistry[TType]['defaultDataPoint']>;
+export type DefaultDataPoint<TType extends ChartType> = DistributiveArray<ChartTypeRegistry[TType]['defaultDataPoint']>;
 
-e***REMOVED***port type ParsedDataType<TType e***REMOVED***tends ChartType = ChartType> = ChartTypeRegistry[TType]['parsedDataType'];
+export type ParsedDataType<TType extends ChartType = ChartType> = ChartTypeRegistry[TType]['parsedDataType'];
 
-e***REMOVED***port interface ChartDatasetProperties<TType e***REMOVED***tends ChartType, TData> {
+export interface ChartDatasetProperties<TType extends ChartType, TData> {
   type?: TType;
   data: TData;
 }
 
-e***REMOVED***port interface ChartDatasetPropertiesCustomTypesPerDataset<TType e***REMOVED***tends ChartType, TData> {
+export interface ChartDatasetPropertiesCustomTypesPerDataset<TType extends ChartType, TData> {
   type: TType;
   data: TData;
 }
 
-e***REMOVED***port type ChartDataset<
-  TType e***REMOVED***tends ChartType = ChartType,
+export type ChartDataset<
+  TType extends ChartType = ChartType,
   TData = DefaultDataPoint<TType>
 > = DeepPartial<
 { [key in ChartType]: { type: key } & ChartTypeRegistry[key]['datasetOptions'] }[TType]
 > & ChartDatasetProperties<TType, TData>;
 
-e***REMOVED***port type ChartDatasetCustomTypesPerDataset<
-  TType e***REMOVED***tends ChartType = ChartType,
+export type ChartDatasetCustomTypesPerDataset<
+  TType extends ChartType = ChartType,
   TData = DefaultDataPoint<TType>
 > = DeepPartial<
 { [key in ChartType]: { type: key } & ChartTypeRegistry[key]['datasetOptions'] }[TType]
@@ -3786,30 +3786,30 @@ e***REMOVED***port type ChartDatasetCustomTypesPerDataset<
  *   based on the chart type.
  * TLabel represents the label type
  */
-e***REMOVED***port interface ChartData<
-  TType e***REMOVED***tends ChartType = ChartType,
+export interface ChartData<
+  TType extends ChartType = ChartType,
   TData = DefaultDataPoint<TType>,
   TLabel = unknown
 > {
   labels?: TLabel[];
-  ***REMOVED***Labels?: TLabel[];
+  xLabels?: TLabel[];
   yLabels?: TLabel[];
   datasets: ChartDataset<TType, TData>[];
 }
 
-e***REMOVED***port interface ChartDataCustomTypesPerDataset<
-  TType e***REMOVED***tends ChartType = ChartType,
+export interface ChartDataCustomTypesPerDataset<
+  TType extends ChartType = ChartType,
   TData = DefaultDataPoint<TType>,
   TLabel = unknown
 > {
   labels?: TLabel[];
-  ***REMOVED***Labels?: TLabel[];
+  xLabels?: TLabel[];
   yLabels?: TLabel[];
   datasets: ChartDatasetCustomTypesPerDataset<TType, TData>[];
 }
 
-e***REMOVED***port interface ChartConfiguration<
-  TType e***REMOVED***tends ChartType = ChartType,
+export interface ChartConfiguration<
+  TType extends ChartType = ChartType,
   TData = DefaultDataPoint<TType>,
   TLabel = unknown
 > {
@@ -3820,8 +3820,8 @@ e***REMOVED***port interface ChartConfiguration<
   platform?: typeof BasePlatform;
 }
 
-e***REMOVED***port interface ChartConfigurationCustomTypesPerDataset<
-  TType e***REMOVED***tends ChartType = ChartType,
+export interface ChartConfigurationCustomTypesPerDataset<
+  TType extends ChartType = ChartType,
   TData = DefaultDataPoint<TType>,
   TLabel = unknown
 > {

@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.cs',
   '\n' +
   '<dl>\n' +
   '  <dt>Přejít na řádek nabídek</dt>\n' +
-  '  <dd>Windows nebo Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows nebo Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Přejít na panel nástrojů</dt>\n' +
-  '  <dd>Windows nebo Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows nebo Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Přejít na zápatí</dt>\n' +
-  '  <dd>Windows nebo Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows nebo Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Přejít na oznámení</dt>\n' +
-  '  <dd>Windows nebo Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
-  '  <dt>Přejít na konte***REMOVED***tový panel nástrojů</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** nebo macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows nebo Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
+  '  <dt>Přejít na kontextový panel nástrojů</dt>\n' +
+  '  <dd>Windows, Linux nebo macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Navigace začne u první položky uživatelského rozhraní, která bude zvýrazněna nebo v případě první položky\n' +

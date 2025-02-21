@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.ko_KR',
   '\n' +
   '<dl>\n' +
   '  <dt>메뉴 모음 포커스 표시</dt>\n' +
-  '  <dd>Windows 또는 Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows 또는 Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>도구 모음 포커스 표시</dt>\n' +
-  '  <dd>Windows 또는 Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows 또는 Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>푸터 포커스 표시</dt>\n' +
-  '  <dd>Windows 또는 Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows 또는 Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>알림 포커스</dt>\n' +
-  '  <dd>Windows 또는 Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows 또는 Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>컨텍스트 도구 모음에 포커스 표시</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** 또는 macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux 또는 macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>첫 번째 UI 항목에서 탐색이 시작되며, 이때 첫 번째 항목이 강조 표시되거나 푸터 요소 경로에 있는\n' +

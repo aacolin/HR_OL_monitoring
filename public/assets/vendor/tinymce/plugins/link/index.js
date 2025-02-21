@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "link" plugin for usage with module loaders
+// Exports the "link" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/link')

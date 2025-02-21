@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.fa',
   '\n' +
   '<dl>\n' +
   '  <dt>تمرکز بر نوار منو</dt>\n' +
-  '  <dd>Windows یا Linu***REMOVED***:‎‏: Alt+F9</dd>\n' +
-  '  <dd>‎‏macOS: &#***REMOVED***2325;F9‎‏</dd>\n' +
+  '  <dd>Windows یا Linux:‎‏: Alt+F9</dd>\n' +
+  '  <dd>‎‏macOS: &#x2325;F9‎‏</dd>\n' +
   '  <dt>تمرکز بر نوار ابزار</dt>\n' +
-  '  <dd>Windows یا Linu***REMOVED***‎‏: Alt+F10</dd>\n' +
-  '  <dd>‎‏macOS: &#***REMOVED***2325;F10‎‏</dd>\n' +
+  '  <dd>Windows یا Linux‎‏: Alt+F10</dd>\n' +
+  '  <dd>‎‏macOS: &#x2325;F10‎‏</dd>\n' +
   '  <dt>تمرکز بر پانویس</dt>\n' +
-  '  <dd>Windows یا Linu***REMOVED***‎‏: Alt+F11</dd>\n' +
-  '  <dd>‎‏macOS: &#***REMOVED***2325;F11‎‏</dd>\n' +
+  '  <dd>Windows یا Linux‎‏: Alt+F11</dd>\n' +
+  '  <dd>‎‏macOS: &#x2325;F11‎‏</dd>\n' +
   '  <dt>تمرکز اعلان</dt>\n' +
   '  <dd>ویندوز یا لینوکس: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>تمرکز بر نوار ابزار بافتاری</dt>\n' +
-  '  <dd>Windows ،Linu***REMOVED*** یا macOS:‏ Ctrl+F9</dd>\n' +
+  '  <dd>Windows ،Linux یا macOS:‏ Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>پیمایش در اولین مورد رابط کاربری شروع می‌شود و درخصوص اولین مورد در\n' +

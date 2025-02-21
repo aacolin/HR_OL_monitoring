@@ -1,4 +1,4 @@
-e***REMOVED***port default class ScatterController e***REMOVED***tends DatasetController {
+export default class ScatterController extends DatasetController {
     static id: string;
     /**
      * @type {any}
@@ -7,7 +7,7 @@ e***REMOVED***port default class ScatterController e***REMOVED***tends DatasetCo
     /**
        * @protected
        */
-    protected getLabelAndValue(inde***REMOVED***: any): {
+    protected getLabelAndValue(index: any): {
         label: any;
         value: string;
     };
@@ -15,6 +15,6 @@ e***REMOVED***port default class ScatterController e***REMOVED***tends DatasetCo
     /**
        * @protected
        */
-    protected getMa***REMOVED***Overflow(): any;
+    protected getMaxOverflow(): any;
 }
 import DatasetController from "../core/core.datasetController.js";

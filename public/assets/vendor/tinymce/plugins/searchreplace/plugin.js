@@ -29,13 +29,13 @@
         return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
       }
     };
-    const typeOf = ***REMOVED*** => {
-      const t = typeof ***REMOVED***;
-      if (***REMOVED*** === null) {
+    const typeOf = x => {
+      const t = typeof x;
+      if (x === null) {
         return 'null';
-      } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+      } else if (t === 'object' && Array.isArray(x)) {
         return 'array';
-      } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
         return 'string';
       } else {
         return t;
@@ -101,7 +101,7 @@
           return Optional.none();
         }
       }
-      e***REMOVED***ists(predicate) {
+      exists(predicate) {
         return this.tag && predicate(this.value);
       }
       forall(predicate) {
@@ -164,43 +164,43 @@
 
     const nativeSlice = Array.prototype.slice;
     const nativePush = Array.prototype.push;
-    const map = (***REMOVED***s, f) => {
-      const len = ***REMOVED***s.length;
+    const map = (xs, f) => {
+      const len = xs.length;
       const r = new Array(len);
       for (let i = 0; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        r[i] = f(***REMOVED***, i);
+        const x = xs[i];
+        r[i] = f(x, i);
       }
       return r;
     };
-    const each = (***REMOVED***s, f) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        f(***REMOVED***, i);
+    const each = (xs, f) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        f(x, i);
       }
     };
-    const eachr = (***REMOVED***s, f) => {
-      for (let i = ***REMOVED***s.length - 1; i >= 0; i--) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        f(***REMOVED***, i);
+    const eachr = (xs, f) => {
+      for (let i = xs.length - 1; i >= 0; i--) {
+        const x = xs[i];
+        f(x, i);
       }
     };
-    const groupBy = (***REMOVED***s, f) => {
-      if (***REMOVED***s.length === 0) {
+    const groupBy = (xs, f) => {
+      if (xs.length === 0) {
         return [];
       } else {
-        let wasType = f(***REMOVED***s[0]);
+        let wasType = f(xs[0]);
         const r = [];
         let group = [];
-        for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-          const ***REMOVED*** = ***REMOVED***s[i];
-          const type = f(***REMOVED***);
+        for (let i = 0, len = xs.length; i < len; i++) {
+          const x = xs[i];
+          const type = f(x);
           if (type !== wasType) {
             r.push(group);
             group = [];
           }
           wasType = type;
-          group.push(***REMOVED***);
+          group.push(x);
         }
         if (group.length !== 0) {
           r.push(group);
@@ -208,25 +208,25 @@
         return r;
       }
     };
-    const foldl = (***REMOVED***s, f, acc) => {
-      each(***REMOVED***s, (***REMOVED***, i) => {
-        acc = f(acc, ***REMOVED***, i);
+    const foldl = (xs, f, acc) => {
+      each(xs, (x, i) => {
+        acc = f(acc, x, i);
       });
       return acc;
     };
-    const flatten = ***REMOVED***s => {
+    const flatten = xs => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; ++i) {
-        if (!isArray(***REMOVED***s[i])) {
-          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + ***REMOVED***s);
+      for (let i = 0, len = xs.length; i < len; ++i) {
+        if (!isArray(xs[i])) {
+          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + xs);
         }
-        nativePush.apply(r, ***REMOVED***s[i]);
+        nativePush.apply(r, xs[i]);
       }
       return r;
     };
-    const bind = (***REMOVED***s, f) => flatten(map(***REMOVED***s, f));
-    const sort = (***REMOVED***s, comparator) => {
-      const copy = nativeSlice.call(***REMOVED***s, 0);
+    const bind = (xs, f) => flatten(map(xs, f));
+    const sort = (xs, comparator) => {
+      const copy = nativeSlice.call(xs, 0);
       copy.sort(comparator);
       return copy;
     };
@@ -243,7 +243,7 @@
 
     const type = element => element.dom.nodeType;
     const isType = t => element => type(element) === t;
-    const isTe***REMOVED***t$1 = isType(TEXT);
+    const isText$1 = isType(TEXT);
 
     const rawSet = (dom, key, value) => {
       if (isString(value) || isBoolean(value) || isNumber(value)) {
@@ -273,9 +273,9 @@
       const node = doc.createElement(tag);
       return fromDom(node);
     };
-    const fromTe***REMOVED***t = (te***REMOVED***t, scope) => {
+    const fromText = (text, scope) => {
       const doc = scope || document;
-      const node = doc.createTe***REMOVED***tNode(te***REMOVED***t);
+      const node = doc.createTextNode(text);
       return fromDom(node);
     };
     const fromDom = node => {
@@ -284,11 +284,11 @@
       }
       return { dom: node };
     };
-    const fromPoint = (docElm, ***REMOVED***, y) => Optional.from(docElm.dom.elementFromPoint(***REMOVED***, y)).map(fromDom);
+    const fromPoint = (docElm, x, y) => Optional.from(docElm.dom.elementFromPoint(x, y)).map(fromDom);
     const SugarElement = {
       fromHtml,
       fromTag,
-      fromTe***REMOVED***t,
+      fromText,
       fromDom,
       fromPoint
     };
@@ -345,7 +345,7 @@
       };
     };
 
-    const api = NodeValue(isTe***REMOVED***t$1, 'te***REMOVED***t');
+    const api = NodeValue(isText$1, 'text');
     const get$1 = element => api.get(element);
 
     const compareDocumentPosition = (a, b, match) => {
@@ -364,7 +364,7 @@
     const isContentEditableTrueInCef = (dom, node) => dom.getContentEditable(node) === 'true' && node.parentNode && !dom.isEditable(node.parentNode);
     const isHidden = (dom, node) => !dom.isBlock(node) && has(dom.schema.getWhitespaceElements(), node.nodeName);
     const isBoundary = (dom, node) => isSimpleBoundary(dom, node) || isContentEditableFalse(dom, node) || isHidden(dom, node) || isContentEditableTrueInCef(dom, node);
-    const isTe***REMOVED***t = node => node.nodeType === 3;
+    const isText = node => node.nodeType === 3;
     const nuSection = () => ({
       sOffset: 0,
       fOffset: 0,
@@ -372,49 +372,49 @@
     });
     const toLeaf = (node, offset) => leaf(SugarElement.fromDom(node), offset);
     const walk = (dom, walkerFn, startNode, callbacks, endNode, skipStart = true) => {
-      let ne***REMOVED***t = skipStart ? walkerFn(false) : startNode;
-      while (ne***REMOVED***t) {
-        const isCefNode = isContentEditableFalse(dom, ne***REMOVED***t);
-        if (isCefNode || isHidden(dom, ne***REMOVED***t)) {
-          const stopWalking = isCefNode ? callbacks.cef(ne***REMOVED***t) : callbacks.boundary(ne***REMOVED***t);
+      let next = skipStart ? walkerFn(false) : startNode;
+      while (next) {
+        const isCefNode = isContentEditableFalse(dom, next);
+        if (isCefNode || isHidden(dom, next)) {
+          const stopWalking = isCefNode ? callbacks.cef(next) : callbacks.boundary(next);
           if (stopWalking) {
             break;
           } else {
-            ne***REMOVED***t = walkerFn(true);
+            next = walkerFn(true);
             continue;
           }
-        } else if (isSimpleBoundary(dom, ne***REMOVED***t)) {
-          if (callbacks.boundary(ne***REMOVED***t)) {
+        } else if (isSimpleBoundary(dom, next)) {
+          if (callbacks.boundary(next)) {
             break;
           }
-        } else if (isTe***REMOVED***t(ne***REMOVED***t)) {
-          callbacks.te***REMOVED***t(ne***REMOVED***t);
+        } else if (isText(next)) {
+          callbacks.text(next);
         }
-        if (ne***REMOVED***t === endNode) {
+        if (next === endNode) {
           break;
         } else {
-          ne***REMOVED***t = walkerFn(false);
+          next = walkerFn(false);
         }
       }
     };
-    const collectTe***REMOVED***tToBoundary = (dom, section, node, rootNode, forwards) => {
+    const collectTextToBoundary = (dom, section, node, rootNode, forwards) => {
       var _a;
       if (isBoundary(dom, node)) {
         return;
       }
       const rootBlock = (_a = dom.getParent(rootNode, dom.isBlock)) !== null && _a !== void 0 ? _a : dom.getRoot();
       const walker = new global(node, rootBlock);
-      const walkerFn = forwards ? walker.ne***REMOVED***t.bind(walker) : walker.prev.bind(walker);
+      const walkerFn = forwards ? walker.next.bind(walker) : walker.prev.bind(walker);
       walk(dom, walkerFn, node, {
         boundary: always,
         cef: always,
-        te***REMOVED***t: ne***REMOVED***t => {
+        text: next => {
           if (forwards) {
-            section.fOffset += ne***REMOVED***t.length;
+            section.fOffset += next.length;
           } else {
-            section.sOffset += ne***REMOVED***t.length;
+            section.sOffset += next.length;
           }
-          section.elements.push(SugarElement.fromDom(ne***REMOVED***t));
+          section.elements.push(SugarElement.fromDom(next));
         }
       });
     };
@@ -422,7 +422,7 @@
       const walker = new global(startNode, rootNode);
       const sections = [];
       let current = nuSection();
-      collectTe***REMOVED***tToBoundary(dom, current, startNode, rootNode, false);
+      collectTextToBoundary(dom, current, startNode, rootNode, false);
       const finishSection = () => {
         if (current.elements.length > 0) {
           sections.push(current);
@@ -430,7 +430,7 @@
         }
         return false;
       };
-      walk(dom, walker.ne***REMOVED***t.bind(walker), startNode, {
+      walk(dom, walker.next.bind(walker), startNode, {
         boundary: finishSection,
         cef: node => {
           finishSection();
@@ -439,15 +439,15 @@
           }
           return false;
         },
-        te***REMOVED***t: ne***REMOVED***t => {
-          current.elements.push(SugarElement.fromDom(ne***REMOVED***t));
+        text: next => {
+          current.elements.push(SugarElement.fromDom(next));
           if (callbacks) {
-            callbacks.te***REMOVED***t(ne***REMOVED***t, current);
+            callbacks.text(next, current);
           }
         }
       }, endNode, skipStart);
       if (endNode) {
-        collectTe***REMOVED***tToBoundary(dom, current, endNode, rootNode, true);
+        collectTextToBoundary(dom, current, endNode, rootNode, true);
       }
       finishSection();
       return sections;
@@ -458,7 +458,7 @@
       const end = toLeaf(rng.endContainer, rng.endOffset);
       const endNode = end.element.dom;
       return collect(dom, rng.commonAncestorContainer, startNode, endNode, {
-        te***REMOVED***t: (node, section) => {
+        text: (node, section) => {
           if (node === endNode) {
             section.fOffset += node.length - end.offset;
           } else if (node === startNode) {
@@ -482,15 +482,15 @@
     };
     const fromNodes = (dom, nodes) => bind(nodes, node => fromNode(dom, node));
 
-    const find$2 = (te***REMOVED***t, pattern, start = 0, finish = te***REMOVED***t.length) => {
-      const rege***REMOVED*** = pattern.rege***REMOVED***;
-      rege***REMOVED***.lastInde***REMOVED*** = start;
+    const find$2 = (text, pattern, start = 0, finish = text.length) => {
+      const regex = pattern.regex;
+      regex.lastIndex = start;
       const results = [];
       let match;
-      while (match = rege***REMOVED***.e***REMOVED***ec(te***REMOVED***t)) {
-        const matchedTe***REMOVED***t = match[pattern.matchInde***REMOVED***];
-        const matchStart = match.inde***REMOVED*** + match[0].inde***REMOVED***Of(matchedTe***REMOVED***t);
-        const matchFinish = matchStart + matchedTe***REMOVED***t.length;
+      while (match = regex.exec(text)) {
+        const matchedText = match[pattern.matchIndex];
+        const matchStart = match.index + match[0].indexOf(matchedText);
+        const matchFinish = matchStart + matchedText.length;
         if (matchFinish > finish) {
           break;
         }
@@ -498,22 +498,22 @@
           start: matchStart,
           finish: matchFinish
         });
-        rege***REMOVED***.lastInde***REMOVED*** = matchFinish;
+        regex.lastIndex = matchFinish;
       }
       return results;
     };
-    const e***REMOVED***tract = (elements, matches) => {
+    const extract = (elements, matches) => {
       const nodePositions = foldl(elements, (acc, element) => {
         const content = get$1(element);
         const start = acc.last;
         const finish = start + content.length;
-        const positions = bind(matches, (match, matchId***REMOVED***) => {
+        const positions = bind(matches, (match, matchIdx) => {
           if (match.start < finish && match.finish > start) {
             return [{
                 element,
-                start: Math.ma***REMOVED***(start, match.start) - start,
+                start: Math.max(start, match.start) - start,
                 finish: Math.min(finish, match.finish) - start,
-                matchId: matchId***REMOVED***
+                matchId: matchIdx
               }];
           } else {
             return [];
@@ -534,44 +534,44 @@
       const elements = section.elements;
       const content = map(elements, get$1).join('');
       const positions = find$2(content, pattern, section.sOffset, content.length - section.fOffset);
-      return e***REMOVED***tract(elements, positions);
+      return extract(elements, positions);
     });
     const mark = (matches, replacementNode) => {
-      eachr(matches, (match, id***REMOVED***) => {
+      eachr(matches, (match, idx) => {
         eachr(match, pos => {
           const wrapper = SugarElement.fromDom(replacementNode.cloneNode(false));
-          set(wrapper, 'data-mce-inde***REMOVED***', id***REMOVED***);
-          const te***REMOVED***tNode = pos.element.dom;
-          if (te***REMOVED***tNode.length === pos.finish && pos.start === 0) {
+          set(wrapper, 'data-mce-index', idx);
+          const textNode = pos.element.dom;
+          if (textNode.length === pos.finish && pos.start === 0) {
             wrap(pos.element, wrapper);
           } else {
-            if (te***REMOVED***tNode.length !== pos.finish) {
-              te***REMOVED***tNode.splitTe***REMOVED***t(pos.finish);
+            if (textNode.length !== pos.finish) {
+              textNode.splitText(pos.finish);
             }
-            const matchNode = te***REMOVED***tNode.splitTe***REMOVED***t(pos.start);
+            const matchNode = textNode.splitText(pos.start);
             wrap(SugarElement.fromDom(matchNode), wrapper);
           }
         });
       });
     };
     const findAndMark = (dom, pattern, node, replacementNode) => {
-      const te***REMOVED***tSections = fromNode(dom, node);
-      const matches = find$1(pattern, te***REMOVED***tSections);
+      const textSections = fromNode(dom, node);
+      const matches = find$1(pattern, textSections);
       mark(matches, replacementNode);
       return matches.length;
     };
     const findAndMarkInSelection = (dom, pattern, selection, replacementNode) => {
       const bookmark = selection.getBookmark();
       const nodes = dom.select('td[data-mce-selected],th[data-mce-selected]');
-      const te***REMOVED***tSections = nodes.length > 0 ? fromNodes(dom, nodes) : fromRng(dom, selection.getRng());
-      const matches = find$1(pattern, te***REMOVED***tSections);
+      const textSections = nodes.length > 0 ? fromNodes(dom, nodes) : fromRng(dom, selection.getRng());
+      const matches = find$1(pattern, textSections);
       mark(matches, replacementNode);
       selection.moveToBookmark(bookmark);
       return matches.length;
     };
 
-    const getElmInde***REMOVED*** = elm => {
-      return elm.getAttribute('data-mce-inde***REMOVED***');
+    const getElmIndex = elm => {
+      return elm.getAttribute('data-mce-index');
     };
     const markAllMatches = (editor, currentSearchState, pattern, inSelection) => {
       const marker = editor.dom.create('span', { 'data-mce-bogus': 1 });
@@ -592,16 +592,16 @@
       }
       (_a = node.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(node);
     };
-    const findSpansByInde***REMOVED*** = (editor, inde***REMOVED***) => {
+    const findSpansByIndex = (editor, index) => {
       const spans = [];
       const nodes = global$1.toArray(editor.getBody().getElementsByTagName('span'));
       if (nodes.length) {
         for (let i = 0; i < nodes.length; i++) {
-          const nodeInde***REMOVED*** = getElmInde***REMOVED***(nodes[i]);
-          if (nodeInde***REMOVED*** === null || !nodeInde***REMOVED***.length) {
+          const nodeIndex = getElmIndex(nodes[i]);
+          if (nodeIndex === null || !nodeIndex.length) {
             continue;
           }
-          if (nodeInde***REMOVED*** === inde***REMOVED***.toString()) {
+          if (nodeIndex === index.toString()) {
             spans.push(nodes[i]);
           }
         }
@@ -610,27 +610,27 @@
     };
     const moveSelection = (editor, currentSearchState, forward) => {
       const searchState = currentSearchState.get();
-      let testInde***REMOVED*** = searchState.inde***REMOVED***;
+      let testIndex = searchState.index;
       const dom = editor.dom;
       if (forward) {
-        if (testInde***REMOVED*** + 1 === searchState.count) {
-          testInde***REMOVED*** = 0;
+        if (testIndex + 1 === searchState.count) {
+          testIndex = 0;
         } else {
-          testInde***REMOVED***++;
+          testIndex++;
         }
       } else {
-        if (testInde***REMOVED*** - 1 === -1) {
-          testInde***REMOVED*** = searchState.count - 1;
+        if (testIndex - 1 === -1) {
+          testIndex = searchState.count - 1;
         } else {
-          testInde***REMOVED***--;
+          testIndex--;
         }
       }
-      dom.removeClass(findSpansByInde***REMOVED***(editor, searchState.inde***REMOVED***), 'mce-match-marker-selected');
-      const spans = findSpansByInde***REMOVED***(editor, testInde***REMOVED***);
+      dom.removeClass(findSpansByIndex(editor, searchState.index), 'mce-match-marker-selected');
+      const spans = findSpansByIndex(editor, testIndex);
       if (spans.length) {
-        dom.addClass(findSpansByInde***REMOVED***(editor, testInde***REMOVED***), 'mce-match-marker-selected');
+        dom.addClass(findSpansByIndex(editor, testIndex), 'mce-match-marker-selected');
         editor.selection.scrollIntoView(spans[0]);
-        return testInde***REMOVED***;
+        return testIndex;
       }
       return -1;
     };
@@ -641,29 +641,29 @@
         dom.remove(parent);
       }
     };
-    const escapeSearchTe***REMOVED***t = (te***REMOVED***t, wholeWord) => {
-      const escapedTe***REMOVED***t = te***REMOVED***t.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&').replace(/\s/g, '[^\\S\\r\\n\\uFEFF]');
-      const wordRege***REMOVED*** = '(' + escapedTe***REMOVED***t + ')';
-      return wholeWord ? `(?:^|\\s|${ punctuation() })` + wordRege***REMOVED*** + `(?=$|\\s|${ punctuation() })` : wordRege***REMOVED***;
+    const escapeSearchText = (text, wholeWord) => {
+      const escapedText = text.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&').replace(/\s/g, '[^\\S\\r\\n\\uFEFF]');
+      const wordRegex = '(' + escapedText + ')';
+      return wholeWord ? `(?:^|\\s|${ punctuation() })` + wordRegex + `(?=$|\\s|${ punctuation() })` : wordRegex;
     };
-    const find = (editor, currentSearchState, te***REMOVED***t, matchCase, wholeWord, inSelection) => {
+    const find = (editor, currentSearchState, text, matchCase, wholeWord, inSelection) => {
       const selection = editor.selection;
-      const escapedTe***REMOVED***t = escapeSearchTe***REMOVED***t(te***REMOVED***t, wholeWord);
+      const escapedText = escapeSearchText(text, wholeWord);
       const isForwardSelection = selection.isForward();
       const pattern = {
-        rege***REMOVED***: new RegE***REMOVED***p(escapedTe***REMOVED***t, matchCase ? 'g' : 'gi'),
-        matchInde***REMOVED***: 1
+        regex: new RegExp(escapedText, matchCase ? 'g' : 'gi'),
+        matchIndex: 1
       };
       const count = markAllMatches(editor, currentSearchState, pattern, inSelection);
       if (global$2.browser.isSafari()) {
         selection.setRng(selection.getRng(), isForwardSelection);
       }
       if (count) {
-        const newInde***REMOVED*** = moveSelection(editor, currentSearchState, true);
+        const newIndex = moveSelection(editor, currentSearchState, true);
         currentSearchState.set({
-          inde***REMOVED***: newInde***REMOVED***,
+          index: newIndex,
           count,
-          te***REMOVED***t,
+          text,
           matchCase,
           wholeWord,
           inSelection
@@ -671,44 +671,44 @@
       }
       return count;
     };
-    const ne***REMOVED***t = (editor, currentSearchState) => {
-      const inde***REMOVED*** = moveSelection(editor, currentSearchState, true);
+    const next = (editor, currentSearchState) => {
+      const index = moveSelection(editor, currentSearchState, true);
       currentSearchState.set({
         ...currentSearchState.get(),
-        inde***REMOVED***
+        index
       });
     };
     const prev = (editor, currentSearchState) => {
-      const inde***REMOVED*** = moveSelection(editor, currentSearchState, false);
+      const index = moveSelection(editor, currentSearchState, false);
       currentSearchState.set({
         ...currentSearchState.get(),
-        inde***REMOVED***
+        index
       });
     };
     const isMatchSpan = node => {
-      const matchInde***REMOVED*** = getElmInde***REMOVED***(node);
-      return matchInde***REMOVED*** !== null && matchInde***REMOVED***.length > 0;
+      const matchIndex = getElmIndex(node);
+      return matchIndex !== null && matchIndex.length > 0;
     };
-    const replace = (editor, currentSearchState, te***REMOVED***t, forward, all) => {
+    const replace = (editor, currentSearchState, text, forward, all) => {
       const searchState = currentSearchState.get();
-      const currentInde***REMOVED*** = searchState.inde***REMOVED***;
-      let currentMatchInde***REMOVED***, ne***REMOVED***tInde***REMOVED*** = currentInde***REMOVED***;
+      const currentIndex = searchState.index;
+      let currentMatchIndex, nextIndex = currentIndex;
       forward = forward !== false;
       const node = editor.getBody();
       const nodes = global$1.grep(global$1.toArray(node.getElementsByTagName('span')), isMatchSpan);
       for (let i = 0; i < nodes.length; i++) {
-        const nodeInde***REMOVED*** = getElmInde***REMOVED***(nodes[i]);
-        let matchInde***REMOVED*** = currentMatchInde***REMOVED*** = parseInt(nodeInde***REMOVED***, 10);
-        if (all || matchInde***REMOVED*** === searchState.inde***REMOVED***) {
-          if (te***REMOVED***t.length) {
-            nodes[i].innerTe***REMOVED***t = te***REMOVED***t;
+        const nodeIndex = getElmIndex(nodes[i]);
+        let matchIndex = currentMatchIndex = parseInt(nodeIndex, 10);
+        if (all || matchIndex === searchState.index) {
+          if (text.length) {
+            nodes[i].innerText = text;
             unwrap(nodes[i]);
           } else {
             removeNode(editor.dom, nodes[i]);
           }
           while (nodes[++i]) {
-            matchInde***REMOVED*** = parseInt(getElmInde***REMOVED***(nodes[i]), 10);
-            if (matchInde***REMOVED*** === currentMatchInde***REMOVED***) {
+            matchIndex = parseInt(getElmIndex(nodes[i]), 10);
+            if (matchIndex === currentMatchIndex) {
               removeNode(editor.dom, nodes[i]);
             } else {
               i--;
@@ -716,19 +716,19 @@
             }
           }
           if (forward) {
-            ne***REMOVED***tInde***REMOVED***--;
+            nextIndex--;
           }
-        } else if (currentMatchInde***REMOVED*** > currentInde***REMOVED***) {
-          nodes[i].setAttribute('data-mce-inde***REMOVED***', String(currentMatchInde***REMOVED*** - 1));
+        } else if (currentMatchIndex > currentIndex) {
+          nodes[i].setAttribute('data-mce-index', String(currentMatchIndex - 1));
         }
       }
       currentSearchState.set({
         ...searchState,
         count: all ? 0 : searchState.count - 1,
-        inde***REMOVED***: ne***REMOVED***tInde***REMOVED***
+        index: nextIndex
       });
       if (forward) {
-        ne***REMOVED***t(editor, currentSearchState);
+        next(editor, currentSearchState);
       } else {
         prev(editor, currentSearchState);
       }
@@ -740,9 +740,9 @@
       const searchState = currentSearchState.get();
       const nodes = global$1.toArray(editor.getBody().getElementsByTagName('span'));
       for (let i = 0; i < nodes.length; i++) {
-        const nodeInde***REMOVED*** = getElmInde***REMOVED***(nodes[i]);
-        if (nodeInde***REMOVED*** !== null && nodeInde***REMOVED***.length) {
-          if (nodeInde***REMOVED*** === searchState.inde***REMOVED***.toString()) {
+        const nodeIndex = getElmIndex(nodes[i]);
+        if (nodeIndex !== null && nodeIndex.length) {
+          if (nodeIndex === searchState.index.toString()) {
             if (!startContainer) {
               startContainer = nodes[i].firstChild;
             }
@@ -753,9 +753,9 @@
       }
       currentSearchState.set({
         ...searchState,
-        inde***REMOVED***: -1,
+        index: -1,
         count: 0,
-        te***REMOVED***t: ''
+        text: ''
       });
       if (startContainer && endContainer) {
         const rng = editor.dom.createRng();
@@ -769,29 +769,29 @@
         return undefined;
       }
     };
-    const hasNe***REMOVED***t = (editor, currentSearchState) => currentSearchState.get().count > 1;
+    const hasNext = (editor, currentSearchState) => currentSearchState.get().count > 1;
     const hasPrev = (editor, currentSearchState) => currentSearchState.get().count > 1;
 
     const get = (editor, currentState) => {
       const done$1 = keepEditorSelection => {
         return done(editor, currentState, keepEditorSelection);
       };
-      const find$1 = (te***REMOVED***t, matchCase, wholeWord, inSelection = false) => {
-        return find(editor, currentState, te***REMOVED***t, matchCase, wholeWord, inSelection);
+      const find$1 = (text, matchCase, wholeWord, inSelection = false) => {
+        return find(editor, currentState, text, matchCase, wholeWord, inSelection);
       };
-      const ne***REMOVED***t$1 = () => {
-        return ne***REMOVED***t(editor, currentState);
+      const next$1 = () => {
+        return next(editor, currentState);
       };
       const prev$1 = () => {
         return prev(editor, currentState);
       };
-      const replace$1 = (te***REMOVED***t, forward, all) => {
-        return replace(editor, currentState, te***REMOVED***t, forward, all);
+      const replace$1 = (text, forward, all) => {
+        return replace(editor, currentState, text, forward, all);
       };
       return {
         done: done$1,
         find: find$1,
-        ne***REMOVED***t: ne***REMOVED***t$1,
+        next: next$1,
         prev: prev$1,
         replace: replace$1
       };
@@ -829,9 +829,9 @@
     const open = (editor, currentSearchState) => {
       const dialogApi = value();
       editor.undoManager.add();
-      const selectedTe***REMOVED***t = global$1.trim(editor.selection.getContent({ format: 'te***REMOVED***t' }));
+      const selectedText = global$1.trim(editor.selection.getContent({ format: 'text' }));
       const updateButtonStates = api => {
-        api.setEnabled('ne***REMOVED***t', hasNe***REMOVED***t(editor, currentSearchState));
+        api.setEnabled('next', hasNext(editor, currentSearchState));
         api.setEnabled('prev', hasPrev(editor, currentSearchState));
       };
       const updateSearchState = api => {
@@ -849,7 +849,7 @@
           'replace',
           'replaceall',
           'prev',
-          'ne***REMOVED***t'
+          'next'
         ];
         const toggle = name => api.setEnabled(name, !disable);
         each(buttons, toggle);
@@ -870,14 +870,14 @@
       const doFind = api => {
         const data = api.getData();
         const last = currentSearchState.get();
-        if (!data.findte***REMOVED***t.length) {
+        if (!data.findtext.length) {
           reset(api);
           return;
         }
-        if (last.te***REMOVED***t === data.findte***REMOVED***t && last.matchCase === data.matchcase && last.wholeWord === data.wholewords) {
-          ne***REMOVED***t(editor, currentSearchState);
+        if (last.text === data.findtext && last.matchCase === data.matchcase && last.wholeWord === data.wholewords) {
+          next(editor, currentSearchState);
         } else {
-          const count = find(editor, currentSearchState, data.findte***REMOVED***t, data.matchcase, data.wholewords, data.inselection);
+          const count = find(editor, currentSearchState, data.findtext, data.matchcase, data.wholewords, data.inselection);
           if (count <= 0) {
             toggleNotFoundAlert(true, api);
           }
@@ -887,8 +887,8 @@
       };
       const initialState = currentSearchState.get();
       const initialData = {
-        findte***REMOVED***t: selectedTe***REMOVED***t,
-        replacete***REMOVED***t: '',
+        findtext: selectedText,
+        replacetext: '',
         wholewords: initialState.wholeWord,
         matchcase: initialState.matchCase,
         inselection: initialState.inSelection
@@ -898,29 +898,29 @@
           {
             type: 'label',
             label: 'Find',
-            for: 'findte***REMOVED***t',
+            for: 'findtext',
             items: [{
                 type: 'bar',
                 items: [
                   {
                     type: 'input',
-                    name: 'findte***REMOVED***t',
-                    ma***REMOVED***imized: true,
+                    name: 'findtext',
+                    maximized: true,
                     inputMode: 'search'
                   },
                   {
                     type: 'button',
                     name: 'prev',
-                    te***REMOVED***t: 'Previous',
+                    text: 'Previous',
                     icon: 'action-prev',
                     enabled: false,
                     borderless: true
                   },
                   {
                     type: 'button',
-                    name: 'ne***REMOVED***t',
-                    te***REMOVED***t: 'Ne***REMOVED***t',
-                    icon: 'action-ne***REMOVED***t',
+                    name: 'next',
+                    text: 'Next',
+                    icon: 'action-next',
                     enabled: false,
                     borderless: true
                   }
@@ -929,7 +929,7 @@
           },
           {
             type: 'input',
-            name: 'replacete***REMOVED***t',
+            name: 'replacetext',
             label: 'Replace with',
             inputMode: 'search'
           }
@@ -938,7 +938,7 @@
           items.push({
             type: 'alertbanner',
             level: 'error',
-            te***REMOVED***t: 'Could not find the specified string.',
+            text: 'Could not find the specified string.',
             icon: 'warning'
           });
         }
@@ -962,36 +962,36 @@
               {
                 type: 'togglemenuitem',
                 name: 'matchcase',
-                te***REMOVED***t: 'Match case'
+                text: 'Match case'
               },
               {
                 type: 'togglemenuitem',
                 name: 'wholewords',
-                te***REMOVED***t: 'Find whole words only'
+                text: 'Find whole words only'
               },
               {
                 type: 'togglemenuitem',
                 name: 'inselection',
-                te***REMOVED***t: 'Find in selection'
+                text: 'Find in selection'
               }
             ]
           },
           {
             type: 'custom',
             name: 'find',
-            te***REMOVED***t: 'Find',
+            text: 'Find',
             primary: true
           },
           {
             type: 'custom',
             name: 'replace',
-            te***REMOVED***t: 'Replace',
+            text: 'Replace',
             enabled: false
           },
           {
             type: 'custom',
             name: 'replaceall',
-            te***REMOVED***t: 'Replace all',
+            text: 'Replace all',
             enabled: false
           }
         ],
@@ -1000,7 +1000,7 @@
           if (showNoMatchesAlertBanner) {
             toggleNotFoundAlert(false, api);
           }
-          if (details.name === 'findte***REMOVED***t' && currentSearchState.get().count > 0) {
+          if (details.name === 'findtext' && currentSearchState.get().count > 0) {
             reset(api);
           }
         },
@@ -1011,22 +1011,22 @@
             doFind(api);
             break;
           case 'replace':
-            if (!replace(editor, currentSearchState, data.replacete***REMOVED***t)) {
+            if (!replace(editor, currentSearchState, data.replacetext)) {
               reset(api);
             } else {
               updateButtonStates(api);
             }
             break;
           case 'replaceall':
-            replace(editor, currentSearchState, data.replacete***REMOVED***t, true, true);
+            replace(editor, currentSearchState, data.replacetext, true, true);
             reset(api);
             break;
           case 'prev':
             prev(editor, currentSearchState);
             updateButtonStates(api);
             break;
-          case 'ne***REMOVED***t':
-            ne***REMOVED***t(editor, currentSearchState);
+          case 'next':
+            next(editor, currentSearchState);
             updateButtonStates(api);
             break;
           case 'matchcase':
@@ -1063,7 +1063,7 @@
     };
     const register = (editor, currentSearchState) => {
       editor.ui.registry.addMenuItem('searchreplace', {
-        te***REMOVED***t: 'Find and replace...',
+        text: 'Find and replace...',
         shortcut: 'Meta+F',
         onAction: showDialog(editor, currentSearchState),
         icon: 'search'
@@ -1080,9 +1080,9 @@
     var Plugin = () => {
       global$3.add('searchreplace', editor => {
         const currentSearchState = Cell({
-          inde***REMOVED***: -1,
+          index: -1,
           count: 0,
-          te***REMOVED***t: '',
+          text: '',
           matchCase: false,
           wholeWord: false,
           inSelection: false

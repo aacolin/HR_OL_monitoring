@@ -1,4 +1,4 @@
-e***REMOVED***port interface ChartArea {
+export interface ChartArea {
   top: number;
   left: number;
   right: number;
@@ -7,46 +7,46 @@ e***REMOVED***port interface ChartArea {
   height: number;
 }
 
-e***REMOVED***port interface Point {
-  ***REMOVED***: number;
+export interface Point {
+  x: number;
   y: number;
 }
 
-e***REMOVED***port type TRBL = {
+export type TRBL = {
   top: number;
   right: number;
   bottom: number;
   left: number;
 }
 
-e***REMOVED***port type TRBLCorners = {
+export type TRBLCorners = {
   topLeft: number;
   topRight: number;
   bottomLeft: number;
   bottomRight: number;
 };
 
-e***REMOVED***port type CornerRadius = number | Partial<TRBLCorners>;
+export type CornerRadius = number | Partial<TRBLCorners>;
 
-e***REMOVED***port type RoundedRect = {
-  ***REMOVED***: number;
+export type RoundedRect = {
+  x: number;
   y: number;
   w: number;
   h: number;
   radius?: CornerRadius
 }
 
-e***REMOVED***port type Padding = Partial<TRBL> | number | Point;
+export type Padding = Partial<TRBL> | number | Point;
 
-e***REMOVED***port interface SplinePoint {
-  ***REMOVED***: number;
+export interface SplinePoint {
+  x: number;
   y: number;
   skip?: boolean;
 
   // Both Bezier and monotone interpolations have these fields
   // but they are added in different spots
-  cp1***REMOVED***?: number;
+  cp1x?: number;
   cp1y?: number;
-  cp2***REMOVED***?: number;
+  cp2x?: number;
   cp2y?: number;
 }

@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.hu_HU',
   '\n' +
   '<dl>\n' +
   '  <dt>Fókusz a menüsávra</dt>\n' +
-  '  <dd>Windows és Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows és Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Fókusz az eszköztárra</dt>\n' +
-  '  <dd>Windows és Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows és Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Fókusz a láblécre</dt>\n' +
-  '  <dd>Windows és Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows és Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Ráközelítés az értesítésre</dt>\n' +
-  '  <dd>Windows vagy Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows vagy Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>Fókusz egy környezetfüggő eszköztárra</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** és macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux és macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>A navigáció az első felhasználói felületi elemnél kezdődik, amelyet a rendszer kiemel, illetve aláhúz, amennyiben az az első elem\n' +

@@ -1,28 +1,28 @@
-.b***REMOVED***-rotate-90
+.bx-rotate-90
 {
     transform: rotate(90deg);
 
     -ms-filter: 'progid:DXImageTransform.Microsoft.BasicImage(rotation=1)';
 }
-.b***REMOVED***-rotate-180
+.bx-rotate-180
 {
     transform: rotate(180deg);
 
     -ms-filter: 'progid:DXImageTransform.Microsoft.BasicImage(rotation=2)';
 }
-.b***REMOVED***-rotate-270
+.bx-rotate-270
 {
     transform: rotate(270deg);
 
     -ms-filter: 'progid:DXImageTransform.Microsoft.BasicImage(rotation=3)';
 }
-.b***REMOVED***-flip-horizontal
+.bx-flip-horizontal
 {
     transform: scaleX(-1);
 
     -ms-filter: 'progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)';
 }
-.b***REMOVED***-flip-vertical
+.bx-flip-vertical
 {
     transform: scaleY(-1);
 

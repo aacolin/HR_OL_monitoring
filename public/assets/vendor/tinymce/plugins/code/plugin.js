@@ -27,7 +27,7 @@
         body: {
           type: 'panel',
           items: [{
-              type: 'te***REMOVED***tarea',
+              type: 'textarea',
               name: 'code'
             }]
         },
@@ -35,12 +35,12 @@
           {
             type: 'cancel',
             name: 'cancel',
-            te***REMOVED***t: 'Cancel'
+            text: 'Cancel'
           },
           {
             type: 'submit',
             name: 'save',
-            te***REMOVED***t: 'Save',
+            text: 'Save',
             primary: true
           }
         ],
@@ -59,7 +59,7 @@
     };
 
     const register = editor => {
-      const onAction = () => editor.e***REMOVED***ecCommand('mceCodeEditor');
+      const onAction = () => editor.execCommand('mceCodeEditor');
       editor.ui.registry.addButton('code', {
         icon: 'sourcecode',
         tooltip: 'Source code',
@@ -67,7 +67,7 @@
       });
       editor.ui.registry.addMenuItem('code', {
         icon: 'sourcecode',
-        te***REMOVED***t: 'Source code',
+        text: 'Source code',
         onAction
       });
     };

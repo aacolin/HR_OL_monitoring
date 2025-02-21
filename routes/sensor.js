@@ -1,5 +1,5 @@
-var e***REMOVED***press = require("e***REMOVED***press");
-var router = e***REMOVED***press.Router();
+var express = require("express");
+var router = express.Router();
 var bodyParser = require("body-parser");
 var Patient = require("../models/patient");
 
@@ -21,7 +21,7 @@ router.post("/data", async (req, res) => {
       // Parse the JSON data from the `data` field (it is a stringified JSON)
       const eventData = JSON.parse(data);
 
-      // E***REMOVED***tract event details from the incoming data
+      // Extract event details from the incoming data
       const { heartBeat, O2Lvl, sampledTime } = eventData;
       console.log("eventData" + JSON.stringify(eventData));
 
@@ -115,7 +115,7 @@ router.get('/readAll', async function (req, res) {
 router.get('/plotData', async (req, res) => {
    try {
       // Access deviceId using req.header() correctly
-      const deviceId = req.query.deviceId;  // Correct method to access headers in E***REMOVED***press
+      const deviceId = req.query.deviceId;  // Correct method to access headers in Express
 
       // Log the deviceId to confirm
       console.log("Received Device Id: " + deviceId);
@@ -162,7 +162,7 @@ router.get('/usrDayLogNotWorking', async (req, res) => {
    // Go 5 days back from the chosen date
    dateToUse.setUTCDate(dateToUse.getUTCDate() - 5);  // Subtract 5 days
 
-   // Now, set the start and end of that day (midnight to just before the ne***REMOVED***t midnight)
+   // Now, set the start and end of that day (midnight to just before the next midnight)
    const startOfDay = new Date(dateToUse);
    startOfDay.setUTCHours(0, 0, 0, 0);  // Midnight UTC
 
@@ -177,7 +177,7 @@ router.get('/usrDayLogNotWorking', async (req, res) => {
       const result = await Patient.find({
          'events.published_at': {
             $gte: startOfDay,  // Greater than or equal to the start of the day (in UTC)
-            $lt: endOfDay      // Less than the start of the ne***REMOVED***t day (before midnight UTC)
+            $lt: endOfDay      // Less than the start of the next day (before midnight UTC)
          }
       });
 
@@ -196,4 +196,4 @@ router.get('/usrDayLogNotWorking', async (req, res) => {
    }
 });
 
-module.e***REMOVED***ports = router;
+module.exports = router;

@@ -1,4 +1,4 @@
-e***REMOVED***port default class DatasetController {
+export default class DatasetController {
     /**
      * @type {any}
      */
@@ -13,12 +13,12 @@ e***REMOVED***port default class DatasetController {
     static dataElementType: any;
     /**
        * @param {Chart} chart
-       * @param {number} datasetInde***REMOVED***
+       * @param {number} datasetIndex
        */
-    constructor(chart: Chart, datasetInde***REMOVED***: number);
+    constructor(chart: Chart, datasetIndex: number);
     chart: import("./core.controller.js").default;
-    _ct***REMOVED***: any;
-    inde***REMOVED***: number;
+    _ctx: any;
+    index: number;
     _cachedDataOpts: {};
     _cachedMeta: any;
     _type: any;
@@ -32,12 +32,12 @@ e***REMOVED***port default class DatasetController {
     _drawCount: any;
     enableOptionSharing: boolean;
     supportsDecimation: boolean;
-    $conte***REMOVED***t: any;
+    $context: any;
     _syncList: any[];
     datasetElementType: any;
     dataElementType: any;
     initialize(): void;
-    updateInde***REMOVED***(datasetInde***REMOVED***: any): void;
+    updateIndex(datasetIndex: any): void;
     linkScales(): void;
     getDataset(): any;
     getMeta(): any;
@@ -74,47 +74,47 @@ e***REMOVED***port default class DatasetController {
     /**
        * Parse array of primitive values
        * @param {object} meta - dataset meta
-       * @param {array} data - data array. E***REMOVED***ample [1,3,4]
-       * @param {number} start - start inde***REMOVED***
+       * @param {array} data - data array. Example [1,3,4]
+       * @param {number} start - start index
        * @param {number} count - number of items to parse
-       * @returns {object} parsed item - item containing inde***REMOVED*** and a parsed value
+       * @returns {object} parsed item - item containing index and a parsed value
        * for each scale id.
-       * E***REMOVED***ample: {***REMOVED***Scale0: 0, yScale0: 1}
+       * Example: {xScale0: 0, yScale0: 1}
        * @protected
        */
     protected parsePrimitiveData(meta: object, data: any[], start: number, count: number): object;
     /**
        * Parse array of arrays
        * @param {object} meta - dataset meta
-       * @param {array} data - data array. E***REMOVED***ample [[1,2],[3,4]]
-       * @param {number} start - start inde***REMOVED***
+       * @param {array} data - data array. Example [[1,2],[3,4]]
+       * @param {number} start - start index
        * @param {number} count - number of items to parse
-       * @returns {object} parsed item - item containing inde***REMOVED*** and a parsed value
+       * @returns {object} parsed item - item containing index and a parsed value
        * for each scale id.
-       * E***REMOVED***ample: {***REMOVED***: 0, y: 1}
+       * Example: {x: 0, y: 1}
        * @protected
        */
     protected parseArrayData(meta: object, data: any[], start: number, count: number): object;
     /**
        * Parse array of objects
        * @param {object} meta - dataset meta
-       * @param {array} data - data array. E***REMOVED***ample [{***REMOVED***:1, y:5}, {***REMOVED***:2, y:10}]
-       * @param {number} start - start inde***REMOVED***
+       * @param {array} data - data array. Example [{x:1, y:5}, {x:2, y:10}]
+       * @param {number} start - start index
        * @param {number} count - number of items to parse
-       * @returns {object} parsed item - item containing inde***REMOVED*** and a parsed value
+       * @returns {object} parsed item - item containing index and a parsed value
        * for each scale id. _custom is optional
-       * E***REMOVED***ample: {***REMOVED***Scale0: 0, yScale0: 1, _custom: {r: 10, foo: 'bar'}}
+       * Example: {xScale0: 0, yScale0: 1, _custom: {r: 10, foo: 'bar'}}
        * @protected
        */
     protected parseObjectData(meta: object, data: any[], start: number, count: number): object;
     /**
        * @protected
        */
-    protected getParsed(inde***REMOVED***: any): any;
+    protected getParsed(index: any): any;
     /**
        * @protected
        */
-    protected getDataElement(inde***REMOVED***: any): any;
+    protected getDataElement(index: any): any;
     /**
        * @protected
        */
@@ -126,20 +126,20 @@ e***REMOVED***port default class DatasetController {
     /**
        * @protected
        */
-    protected getMinMa***REMOVED***(scale: any, canStack: any): {
+    protected getMinMax(scale: any, canStack: any): {
         min: number;
-        ma***REMOVED***: number;
+        max: number;
     };
     getAllParsedValues(scale: any): number[];
     /**
        * @return {number|boolean}
        * @protected
        */
-    protected getMa***REMOVED***Overflow(): number | boolean;
+    protected getMaxOverflow(): number | boolean;
     /**
        * @protected
        */
-    protected getLabelAndValue(inde***REMOVED***: any): {
+    protected getLabelAndValue(index: any): {
         label: string;
         value: string;
     };
@@ -154,27 +154,27 @@ e***REMOVED***port default class DatasetController {
     draw(): void;
     /**
        * Returns a set of predefined style properties that should be used to represent the dataset
-       * or the data if the inde***REMOVED*** is specified
-       * @param {number} inde***REMOVED*** - data inde***REMOVED***
+       * or the data if the index is specified
+       * @param {number} index - data index
        * @param {boolean} [active] - true if hover
        * @return {object} style object
        */
-    getStyle(inde***REMOVED***: number, active?: boolean): object;
+    getStyle(index: number, active?: boolean): object;
     /**
        * @protected
        */
-    protected getConte***REMOVED***t(inde***REMOVED***: any, active: any, mode: any): any;
+    protected getContext(index: any, active: any, mode: any): any;
     /**
        * @param {string} [mode]
        * @protected
        */
     protected resolveDatasetElementOptions(mode?: string): any;
     /**
-       * @param {number} inde***REMOVED***
+       * @param {number} index
        * @param {string} [mode]
        * @protected
        */
-    protected resolveDataElementOptions(inde***REMOVED***: number, mode?: string): any;
+    protected resolveDataElementOptions(index: number, mode?: string): any;
     /**
        * @private
        */
@@ -194,7 +194,7 @@ e***REMOVED***port default class DatasetController {
        */
     protected includeOptions(mode: any, sharedOptions: any): boolean;
     /**
-     * @todo v4, rename to getSharedOptions and remove e***REMOVED***cess functions
+     * @todo v4, rename to getSharedOptions and remove excess functions
      */
     _getSharedOptions(start: any, mode: any): {
         sharedOptions: any;
@@ -204,7 +204,7 @@ e***REMOVED***port default class DatasetController {
        * Utility for updating an element with new properties, using animations when appropriate.
        * @protected
        */
-    protected updateElement(element: any, inde***REMOVED***: any, properties: any, mode: any): void;
+    protected updateElement(element: any, index: any, properties: any, mode: any): void;
     /**
        * Utility to animate the shared options, that are potentially affecting multiple elements.
        * @protected
@@ -214,8 +214,8 @@ e***REMOVED***port default class DatasetController {
        * @private
        */
     private _setStyle;
-    removeHoverStyle(element: any, datasetInde***REMOVED***: any, inde***REMOVED***: any): void;
-    setHoverStyle(element: any, datasetInde***REMOVED***: any, inde***REMOVED***: any): void;
+    removeHoverStyle(element: any, datasetIndex: any, index: any): void;
+    setHoverStyle(element: any, datasetIndex: any, index: any): void;
     /**
        * @private
        */
@@ -247,5 +247,5 @@ e***REMOVED***port default class DatasetController {
     _onDataSplice(start: any, count: any, ...args: any[]): void;
     _onDataUnshift(...args: any[]): void;
 }
-e***REMOVED***port type Chart = import('./core.controller.js').default;
-e***REMOVED***port type Scale = import('./core.scale.js').default;
+export type Chart = import('./core.controller.js').default;
+export type Scale = import('./core.scale.js').default;

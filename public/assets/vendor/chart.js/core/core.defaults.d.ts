@@ -1,17 +1,17 @@
-e***REMOVED***port const overrides: any;
-e***REMOVED***port const descriptors: any;
+export const overrides: any;
+export const descriptors: any;
 /**
- * Please use the module's default e***REMOVED***port which provides a singleton instance
- * Note: class is e***REMOVED***ported for typedoc
+ * Please use the module's default export which provides a singleton instance
+ * Note: class is exported for typedoc
  */
-e***REMOVED***port class Defaults {
+export class Defaults {
     constructor(_descriptors: any, _appliers: any);
     animation: any;
     backgroundColor: string;
     borderColor: string;
     color: string;
     datasets: {};
-    devicePi***REMOVED***elRatio: (conte***REMOVED***t: any) => any;
+    devicePixelRatio: (context: any) => any;
     elements: {};
     events: string[];
     font: {
@@ -22,10 +22,10 @@ e***REMOVED***port class Defaults {
         weight: any;
     };
     hover: {};
-    hoverBackgroundColor: (ct***REMOVED***: any, options: any) => CanvasGradient;
-    hoverBorderColor: (ct***REMOVED***: any, options: any) => CanvasGradient;
-    hoverColor: (ct***REMOVED***: any, options: any) => CanvasGradient;
-    inde***REMOVED***A***REMOVED***is: string;
+    hoverBackgroundColor: (ctx: any, options: any) => CanvasGradient;
+    hoverBorderColor: (ctx: any, options: any) => CanvasGradient;
+    hoverColor: (ctx: any, options: any) => CanvasGradient;
+    indexAxis: string;
     interaction: {
         mode: string;
         intersect: boolean;
@@ -62,7 +62,7 @@ e***REMOVED***port class Defaults {
        * If the values would be copied, the runtime change would not take effect. By routing, the
        * fallback is evaluated at each access, so its always up to date.
        *
-       * E***REMOVED***ample:
+       * Example:
        *
        * 	defaults.route('elements.arc', 'backgroundColor', '', 'color')
        *   - reads the backgroundColor from defaults.color when undefined locally
@@ -77,4 +77,4 @@ e***REMOVED***port class Defaults {
     apply(appliers: any): void;
 }
 declare const _default: Defaults;
-e***REMOVED***port default _default;
+export default _default;

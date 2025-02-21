@@ -1,4 +1,4 @@
-e***REMOVED***port default class CategoryScale e***REMOVED***tends Scale {
+export default class CategoryScale extends Scale {
     static id: string;
     /**
      * @type {any}
@@ -9,13 +9,13 @@ e***REMOVED***port default class CategoryScale e***REMOVED***tends Scale {
     _valueRange: number;
     _addedLabels: any[];
     init(scaleOptions: any): void;
-    parse(raw: any, inde***REMOVED***: any): number;
+    parse(raw: any, index: any): number;
     buildTicks(): {
         value: any;
     }[];
     getLabelForValue(value: any): any;
-    getPi***REMOVED***elForValue(value: any): number;
-    getPi***REMOVED***elForTick(inde***REMOVED***: any): number;
-    getValueForPi***REMOVED***el(pi***REMOVED***el: any): number;
+    getPixelForValue(value: any): number;
+    getPixelForTick(index: any): number;
+    getValueForPixel(pixel: any): number;
 }
 import Scale from "../core/core.scale.js";

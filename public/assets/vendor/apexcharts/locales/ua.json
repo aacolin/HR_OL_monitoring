@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Зберегти SVG",
-      "e***REMOVED***portToPNG": "Зберегти PNG",
-      "e***REMOVED***portToCSV": "Зберегти CSV",
+      "exportToSVG": "Зберегти SVG",
+      "exportToPNG": "Зберегти PNG",
+      "exportToCSV": "Зберегти CSV",
       "menu": "Меню",
       "selection": "Вибір",
       "selectionZoom": "Вибір із збільшенням",

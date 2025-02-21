@@ -1,10 +1,10 @@
 import type { AnyObject } from '../types/basic.js';
 import type { Point } from '../types/geometric.js';
 import type { Animation } from '../types/animation.js';
-e***REMOVED***port default class Element<T = AnyObject, O = AnyObject> {
+export default class Element<T = AnyObject, O = AnyObject> {
     static defaults: {};
     static defaultRoutes: any;
-    ***REMOVED***: number;
+    x: number;
     y: number;
     active: boolean;
     options: O;
@@ -12,10 +12,10 @@ e***REMOVED***port default class Element<T = AnyObject, O = AnyObject> {
     tooltipPosition(useFinalPosition: boolean): Point;
     hasValue(): boolean;
     /**
-     * Gets the current or final value of each prop. Can return e***REMOVED***tra properties (whole object).
+     * Gets the current or final value of each prop. Can return extra properties (whole object).
      * @param props - properties to get
      * @param [final] - get the final value (animation target)
      */
-    getProps<P e***REMOVED***tends (keyof T)[]>(props: P, final?: boolean): Pick<T, P[number]>;
-    getProps<P e***REMOVED***tends string>(props: P[], final?: boolean): Partial<Record<P, unknown>>;
+    getProps<P extends (keyof T)[]>(props: P, final?: boolean): Pick<T, P[number]>;
+    getProps<P extends string>(props: P[], final?: boolean): Partial<Record<P, unknown>>;
 }

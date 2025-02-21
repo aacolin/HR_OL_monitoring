@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Կիր", "Երկ", "Երք", "Չրք", "Հնգ", "Ուրբ", "Շբթ"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Բեռնել SVG",
-      "e***REMOVED***portToPNG": "Բեռնել PNG",
-      "e***REMOVED***portToCSV": "Բեռնել CSV",
+      "exportToSVG": "Բեռնել SVG",
+      "exportToPNG": "Բեռնել PNG",
+      "exportToCSV": "Բեռնել CSV",
       "menu": "Մենյու",
       "selection": "Ընտրված",
       "selectionZoom": "Ընտրված հատվածի խոշորացում",

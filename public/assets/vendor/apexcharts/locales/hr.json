@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Ned", "Pon", "Uto", "Sri", "Čet", "Pet", "Sub"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Preuzmi SVG",
-      "e***REMOVED***portToPNG": "Preuzmi PNG",
-      "e***REMOVED***portToCSV": "Preuzmi CSV",
+      "exportToSVG": "Preuzmi SVG",
+      "exportToPNG": "Preuzmi PNG",
+      "exportToCSV": "Preuzmi CSV",
       "menu": "Izbornik",
       "selection": "Odabir",
       "selectionZoom": "Odabirno povećanje",

@@ -1,4 +1,4 @@
-e***REMOVED***port default class Scale e***REMOVED***tends Element<import("../types/basic.js").AnyObject, import("../types/basic.js").AnyObject> {
+export default class Scale extends Element<import("../types/basic.js").AnyObject, import("../types/basic.js").AnyObject> {
     constructor(cfg: any);
     /** @type {string} */
     id: string;
@@ -6,8 +6,8 @@ e***REMOVED***port default class Scale e***REMOVED***tends Element<import("../ty
     type: string;
     /** @type {any} */
     options: any;
-    /** @type {CanvasRenderingConte***REMOVED***t2D} */
-    ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D;
+    /** @type {CanvasRenderingContext2D} */
+    ctx: CanvasRenderingContext2D;
     /** @type {Chart} */
     chart: Chart;
     /** @type {number} */
@@ -29,9 +29,9 @@ e***REMOVED***port default class Scale e***REMOVED***tends Element<import("../ty
         bottom: number;
     };
     /** @type {number} */
-    ma***REMOVED***Width: number;
+    maxWidth: number;
     /** @type {number} */
-    ma***REMOVED***Height: number;
+    maxHeight: number;
     /** @type {number} */
     paddingTop: number;
     /** @type {number} */
@@ -41,14 +41,14 @@ e***REMOVED***port default class Scale e***REMOVED***tends Element<import("../ty
     /** @type {number} */
     paddingRight: number;
     /** @type {string=} */
-    a***REMOVED***is: string | undefined;
+    axis: string | undefined;
     /** @type {number=} */
     labelRotation: number | undefined;
     min: any;
-    ma***REMOVED***: any;
+    max: any;
     _range: {
         min: number;
-        ma***REMOVED***: number;
+        max: number;
     };
     /** @type {Tick[]} */
     ticks: Tick[];
@@ -59,22 +59,22 @@ e***REMOVED***port default class Scale e***REMOVED***tends Element<import("../ty
     /** @type {object|null} */
     _labelSizes: object | null;
     _length: number;
-    _ma***REMOVED***Length: number;
-    _longestTe***REMOVED***tCache: {};
+    _maxLength: number;
+    _longestTextCache: {};
     /** @type {number} */
-    _startPi***REMOVED***el: number;
+    _startPixel: number;
     /** @type {number} */
-    _endPi***REMOVED***el: number;
-    _reversePi***REMOVED***els: boolean;
-    _userMa***REMOVED***: any;
+    _endPixel: number;
+    _reversePixels: boolean;
+    _userMax: any;
     _userMin: any;
-    _suggestedMa***REMOVED***: any;
+    _suggestedMax: any;
     _suggestedMin: any;
     _ticksLength: number;
     _borderValue: number;
     _cache: {};
     _dataLimitsCached: boolean;
-    $conte***REMOVED***t: any;
+    $context: any;
     /**
        * @param {any} options
        * @since 3.0
@@ -83,30 +83,30 @@ e***REMOVED***port default class Scale e***REMOVED***tends Element<import("../ty
     /**
        * Parse a supported input value to internal representation.
        * @param {*} raw
-       * @param {number} [inde***REMOVED***]
+       * @param {number} [index]
        * @since 3.0
        */
-    parse(raw: any, inde***REMOVED***?: number): any;
+    parse(raw: any, index?: number): any;
     /**
-       * @return {{min: number, ma***REMOVED***: number, minDefined: boolean, ma***REMOVED***Defined: boolean}}
+       * @return {{min: number, max: number, minDefined: boolean, maxDefined: boolean}}
        * @protected
        * @since 3.0
        */
     protected getUserBounds(): {
         min: number;
-        ma***REMOVED***: number;
+        max: number;
         minDefined: boolean;
-        ma***REMOVED***Defined: boolean;
+        maxDefined: boolean;
     };
     /**
        * @param {boolean} canStack
-       * @return {{min: number, ma***REMOVED***: number}}
+       * @return {{min: number, max: number}}
        * @protected
        * @since 3.0
        */
-    protected getMinMa***REMOVED***(canStack: boolean): {
+    protected getMinMax(canStack: boolean): {
         min: number;
-        ma***REMOVED***: number;
+        max: number;
     };
     /**
        * Get the padding needed for the scale
@@ -131,14 +131,14 @@ e***REMOVED***port default class Scale e***REMOVED***tends Element<import("../ty
     beforeLayout(): void;
     beforeUpdate(): void;
     /**
-       * @param {number} ma***REMOVED***Width - the ma***REMOVED*** width in pi***REMOVED***els
-       * @param {number} ma***REMOVED***Height - the ma***REMOVED*** height in pi***REMOVED***els
+       * @param {number} maxWidth - the max width in pixels
+       * @param {number} maxHeight - the max height in pixels
        * @param {{top: number, left: number, bottom: number, right: number}} margins - the space between the edge of the other scales and edge of the chart
        *   This space comes from two sources:
        *     - padding - space that's required to show the labels at the edges of the scale
        *     - thickness of scales or legends in another orientation
        */
-    update(ma***REMOVED***Width: number, ma***REMOVED***Height: number, margins: {
+    update(maxWidth: number, maxHeight: number, margins: {
         top: number;
         left: number;
         bottom: number;
@@ -148,7 +148,7 @@ e***REMOVED***port default class Scale e***REMOVED***tends Element<import("../ty
        * @protected
        */
     protected configure(): void;
-    _alignToPi***REMOVED***els: any;
+    _alignToPixels: any;
     afterUpdate(): void;
     beforeSetDimensions(): void;
     setDimensions(): void;
@@ -203,7 +203,7 @@ e***REMOVED***port default class Scale e***REMOVED***tends Element<import("../ty
     private _getLabelSizes;
     /**
        * Returns {width, height, offset} objects for the first, last, widest, highest tick
-       * labels where offset indicates the anchor point offset from the top in pi***REMOVED***els.
+       * labels where offset indicates the anchor point offset from the top in pixels.
        * @return {{ first: object, last: object, widest: object, highest: object, widths: Array, heights: array }}
        * @private
        */
@@ -215,45 +215,45 @@ e***REMOVED***port default class Scale e***REMOVED***tends Element<import("../ty
        */
     getLabelForValue(value: any): string;
     /**
-       * Returns the location of the given data point. Value can either be an inde***REMOVED*** or a numerical value
+       * Returns the location of the given data point. Value can either be an index or a numerical value
        * The coordinate (0, 0) is at the upper-left corner of the canvas
        * @param {*} value
-       * @param {number} [inde***REMOVED***]
+       * @param {number} [index]
        * @return {number}
        */
-    getPi***REMOVED***elForValue(value: any, inde***REMOVED***?: number): number;
+    getPixelForValue(value: any, index?: number): number;
     /**
-       * Used to get the data value from a given pi***REMOVED***el. This is the inverse of getPi***REMOVED***elForValue
+       * Used to get the data value from a given pixel. This is the inverse of getPixelForValue
        * The coordinate (0, 0) is at the upper-left corner of the canvas
-       * @param {number} pi***REMOVED***el
+       * @param {number} pixel
        * @return {*}
        */
-    getValueForPi***REMOVED***el(pi***REMOVED***el: number): any;
+    getValueForPixel(pixel: number): any;
     /**
-       * Returns the location of the tick at the given inde***REMOVED***
+       * Returns the location of the tick at the given index
        * The coordinate (0, 0) is at the upper-left corner of the canvas
-       * @param {number} inde***REMOVED***
+       * @param {number} index
        * @return {number}
        */
-    getPi***REMOVED***elForTick(inde***REMOVED***: number): number;
+    getPixelForTick(index: number): number;
     /**
-       * Utility for getting the pi***REMOVED***el location of a percentage of scale
+       * Utility for getting the pixel location of a percentage of scale
        * The coordinate (0, 0) is at the upper-left corner of the canvas
        * @param {number} decimal
        * @return {number}
        */
-    getPi***REMOVED***elForDecimal(decimal: number): number;
+    getPixelForDecimal(decimal: number): number;
     /**
-       * @param {number} pi***REMOVED***el
+       * @param {number} pixel
        * @return {number}
        */
-    getDecimalForPi***REMOVED***el(pi***REMOVED***el: number): number;
+    getDecimalForPixel(pixel: number): number;
     /**
-       * Returns the pi***REMOVED***el for the minimum chart value
+       * Returns the pixel for the minimum chart value
        * The coordinate (0, 0) is at the upper-left corner of the canvas
        * @return {number}
        */
-    getBasePi***REMOVED***el(): number;
+    getBasePixel(): number;
     /**
        * @return {number}
        */
@@ -261,7 +261,7 @@ e***REMOVED***port default class Scale e***REMOVED***tends Element<import("../ty
     /**
        * @protected
        */
-    protected getConte***REMOVED***t(inde***REMOVED***: any): any;
+    protected getContext(index: any): any;
     /**
        * @return {number}
        * @private
@@ -280,10 +280,10 @@ e***REMOVED***port default class Scale e***REMOVED***tends Element<import("../ty
        * @private
        */
     private _computeLabelItems;
-    _getXA***REMOVED***isLabelAlignment(): string;
-    _getYA***REMOVED***isLabelAlignment(tl: any): {
-        te***REMOVED***tAlign: string;
-        ***REMOVED***: any;
+    _getXAxisLabelAlignment(): string;
+    _getYAxisLabelAlignment(tl: any): {
+        textAlign: string;
+        x: any;
     };
     /**
        * @private
@@ -323,21 +323,21 @@ e***REMOVED***port default class Scale e***REMOVED***tends Element<import("../ty
        */
     getMatchingVisibleMetas(type?: string): object[];
     /**
-       * @param {number} inde***REMOVED***
+       * @param {number} index
        * @return {object}
        * @protected
        */
-    protected _resolveTickFontOptions(inde***REMOVED***: number): object;
+    protected _resolveTickFontOptions(index: number): object;
     /**
      * @protected
      */
-    protected _ma***REMOVED***Digits(): number;
+    protected _maxDigits(): number;
 }
-e***REMOVED***port type Chart = import('../types/inde***REMOVED***.js').Chart;
-e***REMOVED***port type Tick = {
+export type Chart = import('../types/index.js').Chart;
+export type Tick = {
     value: number | string;
     label?: string;
     major?: boolean;
-    $conte***REMOVED***t?: any;
+    $context?: any;
 };
 import Element from "./core.element.js";

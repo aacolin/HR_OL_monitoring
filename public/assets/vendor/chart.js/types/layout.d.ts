@@ -1,8 +1,8 @@
 import {ChartArea} from './geometric.js';
 
-e***REMOVED***port type LayoutPosition = 'left' | 'top' | 'right' | 'bottom' | 'center' | 'chartArea' | {[scaleId: string]: number};
+export type LayoutPosition = 'left' | 'top' | 'right' | 'bottom' | 'center' | 'chartArea' | {[scaleId: string]: number};
 
-e***REMOVED***port interface LayoutItem {
+export interface LayoutItem {
   /**
    * The position of the item in the chart layout. Possible values are
    */
@@ -12,7 +12,7 @@ e***REMOVED***port interface LayoutItem {
    */
   weight: number;
   /**
-   * if true, and the item is horizontal, then push vertical bo***REMOVED***es down
+   * if true, and the item is horizontal, then push vertical boxes down
    */
   fullSize: boolean;
   /**

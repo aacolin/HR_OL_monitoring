@@ -48,9 +48,9 @@
       "L"
     ],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Lae alla SVG",
-      "e***REMOVED***portToPNG": "Lae alla PNG",
-      "e***REMOVED***portToCSV": "Lae alla CSV",
+      "exportToSVG": "Lae alla SVG",
+      "exportToPNG": "Lae alla PNG",
+      "exportToCSV": "Lae alla CSV",
       "menu": "Menüü",
       "selection": "Valik",
       "selectionZoom": "Valiku suum",

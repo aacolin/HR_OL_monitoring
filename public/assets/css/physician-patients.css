@@ -1,18 +1,18 @@
 #dropdownPatientslist {
     width: 20%;
-    margin-top: 10p***REMOVED***;
-    margin-bottom: 10p***REMOVED***;
-    padding: 10p***REMOVED***;
-    border-radius: 5p***REMOVED***;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
     background-color: #164582;
-    border: 1p***REMOVED*** solid #ced4da;
-    te***REMOVED***t-align: center;
+    border: 1px solid #ced4da;
+    text-align: center;
     
 }
 
 .dropdown-menu {
     width: 20%; /* Make the dropdown menu as wide as the button */
-    bo***REMOVED***-sizing: border-bo***REMOVED***; /* Include padding and border in the element's total width and height */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 .dropdown {
     padding-top: 1%;

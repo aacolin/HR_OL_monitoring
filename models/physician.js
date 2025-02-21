@@ -11,4 +11,4 @@ const physicianSchema = new db.Schema({
 
  const Physician = db.model("Physician", physicianSchema);
 
-module.e***REMOVED***ports = Physician;
+module.exports = Physician;

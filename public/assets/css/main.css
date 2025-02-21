@@ -20,11 +20,11 @@
 /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
 :root { 
   --background-color: #ffffff; /* Background color for the entire website, including individual sections */
-  --default-color: #212529; /* Default color used for the majority of the te***REMOVED***t content across the entire website */
+  --default-color: #212529; /* Default color used for the majority of the text content across the entire website */
   --heading-color: #2d465e; /* Color for headings, subheadings and title throughout the website */
   --accent-color: #559bcc; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
-  --surface-color: #ffffff; /* The surface color is used as a background of bo***REMOVED***ed elements within sections, such as cards, icon bo***REMOVED***es, or other elements that require a visual separation from the global background. */
-  --contrast-color: #ffffff; /* Contrast color for te***REMOVED***t, ensuring readability against backgrounds of accent, heading, or default colors. */
+  --surface-color: #ffffff; /* The surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background. */
+  --contrast-color: #ffffff; /* Contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors. */
 }
 
 /* Nav Menu Colors - The following color variables are used specifically for the navigation menu. They are separate from the global colors to allow for more customization options */
@@ -68,13 +68,13 @@ body {
 
 a {
   color: var(--accent-color);
-  te***REMOVED***t-decoration: none;
+  text-decoration: none;
   transition: 0.3s;
 }
 
 a:hover {
-  color: color-mi***REMOVED***(in srgb, var(--accent-color), transparent 25%);
-  te***REMOVED***t-decoration: none;
+  color: color-mix(in srgb, var(--accent-color), transparent 25%);
+  text-decoration: none;
 }
 
 h1,
@@ -96,9 +96,9 @@ h6 {
   --heading-color: #ffffff;
   color: var(--default-color);
   background-color: var(--background-color);
-  padding: 15p***REMOVED*** 0;
+  padding: 15px 0;
   transition: all 0.5s;
-  z-inde***REMOVED***: 997;
+  z-index: 997;
 }
 
 .header .logo {
@@ -106,19 +106,19 @@ h6 {
 }
 
 .header .logo img {
-  ma***REMOVED***-height: 32p***REMOVED***;
-  margin-right: 8p***REMOVED***;
+  max-height: 32px;
+  margin-right: 8px;
 }
 
 .header .logo h1 {
-  font-size: 30p***REMOVED***;
+  font-size: 30px;
   margin: 0;
   font-weight: 700;
   color: var(--heading-color);
 }
 
 .scrolled .header {
-  bo***REMOVED***-shadow: 0p***REMOVED*** 0 18p***REMOVED*** rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0 18px rgba(0, 0, 0, 0.1);
 }
 
 /* Global Header on Scroll
@@ -133,69 +133,69 @@ h6 {
 .footer {
   color: var(--default-color);
   background-color: var(--background-color);
-  font-size: 14p***REMOVED***;
-  te***REMOVED***t-align: center;
-  padding: 30p***REMOVED*** 0;
+  font-size: 14px;
+  text-align: center;
+  padding: 30px 0;
   position: relative;
 }
 
 .footer h3 {
-  font-size: 36p***REMOVED***;
+  font-size: 36px;
   font-weight: 700;
   position: relative;
   padding: 0;
-  margin: 0 0 15p***REMOVED*** 0;
+  margin: 0 0 15px 0;
 }
 
 .footer p {
   font-size: 15;
   font-style: italic;
   padding: 0;
-  margin: 0 0 30p***REMOVED*** 0;
+  margin: 0 0 30px 0;
 }
 
 .footer .social-links {
-  margin: 0 0 30p***REMOVED*** 0;
+  margin: 0 0 30px 0;
 }
 
 .footer .social-links a {
-  font-size: 16p***REMOVED***;
-  display: fle***REMOVED***;
+  font-size: 16px;
+  display: flex;
   align-items: center;
   justify-content: center;
   background: var(--accent-color);
   color: var(--contrast-color);
   line-height: 1;
-  margin: 0 4p***REMOVED***;
+  margin: 0 4px;
   border-radius: 50%;
-  te***REMOVED***t-align: center;
-  width: 36p***REMOVED***;
-  height: 36p***REMOVED***;
+  text-align: center;
+  width: 36px;
+  height: 36px;
   transition: 0.3s;
 }
 
 .footer .social-links a:hover {
-  background: color-mi***REMOVED***(in srgb, var(--accent-color), transparent 20%);
-  te***REMOVED***t-decoration: none;
+  background: color-mix(in srgb, var(--accent-color), transparent 20%);
+  text-decoration: none;
 }
 
 .footer .copyright {
-  padding-top: 25p***REMOVED***;
-  border-top: 1p***REMOVED*** solid color-mi***REMOVED***(in srgb, var(--default-color), transparent 90%);
+  padding-top: 25px;
+  border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
 }
 
 .footer .credits {
-  font-size: 13p***REMOVED***;
-  padding-top: 5p***REMOVED***;
+  font-size: 13px;
+  padding-top: 5px;
 }
 
 /*--------------------------------------------------------------
 # Preloader
 --------------------------------------------------------------*/
 #preloader {
-  position: fi***REMOVED***ed;
+  position: fixed;
   inset: 0;
-  z-inde***REMOVED***: 999999;
+  z-index: 999999;
   overflow: hidden;
   background: var(--background-color);
   transition: all 0.6s ease-out;
@@ -203,14 +203,14 @@ h6 {
 
 #preloader:before {
   content: "";
-  position: fi***REMOVED***ed;
-  top: calc(50% - 30p***REMOVED***);
-  left: calc(50% - 30p***REMOVED***);
-  border: 6p***REMOVED*** solid #ffffff;
+  position: fixed;
+  top: calc(50% - 30px);
+  left: calc(50% - 30px);
+  border: 6px solid #ffffff;
   border-color: var(--accent-color) transparent var(--accent-color) transparent;
   border-radius: 50%;
-  width: 60p***REMOVED***;
-  height: 60p***REMOVED***;
+  width: 60px;
+  height: 60px;
   animation: animate-preloader 1.5s linear infinite;
 }
 
@@ -228,27 +228,27 @@ h6 {
 # Scroll Top Button
 --------------------------------------------------------------*/
 .scroll-top {
-  position: fi***REMOVED***ed;
+  position: fixed;
   visibility: hidden;
   opacity: 0;
-  right: 15p***REMOVED***;
-  bottom: 15p***REMOVED***;
-  z-inde***REMOVED***: 99999;
+  right: 15px;
+  bottom: 15px;
+  z-index: 99999;
   background-color: var(--accent-color);
-  width: 40p***REMOVED***;
-  height: 40p***REMOVED***;
-  border-radius: 4p***REMOVED***;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
   transition: all 0.4s;
 }
 
 .scroll-top i {
-  font-size: 24p***REMOVED***;
+  font-size: 24px;
   color: var(--contrast-color);
   line-height: 0;
 }
 
 .scroll-top:hover {
-  background-color: color-mi***REMOVED***(in srgb, var(--accent-color), transparent 20%);
+  background-color: color-mix(in srgb, var(--accent-color), transparent 20%);
   color: var(--contrast-color);
 }
 
@@ -260,7 +260,7 @@ h6 {
 /*--------------------------------------------------------------
 # Disable aos animation delay on mobile devices
 --------------------------------------------------------------*/
-@media screen and (ma***REMOVED***-width: 768p***REMOVED***) {
+@media screen and (max-width: 768px) {
   [data-aos-delay] {
     transition-delay: 0 !important;
   }
@@ -275,44 +275,44 @@ h6 {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding: 160p***REMOVED*** 0 80p***REMOVED*** 0;
-  te***REMOVED***t-align: center;
+  padding: 160px 0 80px 0;
+  text-align: center;
   position: relative;
 }
 
 .page-title:before {
   content: "";
-  background-color: color-mi***REMOVED***(in srgb, var(--background-color), transparent 50%);
+  background-color: color-mix(in srgb, var(--background-color), transparent 50%);
   position: absolute;
   inset: 0;
 }
 
 .page-title h1 {
-  font-size: 42p***REMOVED***;
+  font-size: 42px;
   font-weight: 700;
-  margin-bottom: 10p***REMOVED***;
+  margin-bottom: 10px;
 }
 
 .page-title .breadcrumbs ol {
-  display: fle***REMOVED***;
-  fle***REMOVED***-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
   list-style: none;
   justify-content: center;
   padding: 0;
   margin: 0;
-  font-size: 16p***REMOVED***;
+  font-size: 16px;
   font-weight: 400;
 }
 
 .page-title .breadcrumbs ol li+li {
-  padding-left: 10p***REMOVED***;
+  padding-left: 10px;
 }
 
 .page-title .breadcrumbs ol li+li::before {
   content: "/";
   display: inline-block;
-  padding-right: 10p***REMOVED***;
-  color: color-mi***REMOVED***(in srgb, var(--default-color), transparent 50%);
+  padding-right: 10px;
+  color: color-mix(in srgb, var(--default-color), transparent 50%);
 }
 
 /*--------------------------------------------------------------
@@ -322,16 +322,16 @@ section,
 .section {
   color: var(--default-color);
   background-color: var(--background-color);
-  padding: 60p***REMOVED*** 0;
-  scroll-margin-top: 90p***REMOVED***;
+  padding: 60px 0;
+  scroll-margin-top: 90px;
   overflow: clip;
 }
 
-@media (ma***REMOVED***-width: 1199p***REMOVED***) {
+@media (max-width: 1199px) {
 
   section,
   .section {
-    scroll-margin-top: 66p***REMOVED***;
+    scroll-margin-top: 66px;
   }
 }
 
@@ -339,15 +339,15 @@ section,
 # Global Section Titles
 --------------------------------------------------------------*/
 .section-title {
-  te***REMOVED***t-align: center;
-  padding-bottom: 60p***REMOVED***;
+  text-align: center;
+  padding-bottom: 60px;
   position: relative;
 }
 
 .section-title h2 {
-  font-size: 32p***REMOVED***;
+  font-size: 32px;
   font-weight: 700;
-  margin-bottom: 15p***REMOVED***;
+  margin-bottom: 15px;
 }
 
 .section-title p {
@@ -361,55 +361,55 @@ section,
   width: 100%;
   min-height: 80vh;
   position: relative;
-  padding: 120p***REMOVED*** 0 60p***REMOVED*** 0;
-  display: fle***REMOVED***;
+  padding: 120px 0 60px 0;
+  display: flex;
   align-items: center;
   background: url(../img/hero-bg.jpg);
 }
 
 .hero:before {
   content: "";
-  background: color-mi***REMOVED***(in srgb, var(--background-color), transparent 30%);
+  background: color-mix(in srgb, var(--background-color), transparent 30%);
   position: absolute;
   inset: 0;
-  z-inde***REMOVED***: 2;
+  z-index: 2;
 }
 
 .hero .container {
   position: relative;
-  z-inde***REMOVED***: 3;
+  z-index: 3;
 }
 
 .hero h2 {
   margin: 0;
-  font-size: 48p***REMOVED***;
+  font-size: 48px;
   font-weight: 700;
-  line-height: 56p***REMOVED***;
+  line-height: 56px;
 }
 
 .hero p {
-  color: color-mi***REMOVED***(in srgb, var(--default-color), transparent 30%);
-  margin: 5p***REMOVED*** 0 10p***REMOVED*** 0;
-  font-size: 20p***REMOVED***;
+  color: color-mix(in srgb, var(--default-color), transparent 30%);
+  margin: 5px 0 10px 0;
+  font-size: 20px;
   font-weight: 400;
 }
 
 .hero .download-btn {
   color: var(--contrast-default);
-  background: color-mi***REMOVED***(in srgb, var(--default-color), transparent 90%);
+  background: color-mix(in srgb, var(--default-color), transparent 90%);
   font-family: var(--heading-font);
   font-weight: 500;
-  font-size: 15p***REMOVED***;
-  padding: 8p***REMOVED*** 30p***REMOVED*** 10p***REMOVED*** 30p***REMOVED***;
-  border-radius: 3p***REMOVED***;
+  font-size: 15px;
+  padding: 8px 30px 10px 30px;
+  border-radius: 3px;
   transition: 0.5s;
-  display: fle***REMOVED***;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .hero .download-btn+.download-btn {
-  margin-left: 20p***REMOVED***;
+  margin-left: 20px;
 }
 
 .hero .download-btn:hover {
@@ -418,40 +418,40 @@ section,
 }
 
 .hero .download-btn i {
-  font-size: 16p***REMOVED***;
+  font-size: 16px;
   line-height: 0;
-  margin-right: 8p***REMOVED***;
+  margin-right: 8px;
 }
 
 .hero .hero-img {
   position: relative;
-  min-height: 600p***REMOVED***;
+  min-height: 600px;
 }
 
 .hero .hero-img .phone-1 {
-  margin-top: 20p***REMOVED***;
+  margin-top: 20px;
   position: absolute;
   left: 0;
-  bo***REMOVED***-shadow: 0 15p***REMOVED*** 50p***REMOVED*** 0 rgba(0, 0, 0, 0.5);
-  border-radius: 30p***REMOVED***;
-  width: 250p***REMOVED***;
+  box-shadow: 0 15px 50px 0 rgba(0, 0, 0, 0.5);
+  border-radius: 30px;
+  width: 250px;
 }
 
 .hero .hero-img .phone-2 {
   position: absolute;
   left: 0;
-  bo***REMOVED***-shadow: 0 15p***REMOVED*** 50p***REMOVED*** 0 rgba(0, 0, 0, 0.5);
-  border-radius: 30p***REMOVED***;
-  width: 250p***REMOVED***;
-  margin-top: 70p***REMOVED***;
-  margin-left: 100p***REMOVED***;
+  box-shadow: 0 15px 50px 0 rgba(0, 0, 0, 0.5);
+  border-radius: 30px;
+  width: 250px;
+  margin-top: 70px;
+  margin-left: 100px;
 }
 
-@media screen and (ma***REMOVED***-width: 992p***REMOVED***) {
+@media screen and (max-width: 992px) {
   .hero .hero-img {
-    te***REMOVED***t-align: center;
+    text-align: center;
     overflow: hidden;
-    min-height: 600p***REMOVED***;
+    min-height: 600px;
   }
 
   .hero .hero-img .phone-1,
@@ -461,21 +461,21 @@ section,
   }
 }
 
-@media (ma***REMOVED***-width: 768p***REMOVED***) {
+@media (max-width: 768px) {
   .hero h2 {
-    font-size: 28p***REMOVED***;
-    line-height: 36p***REMOVED***;
+    font-size: 28px;
+    line-height: 36px;
   }
 
   .hero p {
-    font-size: 18p***REMOVED***;
-    line-height: 24p***REMOVED***;
-    margin-bottom: 30p***REMOVED***;
+    font-size: 18px;
+    line-height: 24px;
+    margin-bottom: 30px;
   }
 
   .hero .download-btn {
-    font-size: 14p***REMOVED***;
-    padding: 8p***REMOVED*** 20p***REMOVED*** 10p***REMOVED*** 20p***REMOVED***;
+    font-size: 14px;
+    padding: 8px 20px 10px 20px;
   }
 }
 
@@ -484,20 +484,20 @@ section,
 # Cards Section
 --------------------------------------------------------------*/
 .cards .steps-img img {
-  ma***REMOVED***-width: 575p***REMOVED***;
+  max-width: 575px;
 }
 
 
 
-@media (ma***REMOVED***-width: 575p***REMOVED***) {
+@media (max-width: 575px) {
   .cards .steps-img img {
-    ma***REMOVED***-width: 100%;
+    max-width: 100%;
   }
 }
 
 .cards .card-item {
-  background: color-mi***REMOVED***(in srgb, var(--default-color), transparent 97%);
-  padding: 50p***REMOVED*** 30p***REMOVED***;
+  background: color-mix(in srgb, var(--default-color), transparent 97%);
+  padding: 50px 30px;
   transition: all ease-in-out 0.3s;
   height: 100%;
   position: relative;
@@ -506,15 +506,15 @@ section,
 .cards .card-item span {
   color: var(--accent-color);
   display: block;
-  font-size: 28p***REMOVED***;
+  font-size: 28px;
   font-weight: 700;
 }
 
 .cards .card-item h4 {
-  font-size: 24p***REMOVED***;
+  font-size: 24px;
   font-weight: 600;
   padding: 0;
-  margin: 20p***REMOVED*** 0;
+  margin: 20px 0;
 }
 
 .cards .card-item h4 a {
@@ -522,15 +522,15 @@ section,
 }
 
 .cards .card-item p {
-  font-size: 15p***REMOVED***;
-  color: color-mi***REMOVED***(in srgb, var(--default-color), transparent 40%);
+  font-size: 15px;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
   margin: 0;
   padding: 0;
 }
 
 .cards .card-item:hover {
   background: var(--accent-color);
-  padding: 30p***REMOVED*** 30p***REMOVED*** 70p***REMOVED*** 30p***REMOVED***;
+  padding: 30px 30px 70px 30px;
 }
 
 .cards .card-item:hover span,
@@ -543,22 +543,22 @@ section,
 # Features Section
 --------------------------------------------------------------*/
 .features .features-item {
-  color: color-mi***REMOVED***(in srgb, var(--default-color), transparent 20%);
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
 }
 
 .features .features-item+.features-item {
-  margin-top: 100p***REMOVED***;
+  margin-top: 100px;
 }
 
-@media (ma***REMOVED***-width: 640p***REMOVED***) {
+@media (max-width: 640px) {
   .features .features-item+.features-item {
-    margin-top: 40p***REMOVED***;
+    margin-top: 40px;
   }
 }
 
 .features .features-item h3 {
   font-weight: 700;
-  font-size: 26p***REMOVED***;
+  font-size: 26px;
 }
 
 .features .features-item ul {
@@ -567,8 +567,8 @@ section,
 }
 
 .features .features-item ul li {
-  padding-bottom: 10p***REMOVED***;
-  display: fle***REMOVED***;
+  padding-bottom: 10px;
+  display: flex;
   align-items: center;
 }
 
@@ -577,8 +577,8 @@ section,
 }
 
 .features .features-item ul i {
-  font-size: 20p***REMOVED***;
-  padding-right: 4p***REMOVED***;
+  font-size: 20px;
+  padding-right: 4px;
   color: var(--accent-color);
 }
 

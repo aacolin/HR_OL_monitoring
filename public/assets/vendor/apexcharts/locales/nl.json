@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Download SVG",
-      "e***REMOVED***portToPNG": "Download PNG",
-      "e***REMOVED***portToCSV": "Download CSV",
+      "exportToSVG": "Download SVG",
+      "exportToPNG": "Download PNG",
+      "exportToCSV": "Download CSV",
       "menu": "Menu",
       "selection": "Selectie",
       "selectionZoom": "Zoom selectie",

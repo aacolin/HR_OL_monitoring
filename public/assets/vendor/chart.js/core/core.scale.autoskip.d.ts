@@ -1,6 +1,6 @@
 /**
  * @typedef { import('./core.controller.js').default } Chart
- * @typedef {{value:number | string, label?:string, major?:boolean, $conte***REMOVED***t?:any}} Tick
+ * @typedef {{value:number | string, label?:string, major?:boolean, $context?:any}} Tick
  */
 /**
  * Returns a subset of ticks to be plotted to avoid overlapping labels.
@@ -9,11 +9,11 @@
  * @return {Tick[]}
  * @private
  */
-e***REMOVED***port function autoSkip(scale: import('./core.scale.js').default, ticks: Tick[]): Tick[];
-e***REMOVED***port type Chart = import('./core.controller.js').default;
-e***REMOVED***port type Tick = {
+export function autoSkip(scale: import('./core.scale.js').default, ticks: Tick[]): Tick[];
+export type Chart = import('./core.controller.js').default;
+export type Tick = {
     value: number | string;
     label?: string;
     major?: boolean;
-    $conte***REMOVED***t?: any;
+    $context?: any;
 };

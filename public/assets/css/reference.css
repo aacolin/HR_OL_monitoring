@@ -1,15 +1,15 @@
 #references .container {
   background-color: #2090ad; 
-  bo***REMOVED***-shadow: 0 4p***REMOVED*** 8p***REMOVED*** rgba(0, 0, 0, 0.1); /* Shadow effect */
-  border-radius: 8p***REMOVED***; /* Rounded corners */
-  padding: 20p***REMOVED***; /* Padding inside the container */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
+  border-radius: 8px; /* Rounded corners */
+  padding: 20px; /* Padding inside the container */
   margin: 0 auto; /* Center the container */
-  ma***REMOVED***-width: 70% !important; /* Ensure full width */
+  max-width: 70% !important; /* Ensure full width */
 }
 
 #references .section-header {
-  te***REMOVED***t-align: center; /* Center the te***REMOVED***t */
-  margin-bottom: 20p***REMOVED***; /* Space below the header */
+  text-align: center; /* Center the text */
+  margin-bottom: 20px; /* Space below the header */
 }
 
 #references .section-title {
@@ -20,16 +20,16 @@
 #references .section-bg {
   padding: 0; /* Remove padding inside the sections */
   background-color: #2090ad; /* Slightly darker blue background for sections */
-  border-radius: 8p***REMOVED***; /* Rounded corners for sections */
-  margin-bottom: 20p***REMOVED***; /* Space below each section */
+  border-radius: 8px; /* Rounded corners for sections */
+  margin-bottom: 20px; /* Space below each section */
   width: 100% !important; /* Ensure full width */
 }
 
 #references .section-content {
   background-color: #2090ad; /* Slightly darker blue background */
   width: 100% !important; /* Ensure full width */
-  padding: 20p***REMOVED***; /* Padding inside the content */
-  border-radius: 8p***REMOVED***; /* Rounded corners */
+  padding: 20px; /* Padding inside the content */
+  border-radius: 8px; /* Rounded corners */
 }
 
 #references .full-width {

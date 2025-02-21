@@ -19,8 +19,8 @@
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/bo***REMOVED***icons/css/bo***REMOVED***icons.min.css" rel="stylesheet">
-  <link href="assets/vendor/remi***REMOVED***icon/remi***REMOVED***icon.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
@@ -39,9 +39,9 @@
 <body class="hidden" >
 
   <!-- ======= Header ======= -->
-  <header id="header" class="header fi***REMOVED***ed-top d-fle***REMOVED*** align-items-center">
-    <div class="d-fle***REMOVED*** align-items-center justify-content-between">
-      <a href="devices.html" class="logo d-fle***REMOVED*** align-items-center">
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="devices.html" class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="">
         <span class="d-none d-lg-block">Saguaro</span>
       </a>
@@ -49,14 +49,14 @@
     </div><!-- End Logo -->
 
     <div class="search-bar">
-      <form class="search-form d-fle***REMOVED*** align-items-center" method="POST" action="#">
-        <input type="te***REMOVED***t" name="query" placeholder="Search" title="Enter search keyword">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
         <button type="submit" title="Search"><i class="bi bi-search"></i></button>
       </form>
     </div><!-- End Search Bar -->
 
     <nav class="header-nav ms-auto">
-      <ul class="d-fle***REMOVED*** align-items-center">
+      <ul class="d-flex align-items-center">
 
         <li class="nav-item d-block d-lg-none">
           <a class="nav-link nav-icon search-bar-toggle " href="#">
@@ -71,7 +71,7 @@
 
         <li class="nav-item dropdown pe-3">
 
-          <a class="nav-link nav-profile d-fle***REMOVED*** align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <!-- <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle"> -->
             <span class="d-none d-md-block dropdown-toggle ps-2">Menu</span>
           </a><!-- End Profile Iamge Icon -->
@@ -85,7 +85,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-fle***REMOVED*** align-items-center" href="user-profile.html">
+              <a class="dropdown-item d-flex align-items-center" href="user-profile.html">
                 <i class="bi bi-person"></i>
                 <span>My Profile</span>
               </a>
@@ -95,7 +95,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-fle***REMOVED*** align-items-center" href="user-profile.html">
+              <a class="dropdown-item d-flex align-items-center" href="user-profile.html">
                 <i class="bi bi-gear"></i>
                 <span>Account Settings</span>
               </a>
@@ -105,7 +105,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-fle***REMOVED*** align-items-center" href="#">
+              <a class="dropdown-item d-flex align-items-center" href="#">
                 <i class="bi bi-question-circle"></i>
                 <span>Need Help?</span>
               </a>
@@ -115,8 +115,8 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-fle***REMOVED*** align-items-center logout" href="#">
-                <i class="bi bi-bo***REMOVED***-arrow-right"></i>
+              <a class="dropdown-item d-flex align-items-center logout" href="#">
+                <i class="bi bi-box-arrow-right"></i>
                 <span>Sign Out</span>
               </a>
             </li>
@@ -153,14 +153,14 @@
 
       <li class="nav-item">
         <a class="nav-link" href="devices.html">
-          <i class="b***REMOVED*** b***REMOVED***-pulse"></i>
+          <i class="bx bx-pulse"></i>
           <span>Devices</span>
         </a>
       </li>
 
       <li class="nav-item">
         <a class="logout nav-link collapsed" href="#">
-          <i class="bi bi-bo***REMOVED***-arrow-right"></i>
+          <i class="bi bi-box-arrow-right"></i>
           <span>Sign Out</span>
         </a>
       </li><!-- End Login Page Nav -->
@@ -183,10 +183,10 @@
 
     <section class="section profile">
       <div class="row">
-        <div class="col-***REMOVED***l-4">
+        <div class="col-xl-4">
 
           <div class="card">
-            <div class="card-body profile-card pt-4 d-fle***REMOVED*** fle***REMOVED***-column align-items-center">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
               <h2 class="userName deviceName">Device Name</h2>
             </div>
             <div id="deviceImageDiv">
@@ -197,24 +197,24 @@
 
         </div>
 
-        <div class="col-***REMOVED***l-8">
+        <div class="col-xl-8">
 
           <div class="card">
             <div class="card-body pt-3">
 
               <!-- Default Tabs -->
-              <ul class="nav nav-tabs d-fle***REMOVED***" id="myTabjustified" role="tablist">
+              <ul class="nav nav-tabs d-flex" id="myTabjustified" role="tablist">
                 
-                <li class="nav-item fle***REMOVED***-fill" role="presentation">
+                <li class="nav-item flex-fill" role="presentation">
                   <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-justified" type="button" role="tab" aria-controls="home" aria-selected="true">Details</button>
                 </li>
-                <li class="nav-item fle***REMOVED***-fill" role="presentation">
+                <li class="nav-item flex-fill" role="presentation">
                   <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-justified" type="button" role="tab" aria-controls="profile" aria-selected="false">Add Device</button>
                 </li>
-                <li class="nav-item fle***REMOVED***-fill" role="presentation">
+                <li class="nav-item flex-fill" role="presentation">
                   <button class="nav-link w-100" id="change-tab" data-bs-toggle="tab" data-bs-target="#change-justified" type="button" role="tab" aria-controls="change" aria-selected="false">Change Device</button>
                 </li>
-                <li class="nav-item fle***REMOVED***-fill" role="presentation">
+                <li class="nav-item flex-fill" role="presentation">
                   <button class="nav-link w-100" id="change-tab" data-bs-toggle="tab" data-bs-target="#remove-justified" type="button" role="tab" aria-controls="remove" aria-selected="false">Remove Device</button>
                 </li>
               </ul>
@@ -244,18 +244,18 @@
                   <div class="row mb-3">
                     <div class="col-lg-3 col-md-4 label">Device Id:</div>
                     <div class="col-lg-9 col-md-8">
-                      <input type="te***REMOVED***t" class="form-control" id="newDeviceId" placeholder="Enter Device Id">
+                      <input type="text" class="form-control" id="newDeviceId" placeholder="Enter Device Id">
                     </div>
                   </div>
                   <div class="row mb-3">
                     <div class="col-lg-3 col-md-4 label">Device Name:</div>
                     <div class="col-lg-9 col-md-8">
-                      <input type="te***REMOVED***t" class="form-control" id="newDeviceName" placeholder="Enter Device Name (Optional)">
+                      <input type="text" class="form-control" id="newDeviceName" placeholder="Enter Device Name (Optional)">
                     </div>
                   </div>
                   <div class="errorDiv" ></div>
                   <div class="row">
-                    <div class="col-lg-12 d-fle***REMOVED*** justify-content-end">
+                    <div class="col-lg-12 d-flex justify-content-end">
                       <button type="submit" class=" btn btn-primary me-2" id="addDeviceButton">Add Device</button>
                       <button type="button" class="btn btn-secondary" id="cancelButton">Cancel</button>
                     </div>
@@ -273,7 +273,7 @@
                   </div>
                   <div class="errorDiv" ></div>
                   <div class="row">
-                    <div class="col-lg-12 d-fle***REMOVED*** justify-content-end">
+                    <div class="col-lg-12 d-flex justify-content-end">
                       <button type="button" class="btn btn-primary" id="changeDeviceButton">Change Device</button>
                     </div>
                   </div>
@@ -290,7 +290,7 @@
                   </div>
                   <div class="errorDiv" ></div>
                   <div class="row">
-                    <div class="col-lg-12 d-fle***REMOVED*** justify-content-end">
+                    <div class="col-lg-12 d-flex justify-content-end">
                       <button type="button" class="btn btn-primary" id="removeDeviceButton">Remove Device</button>
                     </div>
                   </div>
@@ -317,12 +317,12 @@
     </div>
   </footer><!-- End Footer -->
 
-  <a href="#" class="back-to-top d-fle***REMOVED*** align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <!-- Vendor JS Files -->
-  <script src="assets/vendor/ape***REMOVED***charts/ape***REMOVED***charts.min.js"></script>
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   
   <!-- Template Prject JS Files -->

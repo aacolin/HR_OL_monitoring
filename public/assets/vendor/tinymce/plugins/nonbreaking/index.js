@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "nonbreaking" plugin for usage with module loaders
+// Exports the "nonbreaking" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/nonbreaking')

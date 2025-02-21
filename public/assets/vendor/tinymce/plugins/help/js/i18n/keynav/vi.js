@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.vi',
   '\n' +
   '<dl>\n' +
   '  <dt>Tập trung vào thanh menu</dt>\n' +
-  '  <dd>Windows hoặc Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows hoặc Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Tập trung vào thanh công cụ</dt>\n' +
-  '  <dd>Windows hoặc Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows hoặc Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Tập trung vào chân trang</dt>\n' +
-  '  <dd>Windows hoặc Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows hoặc Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Tập trung vào thông báo</dt>\n' +
-  '  <dd>Windows hoặc Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows hoặc Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>Tập trung vào thanh công cụ ngữ cảnh</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** hoặc macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux hoặc macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Điều hướng sẽ bắt đầu từ mục UI đầu tiên. Mục này sẽ được tô sáng hoặc có gạch dưới (nếu là mục đầu tiên trong\n' +
@@ -57,14 +57,14 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.vi',
   '  <li>di chuyển giữa các mục trong đường dẫn phần tử của chân trang.</li>\n' +
   '</ul>\n' +
   '\n' +
-  '<p>Các phím mũi tên <strong>Hướng ***REMOVED***uống</strong> và <strong>Hướng lên</strong></p>\n' +
+  '<p>Các phím mũi tên <strong>Hướng xuống</strong> và <strong>Hướng lên</strong></p>\n' +
   '\n' +
   '<ul>\n' +
   '  <li>di chuyển giữa các mục menu trong menu.</li>\n' +
   '  <li>di chuyển giữa các mục trong menu thanh công cụ dạng bật lên.</li>\n' +
   '</ul>\n' +
   '\n' +
-  '<p>Các phím <strong>mũi tên</strong> ***REMOVED***oay vòng trong một phần UI tập trung.</p>\n' +
+  '<p>Các phím <strong>mũi tên</strong> xoay vòng trong một phần UI tập trung.</p>\n' +
   '\n' +
   '<p>Để đóng một menu mở, một menu phụ đang mở, hoặc một menu dạng bật lên đang mở, hãy ấn phím <strong>Esc</strong>.</p>\n' +
   '\n' +
@@ -90,4 +90,4 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.vi',
   '  <strong>Shift+Tab</strong>.</p>\n' +
   '\n' +
   '<p>Chuyển sang một tab hộp thoại khác bằng cách chuyển trọng tâm vào menu tab, rồi ấn phím <strong>Mũi tên</strong> phù hợp\n' +
-  '  để ***REMOVED***oay vòng các tab hiện có.</p>\n');
+  '  để xoay vòng các tab hiện có.</p>\n');

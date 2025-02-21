@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "wordcount" plugin for usage with module loaders
+// Exports the "wordcount" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/wordcount')

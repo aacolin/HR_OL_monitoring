@@ -13,7 +13,7 @@
 
     const insertChar = (editor, chr) => {
       const evtChr = fireInsertCustomChar(editor, chr).chr;
-      editor.e***REMOVED***ecCommand('mceInsertContent', false, evtChr);
+      editor.execCommand('mceInsertContent', false, evtChr);
     };
 
     const hasProto = (v, constructor, predicate) => {
@@ -24,13 +24,13 @@
         return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
       }
     };
-    const typeOf = ***REMOVED*** => {
-      const t = typeof ***REMOVED***;
-      if (***REMOVED*** === null) {
+    const typeOf = x => {
+      const t = typeof x;
+      if (x === null) {
         return 'null';
-      } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+      } else if (t === 'object' && Array.isArray(x)) {
         return 'array';
-      } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
         return 'string';
       } else {
         return t;
@@ -91,7 +91,7 @@
           return Optional.none();
         }
       }
-      e***REMOVED***ists(predicate) {
+      exists(predicate) {
         return this.tag && predicate(this.value);
       }
       forall(predicate) {
@@ -147,46 +147,46 @@
     Optional.singletonNone = new Optional(false);
 
     const nativePush = Array.prototype.push;
-    const map = (***REMOVED***s, f) => {
-      const len = ***REMOVED***s.length;
+    const map = (xs, f) => {
+      const len = xs.length;
       const r = new Array(len);
       for (let i = 0; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        r[i] = f(***REMOVED***, i);
+        const x = xs[i];
+        r[i] = f(x, i);
       }
       return r;
     };
-    const each = (***REMOVED***s, f) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        f(***REMOVED***, i);
+    const each = (xs, f) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        f(x, i);
       }
     };
-    const findUntil = (***REMOVED***s, pred, until) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
-          return Optional.some(***REMOVED***);
-        } else if (until(***REMOVED***, i)) {
+    const findUntil = (xs, pred, until) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
+          return Optional.some(x);
+        } else if (until(x, i)) {
           break;
         }
       }
       return Optional.none();
     };
-    const find = (***REMOVED***s, pred) => {
-      return findUntil(***REMOVED***s, pred, never);
+    const find = (xs, pred) => {
+      return findUntil(xs, pred, never);
     };
-    const flatten = ***REMOVED***s => {
+    const flatten = xs => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; ++i) {
-        if (!isArray$1(***REMOVED***s[i])) {
-          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + ***REMOVED***s);
+      for (let i = 0, len = xs.length; i < len; ++i) {
+        if (!isArray$1(xs[i])) {
+          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + xs);
         }
-        nativePush.apply(r, ***REMOVED***s[i]);
+        nativePush.apply(r, xs[i]);
       }
       return r;
     };
-    const bind = (***REMOVED***s, f) => flatten(map(***REMOVED***s, f));
+    const bind = (xs, f) => flatten(map(xs, f));
 
     var global = tinymce.util.Tools.resolve('tinymce.util.Tools');
 
@@ -366,7 +366,7 @@
           ]
         },
         {
-          name: 'Te***REMOVED***t',
+          name: 'Text',
           characters: [
             [
               169,
@@ -511,7 +511,7 @@
             ],
             [
               161,
-              'inverted e***REMOVED***clamation mark'
+              'inverted exclamation mark'
             ],
             [
               191,
@@ -519,7 +519,7 @@
             ],
             [
               710,
-              'circumfle***REMOVED*** accent'
+              'circumflex accent'
             ],
             [
               732,
@@ -604,7 +604,7 @@
             ],
             [
               8773,
-              'appro***REMOVED***imately equal to'
+              'approximately equal to'
             ],
             [
               8776,
@@ -664,7 +664,7 @@
             ],
             [
               8707,
-              'there e***REMOVED***ists'
+              'there exists'
             ],
             [
               8709,
@@ -689,7 +689,7 @@
           ]
         },
         {
-          name: 'E***REMOVED***tended Latin',
+          name: 'Extended Latin',
           characters: [
             [
               192,
@@ -701,7 +701,7 @@
             ],
             [
               194,
-              'A - circumfle***REMOVED***'
+              'A - circumflex'
             ],
             [
               195,
@@ -737,7 +737,7 @@
             ],
             [
               202,
-              'E - circumfle***REMOVED***'
+              'E - circumflex'
             ],
             [
               203,
@@ -757,7 +757,7 @@
             ],
             [
               206,
-              'I - circumfle***REMOVED***'
+              'I - circumflex'
             ],
             [
               207,
@@ -785,7 +785,7 @@
             ],
             [
               212,
-              'O - circumfle***REMOVED***'
+              'O - circumflex'
             ],
             [
               213,
@@ -821,7 +821,7 @@
             ],
             [
               219,
-              'U - circumfle***REMOVED***'
+              'U - circumflex'
             ],
             [
               220,
@@ -857,7 +857,7 @@
             ],
             [
               226,
-              'a - circumfle***REMOVED***'
+              'a - circumflex'
             ],
             [
               227,
@@ -893,7 +893,7 @@
             ],
             [
               234,
-              'e - circumfle***REMOVED***'
+              'e - circumflex'
             ],
             [
               235,
@@ -913,7 +913,7 @@
             ],
             [
               238,
-              'i - circumfle***REMOVED***'
+              'i - circumflex'
             ],
             [
               239,
@@ -941,7 +941,7 @@
             ],
             [
               244,
-              'o - circumfle***REMOVED***'
+              'o - circumflex'
             ],
             [
               245,
@@ -977,7 +977,7 @@
             ],
             [
               251,
-              'u - circumfle***REMOVED***'
+              'u - circumflex'
             ],
             [
               252,
@@ -1153,7 +1153,7 @@
             ],
             [
               958,
-              '***REMOVED***i'
+              'xi'
             ],
             [
               959,
@@ -1407,7 +1407,7 @@
       }
       return [];
     };
-    const e***REMOVED***tendCharMap = (editor, charmap) => {
+    const extendCharMap = (editor, charmap) => {
       const userCharMap = getCharMap$1(editor);
       if (userCharMap) {
         charmap = [{
@@ -1433,7 +1433,7 @@
       return charmap;
     };
     const getCharMap = editor => {
-      const groups = e***REMOVED***tendCharMap(editor, getDefaultCharMap());
+      const groups = extendCharMap(editor, getDefaultCharMap());
       return groups.length > 1 ? [{
           name: 'All',
           characters: bind(groups, g => g.characters)
@@ -1489,9 +1489,9 @@
     };
 
     const contains = (str, substr, start = 0, end) => {
-      const id***REMOVED*** = str.inde***REMOVED***Of(substr, start);
-      if (id***REMOVED*** !== -1) {
-        return isUndefined(end) ? true : id***REMOVED*** + substr.length <= end;
+      const idx = str.indexOf(substr, start);
+      if (idx !== -1) {
+        return isUndefined(end) ? true : idx + substr.length <= end;
       } else {
         return false;
       }
@@ -1514,7 +1514,7 @@
         }
       });
       return map(matches, m => ({
-        te***REMOVED***t: m[1],
+        text: m[1],
         value: fromCodePoint(m[0]),
         icon: fromCodePoint(m[0])
       }));
@@ -1570,7 +1570,7 @@
         buttons: [{
             type: 'cancel',
             name: 'close',
-            te***REMOVED***t: 'Close',
+            text: 'Close',
             primary: true
           }],
         initialData,
@@ -1605,7 +1605,7 @@
         trigger: ':',
         columns: 'auto',
         minChars: 2,
-        fetch: (pattern, _ma***REMOVED***Results) => new Promise((resolve, _reject) => {
+        fetch: (pattern, _maxResults) => new Promise((resolve, _reject) => {
           resolve(scan(all, pattern));
         }),
         onAction: (autocompleteApi, rng, value) => {
@@ -1627,7 +1627,7 @@
       };
     };
     const register = editor => {
-      const onAction = () => editor.e***REMOVED***ecCommand('mceShowCharmap');
+      const onAction = () => editor.execCommand('mceShowCharmap');
       editor.ui.registry.addButton('charmap', {
         icon: 'insert-character',
         tooltip: 'Special character',
@@ -1636,7 +1636,7 @@
       });
       editor.ui.registry.addMenuItem('charmap', {
         icon: 'insert-character',
-        te***REMOVED***t: 'Special character...',
+        text: 'Special character...',
         onAction,
         onSetup: onSetupEditable(editor)
       });

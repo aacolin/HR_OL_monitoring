@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.sk',
   '\n' +
   '<dl>\n' +
   '  <dt>Prejsť na panel s ponukami</dt>\n' +
-  '  <dd>Windows alebo Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows alebo Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Prejsť na panel nástrojov</dt>\n' +
-  '  <dd>Windows alebo Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows alebo Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Prejsť na pätičku</dt>\n' +
-  '  <dd>Windows alebo Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows alebo Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Zaostriť na oznámenie</dt>\n' +
-  '  <dd>Windows alebo Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
-  '  <dt>Prejsť na konte***REMOVED***tový panel nástrojov</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** alebo macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows alebo Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
+  '  <dt>Prejsť na kontextový panel nástrojov</dt>\n' +
+  '  <dd>Windows, Linux alebo macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Navigácia začne pri prvej položke používateľského rozhrania, ktorá bude zvýraznená alebo v prípade prvej položky\n' +
@@ -61,12 +61,12 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.sk',
   '\n' +
   '<ul>\n' +
   '  <li>umožňujú presun medzi položkami ponuky,</li>\n' +
-  '  <li>umožňujú presun medzi položkami v konte***REMOVED***tovej ponuke panela nástrojov.</li>\n' +
+  '  <li>umožňujú presun medzi položkami v kontextovej ponuke panela nástrojov.</li>\n' +
   '</ul>\n' +
   '\n' +
   '<p>Klávesy so <strong>šípkami</strong> vykonávajú prepínanie v rámci vybranej časti používateľského rozhrania.</p>\n' +
   '\n' +
-  '<p>Ak chcete zatvoriť otvorenú ponuku, otvorenú podponuku alebo otvorenú konte***REMOVED***tovú ponuku, stlačte kláves <strong>Esc</strong>.</p>\n' +
+  '<p>Ak chcete zatvoriť otvorenú ponuku, otvorenú podponuku alebo otvorenú kontextovú ponuku, stlačte kláves <strong>Esc</strong>.</p>\n' +
   '\n' +
   '<p>Ak je aktuálne vybratá horná časť konkrétneho používateľského rozhrania, stlačením klávesu <strong>Esc</strong> úplne ukončíte tiež\n' +
   '  navigáciu pomocou klávesnice.</p>\n' +

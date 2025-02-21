@@ -1,5 +1,5 @@
 import type { Chart } from '../types.js';
-e***REMOVED***port interface ColorsPluginOptions {
+export interface ColorsPluginOptions {
     enabled?: boolean;
     forceOverride?: boolean;
 }
@@ -8,4 +8,4 @@ declare const _default: {
     defaults: ColorsPluginOptions;
     beforeLayout(chart: Chart, _args: any, options: ColorsPluginOptions): void;
 };
-e***REMOVED***port default _default;
+export default _default;

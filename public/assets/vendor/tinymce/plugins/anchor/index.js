@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "anchor" plugin for usage with module loaders
+// Exports the "anchor" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/anchor')

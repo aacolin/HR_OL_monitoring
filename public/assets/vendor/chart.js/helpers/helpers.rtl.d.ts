@@ -1,10 +1,10 @@
-e***REMOVED***port interface RTLAdapter {
-    ***REMOVED***(***REMOVED***: number): number;
+export interface RTLAdapter {
+    x(x: number): number;
     setWidth(w: number): void;
-    te***REMOVED***tAlign(align: 'center' | 'left' | 'right'): 'center' | 'left' | 'right';
-    ***REMOVED***Plus(***REMOVED***: number, value: number): number;
-    leftForLtr(***REMOVED***: number, itemWidth: number): number;
+    textAlign(align: 'center' | 'left' | 'right'): 'center' | 'left' | 'right';
+    xPlus(x: number, value: number): number;
+    leftForLtr(x: number, itemWidth: number): number;
 }
-e***REMOVED***port declare function getRtlAdapter(rtl: boolean, rectX: number, width: number): RTLAdapter;
-e***REMOVED***port declare function overrideTe***REMOVED***tDirection(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, direction: 'ltr' | 'rtl'): void;
-e***REMOVED***port declare function restoreTe***REMOVED***tDirection(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, original?: [string, string]): void;
+export declare function getRtlAdapter(rtl: boolean, rectX: number, width: number): RTLAdapter;
+export declare function overrideTextDirection(ctx: CanvasRenderingContext2D, direction: 'ltr' | 'rtl'): void;
+export declare function restoreTextDirection(ctx: CanvasRenderingContext2D, original?: [string, string]): void;

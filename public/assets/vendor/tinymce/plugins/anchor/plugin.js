@@ -102,19 +102,19 @@
               name: 'id',
               type: 'input',
               label: 'ID',
-              placeholder: 'e***REMOVED***ample'
+              placeholder: 'example'
             }]
         },
         buttons: [
           {
             type: 'cancel',
             name: 'cancel',
-            te***REMOVED***t: 'Cancel'
+            text: 'Cancel'
           },
           {
             type: 'submit',
             name: 'save',
-            te***REMOVED***t: 'Save',
+            text: 'Save',
             primary: true
           }
         ],
@@ -175,7 +175,7 @@
       };
     };
     const register = editor => {
-      const onAction = () => editor.e***REMOVED***ecCommand('mceAnchor');
+      const onAction = () => editor.execCommand('mceAnchor');
       editor.ui.registry.addToggleButton('anchor', {
         icon: 'bookmark',
         tooltip: 'Anchor',
@@ -191,7 +191,7 @@
       });
       editor.ui.registry.addMenuItem('anchor', {
         icon: 'bookmark',
-        te***REMOVED***t: 'Anchor...',
+        text: 'Anchor...',
         onAction,
         onSetup: onSetupEditable(editor)
       });

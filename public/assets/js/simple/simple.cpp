@@ -3,7 +3,7 @@
 int simpleVar = 42;
 
 void setup() {
-    Particle.variable("simpleVar", simpleVar);  // E***REMOVED***pose simpleVar to the cloud
+    Particle.variable("simpleVar", simpleVar);  // Expose simpleVar to the cloud
 }
 
 void loop() {

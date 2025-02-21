@@ -12,8 +12,8 @@
   <script src= "assets/js/plot-graph.js"></script>
   <style>
     canvas {
-      ma***REMOVED***-width: 100%;
-      margin-bottom: 20p***REMOVED***;
+      max-width: 100%;
+      margin-bottom: 20px;
     }
   </style>
 </head>
@@ -28,22 +28,22 @@
   </select>
 
   <label for="deviceId">Enter Device ID: </label>
-  <input type="te***REMOVED***t" id="deviceId" placeholder="Device ID" />
+  <input type="text" id="deviceId" placeholder="Device ID" />
 
   <button id="plotPatientGraphBtn">Show Graph</button>
   <br>
   <label for="startSamplingTime">Measurement to start from  </label>
-  <input type="te***REMOVED***t" id="startSamplingTime" placeholder=" 24 Hr format" />
+  <input type="text" id="startSamplingTime" placeholder=" 24 Hr format" />
   <button id="changeSamplingStartTimeBtn">Set Start Time</button>
 
   <br>
   <label for="stopSamplingTime">Measurement to start to  </label>
-  <input type="te***REMOVED***t" id="stopSamplingTime" placeholder="24 Hr format" >
+  <input type="text" id="stopSamplingTime" placeholder="24 Hr format" >
   <button id="changeStopSamplingTimeBtn">Set Stop Time</button>
 
   <br>
   <label for="samplingFreq">Interval of measurement  </label>
-  <input type="te***REMOVED***t" id="samplingFreq" placeholder="Enter Time in minute" >
+  <input type="text" id="samplingFreq" placeholder="Enter Time in minute" >
   <button id="changeSamplingFreqBtn">Set IOT Sampling Frequency</button>
 
   <!-- Two separate canvases for Heart Rate and SpO2 -->

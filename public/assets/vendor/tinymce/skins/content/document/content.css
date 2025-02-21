@@ -5,15 +5,15 @@
   }
 }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, O***REMOVED***ygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 @media screen {
   body {
     background-color: #fff;
-    bo***REMOVED***-shadow: 0 0 4p***REMOVED*** rgba(0, 0, 0, 0.15);
-    bo***REMOVED***-sizing: border-bo***REMOVED***;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
     margin: 1rem auto 0;
-    ma***REMOVED***-width: 820p***REMOVED***;
+    max-width: 820px;
     min-height: calc(100vh - 1rem);
     padding: 4rem 6rem 6rem 6rem;
   }
@@ -30,7 +30,7 @@ table:not([cellpadding]) td {
    and no inline css */
 table[border]:not([border="0"]):not([style*="border-width"]) th,
 table[border]:not([border="0"]):not([style*="border-width"]) td {
-  border-width: 1p***REMOVED***;
+  border-width: 1px;
 }
 /* Set default table styles if a table has a positive border attribute
    and no inline css */
@@ -47,20 +47,20 @@ table[border]:not([border="0"]):not([style*="border-color"]) td {
 figure figcaption {
   color: #999;
   margin-top: 0.25rem;
-  te***REMOVED***t-align: center;
+  text-align: center;
 }
 hr {
   border-color: #ccc;
   border-style: solid;
-  border-width: 1p***REMOVED*** 0 0 0;
+  border-width: 1px 0 0 0;
 }
 .mce-content-body:not([dir=rtl]) blockquote {
-  border-left: 2p***REMOVED*** solid #ccc;
+  border-left: 2px solid #ccc;
   margin-left: 1.5rem;
   padding-left: 1rem;
 }
 .mce-content-body[dir=rtl] blockquote {
-  border-right: 2p***REMOVED*** solid #ccc;
+  border-right: 2px solid #ccc;
   margin-right: 1.5rem;
   padding-right: 1rem;
 }

@@ -16,13 +16,13 @@
         return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
       }
     };
-    const typeOf = ***REMOVED*** => {
-      const t = typeof ***REMOVED***;
-      if (***REMOVED*** === null) {
+    const typeOf = x => {
+      const t = typeof x;
+      if (x === null) {
         return 'null';
-      } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+      } else if (t === 'object' && Array.isArray(x)) {
         return 'array';
-      } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
         return 'string';
       } else {
         return t;
@@ -95,7 +95,7 @@
           return Optional.none();
         }
       }
-      e***REMOVED***ists(predicate) {
+      exists(predicate) {
         return this.tag && predicate(this.value);
       }
       forall(predicate) {
@@ -156,16 +156,16 @@
       const props = keys(obj);
       for (let k = 0, len = props.length; k < len; k++) {
         const i = props[k];
-        const ***REMOVED*** = obj[i];
-        f(***REMOVED***, i);
+        const x = obj[i];
+        f(x, i);
       }
     };
-    const objAcc = r => (***REMOVED***, i) => {
-      r[i] = ***REMOVED***;
+    const objAcc = r => (x, i) => {
+      r[i] = x;
     };
     const internalFilter = (obj, pred, onTrue, onFalse) => {
-      each(obj, (***REMOVED***, i) => {
-        (pred(***REMOVED***, i) ? onTrue : onFalse)(***REMOVED***, i);
+      each(obj, (x, i) => {
+        (pred(x, i) ? onTrue : onFalse)(x, i);
       });
     };
     const filter = (obj, pred) => {
@@ -177,18 +177,18 @@
     const hasNonNullableKey = (obj, key) => has(obj, key) && obj[key] !== undefined && obj[key] !== null;
 
     const nativePush = Array.prototype.push;
-    const flatten = ***REMOVED***s => {
+    const flatten = xs => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; ++i) {
-        if (!isArray(***REMOVED***s[i])) {
-          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + ***REMOVED***s);
+      for (let i = 0, len = xs.length; i < len; ++i) {
+        if (!isArray(xs[i])) {
+          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + xs);
         }
-        nativePush.apply(r, ***REMOVED***s[i]);
+        nativePush.apply(r, xs[i]);
       }
       return r;
     };
-    const get = (***REMOVED***s, i) => i >= 0 && i < ***REMOVED***s.length ? Optional.some(***REMOVED***s[i]) : Optional.none();
-    const head = ***REMOVED***s => get(***REMOVED***s, 0);
+    const get = (xs, i) => i >= 0 && i < xs.length ? Optional.some(xs[i]) : Optional.none();
+    const head = xs => get(xs, 0);
     const findMap = (arr, f) => {
       for (let i = 0; i < arr.length; i++) {
         const r = f(arr[i], i);
@@ -232,9 +232,9 @@
       const node = doc.createElement(tag);
       return fromDom(node);
     };
-    const fromTe***REMOVED***t = (te***REMOVED***t, scope) => {
+    const fromText = (text, scope) => {
       const doc = scope || document;
-      const node = doc.createTe***REMOVED***tNode(te***REMOVED***t);
+      const node = doc.createTextNode(text);
       return fromDom(node);
     };
     const fromDom = node => {
@@ -243,11 +243,11 @@
       }
       return { dom: node };
     };
-    const fromPoint = (docElm, ***REMOVED***, y) => Optional.from(docElm.dom.elementFromPoint(***REMOVED***, y)).map(fromDom);
+    const fromPoint = (docElm, x, y) => Optional.from(docElm.dom.elementFromPoint(x, y)).map(fromDom);
     const SugarElement = {
       fromHtml,
       fromTag,
-      fromTe***REMOVED***t,
+      fromText,
       fromDom,
       fromPoint
     };
@@ -318,7 +318,7 @@
     const hasUploadUrl = editor => isNotEmpty(editor.options.get('images_upload_url'));
     const hasUploadHandler = editor => isNonNullable(editor.options.get('images_upload_handler'));
 
-    const parseIntAndGetMa***REMOVED*** = (val1, val2) => Math.ma***REMOVED***(parseInt(val1, 10), parseInt(val2, 10));
+    const parseIntAndGetMax = (val1, val2) => Math.max(parseInt(val1, 10), parseInt(val2, 10));
     const getImageSize = url => new Promise(callback => {
       const img = document.createElement('img');
       const done = dimensions => {
@@ -329,8 +329,8 @@
         callback(dimensions);
       };
       img.onload = () => {
-        const width = parseIntAndGetMa***REMOVED***(img.width, img.clientWidth);
-        const height = parseIntAndGetMa***REMOVED***(img.height, img.clientHeight);
+        const width = parseIntAndGetMax(img.width, img.clientWidth);
+        const height = parseIntAndGetMax(img.height, img.clientHeight);
         const dimensions = {
           width,
           height
@@ -342,21 +342,21 @@
       };
       const style = img.style;
       style.visibility = 'hidden';
-      style.position = 'fi***REMOVED***ed';
-      style.bottom = style.left = '0p***REMOVED***';
+      style.position = 'fixed';
+      style.bottom = style.left = '0px';
       style.width = style.height = 'auto';
       document.body.appendChild(img);
       img.src = url;
     });
-    const removePi***REMOVED***elSuffi***REMOVED*** = value => {
+    const removePixelSuffix = value => {
       if (value) {
-        value = value.replace(/p***REMOVED***$/, '');
+        value = value.replace(/px$/, '');
       }
       return value;
     };
-    const addPi***REMOVED***elSuffi***REMOVED*** = value => {
+    const addPixelSuffix = value => {
       if (value.length > 0 && /^[0-9]+$/.test(value)) {
-        value += 'p***REMOVED***';
+        value += 'px';
       }
       return value;
     };
@@ -449,21 +449,21 @@
     const DOM = global$3.DOM;
     const getHspace = image => {
       if (image.style.marginLeft && image.style.marginRight && image.style.marginLeft === image.style.marginRight) {
-        return removePi***REMOVED***elSuffi***REMOVED***(image.style.marginLeft);
+        return removePixelSuffix(image.style.marginLeft);
       } else {
         return '';
       }
     };
     const getVspace = image => {
       if (image.style.marginTop && image.style.marginBottom && image.style.marginTop === image.style.marginBottom) {
-        return removePi***REMOVED***elSuffi***REMOVED***(image.style.marginTop);
+        return removePixelSuffix(image.style.marginTop);
       } else {
         return '';
       }
     };
     const getBorder = image => {
       if (image.style.borderWidth) {
-        return removePi***REMOVED***elSuffi***REMOVED***(image.style.borderWidth);
+        return removePixelSuffix(image.style.borderWidth);
       } else {
         return '';
       }
@@ -518,7 +518,7 @@
     const setSize = (name, normalizeCss) => (image, name, value) => {
       const styles = image.style;
       if (styles[name]) {
-        styles[name] = addPi***REMOVED***elSuffi***REMOVED***(value);
+        styles[name] = addPixelSuffix(value);
         normalizeStyle(image, normalizeCss);
       } else {
         updateAttrib(image, name, value);
@@ -526,24 +526,24 @@
     };
     const getSize = (image, name) => {
       if (image.style[name]) {
-        return removePi***REMOVED***elSuffi***REMOVED***(image.style[name]);
+        return removePixelSuffix(image.style[name]);
       } else {
         return getAttrib(image, name);
       }
     };
     const setHspace = (image, value) => {
-      const p***REMOVED***Value = addPi***REMOVED***elSuffi***REMOVED***(value);
-      image.style.marginLeft = p***REMOVED***Value;
-      image.style.marginRight = p***REMOVED***Value;
+      const pxValue = addPixelSuffix(value);
+      image.style.marginLeft = pxValue;
+      image.style.marginRight = pxValue;
     };
     const setVspace = (image, value) => {
-      const p***REMOVED***Value = addPi***REMOVED***elSuffi***REMOVED***(value);
-      image.style.marginTop = p***REMOVED***Value;
-      image.style.marginBottom = p***REMOVED***Value;
+      const pxValue = addPixelSuffix(value);
+      image.style.marginTop = pxValue;
+      image.style.marginBottom = pxValue;
     };
     const setBorder = (image, value) => {
-      const p***REMOVED***Value = addPi***REMOVED***elSuffi***REMOVED***(value);
-      image.style.borderWidth = p***REMOVED***Value;
+      const pxValue = addPixelSuffix(value);
+      image.style.borderWidth = pxValue;
     };
     const setBorderStyle = (image, value) => {
       image.style.borderStyle = value;
@@ -675,8 +675,8 @@
       updateAlt(image, oldData, newData);
     };
 
-    const normalizeCss$1 = (editor, cssTe***REMOVED***t) => {
-      const css = editor.dom.styles.parse(cssTe***REMOVED***t);
+    const normalizeCss$1 = (editor, cssText) => {
+      const css = editor.dom.styles.parse(cssText);
       const mergedCss = mergeMargins(css);
       const compressed = editor.dom.styles.parse(editor.dom.styles.serialize(mergedCss));
       return editor.dom.styles.serialize(compressed);
@@ -692,13 +692,13 @@
       }
       return imgElm;
     };
-    const splitTe***REMOVED***tBlock = (editor, figure) => {
+    const splitTextBlock = (editor, figure) => {
       var _a;
       const dom = editor.dom;
-      const te***REMOVED***tBlockElements = filter(editor.schema.getTe***REMOVED***tBlockElements(), (_, parentElm) => !editor.schema.isValidChild(parentElm, 'figure'));
-      const te***REMOVED***tBlock = dom.getParent(figure.parentNode, node => hasNonNullableKey(te***REMOVED***tBlockElements, node.nodeName), editor.getBody());
-      if (te***REMOVED***tBlock) {
-        return (_a = dom.split(te***REMOVED***tBlock, figure)) !== null && _a !== void 0 ? _a : figure;
+      const textBlockElements = filter(editor.schema.getTextBlockElements(), (_, parentElm) => !editor.schema.isValidChild(parentElm, 'figure'));
+      const textBlock = dom.getParent(figure.parentNode, node => hasNonNullableKey(textBlockElements, node.nodeName), editor.getBody());
+      if (textBlock) {
+        return (_a = dom.split(textBlock, figure)) !== null && _a !== void 0 ? _a : figure;
       } else {
         return figure;
       }
@@ -715,7 +715,7 @@
       const insertedElm = editor.dom.select('*[data-mce-id="__mcenew"]')[0];
       editor.dom.setAttrib(insertedElm, 'data-mce-id', null);
       if (isFigure(insertedElm)) {
-        const figure = splitTe***REMOVED***tBlock(editor, insertedElm);
+        const figure = splitTextBlock(editor, insertedElm);
         editor.selection.select(figure);
       } else {
         editor.selection.select(insertedElm);
@@ -743,7 +743,7 @@
         syncSrcAttr(editor, image);
         if (isFigure(image.parentNode)) {
           const figure = image.parentNode;
-          splitTe***REMOVED***tBlock(editor, figure);
+          splitTextBlock(editor, figure);
           editor.selection.select(image.parentNode);
         } else {
           editor.selection.select(image);
@@ -808,38 +808,38 @@
     var global = tinymce.util.Tools.resolve('tinymce.util.Tools');
 
     const getValue = item => isString(item.value) ? item.value : '';
-    const getTe***REMOVED***t = item => {
-      if (isString(item.te***REMOVED***t)) {
-        return item.te***REMOVED***t;
+    const getText = item => {
+      if (isString(item.text)) {
+        return item.text;
       } else if (isString(item.title)) {
         return item.title;
       } else {
         return '';
       }
     };
-    const sanitizeList = (list, e***REMOVED***tractValue) => {
+    const sanitizeList = (list, extractValue) => {
       const out = [];
       global.each(list, item => {
-        const te***REMOVED***t = getTe***REMOVED***t(item);
+        const text = getText(item);
         if (item.menu !== undefined) {
-          const items = sanitizeList(item.menu, e***REMOVED***tractValue);
+          const items = sanitizeList(item.menu, extractValue);
           out.push({
-            te***REMOVED***t,
+            text,
             items
           });
         } else {
-          const value = e***REMOVED***tractValue(item);
+          const value = extractValue(item);
           out.push({
-            te***REMOVED***t,
+            text,
             value
           });
         }
       });
       return out;
     };
-    const sanitizer = (e***REMOVED***tractor = getValue) => list => {
+    const sanitizer = (extractor = getValue) => list => {
       if (list) {
-        return Optional.from(list).map(list => sanitizeList(list, e***REMOVED***tractor));
+        return Optional.from(list).map(list => sanitizeList(list, extractor));
       } else {
         return Optional.none();
       }
@@ -888,52 +888,52 @@
               inputMode: 'numeric'
             },
             {
-              type: 'listbo***REMOVED***',
+              type: 'listbox',
               name: 'borderstyle',
               label: 'Border style',
               items: [
                 {
-                  te***REMOVED***t: 'Select...',
+                  text: 'Select...',
                   value: ''
                 },
                 {
-                  te***REMOVED***t: 'Solid',
+                  text: 'Solid',
                   value: 'solid'
                 },
                 {
-                  te***REMOVED***t: 'Dotted',
+                  text: 'Dotted',
                   value: 'dotted'
                 },
                 {
-                  te***REMOVED***t: 'Dashed',
+                  text: 'Dashed',
                   value: 'dashed'
                 },
                 {
-                  te***REMOVED***t: 'Double',
+                  text: 'Double',
                   value: 'double'
                 },
                 {
-                  te***REMOVED***t: 'Groove',
+                  text: 'Groove',
                   value: 'groove'
                 },
                 {
-                  te***REMOVED***t: 'Ridge',
+                  text: 'Ridge',
                   value: 'ridge'
                 },
                 {
-                  te***REMOVED***t: 'Inset',
+                  text: 'Inset',
                   value: 'inset'
                 },
                 {
-                  te***REMOVED***t: 'Outset',
+                  text: 'Outset',
                   value: 'outset'
                 },
                 {
-                  te***REMOVED***t: 'None',
+                  text: 'None',
                   value: 'none'
                 },
                 {
-                  te***REMOVED***t: 'Hidden',
+                  text: 'Hidden',
                   value: 'hidden'
                 }
               ]
@@ -949,7 +949,7 @@
         createImageList(editor, imageList => {
           completer(urlListSanitizer(imageList).map(items => flatten([
             [{
-                te***REMOVED***t: 'None',
+                text: 'None',
                 value: ''
               }],
             items
@@ -993,11 +993,11 @@
         type: 'urlinput',
         filetype: 'image',
         label: 'Source',
-        picker_te***REMOVED***t: 'Browse files'
+        picker_text: 'Browse files'
       };
       const imageList = info.imageList.map(items => ({
         name: 'images',
-        type: 'listbo***REMOVED***',
+        type: 'listbox',
         label: 'Image list',
         items
       }));
@@ -1021,13 +1021,13 @@
         label: 'Accessibility',
         items: [{
             name: 'isDecorative',
-            type: 'checkbo***REMOVED***',
+            type: 'checkbox',
             label: 'Image is decorative'
           }]
       };
       const classList = info.classList.map(items => ({
         name: 'classes',
-        type: 'listbo***REMOVED***',
+        type: 'listbox',
         label: 'Class',
         items
       }));
@@ -1035,7 +1035,7 @@
         type: 'label',
         label: 'Caption',
         items: [{
-            type: 'checkbo***REMOVED***',
+            type: 'checkbox',
             name: 'caption',
             label: 'Show caption'
           }]
@@ -1239,7 +1239,7 @@
       const data = api.getData();
       const image = ListUtils.findEntry(info.imageList, data.images);
       image.each(img => {
-        const updateAlt = data.alt === '' || state.prevImage.map(image => image.te***REMOVED***t === data.alt).getOr(false);
+        const updateAlt = data.alt === '' || state.prevImage.map(image => image.text === data.alt).getOr(false);
         if (updateAlt) {
           if (img.value === '') {
             api.setData({
@@ -1249,7 +1249,7 @@
           } else {
             api.setData({
               src: img,
-              alt: img.te***REMOVED***t
+              alt: img.text
             });
           }
         } else {
@@ -1340,7 +1340,7 @@
         ...data,
         style: getStyleValue(helpers.normalizeCss, toImageData(data, false))
       };
-      editor.e***REMOVED***ecCommand('mceUpdateImage', false, toImageData(finalData, info.hasAccessibilityOptions));
+      editor.execCommand('mceUpdateImage', false, toImageData(finalData, info.hasAccessibilityOptions));
       editor.editorUpload.uploadImagesAuto();
       api.close();
     };
@@ -1373,8 +1373,8 @@
     const alertErr = editor => message => {
       editor.windowManager.alert(message);
     };
-    const normalizeCss = editor => cssTe***REMOVED***t => normalizeCss$1(editor, cssTe***REMOVED***t);
-    const parseStyle = editor => cssTe***REMOVED***t => editor.dom.parseStyle(cssTe***REMOVED***t);
+    const normalizeCss = editor => cssText => normalizeCss$1(editor, cssText);
+    const parseStyle = editor => cssText => editor.dom.parseStyle(cssText);
     const serializeStyle = editor => (stylesArg, name) => editor.dom.serializeStyle(stylesArg, name);
     const uploadImage = editor => blobInfo => global$1(editor).upload([blobInfo], false).then(results => {
       var _a;
@@ -1408,12 +1408,12 @@
               {
                 type: 'cancel',
                 name: 'cancel',
-                te***REMOVED***t: 'Cancel'
+                text: 'Cancel'
               },
               {
                 type: 'submit',
                 name: 'save',
-                te***REMOVED***t: 'Save',
+                text: 'Save',
                 primary: true
               }
             ],
@@ -1485,11 +1485,11 @@
       });
       editor.ui.registry.addMenuItem('image', {
         icon: 'image',
-        te***REMOVED***t: 'Image...',
+        text: 'Image...',
         onAction: Dialog(editor).open,
         onSetup: onSetupEditable(editor)
       });
-      editor.ui.registry.addConte***REMOVED***tMenu('image', { update: element => editor.selection.isEditable() && (isFigure(element) || isImage(element) && !isPlaceholderImage(element)) ? ['image'] : [] });
+      editor.ui.registry.addContextMenu('image', { update: element => editor.selection.isEditable() && (isFigure(element) || isImage(element) && !isPlaceholderImage(element)) ? ['image'] : [] });
     };
 
     var Plugin = () => {

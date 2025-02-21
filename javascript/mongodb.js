@@ -8,4 +8,4 @@ mongoose.connect('mongodb://localhost:27017/saguaro_hrm')
 .catch((err) => {
   console.error('Error connecting to the local MongoDB instance:', err);
 });
-module.e***REMOVED***ports = mongoose;
+module.exports = mongoose;

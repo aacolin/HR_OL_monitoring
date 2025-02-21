@@ -40,9 +40,9 @@
     ],
     "shortDays": ["კვი", "ორშ", "სამ", "ოთხ", "ხუთ", "პარ", "შაბ"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "გადმოქაჩე SVG",
-      "e***REMOVED***portToPNG": "გადმოქაჩე PNG",
-      "e***REMOVED***portToCSV": "გადმოქაჩე CSV",
+      "exportToSVG": "გადმოქაჩე SVG",
+      "exportToPNG": "გადმოქაჩე PNG",
+      "exportToCSV": "გადმოქაჩე CSV",
       "menu": "მენიუ",
       "selection": "არჩევა",
       "selectionZoom": "არჩეულის გადიდება",

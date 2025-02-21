@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Ne", "Po", "To", "Sr", "Če", "Pe", "So"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Prenesi SVG",
-      "e***REMOVED***portToPNG": "Prenesi PNG",
-      "e***REMOVED***portToCSV": "Prenesi CSV",
+      "exportToSVG": "Prenesi SVG",
+      "exportToPNG": "Prenesi PNG",
+      "exportToCSV": "Prenesi CSV",
       "menu": "Menu",
       "selection": "Izbiranje",
       "selectionZoom": "Zoom: Izbira",

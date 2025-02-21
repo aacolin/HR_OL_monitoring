@@ -60,7 +60,7 @@
           return Optional.none();
         }
       }
-      e***REMOVED***ists(predicate) {
+      exists(predicate) {
         return this.tag && predicate(this.value);
       }
       forall(predicate) {
@@ -115,28 +115,28 @@
     }
     Optional.singletonNone = new Optional(false);
 
-    const e***REMOVED***ists = (***REMOVED***s, pred) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
+    const exists = (xs, pred) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
           return true;
         }
       }
       return false;
     };
-    const map$1 = (***REMOVED***s, f) => {
-      const len = ***REMOVED***s.length;
+    const map$1 = (xs, f) => {
+      const len = xs.length;
       const r = new Array(len);
       for (let i = 0; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        r[i] = f(***REMOVED***, i);
+        const x = xs[i];
+        r[i] = f(x, i);
       }
       return r;
     };
-    const each$1 = (***REMOVED***s, f) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        f(***REMOVED***, i);
+    const each$1 = (xs, f) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        f(x, i);
       }
     };
 
@@ -185,20 +185,20 @@
       const props = keys(obj);
       for (let k = 0, len = props.length; k < len; k++) {
         const i = props[k];
-        const ***REMOVED*** = obj[i];
-        f(***REMOVED***, i);
+        const x = obj[i];
+        f(x, i);
       }
     };
     const map = (obj, f) => {
-      return tupleMap(obj, (***REMOVED***, i) => ({
+      return tupleMap(obj, (x, i) => ({
         k: i,
-        v: f(***REMOVED***, i)
+        v: f(x, i)
       }));
     };
     const tupleMap = (obj, f) => {
       const r = {};
-      each(obj, (***REMOVED***, i) => {
-        const tuple = f(***REMOVED***, i);
+      each(obj, (x, i) => {
+        const tuple = f(x, i);
         r[tuple.k] = tuple.v;
       });
       return r;
@@ -258,15 +258,15 @@
 
     const checkRange = (str, substr, start) => substr === '' || str.length >= substr.length && str.substr(start, start + substr.length) === substr;
     const contains = (str, substr, start = 0, end) => {
-      const id***REMOVED*** = str.inde***REMOVED***Of(substr, start);
-      if (id***REMOVED*** !== -1) {
-        return isUndefined(end) ? true : id***REMOVED*** + substr.length <= end;
+      const idx = str.indexOf(substr, start);
+      if (idx !== -1) {
+        return isUndefined(end) ? true : idx + substr.length <= end;
       } else {
         return false;
       }
     };
-    const startsWith = (str, prefi***REMOVED***) => {
-      return checkRange(str, prefi***REMOVED***, 0);
+    const startsWith = (str, prefix) => {
+      return checkRange(str, prefix, 0);
     };
 
     var global = tinymce.util.Tools.resolve('tinymce.Resource');
@@ -281,7 +281,7 @@
       });
       registerOption('emoticons_database_url', {
         processor: 'string',
-        default: `${ pluginUrl }/js/${ getEmojiDatabase(editor) }${ editor.suffi***REMOVED*** }.js`
+        default: `${ pluginUrl }/js/${ getEmojiDatabase(editor) }${ editor.suffix }.js`
       });
       registerOption('emoticons_database_id', {
         processor: 'string',
@@ -293,7 +293,7 @@
       });
       registerOption('emoticons_images_url', {
         processor: 'string',
-        default: 'https://cdnjs.cloudflare.com/aja***REMOVED***/libs/twemoji/15.1.0/72***REMOVED***72/'
+        default: 'https://cdnjs.cloudflare.com/ajax/libs/twemoji/15.1.0/72x72/'
       });
     };
     const getEmojiDatabase = option('emoticons_database');
@@ -401,16 +401,16 @@
       };
     };
 
-    const emojiMatches = (emoji, lowerCasePattern) => contains(emoji.title.toLowerCase(), lowerCasePattern) || e***REMOVED***ists(emoji.keywords, k => contains(k.toLowerCase(), lowerCasePattern));
-    const emojisFrom = (list, pattern, ma***REMOVED***Results) => {
+    const emojiMatches = (emoji, lowerCasePattern) => contains(emoji.title.toLowerCase(), lowerCasePattern) || exists(emoji.keywords, k => contains(k.toLowerCase(), lowerCasePattern));
+    const emojisFrom = (list, pattern, maxResults) => {
       const matches = [];
       const lowerCasePattern = pattern.toLowerCase();
-      const reachedLimit = ma***REMOVED***Results.fold(() => never, ma***REMOVED*** => size => size >= ma***REMOVED***);
+      const reachedLimit = maxResults.fold(() => never, max => size => size >= max);
       for (let i = 0; i < list.length; i++) {
         if (pattern.length === 0 || emojiMatches(list[i], lowerCasePattern)) {
           matches.push({
             value: list[i].char,
-            te***REMOVED***t: list[i].title,
+            text: list[i].title,
             icon: list[i].char
           });
           if (reachedLimit(matches.length)) {
@@ -477,7 +477,7 @@
           },
           buttons: [{
               type: 'cancel',
-              te***REMOVED***t: 'Close',
+              text: 'Close',
               primary: true
             }]
         };
@@ -500,12 +500,12 @@
                   type: 'alertbanner',
                   level: 'error',
                   icon: 'warning',
-                  te***REMOVED***t: 'Could not load emojis'
+                  text: 'Could not load emojis'
                 }]
             },
             buttons: [{
                 type: 'cancel',
-                te***REMOVED***t: 'Close',
+                text: 'Close',
                 primary: true
               }],
             initialData: {
@@ -539,9 +539,9 @@
         trigger: ':',
         columns: 'auto',
         minChars: 2,
-        fetch: (pattern, ma***REMOVED***Results) => database.waitForLoad().then(() => {
+        fetch: (pattern, maxResults) => database.waitForLoad().then(() => {
           const candidates = database.listAll();
-          return emojisFrom(candidates, pattern, Optional.some(ma***REMOVED***Results));
+          return emojisFrom(candidates, pattern, Optional.some(maxResults));
         }),
         onAction: (autocompleteApi, rng, value) => {
           editor.selection.setRng(rng);
@@ -562,7 +562,7 @@
       };
     };
     const register = editor => {
-      const onAction = () => editor.e***REMOVED***ecCommand('mceEmoticons');
+      const onAction = () => editor.execCommand('mceEmoticons');
       editor.ui.registry.addButton('emoticons', {
         tooltip: 'Emojis',
         icon: 'emoji',
@@ -570,7 +570,7 @@
         onSetup: onSetupEditable(editor)
       });
       editor.ui.registry.addMenuItem('emoticons', {
-        te***REMOVED***t: 'Emojis...',
+        text: 'Emojis...',
         icon: 'emoji',
         onAction,
         onSetup: onSetupEditable(editor)

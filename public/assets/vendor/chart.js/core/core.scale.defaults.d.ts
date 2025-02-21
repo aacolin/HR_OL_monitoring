@@ -1,1 +1,1 @@
-e***REMOVED***port function applyScaleDefaults(defaults: any): void;
+export function applyScaleDefaults(defaults: any): void;

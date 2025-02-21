@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.uk',
   '\n' +
   '<dl>\n' +
   '  <dt>Фокус на рядок меню</dt>\n' +
-  '  <dd>Windows або Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows або Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Фокус на панелі інструментів</dt>\n' +
-  '  <dd>Windows або Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows або Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Фокус на розділі "Нижній колонтитул"</dt>\n' +
-  '  <dd>Windows або Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows або Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Фокус на сповіщення</dt>\n' +
-  '  <dd>Windows або Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows або Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>Фокус на контекстній панелі інструментів</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** або macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux або macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Навігація почнеться з першого елемента інтерфейсу користувача, який буде виділено або підкреслено в разі, якщо перший елемент знаходиться в\n' +

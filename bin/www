@@ -8,7 +8,7 @@ var debug = require('debug')('saguarohrm:server');
 var http = require('http');
 var server = http.createServer(app);
 
-// Get port from environment and store in E***REMOVED***press.
+// Get port from environment and store in Express.
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
@@ -46,11 +46,11 @@ function onError(error) {
   switch (error.code) {
     case 'EACCES':
       console.error(bind + ' requires elevated privileges');
-      process.e***REMOVED***it(1);
+      process.exit(1);
       break;
     case 'EADDRINUSE':
       console.error(bind + ' is already in use');
-      process.e***REMOVED***it(1);
+      process.exit(1);
       break;
     default:
       throw error;

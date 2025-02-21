@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Dg", "Dl", "Dt", "Dc", "Dj", "Dv", "Ds"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Descarregar SVG",
-      "e***REMOVED***portToPNG": "Descarregar PNG",
-      "e***REMOVED***portToCSV": "Descarregar CSV",
+      "exportToSVG": "Descarregar SVG",
+      "exportToPNG": "Descarregar PNG",
+      "exportToCSV": "Descarregar CSV",
       "menu": "Menú",
       "selection": "Seleccionar",
       "selectionZoom": "Seleccionar Zoom",

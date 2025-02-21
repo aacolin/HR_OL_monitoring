@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.pt_BR',
   '\n' +
   '<dl>\n' +
   '  <dt>Foco na barra de menus</dt>\n' +
-  '  <dd>Windows ou Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows ou Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Foco na barra de ferramentas</dt>\n' +
-  '  <dd>Windows ou Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows ou Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Foco no rodapé</dt>\n' +
-  '  <dd>Windows ou Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows ou Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Foco na notificação</dt>\n' +
-  '  <dd>Windows ou Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
-  '  <dt>Foco na barra de ferramentas conte***REMOVED***tual</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** ou macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows ou Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
+  '  <dt>Foco na barra de ferramentas contextual</dt>\n' +
+  '  <dd>Windows, Linux ou macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>A navegação inicia no primeiro item da IU, que será destacado ou sublinhado no caso do primeiro item no\n' +
@@ -57,7 +57,7 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.pt_BR',
   '  <li>movem entre itens no caminho do elemento do rodapé.</li>\n' +
   '</ul>\n' +
   '\n' +
-  '<p>As teclas de seta <strong>Abai***REMOVED***o</strong> e <strong>Acima</strong></p>\n' +
+  '<p>As teclas de seta <strong>Abaixo</strong> e <strong>Acima</strong></p>\n' +
   '\n' +
   '<ul>\n' +
   '  <li>movem entre itens de menu em um menu.</li>\n' +
@@ -71,23 +71,23 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.pt_BR',
   '<p>Se o foco atual estiver no ‘alto’ de determinada seção da IU, pressionar <strong>Esc</strong> também sai\n' +
   '  totalmente da navegação pelo teclado.</p>\n' +
   '\n' +
-  '<h1>E***REMOVED***ecutar um item de menu ou botão da barra de ferramentas</h1>\n' +
+  '<h1>Executar um item de menu ou botão da barra de ferramentas</h1>\n' +
   '\n' +
   '<p>Com o item de menu ou botão da barra de ferramentas desejado destacado, pressione <strong>Return</strong>, <strong>Enter</strong>,\n' +
-  '  ou a <strong>Barra de espaço</strong> para e***REMOVED***ecutar o item.</p>\n' +
+  '  ou a <strong>Barra de espaço</strong> para executar o item.</p>\n' +
   '\n' +
-  '<h1>Navegar por cai***REMOVED***as de diálogo sem guias</h1>\n' +
+  '<h1>Navegar por caixas de diálogo sem guias</h1>\n' +
   '\n' +
-  '<p>Em cai***REMOVED***as de diálogo sem guias, o primeiro componente interativo recebe o foco quando a cai***REMOVED***a de diálogo abre.</p>\n' +
+  '<p>Em caixas de diálogo sem guias, o primeiro componente interativo recebe o foco quando a caixa de diálogo abre.</p>\n' +
   '\n' +
-  '<p>Navegue entre componentes interativos de cai***REMOVED***a de diálogo pressionando <strong>Tab</strong> ou <strong>Shift+Tab</strong>.</p>\n' +
+  '<p>Navegue entre componentes interativos de caixa de diálogo pressionando <strong>Tab</strong> ou <strong>Shift+Tab</strong>.</p>\n' +
   '\n' +
-  '<h1>Navegar por cai***REMOVED***as de diálogo com guias</h1>\n' +
+  '<h1>Navegar por caixas de diálogo com guias</h1>\n' +
   '\n' +
-  '<p>Em cai***REMOVED***as de diálogo com guias, o primeiro botão no menu da guia recebe o foco quando a cai***REMOVED***a de diálogo abre.</p>\n' +
+  '<p>Em caixas de diálogo com guias, o primeiro botão no menu da guia recebe o foco quando a caixa de diálogo abre.</p>\n' +
   '\n' +
-  '<p>Navegue entre componentes interativos dessa guia da cai***REMOVED***a de diálogo pressionando <strong>Tab</strong> ou\n' +
+  '<p>Navegue entre componentes interativos dessa guia da caixa de diálogo pressionando <strong>Tab</strong> ou\n' +
   '  <strong>Shift+Tab</strong>.</p>\n' +
   '\n' +
-  '<p>Alterne para outra guia da cai***REMOVED***a de diálogo colocando o foco no menu da guia e pressionando a <strong>Seta</strong>\n' +
+  '<p>Alterne para outra guia da caixa de diálogo colocando o foco no menu da guia e pressionando a <strong>Seta</strong>\n' +
   '  adequada para percorrer as guias disponíveis.</p>\n');

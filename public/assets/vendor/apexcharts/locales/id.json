@@ -32,9 +32,9 @@
     "days": ["Minggu", "Senin", "Selasa", "Rabu", "kamis", "Jumat", "Sabtu"],
     "shortDays": ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Unduh SVG",
-      "e***REMOVED***portToPNG": "Unduh PNG",
-      "e***REMOVED***portToCSV": "Unduh CSV",
+      "exportToSVG": "Unduh SVG",
+      "exportToPNG": "Unduh PNG",
+      "exportToCSV": "Unduh CSV",
       "menu": "Menu",
       "selection": "Pilihan",
       "selectionZoom": "Perbesar Pilihan",

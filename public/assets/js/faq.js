@@ -24,11 +24,11 @@ function redirectToHomePage() {
 }
 
 function validateTokenWithServer(token) {
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/patients/token-auth',
         method: 'GET',
         contentType: 'application/json',
-        headers: {'***REMOVED***-auth': token},
+        headers: {'x-auth': token},
         dataType: 'json',
     }).done(function(data) {
         document.body.classList.remove('hidden');

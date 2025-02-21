@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Ne", "Po", "Út", "St", "Čt", "Pá", "So"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Stáhnout SVG",
-      "e***REMOVED***portToPNG": "Stáhnout PNG",
-      "e***REMOVED***portToCSV": "Stáhnout CSV",
+      "exportToSVG": "Stáhnout SVG",
+      "exportToPNG": "Stáhnout PNG",
+      "exportToCSV": "Stáhnout CSV",
       "menu": "Menu",
       "selection": "Vybrat",
       "selectionZoom": "Zoom: Vybrat",

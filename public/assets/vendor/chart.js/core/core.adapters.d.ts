@@ -4,9 +4,9 @@
  * @private
  */
 import type { AnyObject } from '../types/basic.js';
-import type { ChartOptions } from '../types/inde***REMOVED***.js';
-e***REMOVED***port type TimeUnit = 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year';
-e***REMOVED***port interface DateAdapter<T e***REMOVED***tends AnyObject = AnyObject> {
+import type { ChartOptions } from '../types/index.js';
+export type TimeUnit = 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year';
+export interface DateAdapter<T extends AnyObject = AnyObject> {
     readonly options: T;
     /**
      * Will called with chart options after adapter creation.
@@ -20,7 +20,7 @@ e***REMOVED***port interface DateAdapter<T e***REMOVED***tends AnyObject = AnyOb
     /**
      * Parses the given `value` and return the associated timestamp.
      * @param value - the value to parse (usually comes from the data)
-     * @param [format] - the e***REMOVED***pected data format
+     * @param [format] - the expected data format
      */
     parse(this: DateAdapter<T>, value: unknown, format?: TimeUnit): number | null;
     /**
@@ -68,14 +68,14 @@ declare class DateAdapterBase implements DateAdapter {
     /**
      * Override default date adapter methods.
      * Accepts type parameter to define options type.
-     * @e***REMOVED***ample
+     * @example
      * Chart._adapters._date.override<{myAdapterOption: string}>({
      *   init() {
      *     console.log(this.options.myAdapterOption);
      *   }
      * })
      */
-    static override<T e***REMOVED***tends AnyObject = AnyObject>(members: Partial<Omit<DateAdapter<T>, 'options'>>): void;
+    static override<T extends AnyObject = AnyObject>(members: Partial<Omit<DateAdapter<T>, 'options'>>): void;
     readonly options: AnyObject;
     constructor(options: AnyObject);
     init(): void;
@@ -90,4 +90,4 @@ declare class DateAdapterBase implements DateAdapter {
 declare const _default: {
     _date: typeof DateAdapterBase;
 };
-e***REMOVED***port default _default;
+export default _default;

@@ -1,4 +1,4 @@
-e***REMOVED***port default class LineController e***REMOVED***tends DatasetController {
+export default class LineController extends DatasetController {
     static id: string;
     /**
      * @type {any}
@@ -8,6 +8,6 @@ e***REMOVED***port default class LineController e***REMOVED***tends DatasetContr
     /**
        * @protected
        */
-    protected getMa***REMOVED***Overflow(): any;
+    protected getMaxOverflow(): any;
 }
 import DatasetController from "../core/core.datasetController.js";

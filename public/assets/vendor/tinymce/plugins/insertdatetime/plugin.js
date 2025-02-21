@@ -137,7 +137,7 @@
     const register = editor => {
       const formats = getFormats(editor);
       const defaultFormat = Cell(getDefaultDateTime(editor));
-      const insertDateTime = format => editor.e***REMOVED***ecCommand('mceInsertDate', false, format);
+      const insertDateTime = format => editor.execCommand('mceInsertDate', false, format);
       editor.ui.registry.addSplitButton('insertdatetime', {
         icon: 'insert-time',
         tooltip: 'Insert date/time',
@@ -145,7 +145,7 @@
         fetch: done => {
           done(global.map(formats, format => ({
             type: 'choiceitem',
-            te***REMOVED***t: getDateTime(editor, format),
+            text: getDateTime(editor, format),
             value: format
           })));
         },
@@ -164,10 +164,10 @@
       };
       editor.ui.registry.addNestedMenuItem('insertdatetime', {
         icon: 'insert-time',
-        te***REMOVED***t: 'Date/time',
+        text: 'Date/time',
         getSubmenuItems: () => global.map(formats, format => ({
           type: 'menuitem',
-          te***REMOVED***t: getDateTime(editor, format),
+          text: getDateTime(editor, format),
           onAction: makeMenuItemHandler(format)
         })),
         onSetup: onSetupEditable(editor)

@@ -1,4 +1,4 @@
-e***REMOVED***port default class LinearScaleBase e***REMOVED***tends Scale {
+export default class LinearScaleBase extends Scale {
     /** @type {number} */
     start: number;
     /** @type {number} */
@@ -8,7 +8,7 @@ e***REMOVED***port default class LinearScaleBase e***REMOVED***tends Scale {
     /** @type {number} */
     _endValue: number;
     _valueRange: number;
-    parse(raw: any, inde***REMOVED***: any): number;
+    parse(raw: any, index: any): number;
     handleTickRangeOptions(): void;
     getTickLimit(): number;
     /**

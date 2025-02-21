@@ -1,6 +1,6 @@
 $(document).ready(function() {
     initializeReportsChart("#heartRateChart", generateHeartRateData);
-    initializeReportsChart("#bloodO***REMOVED***ygenChart", generateO***REMOVED***ygenLevelData);
+    initializeReportsChart("#bloodOxygenChart", generateOxygenLevelData);
     initializeWeeklyCharts();
     populateSelectDeviceId();
     handleStartSimulationButton();
@@ -16,9 +16,9 @@ function initializeReportsChart(target, dataGenerator) {
     // Generate data for the graph based on current day
     const data = dataGenerator(startDate, endDate, interval);
 
-    new Ape***REMOVED***Charts(document.querySelector(target), {
+    new ApexCharts(document.querySelector(target), {
         series: [{
-            name: target === "#heartRateChart" ? 'Heart Rate' : 'O***REMOVED***ygen Levels',
+            name: target === "#heartRateChart" ? 'Heart Rate' : 'Oxygen Levels',
             data: data,
         }],
         chart: {
@@ -28,8 +28,8 @@ function initializeReportsChart(target, dataGenerator) {
                 show: true
             }
         },
-        colors: [target === "#heartRateChart" ? '#ff0000' : '#4154f1'], // Red for heart rate, blue for o***REMOVED***ygen levels
-        ***REMOVED***a***REMOVED***is: {
+        colors: [target === "#heartRateChart" ? '#ff0000' : '#4154f1'], // Red for heart rate, blue for oxygen levels
+        xaxis: {
             type: 'datetime',
             labels: {
                 formatter: function(value, timestamp) {
@@ -46,9 +46,9 @@ function initializeReportsChart(target, dataGenerator) {
 
 function initializeWeeklyCharts() {
     const weeklyHeartRateData = generateWeeklyData(generateRandomHeartRate);
-    const weeklyO***REMOVED***ygenData = generateWeeklyData(generateRandomWeeklyO***REMOVED***ygenLevel);
+    const weeklyOxygenData = generateWeeklyData(generateRandomWeeklyOxygenLevel);
 
-    new Ape***REMOVED***Charts(document.querySelector("#weeklyHeartRateChart"), {
+    new ApexCharts(document.querySelector("#weeklyHeartRateChart"), {
         series: [{
             name: 'Weekly Heart Rate',
             data: weeklyHeartRateData,
@@ -61,30 +61,30 @@ function initializeWeeklyCharts() {
             }
         },
         colors: ['#71f5a5'], // Green for heart rate
-        ***REMOVED***a***REMOVED***is: {
+        xaxis: {
             type: 'datetime',
             min: new Date().setDate(new Date().getDate() - 6), // Start from 6 days ago
-            ma***REMOVED***: new Date().getTime(), // End at current time
+            max: new Date().getTime(), // End at current time
             labels: {
                 formatter: function(value) {
                     const date = new Date(value);
                     return date.toLocaleString('en-US', { weekday: 'long' }); // Show day name
                 }
             },
-            tickAmount: 6 // Ensure there are e***REMOVED***actly 6 ticks on the ***REMOVED***-a***REMOVED***is
+            tickAmount: 6 // Ensure there are exactly 6 ticks on the x-axis
         },
         dataLabels: {
             enabled: true, // Enable data labels
             formatter: function(value) {
-                return value.toFi***REMOVED***ed(2); // Format the value to 2 decimal places
+                return value.toFixed(2); // Format the value to 2 decimal places
             }
         }
     }).render();
 
-    new Ape***REMOVED***Charts(document.querySelector("#weeklyO***REMOVED***ygenChart"), {
+    new ApexCharts(document.querySelector("#weeklyOxygenChart"), {
         series: [{
-            name: 'Weekly O***REMOVED***ygen Levels',
-            data: weeklyO***REMOVED***ygenData,
+            name: 'Weekly Oxygen Levels',
+            data: weeklyOxygenData,
         }],
         chart: {
             height: 350,
@@ -93,23 +93,23 @@ function initializeWeeklyCharts() {
                 show: true
             }
         },
-        colors: ['#41acf1'], // Blue for o***REMOVED***ygen levels
-        ***REMOVED***a***REMOVED***is: {
+        colors: ['#41acf1'], // Blue for oxygen levels
+        xaxis: {
             type: 'datetime',
             min: new Date().setDate(new Date().getDate() - 6), // Start from 6 days ago
-            ma***REMOVED***: new Date().getTime(), // End at current time
+            max: new Date().getTime(), // End at current time
             labels: {
                 formatter: function(value) {
                     const date = new Date(value);
                     return date.toLocaleString('en-US', { weekday: 'long' }); // Show day name
                 }
             },
-            tickAmount: 6 // Ensure there are e***REMOVED***actly 6 ticks on the ***REMOVED***-a***REMOVED***is
+            tickAmount: 6 // Ensure there are exactly 6 ticks on the x-axis
         },
         dataLabels: {
             enabled: true, // Enable data labels
             formatter: function(value) {
-                return value.toFi***REMOVED***ed(2); // Format the value to 2 decimal places
+                return value.toFixed(2); // Format the value to 2 decimal places
             }
         }
     }).render();
@@ -121,7 +121,7 @@ function generateWeeklyData(dataGenerator) {
 
     for (let i = 0; i < 7; i++) {
         data.push({
-            ***REMOVED***: currentTime.toISOString(),
+            x: currentTime.toISOString(),
             y: dataGenerator()
         });
         currentTime.setDate(currentTime.getDate() - 1);
@@ -136,7 +136,7 @@ function generateHeartRateData(startDate, endDate, interval) {
 
     while (currentTime <= endDate) {
         data.push({
-            ***REMOVED***: currentTime.toISOString(),
+            x: currentTime.toISOString(),
             y: generateRandomHeartRate()
         });
         currentTime = new Date(currentTime.getTime() + interval * 60000);
@@ -145,14 +145,14 @@ function generateHeartRateData(startDate, endDate, interval) {
     return data;
 }
 
-function generateO***REMOVED***ygenLevelData(startDate, endDate, interval) {
+function generateOxygenLevelData(startDate, endDate, interval) {
     let data = [];
     let currentTime = new Date(startDate);
 
     while (currentTime <= endDate) {
         data.push({
-            ***REMOVED***: currentTime.toISOString(),
-            y: generateRandomO***REMOVED***ygenLevel()
+            x: currentTime.toISOString(),
+            y: generateRandomOxygenLevel()
         });
         currentTime = new Date(currentTime.getTime() + interval * 60000);
     }
@@ -175,7 +175,7 @@ function generateRandomHeartRate() {
     }
 }
 
-function generateRandomO***REMOVED***ygenLevel() {
+function generateRandomOxygenLevel() {
     const baseline = 98;
     const minRate = 94;
     const baselineVariance = 2;
@@ -190,7 +190,7 @@ function generateRandomO***REMOVED***ygenLevel() {
     }
 }
 
-function generateRandomWeeklyO***REMOVED***ygenLevel() {
+function generateRandomWeeklyOxygenLevel() {
     const baseline = 98;
     const minRate = 94;
     const baselineVariance = 2;
@@ -207,7 +207,7 @@ function generateRandomWeeklyO***REMOVED***ygenLevel() {
 
 function populateSelectDeviceId() {
     const token = window.sessionStorage.getItem('patient-token');
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/patients/profile',
         method: 'POST',
         contentType: 'application/json',
@@ -262,7 +262,7 @@ function checkFieldsForErrors() {
 
     if (errorMessage) {
         $('.errorDiv').show();
-        $('.errorMessage').te***REMOVED***t(errorMessage);
+        $('.errorMessage').text(errorMessage);
         return false;
     } else {
         $('.errorDiv').hide();
@@ -279,7 +279,7 @@ function generateSimulationGraph() {
     // Generate data for the graph based on form values
     const data = generateGraphData(startDate, endDate, interval);
 
-    new Ape***REMOVED***Charts(document.querySelector("#simulationHeartRateChart"), {
+    new ApexCharts(document.querySelector("#simulationHeartRateChart"), {
         series: [{
             name: 'Simulated Heart Rate',
             data: data,
@@ -291,7 +291,7 @@ function generateSimulationGraph() {
                 show: true
             }
         },
-        ***REMOVED***a***REMOVED***is: {
+        xaxis: {
             type: 'datetime',
             labels: {
                 formatter: function(value, timestamp) {
@@ -320,7 +320,7 @@ function generateGraphData(startDate, endDate, interval) {
 
     while (currentTime <= endDate) {
         data.push({
-            ***REMOVED***: currentTime.toISOString(),
+            x: currentTime.toISOString(),
             y: generateRandomHeartRate()
         });
         currentTime = new Date(currentTime.getTime() + interval * 60000);
@@ -368,7 +368,7 @@ function validateForm() {
 
     if (!isValid) {
         $('.errorDiv').show();
-        $('.errorMessage').te***REMOVED***t(errorMessage);
+        $('.errorMessage').text(errorMessage);
     } else {
         $('.errorDiv').hide();
     }

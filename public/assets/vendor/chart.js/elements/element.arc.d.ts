@@ -1,13 +1,13 @@
 import Element from '../core/core.element.js';
-import type { ArcOptions, Point } from '../types/inde***REMOVED***.js';
-e***REMOVED***port interface ArcProps e***REMOVED***tends Point {
+import type { ArcOptions, Point } from '../types/index.js';
+export interface ArcProps extends Point {
     startAngle: number;
     endAngle: number;
     innerRadius: number;
     outerRadius: number;
     circumference: number;
 }
-e***REMOVED***port default class ArcElement e***REMOVED***tends Element<ArcProps, ArcOptions> {
+export default class ArcElement extends Element<ArcProps, ArcOptions> {
     static id: string;
     static defaults: {
         borderAlign: string;
@@ -27,24 +27,24 @@ e***REMOVED***port default class ArcElement e***REMOVED***tends Element<ArcProps
     };
     static descriptors: {
         _scriptable: boolean;
-        _inde***REMOVED***able: (name: any) => boolean;
+        _indexable: (name: any) => boolean;
     };
     circumference: number;
     endAngle: number;
     fullCircles: number;
     innerRadius: number;
     outerRadius: number;
-    pi***REMOVED***elMargin: number;
+    pixelMargin: number;
     startAngle: number;
     constructor(cfg: any);
     inRange(chartX: number, chartY: number, useFinalPosition: boolean): boolean;
     getCenterPoint(useFinalPosition: boolean): {
-        ***REMOVED***: number;
+        x: number;
         y: number;
     };
     tooltipPosition(useFinalPosition: boolean): {
-        ***REMOVED***: number;
+        x: number;
         y: number;
     };
-    draw(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D): void;
+    draw(ctx: CanvasRenderingContext2D): void;
 }

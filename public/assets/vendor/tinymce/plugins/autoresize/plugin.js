@@ -38,7 +38,7 @@
       });
     };
     const getMinHeight = option('min_height');
-    const getMa***REMOVED***Height = option('ma***REMOVED***_height');
+    const getMaxHeight = option('max_height');
     const getAutoResizeOverflowPadding = option('autoresize_overflow_padding');
     const getAutoResizeBottomMargin = option('autoresize_bottom_margin');
 
@@ -65,7 +65,7 @@
         return false;
       }
     };
-    const resize = (editor, oldSize, trigger, getE***REMOVED***traMarginBottom) => {
+    const resize = (editor, oldSize, trigger, getExtraMarginBottom) => {
       var _a;
       const dom = editor.dom;
       const doc = editor.getDoc();
@@ -77,7 +77,7 @@
         return;
       }
       const docEle = doc.documentElement;
-      const resizeBottomMargin = getE***REMOVED***traMarginBottom ? getE***REMOVED***traMarginBottom() : getAutoResizeOverflowPadding(editor);
+      const resizeBottomMargin = getExtraMarginBottom ? getExtraMarginBottom() : getAutoResizeOverflowPadding(editor);
       const minHeight = (_a = getMinHeight(editor)) !== null && _a !== void 0 ? _a : editor.getElement().offsetHeight;
       let resizeHeight = minHeight;
       const marginTop = parseCssValueToInt(dom, docEle, 'margin-top', true);
@@ -92,9 +92,9 @@
       if (contentHeight + chromeHeight > minHeight) {
         resizeHeight = contentHeight + chromeHeight;
       }
-      const ma***REMOVED***Height = getMa***REMOVED***Height(editor);
-      if (ma***REMOVED***Height && resizeHeight > ma***REMOVED***Height) {
-        resizeHeight = ma***REMOVED***Height;
+      const maxHeight = getMaxHeight(editor);
+      if (maxHeight && resizeHeight > maxHeight) {
+        resizeHeight = maxHeight;
         toggleScrolling(editor, true);
       } else {
         toggleScrolling(editor, false);
@@ -106,7 +106,7 @@
       }
       if (resizeHeight !== old.totalHeight && (contentHeight - resizeBottomMargin !== old.contentHeight || !old.set)) {
         const deltaSize = resizeHeight - old.totalHeight;
-        dom.setStyle(editor.getContainer(), 'height', resizeHeight + 'p***REMOVED***');
+        dom.setStyle(editor.getContainer(), 'height', resizeHeight + 'px');
         oldSize.set({
           totalHeight: resizeHeight,
           contentHeight,
@@ -121,12 +121,12 @@
           editor.selection.scrollIntoView();
         }
         if ((global.browser.isSafari() || global.browser.isChromium()) && deltaSize < 0) {
-          resize(editor, oldSize, trigger, getE***REMOVED***traMarginBottom);
+          resize(editor, oldSize, trigger, getExtraMarginBottom);
         }
       }
     };
     const setup = (editor, oldSize) => {
-      const getE***REMOVED***traMarginBottom = () => getAutoResizeBottomMargin(editor);
+      const getExtraMarginBottom = () => getAutoResizeBottomMargin(editor);
       editor.on('init', e => {
         const overflowPadding = getAutoResizeOverflowPadding(editor);
         const dom = editor.dom;
@@ -143,10 +143,10 @@
             paddingRight: overflowPadding
           });
         }
-        resize(editor, oldSize, e, getE***REMOVED***traMarginBottom);
+        resize(editor, oldSize, e, getExtraMarginBottom);
       });
       editor.on('NodeChange SetContent keyup FullscreenStateChanged ResizeContent', e => {
-        resize(editor, oldSize, e, getE***REMOVED***traMarginBottom);
+        resize(editor, oldSize, e, getExtraMarginBottom);
       });
     };
 

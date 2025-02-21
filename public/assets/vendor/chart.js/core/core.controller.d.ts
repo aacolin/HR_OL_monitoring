@@ -1,6 +1,6 @@
-e***REMOVED***port default Chart;
-e***REMOVED***port type ChartEvent = import('../types/inde***REMOVED***.js').ChartEvent;
-e***REMOVED***port type Point = import('../types/inde***REMOVED***.js').Point;
+export default Chart;
+export type ChartEvent = import('../types/index.js').ChartEvent;
+export type Point = import('../types/index.js').Point;
 declare class Chart {
     static defaults: import("./core.defaults.js").Defaults;
     static instances: {};
@@ -14,7 +14,7 @@ declare class Chart {
     config: Config;
     platform: any;
     id: number;
-    ct***REMOVED***: any;
+    ctx: any;
     canvas: any;
     width: any;
     height: any;
@@ -23,11 +23,11 @@ declare class Chart {
     _layers: any[];
     _metasets: any[];
     _stacks: any;
-    bo***REMOVED***es: any[];
-    currentDevicePi***REMOVED***elRatio: any;
+    boxes: any[];
+    currentDevicePixelRatio: any;
     chartArea: any;
     _active: any[];
-    _lastEvent: import("../types/inde***REMOVED***.js").ChartEvent;
+    _lastEvent: import("../types/index.js").ChartEvent;
     _listeners: {};
     /** @type {?{attach?: function, detach?: function, resize?: function}} */
     _responsiveListeners: {
@@ -38,11 +38,11 @@ declare class Chart {
     _sortedMetasets: any[];
     scales: {};
     _plugins: PluginService;
-    $pro***REMOVED***ies: {};
+    $proxies: {};
     _hiddenIndices: {};
     attached: boolean;
     _animationsDisabled: boolean;
-    $conte***REMOVED***t: {
+    $context: {
         chart: Chart;
         type: string;
     };
@@ -61,7 +61,7 @@ declare class Chart {
     clear(): Chart;
     stop(): Chart;
     /**
-       * Resize the chart to its container or to e***REMOVED***plicit dimensions.
+       * Resize the chart to its container or to explicit dimensions.
        * @param {number} [width]
        * @param {number} [height]
        */
@@ -125,7 +125,7 @@ declare class Chart {
        */
     private _updateDatasets;
     /**
-       * Updates dataset at inde***REMOVED*** unless a plugin returns `false` to the `beforeDatasetUpdate`
+       * Updates dataset at index unless a plugin returns `false` to the `beforeDatasetUpdate`
        * hook, in which case, plugins will not be called on `afterDatasetUpdate`.
        * @private
        */
@@ -148,7 +148,7 @@ declare class Chart {
        */
     private _drawDatasets;
     /**
-       * Draws dataset at inde***REMOVED*** unless a plugin returns `false` to the `beforeDatasetDraw`
+       * Draws dataset at index unless a plugin returns `false` to the `beforeDatasetDraw`
        * hook, in which case, plugins will not be called on `afterDatasetDraw`.
        * @private
        */
@@ -160,22 +160,22 @@ declare class Chart {
      */
     isPointInArea(point: Point): boolean;
     getElementsAtEventForMode(e: any, mode: any, options: any, useFinalPosition: any): any;
-    getDatasetMeta(datasetInde***REMOVED***: any): any;
-    getConte***REMOVED***t(): {
+    getDatasetMeta(datasetIndex: any): any;
+    getContext(): {
         chart: Chart;
         type: string;
     };
     getVisibleDatasetCount(): number;
-    isDatasetVisible(datasetInde***REMOVED***: any): boolean;
-    setDatasetVisibility(datasetInde***REMOVED***: any, visible: any): void;
-    toggleDataVisibility(inde***REMOVED***: any): void;
-    getDataVisibility(inde***REMOVED***: any): boolean;
+    isDatasetVisible(datasetIndex: any): boolean;
+    setDatasetVisibility(datasetIndex: any, visible: any): void;
+    toggleDataVisibility(index: any): void;
+    getDataVisibility(index: any): boolean;
     /**
        * @private
        */
     private _updateVisibility;
-    hide(datasetInde***REMOVED***: any, dataInde***REMOVED***: any): void;
-    show(datasetInde***REMOVED***: any, dataInde***REMOVED***: any): void;
+    hide(datasetIndex: any, dataIndex: any): void;
+    show(datasetIndex: any, dataIndex: any): void;
     /**
        * @private
        */
@@ -212,10 +212,10 @@ declare class Chart {
     setActiveElements(activeElements: any[]): void;
     /**
        * Calls enabled plugins on the specified hook and with the given args.
-       * This method immediately returns as soon as a plugin e***REMOVED***plicitly returns false. The
+       * This method immediately returns as soon as a plugin explicitly returns false. The
        * returned value can be used, for instance, to interrupt the current action.
        * @param {string} hook - The name of the plugin method to call (e.g. 'beforeUpdate').
-       * @param {Object} [args] - E***REMOVED***tra arguments to apply to the hook call.
+       * @param {Object} [args] - Extra arguments to apply to the hook call.
      * @param {import('./core.plugins.js').filterCallback} [filter] - Filtering function for limiting which plugins are notified
        * @returns {boolean} false if any of the plugins return false, else returns true.
        */
@@ -245,13 +245,13 @@ declare class Chart {
     private _handleEvent;
     /**
      * @param {ChartEvent} e - The event
-     * @param {import('../types/inde***REMOVED***.js').ActiveElement[]} lastActive - Previously active elements
+     * @param {import('../types/index.js').ActiveElement[]} lastActive - Previously active elements
      * @param {boolean} inChartArea - Is the envent inside chartArea
      * @param {boolean} useFinalPosition - Should the evaluation be done with current or final (after animation) element positions
-     * @returns {import('../types/inde***REMOVED***.js').ActiveElement[]} - The active elements
+     * @returns {import('../types/index.js').ActiveElement[]} - The active elements
      * @pravate
      */
-    _getActiveElements(e: ChartEvent, lastActive: import('../types/inde***REMOVED***.js').ActiveElement[], inChartArea: boolean, useFinalPosition: boolean): import('../types/inde***REMOVED***.js').ActiveElement[];
+    _getActiveElements(e: ChartEvent, lastActive: import('../types/index.js').ActiveElement[], inChartArea: boolean, useFinalPosition: boolean): import('../types/index.js').ActiveElement[];
 }
 import Config from "./core.config.js";
 import PluginService from "./core.plugins.js";

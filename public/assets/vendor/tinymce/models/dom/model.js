@@ -15,13 +15,13 @@
         return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
       }
     };
-    const typeOf = ***REMOVED*** => {
-      const t = typeof ***REMOVED***;
-      if (***REMOVED*** === null) {
+    const typeOf = x => {
+      const t = typeof x;
+      if (x === null) {
         return 'null';
-      } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+      } else if (t === 'object' && Array.isArray(x)) {
         return 'array';
-      } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
         return 'string';
       } else {
         return t;
@@ -54,8 +54,8 @@
         return value;
       };
     };
-    const identity = ***REMOVED*** => {
-      return ***REMOVED***;
+    const identity = x => {
+      return x;
     };
     const tripleEquals = (a, b) => {
       return a === b;
@@ -116,7 +116,7 @@
           return Optional.none();
         }
       }
-      e***REMOVED***ists(predicate) {
+      exists(predicate) {
         return this.tag && predicate(this.value);
       }
       forall(predicate) {
@@ -172,14 +172,14 @@
     Optional.singletonNone = new Optional(false);
 
     const nativeSlice = Array.prototype.slice;
-    const nativeInde***REMOVED***Of = Array.prototype.inde***REMOVED***Of;
+    const nativeIndexOf = Array.prototype.indexOf;
     const nativePush = Array.prototype.push;
-    const rawInde***REMOVED***Of = (ts, t) => nativeInde***REMOVED***Of.call(ts, t);
-    const contains$2 = (***REMOVED***s, ***REMOVED***) => rawInde***REMOVED***Of(***REMOVED***s, ***REMOVED***) > -1;
-    const e***REMOVED***ists = (***REMOVED***s, pred) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
+    const rawIndexOf = (ts, t) => nativeIndexOf.call(ts, t);
+    const contains$2 = (xs, x) => rawIndexOf(xs, x) > -1;
+    const exists = (xs, pred) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
           return true;
         }
       }
@@ -192,126 +192,126 @@
       }
       return r;
     };
-    const map$1 = (***REMOVED***s, f) => {
-      const len = ***REMOVED***s.length;
+    const map$1 = (xs, f) => {
+      const len = xs.length;
       const r = new Array(len);
       for (let i = 0; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        r[i] = f(***REMOVED***, i);
+        const x = xs[i];
+        r[i] = f(x, i);
       }
       return r;
     };
-    const each$2 = (***REMOVED***s, f) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        f(***REMOVED***, i);
+    const each$2 = (xs, f) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        f(x, i);
       }
     };
-    const eachr = (***REMOVED***s, f) => {
-      for (let i = ***REMOVED***s.length - 1; i >= 0; i--) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        f(***REMOVED***, i);
+    const eachr = (xs, f) => {
+      for (let i = xs.length - 1; i >= 0; i--) {
+        const x = xs[i];
+        f(x, i);
       }
     };
-    const partition = (***REMOVED***s, pred) => {
+    const partition = (xs, pred) => {
       const pass = [];
       const fail = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        const arr = pred(***REMOVED***, i) ? pass : fail;
-        arr.push(***REMOVED***);
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        const arr = pred(x, i) ? pass : fail;
+        arr.push(x);
       }
       return {
         pass,
         fail
       };
     };
-    const filter$2 = (***REMOVED***s, pred) => {
+    const filter$2 = (xs, pred) => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
-          r.push(***REMOVED***);
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
+          r.push(x);
         }
       }
       return r;
     };
-    const foldr = (***REMOVED***s, f, acc) => {
-      eachr(***REMOVED***s, (***REMOVED***, i) => {
-        acc = f(acc, ***REMOVED***, i);
+    const foldr = (xs, f, acc) => {
+      eachr(xs, (x, i) => {
+        acc = f(acc, x, i);
       });
       return acc;
     };
-    const foldl = (***REMOVED***s, f, acc) => {
-      each$2(***REMOVED***s, (***REMOVED***, i) => {
-        acc = f(acc, ***REMOVED***, i);
+    const foldl = (xs, f, acc) => {
+      each$2(xs, (x, i) => {
+        acc = f(acc, x, i);
       });
       return acc;
     };
-    const findUntil = (***REMOVED***s, pred, until) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
-          return Optional.some(***REMOVED***);
-        } else if (until(***REMOVED***, i)) {
+    const findUntil = (xs, pred, until) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
+          return Optional.some(x);
+        } else if (until(x, i)) {
           break;
         }
       }
       return Optional.none();
     };
-    const find$1 = (***REMOVED***s, pred) => {
-      return findUntil(***REMOVED***s, pred, never);
+    const find$1 = (xs, pred) => {
+      return findUntil(xs, pred, never);
     };
-    const findInde***REMOVED*** = (***REMOVED***s, pred) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
+    const findIndex = (xs, pred) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
           return Optional.some(i);
         }
       }
       return Optional.none();
     };
-    const flatten = ***REMOVED***s => {
+    const flatten = xs => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; ++i) {
-        if (!isArray(***REMOVED***s[i])) {
-          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + ***REMOVED***s);
+      for (let i = 0, len = xs.length; i < len; ++i) {
+        if (!isArray(xs[i])) {
+          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + xs);
         }
-        nativePush.apply(r, ***REMOVED***s[i]);
+        nativePush.apply(r, xs[i]);
       }
       return r;
     };
-    const bind$2 = (***REMOVED***s, f) => flatten(map$1(***REMOVED***s, f));
-    const forall = (***REMOVED***s, pred) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; ++i) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i) !== true) {
+    const bind$2 = (xs, f) => flatten(map$1(xs, f));
+    const forall = (xs, pred) => {
+      for (let i = 0, len = xs.length; i < len; ++i) {
+        const x = xs[i];
+        if (pred(x, i) !== true) {
           return false;
         }
       }
       return true;
     };
-    const reverse = ***REMOVED***s => {
-      const r = nativeSlice.call(***REMOVED***s, 0);
+    const reverse = xs => {
+      const r = nativeSlice.call(xs, 0);
       r.reverse();
       return r;
     };
-    const mapToObject = (***REMOVED***s, f) => {
+    const mapToObject = (xs, f) => {
       const r = {};
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        r[String(***REMOVED***)] = f(***REMOVED***, i);
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        r[String(x)] = f(x, i);
       }
       return r;
     };
-    const sort$1 = (***REMOVED***s, comparator) => {
-      const copy = nativeSlice.call(***REMOVED***s, 0);
+    const sort$1 = (xs, comparator) => {
+      const copy = nativeSlice.call(xs, 0);
       copy.sort(comparator);
       return copy;
     };
-    const get$d = (***REMOVED***s, i) => i >= 0 && i < ***REMOVED***s.length ? Optional.some(***REMOVED***s[i]) : Optional.none();
-    const head = ***REMOVED***s => get$d(***REMOVED***s, 0);
-    const last$2 = ***REMOVED***s => get$d(***REMOVED***s, ***REMOVED***s.length - 1);
+    const get$d = (xs, i) => i >= 0 && i < xs.length ? Optional.some(xs[i]) : Optional.none();
+    const head = xs => get$d(xs, 0);
+    const last$2 = xs => get$d(xs, xs.length - 1);
     const findMap = (arr, f) => {
       for (let i = 0; i < arr.length; i++) {
         const r = f(arr[i], i);
@@ -328,30 +328,30 @@
       const props = keys(obj);
       for (let k = 0, len = props.length; k < len; k++) {
         const i = props[k];
-        const ***REMOVED*** = obj[i];
-        f(***REMOVED***, i);
+        const x = obj[i];
+        f(x, i);
       }
     };
     const map = (obj, f) => {
-      return tupleMap(obj, (***REMOVED***, i) => ({
+      return tupleMap(obj, (x, i) => ({
         k: i,
-        v: f(***REMOVED***, i)
+        v: f(x, i)
       }));
     };
     const tupleMap = (obj, f) => {
       const r = {};
-      each$1(obj, (***REMOVED***, i) => {
-        const tuple = f(***REMOVED***, i);
+      each$1(obj, (x, i) => {
+        const tuple = f(x, i);
         r[tuple.k] = tuple.v;
       });
       return r;
     };
-    const objAcc = r => (***REMOVED***, i) => {
-      r[i] = ***REMOVED***;
+    const objAcc = r => (x, i) => {
+      r[i] = x;
     };
     const internalFilter = (obj, pred, onTrue, onFalse) => {
-      each$1(obj, (***REMOVED***, i) => {
-        (pred(***REMOVED***, i) ? onTrue : onFalse)(***REMOVED***, i);
+      each$1(obj, (x, i) => {
+        (pred(x, i) ? onTrue : onFalse)(x, i);
       });
     };
     const filter$1 = (obj, pred) => {
@@ -375,8 +375,8 @@
     const has$1 = (obj, key) => hasOwnProperty.call(obj, key);
     const hasNonNullableKey = (obj, key) => has$1(obj, key) && obj[key] !== undefined && obj[key] !== null;
     const isEmpty = r => {
-      for (const ***REMOVED*** in r) {
-        if (hasOwnProperty.call(r, ***REMOVED***)) {
+      for (const x in r) {
+        if (hasOwnProperty.call(r, x)) {
           return false;
         }
       }
@@ -412,9 +412,9 @@
     const sandHTMLElement = scope => {
       return getOrDie('HTMLElement', scope);
     };
-    const isPrototypeOf = ***REMOVED*** => {
-      const scope = resolve$2('ownerDocument.defaultView', ***REMOVED***);
-      return isObject(***REMOVED***) && (sandHTMLElement(scope).prototype.isPrototypeOf(***REMOVED***) || /^HTML\w*Element$/.test(getPrototypeOf(***REMOVED***).constructor.name));
+    const isPrototypeOf = x => {
+      const scope = resolve$2('ownerDocument.defaultView', x);
+      return isObject(x) && (sandHTMLElement(scope).prototype.isPrototypeOf(x) || /^HTML\w*Element$/.test(getPrototypeOf(x).constructor.name));
     };
 
     const COMMENT = 8;
@@ -432,7 +432,7 @@
     const isComment = element => type(element) === COMMENT || name(element) === '#comment';
     const isHTMLElement = element => isElement(element) && isPrototypeOf(element.dom);
     const isElement = isType(ELEMENT);
-    const isTe***REMOVED***t = isType(TEXT);
+    const isText = isType(TEXT);
     const isDocument = isType(DOCUMENT);
     const isDocumentFragment = isType(DOCUMENT_FRAGMENT);
     const isTag = tag => e => isElement(e) && name(e) === tag;
@@ -492,9 +492,9 @@
       const node = doc.createElement(tag);
       return fromDom$1(node);
     };
-    const fromTe***REMOVED***t = (te***REMOVED***t, scope) => {
+    const fromText = (text, scope) => {
       const doc = scope || document;
-      const node = doc.createTe***REMOVED***tNode(te***REMOVED***t);
+      const node = doc.createTextNode(text);
       return fromDom$1(node);
     };
     const fromDom$1 = node => {
@@ -503,11 +503,11 @@
       }
       return { dom: node };
     };
-    const fromPoint$1 = (docElm, ***REMOVED***, y) => Optional.from(docElm.dom.elementFromPoint(***REMOVED***, y)).map(fromDom$1);
+    const fromPoint$1 = (docElm, x, y) => Optional.from(docElm.dom.elementFromPoint(x, y)).map(fromDom$1);
     const SugarElement = {
       fromHtml: fromHtml$1,
       fromTag,
-      fromTe***REMOVED***t,
+      fromText,
       fromDom: fromDom$1,
       fromPoint: fromPoint$1
     };
@@ -572,11 +572,11 @@
       return ret;
     };
     const prevSibling = element => Optional.from(element.dom.previousSibling).map(SugarElement.fromDom);
-    const ne***REMOVED***tSibling = element => Optional.from(element.dom.ne***REMOVED***tSibling).map(SugarElement.fromDom);
+    const nextSibling = element => Optional.from(element.dom.nextSibling).map(SugarElement.fromDom);
     const children$2 = element => map$1(element.dom.childNodes, SugarElement.fromDom);
-    const child$2 = (element, inde***REMOVED***) => {
+    const child$2 = (element, index) => {
       const cs = element.dom.childNodes;
-      return Optional.from(cs[inde***REMOVED***]).map(SugarElement.fromDom);
+      return Optional.from(cs[index]).map(SugarElement.fromDom);
     };
     const firstChild = element => child$2(element, 0);
 
@@ -587,7 +587,7 @@
       });
     };
     const after$5 = (marker, element) => {
-      const sibling = ne***REMOVED***tSibling(marker);
+      const sibling = nextSibling(marker);
       sibling.fold(() => {
         const parent$1 = parent(marker);
         parent$1.each(v => {
@@ -608,8 +608,8 @@
     const append$1 = (parent, element) => {
       parent.dom.appendChild(element.dom);
     };
-    const appendAt = (parent, element, inde***REMOVED***) => {
-      child$2(parent, inde***REMOVED***).fold(() => {
+    const appendAt = (parent, element, index) => {
+      child$2(parent, index).fold(() => {
         append$1(parent, element);
       }, v => {
         before$3(v, element);
@@ -621,19 +621,19 @@
     };
 
     const after$4 = (marker, elements) => {
-      each$2(elements, (***REMOVED***, i) => {
+      each$2(elements, (x, i) => {
         const e = i === 0 ? marker : elements[i - 1];
-        after$5(e, ***REMOVED***);
+        after$5(e, x);
       });
     };
     const append = (parent, elements) => {
-      each$2(elements, ***REMOVED*** => {
-        append$1(parent, ***REMOVED***);
+      each$2(elements, x => {
+        append$1(parent, x);
       });
     };
 
     const empty = element => {
-      element.dom.te***REMOVED***tContent = '';
+      element.dom.textContent = '';
       each$2(children$2(element), rogue => {
         remove$6(rogue);
       });
@@ -702,7 +702,7 @@
       colspan,
       isNew
     });
-    const e***REMOVED***tended = (element, rowspan, colspan, row, column, isLocked) => ({
+    const extended = (element, rowspan, colspan, row, column, isLocked) => ({
       element,
       rowspan,
       colspan,
@@ -738,7 +738,7 @@
       finishRow,
       finishCol
     });
-    const columne***REMOVED***t = (element, colspan, column) => ({
+    const columnext = (element, colspan, column) => ({
       element,
       colspan,
       column
@@ -774,7 +774,7 @@
     const isOpenShadowHost = element => isNonNullable(element.dom.shadowRoot);
 
     const inBody = element => {
-      const dom = isTe***REMOVED***t(element) ? element.dom.parentNode : element.dom;
+      const dom = isText(element) ? element.dom.parentNode : element.dom;
       if (dom === undefined || dom === null || dom.ownerDocument === null) {
         return false;
       }
@@ -794,11 +794,11 @@
     const children$1 = (scope, predicate) => filter$2(children$2(scope), predicate);
     const descendants$1 = (scope, predicate) => {
       let result = [];
-      each$2(children$2(scope), ***REMOVED*** => {
-        if (predicate(***REMOVED***)) {
-          result = result.concat([***REMOVED***]);
+      each$2(children$2(scope), x => {
+        if (predicate(x)) {
+          result = result.concat([x]);
         }
-        result = result.concat(descendants$1(***REMOVED***, predicate));
+        result = result.concat(descendants$1(x, predicate));
       });
       return result;
     };
@@ -865,11 +865,11 @@
       return ClosestOrAncestor(is, ancestor$1, scope, selector, isRoot);
     };
 
-    const is = (lhs, rhs, comparator = tripleEquals) => lhs.e***REMOVED***ists(left => comparator(left, rhs));
+    const is = (lhs, rhs, comparator = tripleEquals) => lhs.exists(left => comparator(left, rhs));
     const cat = arr => {
       const r = [];
-      const push = ***REMOVED*** => {
-        r.push(***REMOVED***);
+      const push = x => {
+        r.push(x);
       };
       for (let i = 0; i < arr.length; i++) {
         arr[i].each(push);
@@ -884,22 +884,22 @@
     };
 
     const checkRange = (str, substr, start) => substr === '' || str.length >= substr.length && str.substr(start, start + substr.length) === substr;
-    const removeLeading = (str, prefi***REMOVED***) => {
-      return startsWith(str, prefi***REMOVED***) ? removeFromStart(str, prefi***REMOVED***.length) : str;
+    const removeLeading = (str, prefix) => {
+      return startsWith(str, prefix) ? removeFromStart(str, prefix.length) : str;
     };
     const contains = (str, substr, start = 0, end) => {
-      const id***REMOVED*** = str.inde***REMOVED***Of(substr, start);
-      if (id***REMOVED*** !== -1) {
-        return isUndefined(end) ? true : id***REMOVED*** + substr.length <= end;
+      const idx = str.indexOf(substr, start);
+      if (idx !== -1) {
+        return isUndefined(end) ? true : idx + substr.length <= end;
       } else {
         return false;
       }
     };
-    const startsWith = (str, prefi***REMOVED***) => {
-      return checkRange(str, prefi***REMOVED***, 0);
+    const startsWith = (str, prefix) => {
+      return checkRange(str, prefix, 0);
     };
-    const endsWith = (str, suffi***REMOVED***) => {
-      return checkRange(str, suffi***REMOVED***, str.length - suffi***REMOVED***.length);
+    const endsWith = (str, suffix) => {
+      return checkRange(str, suffix, str.length - suffix.length);
     };
     const blank = r => s => s.replace(r, '');
     const trim = blank(/^\s+|\s+$/g);
@@ -958,7 +958,7 @@
       const sourceDom = source.dom;
       const targetDom = target.dom;
       if (isSupported(sourceDom) && isSupported(targetDom)) {
-        targetDom.style.cssTe***REMOVED***t = sourceDom.style.cssTe***REMOVED***t;
+        targetDom.style.cssText = sourceDom.style.cssText;
       }
     };
 
@@ -980,11 +980,11 @@
       return filterFirstLayer(scope, selector, always);
     };
     const filterFirstLayer = (scope, selector, predicate) => {
-      return bind$2(children$2(scope), ***REMOVED*** => {
-        if (is$2(***REMOVED***, selector)) {
-          return predicate(***REMOVED***) ? [***REMOVED***] : [];
+      return bind$2(children$2(scope), x => {
+        if (is$2(x, selector)) {
+          return predicate(x) ? [x] : [];
         } else {
-          return filterFirstLayer(***REMOVED***, selector, predicate);
+          return filterFirstLayer(x, selector, predicate);
         }
       });
     };
@@ -1063,7 +1063,7 @@
       const isiPhone = os.isiOS() && !isiPad;
       const isMobile = os.isiOS() || os.isAndroid();
       const isTouch = isMobile || mediaMatch('(pointer:coarse)');
-      const isTablet = isiPad || !isiPhone && isMobile && mediaMatch('(min-device-width:768p***REMOVED***)');
+      const isTablet = isiPad || !isiPhone && isMobile && mediaMatch('(min-device-width:768px)');
       const isPhone = isiPhone || isMobile && !isTablet;
       const iOSwebview = browser.isSafari() && os.isiOS() && /safari/i.test(userAgent) === false;
       const isDesktop = !isPhone && !isTablet && !iOSwebview;
@@ -1080,17 +1080,17 @@
       };
     };
 
-    const firstMatch = (rege***REMOVED***es, s) => {
-      for (let i = 0; i < rege***REMOVED***es.length; i++) {
-        const ***REMOVED*** = rege***REMOVED***es[i];
-        if (***REMOVED***.test(s)) {
-          return ***REMOVED***;
+    const firstMatch = (regexes, s) => {
+      for (let i = 0; i < regexes.length; i++) {
+        const x = regexes[i];
+        if (x.test(s)) {
+          return x;
         }
       }
       return undefined;
     };
-    const find = (rege***REMOVED***es, agent) => {
-      const r = firstMatch(rege***REMOVED***es, agent);
+    const find = (regexes, agent) => {
+      const r = firstMatch(regexes, agent);
       if (!r) {
         return {
           major: 0,
@@ -1102,12 +1102,12 @@
       };
       return nu$2(group(1), group(2));
     };
-    const detect$5 = (versionRege***REMOVED***es, agent) => {
+    const detect$5 = (versionRegexes, agent) => {
       const cleanedAgent = String(agent).toLowerCase();
-      if (versionRege***REMOVED***es.length === 0) {
+      if (versionRegexes.length === 0) {
         return unknown$2();
       }
-      return find(versionRege***REMOVED***es, cleanedAgent);
+      return find(versionRegexes, cleanedAgent);
     };
     const unknown$2 = () => {
       return nu$2(0, 0);
@@ -1145,7 +1145,7 @@
     };
     const detectBrowser = (browsers, userAgent) => {
       return detect$4(browsers, userAgent).map(browser => {
-        const version = Version.detect(browser.versionRege***REMOVED***es, userAgent);
+        const version = Version.detect(browser.versionRegexes, userAgent);
         return {
           current: browser.name,
           version
@@ -1154,7 +1154,7 @@
     };
     const detectOs = (oses, userAgent) => {
       return detect$4(oses, userAgent).map(os => {
-        const version = Version.detect(os.versionRege***REMOVED***es, userAgent);
+        const version = Version.detect(os.versionRegexes, userAgent);
         return {
           current: os.name,
           version
@@ -1162,7 +1162,7 @@
       });
     };
 
-    const normalVersionRege***REMOVED*** = /.*?version\/\ ?([0-9]+)\.([0-9]+).*/;
+    const normalVersionRegex = /.*?version\/\ ?([0-9]+)\.([0-9]+).*/;
     const checkContains = target => {
       return uastring => {
         return contains(uastring, target);
@@ -1171,7 +1171,7 @@
     const browsers = [
       {
         name: 'Edge',
-        versionRege***REMOVED***es: [/.*?edge\/ ?([0-9]+)\.([0-9]+)$/],
+        versionRegexes: [/.*?edge\/ ?([0-9]+)\.([0-9]+)$/],
         search: uastring => {
           return contains(uastring, 'edge/') && contains(uastring, 'chrome') && contains(uastring, 'safari') && contains(uastring, 'applewebkit');
         }
@@ -1179,9 +1179,9 @@
       {
         name: 'Chromium',
         brand: 'Chromium',
-        versionRege***REMOVED***es: [
+        versionRegexes: [
           /.*?chrome\/([0-9]+)\.([0-9]+).*/,
-          normalVersionRege***REMOVED***
+          normalVersionRegex
         ],
         search: uastring => {
           return contains(uastring, 'chrome') && !contains(uastring, 'chromeframe');
@@ -1189,7 +1189,7 @@
       },
       {
         name: 'IE',
-        versionRege***REMOVED***es: [
+        versionRegexes: [
           /.*?msie\ ?([0-9]+)\.([0-9]+).*/,
           /.*?rv:([0-9]+)\.([0-9]+).*/
         ],
@@ -1199,21 +1199,21 @@
       },
       {
         name: 'Opera',
-        versionRege***REMOVED***es: [
-          normalVersionRege***REMOVED***,
+        versionRegexes: [
+          normalVersionRegex,
           /.*?opera\/([0-9]+)\.([0-9]+).*/
         ],
         search: checkContains('opera')
       },
       {
-        name: 'Firefo***REMOVED***',
-        versionRege***REMOVED***es: [/.*?firefo***REMOVED***\/\ ?([0-9]+)\.([0-9]+).*/],
-        search: checkContains('firefo***REMOVED***')
+        name: 'Firefox',
+        versionRegexes: [/.*?firefox\/\ ?([0-9]+)\.([0-9]+).*/],
+        search: checkContains('firefox')
       },
       {
         name: 'Safari',
-        versionRege***REMOVED***es: [
-          normalVersionRege***REMOVED***,
+        versionRegexes: [
+          normalVersionRegex,
           /.*?cpu os ([0-9]+)_([0-9]+).*/
         ],
         search: uastring => {
@@ -1225,14 +1225,14 @@
       {
         name: 'Windows',
         search: checkContains('win'),
-        versionRege***REMOVED***es: [/.*?windows\ nt\ ?([0-9]+)\.([0-9]+).*/]
+        versionRegexes: [/.*?windows\ nt\ ?([0-9]+)\.([0-9]+).*/]
       },
       {
         name: 'iOS',
         search: uastring => {
           return contains(uastring, 'iphone') || contains(uastring, 'ipad');
         },
-        versionRege***REMOVED***es: [
+        versionRegexes: [
           /.*?version\/\ ?([0-9]+)\.([0-9]+).*/,
           /.*cpu os ([0-9]+)_([0-9]+).*/,
           /.*cpu iphone os ([0-9]+)_([0-9]+).*/
@@ -1241,32 +1241,32 @@
       {
         name: 'Android',
         search: checkContains('android'),
-        versionRege***REMOVED***es: [/.*?android\ ?([0-9]+)\.([0-9]+).*/]
+        versionRegexes: [/.*?android\ ?([0-9]+)\.([0-9]+).*/]
       },
       {
         name: 'macOS',
-        search: checkContains('mac os ***REMOVED***'),
-        versionRege***REMOVED***es: [/.*?mac\ os\ ***REMOVED***\ ?([0-9]+)_([0-9]+).*/]
+        search: checkContains('mac os x'),
+        versionRegexes: [/.*?mac\ os\ x\ ?([0-9]+)_([0-9]+).*/]
       },
       {
-        name: 'Linu***REMOVED***',
-        search: checkContains('linu***REMOVED***'),
-        versionRege***REMOVED***es: []
+        name: 'Linux',
+        search: checkContains('linux'),
+        versionRegexes: []
       },
       {
         name: 'Solaris',
         search: checkContains('sunos'),
-        versionRege***REMOVED***es: []
+        versionRegexes: []
       },
       {
         name: 'FreeBSD',
         search: checkContains('freebsd'),
-        versionRege***REMOVED***es: []
+        versionRegexes: []
       },
       {
         name: 'ChromeOS',
         search: checkContains('cros'),
-        versionRege***REMOVED***es: [/.*?chrome\/([0-9]+)\.([0-9]+).*/]
+        versionRegexes: [/.*?chrome\/([0-9]+)\.([0-9]+).*/]
       }
     ];
     const PlatformInfo = {
@@ -1278,7 +1278,7 @@
     const chromium = 'Chromium';
     const ie = 'IE';
     const opera = 'Opera';
-    const firefo***REMOVED*** = 'Firefo***REMOVED***';
+    const firefox = 'Firefox';
     const safari = 'Safari';
     const unknown$1 = () => {
       return nu$1({
@@ -1297,7 +1297,7 @@
         isChromium: isBrowser(chromium),
         isIE: isBrowser(ie),
         isOpera: isBrowser(opera),
-        isFirefo***REMOVED***: isBrowser(firefo***REMOVED***),
+        isFirefox: isBrowser(firefox),
         isSafari: isBrowser(safari)
       };
     };
@@ -1308,14 +1308,14 @@
       chromium: constant(chromium),
       ie: constant(ie),
       opera: constant(opera),
-      firefo***REMOVED***: constant(firefo***REMOVED***),
+      firefox: constant(firefox),
       safari: constant(safari)
     };
 
     const windows = 'Windows';
     const ios = 'iOS';
     const android = 'Android';
-    const linu***REMOVED*** = 'Linu***REMOVED***';
+    const linux = 'Linux';
     const macos = 'macOS';
     const solaris = 'Solaris';
     const freebsd = 'FreeBSD';
@@ -1337,7 +1337,7 @@
         isiOS: isOS(ios),
         isAndroid: isOS(android),
         isMacOS: isOS(macos),
-        isLinu***REMOVED***: isOS(linu***REMOVED***),
+        isLinux: isOS(linux),
         isSolaris: isOS(solaris),
         isFreeBSD: isOS(freebsd),
         isChromeOS: isOS(chromeos)
@@ -1349,7 +1349,7 @@
       windows: constant(windows),
       ios: constant(ios),
       android: constant(android),
-      linu***REMOVED***: constant(linu***REMOVED***),
+      linux: constant(linux),
       macos: constant(macos),
       solaris: constant(solaris),
       freebsd: constant(freebsd),
@@ -1381,7 +1381,7 @@
         }
         const dom = element.dom;
         if (isSupported(dom)) {
-          dom.style[name] = h + 'p***REMOVED***';
+          dom.style[name] = h + 'px';
         }
       };
       const get = element => {
@@ -1398,37 +1398,37 @@
         const value = val === undefined ? 0 : parseInt(val, 10);
         return isNaN(value) ? acc : acc + value;
       }, 0);
-      const ma***REMOVED*** = (element, value, properties) => {
+      const max = (element, value, properties) => {
         const cumulativeInclusions = aggregate(element, properties);
-        const absoluteMa***REMOVED*** = value > cumulativeInclusions ? value - cumulativeInclusions : 0;
-        return absoluteMa***REMOVED***;
+        const absoluteMax = value > cumulativeInclusions ? value - cumulativeInclusions : 0;
+        return absoluteMax;
       };
       return {
         set,
         get,
         getOuter,
         aggregate,
-        ma***REMOVED***
+        max
       };
     };
 
-    const toNumber = (p***REMOVED***, fallback) => toFloat(p***REMOVED***).getOr(fallback);
+    const toNumber = (px, fallback) => toFloat(px).getOr(fallback);
     const getProp = (element, name, fallback) => toNumber(get$a(element, name), fallback);
-    const calcContentBo***REMOVED***Size = (element, size, upper, lower) => {
+    const calcContentBoxSize = (element, size, upper, lower) => {
       const paddingUpper = getProp(element, `padding-${ upper }`, 0);
       const paddingLower = getProp(element, `padding-${ lower }`, 0);
       const borderUpper = getProp(element, `border-${ upper }-width`, 0);
       const borderLower = getProp(element, `border-${ lower }-width`, 0);
       return size - paddingUpper - paddingLower - borderUpper - borderLower;
     };
-    const getCalculatedWidth = (element, bo***REMOVED***Sizing) => {
+    const getCalculatedWidth = (element, boxSizing) => {
       const dom = element.dom;
       const width = dom.getBoundingClientRect().width || dom.offsetWidth;
-      return bo***REMOVED***Sizing === 'border-bo***REMOVED***' ? width : calcContentBo***REMOVED***Size(element, width, 'left', 'right');
+      return boxSizing === 'border-box' ? width : calcContentBoxSize(element, width, 'left', 'right');
     };
     const getHeight$1 = element => getProp(element, 'height', element.dom.offsetHeight);
     const getWidth = element => getProp(element, 'width', element.dom.offsetWidth);
-    const getInnerWidth = element => getCalculatedWidth(element, 'content-bo***REMOVED***');
+    const getInnerWidth = element => getCalculatedWidth(element, 'content-box');
 
     const api$2 = Dimension('width', element => element.dom.offsetWidth);
     const get$9 = element => api$2.get(element);
@@ -1436,17 +1436,17 @@
     const getInner = getInnerWidth;
     const getRuntime$1 = getWidth;
 
-    const addCells = (gridRow, inde***REMOVED***, cells) => {
-      const e***REMOVED***istingCells = gridRow.cells;
-      const before = e***REMOVED***istingCells.slice(0, inde***REMOVED***);
-      const after = e***REMOVED***istingCells.slice(inde***REMOVED***);
+    const addCells = (gridRow, index, cells) => {
+      const existingCells = gridRow.cells;
+      const before = existingCells.slice(0, index);
+      const after = existingCells.slice(index);
       const newCells = before.concat(cells).concat(after);
       return setCells(gridRow, newCells);
     };
-    const addCell = (gridRow, inde***REMOVED***, cell) => addCells(gridRow, inde***REMOVED***, [cell]);
-    const mutateCell = (gridRow, inde***REMOVED***, cell) => {
+    const addCell = (gridRow, index, cell) => addCells(gridRow, index, [cell]);
+    const mutateCell = (gridRow, index, cell) => {
       const cells = gridRow.cells;
-      cells[inde***REMOVED***] = cell;
+      cells[index] = cell;
     };
     const setCells = (gridRow, cells) => rowcells(gridRow.element, cells, gridRow.section, gridRow.isNew);
     const mapCells = (gridRow, f) => {
@@ -1454,10 +1454,10 @@
       const r = map$1(cells, f);
       return rowcells(gridRow.element, r, gridRow.section, gridRow.isNew);
     };
-    const getCell = (gridRow, inde***REMOVED***) => gridRow.cells[inde***REMOVED***];
-    const getCellElement = (gridRow, inde***REMOVED***) => getCell(gridRow, inde***REMOVED***).element;
+    const getCell = (gridRow, index) => gridRow.cells[index];
+    const getCellElement = (gridRow, index) => getCell(gridRow, index).element;
     const cellLength = gridRow => gridRow.cells.length;
-    const e***REMOVED***tractGridDetails = grid => {
+    const extractGridDetails = grid => {
       const result = partition(grid, row => row.section === 'colgroup');
       return {
         rows: result.fail,
@@ -1472,10 +1472,10 @@
     const LOCKED_COL_ATTR = 'data-snooker-locked-cols';
     const getLockedColumnsFromTable = table => getOpt(table, LOCKED_COL_ATTR).bind(lockedColStr => Optional.from(lockedColStr.match(/\d+/g))).map(lockedCols => mapToObject(lockedCols, always));
     const getLockedColumnsFromGrid = grid => {
-      const locked = foldl(e***REMOVED***tractGridDetails(grid).rows, (acc, row) => {
-        each$2(row.cells, (cell, id***REMOVED***) => {
+      const locked = foldl(extractGridDetails(grid).rows, (acc, row) => {
+        each$2(row.cells, (cell, idx) => {
           if (cell.isLocked) {
-            acc[id***REMOVED***] = true;
+            acc[idx] = true;
           }
         });
         return acc;
@@ -1502,14 +1502,14 @@
     };
     const generateColumns = rowData => {
       const columnsGroup = {};
-      let inde***REMOVED*** = 0;
+      let index = 0;
       each$2(rowData.cells, column => {
         const colspan = column.colspan;
-        range$1(colspan, columnInde***REMOVED*** => {
-          const colInde***REMOVED*** = inde***REMOVED*** + columnInde***REMOVED***;
-          columnsGroup[colInde***REMOVED***] = columne***REMOVED***t(column.element, colspan, colInde***REMOVED***);
+        range$1(colspan, columnIndex => {
+          const colIndex = index + columnIndex;
+          columnsGroup[colIndex] = columnext(column.element, colspan, colIndex);
         });
-        inde***REMOVED*** += colspan;
+        index += colspan;
       });
       return columnsGroup;
     };
@@ -1518,8 +1518,8 @@
       const cells = [];
       const tableOpt = head(list).map(rowData => rowData.element).bind(table);
       const lockedColumns = tableOpt.bind(getLockedColumnsFromTable).getOr({});
-      let ma***REMOVED***Rows = 0;
-      let ma***REMOVED***Columns = 0;
+      let maxRows = 0;
+      let maxColumns = 0;
       let rowCount = 0;
       const {
         pass: colgroupRows,
@@ -1533,19 +1533,19 @@
             start++;
           }
           const isLocked = hasNonNullableKey(lockedColumns, start.toString());
-          const current = e***REMOVED***tended(rowCell.element, rowCell.rowspan, rowCell.colspan, rowCount, start, isLocked);
+          const current = extended(rowCell.element, rowCell.rowspan, rowCell.colspan, rowCount, start, isLocked);
           for (let occupiedColumnPosition = 0; occupiedColumnPosition < rowCell.colspan; occupiedColumnPosition++) {
             for (let occupiedRowPosition = 0; occupiedRowPosition < rowCell.rowspan; occupiedRowPosition++) {
               const rowPosition = rowCount + occupiedRowPosition;
               const columnPosition = start + occupiedColumnPosition;
               const newpos = key(rowPosition, columnPosition);
               access[newpos] = current;
-              ma***REMOVED***Columns = Math.ma***REMOVED***(ma***REMOVED***Columns, columnPosition + 1);
+              maxColumns = Math.max(maxColumns, columnPosition + 1);
             }
           }
           currentRow.push(current);
         });
-        ma***REMOVED***Rows++;
+        maxRows++;
         cells.push(rowdetail(rowData.element, currentRow, rowData.section));
         rowCount++;
       });
@@ -1560,7 +1560,7 @@
         colgroups: [],
         columns: {}
       }));
-      const grid$1 = grid(ma***REMOVED***Rows, ma***REMOVED***Columns);
+      const grid$1 = grid(maxRows, maxColumns);
       return {
         grid: grid$1,
         access,
@@ -1576,7 +1576,7 @@
     const justCells = warehouse => bind$2(warehouse.all, w => w.cells);
     const justColumns = warehouse => values(warehouse.columns);
     const hasColumns = warehouse => keys(warehouse.columns).length > 0;
-    const getColumnAt = (warehouse, columnInde***REMOVED***) => Optional.from(warehouse.columns[columnInde***REMOVED***]);
+    const getColumnAt = (warehouse, columnIndex) => Optional.from(warehouse.columns[columnIndex]);
     const Warehouse = {
       fromTable,
       generate: generate$1,
@@ -1618,12 +1618,12 @@
       });
     };
 
-    const deduce = (***REMOVED***s, inde***REMOVED***) => {
-      if (inde***REMOVED*** < 0 || inde***REMOVED*** >= ***REMOVED***s.length - 1) {
+    const deduce = (xs, index) => {
+      if (index < 0 || index >= xs.length - 1) {
         return Optional.none();
       }
-      const current = ***REMOVED***s[inde***REMOVED***].fold(() => {
-        const rest = reverse(***REMOVED***s.slice(0, inde***REMOVED***));
+      const current = xs[index].fold(() => {
+        const rest = reverse(xs.slice(0, index));
         return findMap(rest, (a, i) => a.map(aa => ({
           value: aa,
           delta: i + 1
@@ -1632,8 +1632,8 @@
         value: c,
         delta: 0
       }));
-      const ne***REMOVED***t = ***REMOVED***s[inde***REMOVED*** + 1].fold(() => {
-        const rest = ***REMOVED***s.slice(inde***REMOVED*** + 1);
+      const next = xs[index + 1].fold(() => {
+        const rest = xs.slice(index + 1);
         return findMap(rest, (a, i) => a.map(aa => ({
           value: aa,
           delta: i + 1
@@ -1642,9 +1642,9 @@
         value: n,
         delta: 1
       }));
-      return current.bind(c => ne***REMOVED***t.map(n => {
-        const e***REMOVED***tras = n.delta + c.delta;
-        return Math.abs(n.value - c.value) / e***REMOVED***tras;
+      return current.bind(c => next.map(n => {
+        const extras = n.delta + c.delta;
+        return Math.abs(n.value - c.value) / extras;
       }));
     };
 
@@ -1660,7 +1660,7 @@
     const getRuntime = getHeight$1;
 
     const r = (left, top) => {
-      const translate = (***REMOVED***, y) => r(left + ***REMOVED***, top + y);
+      const translate = (x, y) => r(left + x, top + y);
       return {
         left,
         top,
@@ -1669,9 +1669,9 @@
     };
     const SugarPosition = r;
 
-    const bo***REMOVED***Position = dom => {
-      const bo***REMOVED*** = dom.getBoundingClientRect();
-      return SugarPosition(bo***REMOVED***.left, bo***REMOVED***.top);
+    const boxPosition = dom => {
+      const box = dom.getBoundingClientRect();
+      return SugarPosition(box.left, box.top);
     };
     const firstDefinedOrZero = (a, b) => {
       if (a !== undefined) {
@@ -1704,16 +1704,16 @@
       if (!inBody(element)) {
         return SugarPosition(0, 0);
       }
-      return bo***REMOVED***Position(dom);
+      return boxPosition(dom);
     };
 
     const rowInfo = (row, y) => ({
       row,
       y
     });
-    const colInfo = (col, ***REMOVED***) => ({
+    const colInfo = (col, x) => ({
       col,
-      ***REMOVED***
+      x
     });
     const rtlEdge = cell => {
       const pos = absolute(cell);
@@ -1722,28 +1722,28 @@
     const ltrEdge = cell => {
       return absolute(cell).left;
     };
-    const getLeftEdge = (inde***REMOVED***, cell) => {
-      return colInfo(inde***REMOVED***, ltrEdge(cell));
+    const getLeftEdge = (index, cell) => {
+      return colInfo(index, ltrEdge(cell));
     };
-    const getRightEdge = (inde***REMOVED***, cell) => {
-      return colInfo(inde***REMOVED***, rtlEdge(cell));
+    const getRightEdge = (index, cell) => {
+      return colInfo(index, rtlEdge(cell));
     };
     const getTop$1 = cell => {
       return absolute(cell).top;
     };
-    const getTopEdge = (inde***REMOVED***, cell) => {
-      return rowInfo(inde***REMOVED***, getTop$1(cell));
+    const getTopEdge = (index, cell) => {
+      return rowInfo(index, getTop$1(cell));
     };
-    const getBottomEdge = (inde***REMOVED***, cell) => {
-      return rowInfo(inde***REMOVED***, getTop$1(cell) + getOuter$1(cell));
+    const getBottomEdge = (index, cell) => {
+      return rowInfo(index, getTop$1(cell) + getOuter$1(cell));
     };
     const findPositions = (getInnerEdge, getOuterEdge, array) => {
       if (array.length === 0) {
         return [];
       }
-      const lines = map$1(array.slice(1), (cellOption, inde***REMOVED***) => {
+      const lines = map$1(array.slice(1), (cellOption, index) => {
         return cellOption.map(cell => {
-          return getInnerEdge(inde***REMOVED***, cell);
+          return getInnerEdge(index, cell);
         });
       });
       const lastLine = array[array.length - 1].map(cell => {
@@ -1779,7 +1779,7 @@
     const units = {
       unsupportedLength: [
         'em',
-        'e***REMOVED***',
+        'ex',
         'cap',
         'ch',
         'ic',
@@ -1791,17 +1791,17 @@
         'vi',
         'vb',
         'vmin',
-        'vma***REMOVED***',
+        'vmax',
         'cm',
         'mm',
         'Q',
         'in',
         'pc',
         'pt',
-        'p***REMOVED***'
+        'px'
       ],
-      fi***REMOVED***ed: [
-        'p***REMOVED***',
+      fixed: [
+        'px',
         'pt'
       ],
       relative: ['%'],
@@ -1810,21 +1810,21 @@
     const pattern = (() => {
       const decimalDigits = '[0-9]+';
       const signedInteger = '[+-]?' + decimalDigits;
-      const e***REMOVED***ponentPart = '[eE]' + signedInteger;
+      const exponentPart = '[eE]' + signedInteger;
       const dot = '\\.';
       const opt = input => `(?:${ input })?`;
       const unsignedDecimalLiteral = [
         'Infinity',
-        decimalDigits + dot + opt(decimalDigits) + opt(e***REMOVED***ponentPart),
-        dot + decimalDigits + opt(e***REMOVED***ponentPart),
-        decimalDigits + opt(e***REMOVED***ponentPart)
+        decimalDigits + dot + opt(decimalDigits) + opt(exponentPart),
+        dot + decimalDigits + opt(exponentPart),
+        decimalDigits + opt(exponentPart)
       ].join('|');
       const float = `[+-]?(?:${ unsignedDecimalLiteral })`;
-      return new RegE***REMOVED***p(`^(${ float })(.*)$`);
+      return new RegExp(`^(${ float })(.*)$`);
     })();
-    const isUnit = (unit, accepted) => e***REMOVED***ists(accepted, acc => e***REMOVED***ists(units[acc], check => unit === check));
+    const isUnit = (unit, accepted) => exists(accepted, acc => exists(units[acc], check => unit === check));
     const parse = (input, accepted) => {
-      const match = Optional.from(pattern.e***REMOVED***ec(input));
+      const match = Optional.from(pattern.exec(input));
       return match.bind(array => {
         const value = Number(array[1]);
         const unitRaw = array[2];
@@ -1839,27 +1839,27 @@
       });
     };
 
-    const rPercentageBasedSizeRege***REMOVED*** = /(\d+(\.\d+)?)%/;
-    const rPi***REMOVED***elBasedSizeRege***REMOVED*** = /(\d+(\.\d+)?)p***REMOVED***|em/;
+    const rPercentageBasedSizeRegex = /(\d+(\.\d+)?)%/;
+    const rPixelBasedSizeRegex = /(\d+(\.\d+)?)px|em/;
     const isCol$2 = isTag('col');
     const isRow$2 = isTag('tr');
     const getPercentSize = (elm, outerGetter, innerGetter) => {
       const relativeParent = parentElement(elm).getOrThunk(() => getBody$1(owner(elm)));
       return outerGetter(elm) / innerGetter(relativeParent) * 100;
     };
-    const setPi***REMOVED***elWidth = (cell, amount) => {
-      set$1(cell, 'width', amount + 'p***REMOVED***');
+    const setPixelWidth = (cell, amount) => {
+      set$1(cell, 'width', amount + 'px');
     };
     const setPercentageWidth = (cell, amount) => {
       set$1(cell, 'width', amount + '%');
     };
     const setHeight = (cell, amount) => {
-      set$1(cell, 'height', amount + 'p***REMOVED***');
+      set$1(cell, 'height', amount + 'px');
     };
     const removeHeight = cell => {
       remove$5(cell, 'height');
     };
-    const getHeightValue = cell => getRuntime(cell) + 'p***REMOVED***';
+    const getHeightValue = cell => getRuntime(cell) + 'px';
     const convert = (cell, number, getter, setter) => {
       const newSize = table(cell).map(table => {
         const total = getter(table);
@@ -1868,7 +1868,7 @@
       setter(cell, newSize);
       return newSize;
     };
-    const normalizePi***REMOVED***elSize = (value, cell, getter, setter) => {
+    const normalizePixelSize = (value, cell, getter, setter) => {
       const number = parseFloat(value);
       return endsWith(value, '%') && name(cell) !== 'table' ? convert(cell, number, getter, setter) : number;
     };
@@ -1877,7 +1877,7 @@
       if (!value) {
         return get$8(cell);
       }
-      return normalizePi***REMOVED***elSize(value, cell, get$8, setHeight);
+      return normalizePixelSize(value, cell, get$8, setHeight);
     };
     const get$7 = (cell, type, f) => {
       const v = f(cell);
@@ -1886,20 +1886,20 @@
     };
     const getRaw$1 = (element, prop) => {
       return getRaw$2(element, prop).orThunk(() => {
-        return getOpt(element, prop).map(val => val + 'p***REMOVED***');
+        return getOpt(element, prop).map(val => val + 'px');
       });
     };
     const getRawWidth$1 = element => getRaw$1(element, 'width');
     const getRawHeight$1 = element => getRaw$1(element, 'height');
     const getPercentageWidth = cell => getPercentSize(cell, get$9, getInner);
-    const getPi***REMOVED***elWidth$1 = cell => isCol$2(cell) ? get$9(cell) : getRuntime$1(cell);
+    const getPixelWidth$1 = cell => isCol$2(cell) ? get$9(cell) : getRuntime$1(cell);
     const getHeight = cell => {
       return isRow$2(cell) ? get$8(cell) : get$7(cell, 'rowspan', getTotalHeight);
     };
     const getGenericWidth = cell => {
       const width = getRawWidth$1(cell);
       return width.bind(w => parse(w, [
-        'fi***REMOVED***ed',
+        'fixed',
         'relative',
         'empty'
       ]));
@@ -1907,32 +1907,32 @@
     const setGenericWidth = (cell, amount, unit) => {
       set$1(cell, 'width', amount + unit);
     };
-    const getPi***REMOVED***elTableWidth = table => get$9(table) + 'p***REMOVED***';
-    const getPi***REMOVED***elTableHeight = table => get$8(table) + 'p***REMOVED***';
+    const getPixelTableWidth = table => get$9(table) + 'px';
+    const getPixelTableHeight = table => get$8(table) + 'px';
     const getPercentTableWidth = table => getPercentSize(table, get$9, getInner) + '%';
-    const isPercentSizing$1 = table => getRawWidth$1(table).e***REMOVED***ists(size => rPercentageBasedSizeRege***REMOVED***.test(size));
-    const isPi***REMOVED***elSizing$1 = table => getRawWidth$1(table).e***REMOVED***ists(size => rPi***REMOVED***elBasedSizeRege***REMOVED***.test(size));
+    const isPercentSizing$1 = table => getRawWidth$1(table).exists(size => rPercentageBasedSizeRegex.test(size));
+    const isPixelSizing$1 = table => getRawWidth$1(table).exists(size => rPixelBasedSizeRegex.test(size));
     const isNoneSizing$1 = table => getRawWidth$1(table).isNone();
-    const percentageBasedSizeRege***REMOVED*** = constant(rPercentageBasedSizeRege***REMOVED***);
+    const percentageBasedSizeRegex = constant(rPercentageBasedSizeRegex);
 
     const isCol$1 = isTag('col');
     const getRawW = cell => {
-      return getRawWidth$1(cell).getOrThunk(() => getPi***REMOVED***elWidth$1(cell) + 'p***REMOVED***');
+      return getRawWidth$1(cell).getOrThunk(() => getPixelWidth$1(cell) + 'px');
     };
     const getRawH = cell => {
-      return getRawHeight$1(cell).getOrThunk(() => getHeight(cell) + 'p***REMOVED***');
+      return getRawHeight$1(cell).getOrThunk(() => getHeight(cell) + 'px');
     };
     const justCols = warehouse => map$1(Warehouse.justColumns(warehouse), column => Optional.from(column.element));
     const isValidColumn = cell => {
       const browser = detect$2().browser;
-      const supportsColWidths = browser.isChromium() || browser.isFirefo***REMOVED***();
+      const supportsColWidths = browser.isChromium() || browser.isFirefox();
       return isCol$1(cell) ? supportsColWidths : true;
     };
-    const getDimension = (cellOpt, inde***REMOVED***, backups, filter, getter, fallback) => cellOpt.filter(filter).fold(() => fallback(deduce(backups, inde***REMOVED***)), cell => getter(cell));
+    const getDimension = (cellOpt, index, backups, filter, getter, fallback) => cellOpt.filter(filter).fold(() => fallback(deduce(backups, index)), cell => getter(cell));
     const getWidthFrom = (warehouse, table, getWidth, fallback) => {
       const columnCells = columns(warehouse);
       const columns$1 = Warehouse.hasColumns(warehouse) ? justCols(warehouse) : columnCells;
-      const backups = [Optional.some(width.edge(table))].concat(map$1(width.positions(columnCells, table), pos => pos.map(p => p.***REMOVED***)));
+      const backups = [Optional.some(width.edge(table))].concat(map$1(width.positions(columnCells, table), pos => pos.map(p => p.x)));
       const colFilter = not(hasColspan);
       return map$1(columns$1, (cellOption, c) => {
         return getDimension(cellOption, c, backups, colFilter, column => {
@@ -1947,7 +1947,7 @@
     };
     const getDeduced = deduced => {
       return deduced.map(d => {
-        return d + 'p***REMOVED***';
+        return d + 'px';
       }).getOr('');
     };
     const getRawWidths = (warehouse, table) => {
@@ -1958,12 +1958,12 @@
         return deduced.fold(() => {
           return tableSize.minCellWidth();
         }, cellWidth => {
-          return cellWidth / tableSize.pi***REMOVED***elWidth() * 100;
+          return cellWidth / tableSize.pixelWidth() * 100;
         });
       });
     };
-    const getPi***REMOVED***elWidths = (warehouse, table, tableSize) => {
-      return getWidthFrom(warehouse, table, getPi***REMOVED***elWidth$1, deduced => {
+    const getPixelWidths = (warehouse, table, tableSize) => {
+      return getWidthFrom(warehouse, table, getPixelWidth$1, deduced => {
         return deduced.getOrThunk(tableSize.minCellWidth);
       });
     };
@@ -1973,7 +1973,7 @@
       const backups = [Optional.some(height.edge(table))].concat(map$1(height.positions(rowCells, table), pos => pos.map(p => p.y)));
       return map$1(rows$1, (row, i) => getDimension(row, i, backups, always, getHeight, fallback));
     };
-    const getPi***REMOVED***elHeights = (warehouse, table) => {
+    const getPixelHeights = (warehouse, table) => {
       return getHeightFrom(warehouse, table, getHeight, deduced => {
         return deduced.getOrThunk(minHeight);
       });
@@ -1992,10 +1992,10 @@
     const noneSize = table => {
       const getWidth = widthLookup(table, get$9);
       const zero = constant(0);
-      const getWidths = (warehouse, tableSize) => getPi***REMOVED***elWidths(warehouse, table, tableSize);
+      const getWidths = (warehouse, tableSize) => getPixelWidths(warehouse, table, tableSize);
       return {
         width: getWidth,
-        pi***REMOVED***elWidth: getWidth,
+        pixelWidth: getWidth,
         getWidths,
         getCellDelta: zero,
         singleColumnWidth: constant([0]),
@@ -2021,7 +2021,7 @@
       const getWidths = (warehouse, tableSize) => getPercentageWidths(warehouse, table, tableSize);
       return {
         width: getFloatWidth,
-        pi***REMOVED***elWidth: getWidth,
+        pixelWidth: getWidth,
         getWidths,
         getCellDelta,
         singleColumnWidth,
@@ -2032,37 +2032,37 @@
         label: 'percent'
       };
     };
-    const pi***REMOVED***elSize = table => {
+    const pixelSize = table => {
       const getWidth = widthLookup(table, get$9);
       const getCellDelta = identity;
       const singleColumnWidth = (w, delta) => {
-        const newNe***REMOVED***t = Math.ma***REMOVED***(minWidth(), w + delta);
-        return [newNe***REMOVED***t - w];
+        const newNext = Math.max(minWidth(), w + delta);
+        return [newNext - w];
       };
       const adjustTableWidth = delta => {
         const newWidth = getWidth() + delta;
-        setPi***REMOVED***elWidth(table, newWidth);
+        setPixelWidth(table, newWidth);
       };
-      const getWidths = (warehouse, tableSize) => getPi***REMOVED***elWidths(warehouse, table, tableSize);
+      const getWidths = (warehouse, tableSize) => getPixelWidths(warehouse, table, tableSize);
       return {
         width: getWidth,
-        pi***REMOVED***elWidth: getWidth,
+        pixelWidth: getWidth,
         getWidths,
         getCellDelta,
         singleColumnWidth,
         minCellWidth: minWidth,
-        setElementWidth: setPi***REMOVED***elWidth,
+        setElementWidth: setPixelWidth,
         adjustTableWidth,
         isRelative: false,
-        label: 'pi***REMOVED***el'
+        label: 'pixel'
       };
     };
     const chooseSize = (element, width) => {
-      const percentMatch = percentageBasedSizeRege***REMOVED***().e***REMOVED***ec(width);
+      const percentMatch = percentageBasedSizeRegex().exec(width);
       if (percentMatch !== null) {
         return percentageSize(element);
       } else {
-        return pi***REMOVED***elSize(element);
+        return pixelSize(element);
       }
     };
     const getTableSize = table => {
@@ -2071,16 +2071,16 @@
     };
     const TableSize = {
       getTableSize,
-      pi***REMOVED***elSize,
+      pixelSize,
       percentageSize,
       noneSize
     };
 
-    const statsStruct = (minRow, minCol, ma***REMOVED***Row, ma***REMOVED***Col, allCells, selectedCells) => ({
+    const statsStruct = (minRow, minCol, maxRow, maxCol, allCells, selectedCells) => ({
       minRow,
       minCol,
-      ma***REMOVED***Row,
-      ma***REMOVED***Col,
+      maxRow,
+      maxCol,
       allCells,
       selectedCells
     });
@@ -2089,8 +2089,8 @@
       const totalRows = house.grid.rows;
       let minRow = totalRows;
       let minCol = totalColumns;
-      let ma***REMOVED***Row = 0;
-      let ma***REMOVED***Col = 0;
+      let maxRow = 0;
+      let maxCol = 0;
       const allCells = [];
       const selectedCells = [];
       each$1(house.access, detail => {
@@ -2103,20 +2103,20 @@
           const endCol = startCol + detail.colspan - 1;
           if (startRow < minRow) {
             minRow = startRow;
-          } else if (endRow > ma***REMOVED***Row) {
-            ma***REMOVED***Row = endRow;
+          } else if (endRow > maxRow) {
+            maxRow = endRow;
           }
           if (startCol < minCol) {
             minCol = startCol;
-          } else if (endCol > ma***REMOVED***Col) {
-            ma***REMOVED***Col = endCol;
+          } else if (endCol > maxCol) {
+            maxCol = endCol;
           }
         }
       });
-      return statsStruct(minRow, minCol, ma***REMOVED***Row, ma***REMOVED***Col, allCells, selectedCells);
+      return statsStruct(minRow, minCol, maxRow, maxCol, allCells, selectedCells);
     };
-    const makeCell = (list, seenSelected, rowInde***REMOVED***) => {
-      const row = list[rowInde***REMOVED***].element;
+    const makeCell = (list, seenSelected, rowIndex) => {
+      const row = list[rowIndex].element;
       const td = SugarElement.fromTag('td');
       append$1(td, SugarElement.fromTag('br'));
       const f = seenSelected ? append$1 : prepend;
@@ -2129,7 +2129,7 @@
       for (let i = 0; i < totalRows; i++) {
         let seenSelected = false;
         for (let j = 0; j < totalColumns; j++) {
-          if (!(i < stats.minRow || i > stats.ma***REMOVED***Row || j < stats.minCol || j > stats.ma***REMOVED***Col)) {
+          if (!(i < stats.minRow || i > stats.maxRow || j < stats.minCol || j > stats.maxCol)) {
             const needCell = Warehouse.getAt(house, i, j).filter(isSelected).isNone();
             if (needCell) {
               makeCell(rows, seenSelected, i);
@@ -2142,13 +2142,13 @@
     };
     const clean = (replica, stats, house, widthDelta) => {
       each$1(house.columns, col => {
-        if (col.column < stats.minCol || col.column > stats.ma***REMOVED***Col) {
+        if (col.column < stats.minCol || col.column > stats.maxCol) {
           remove$6(col.element);
         }
       });
       const emptyRows = filter$2(firstLayer(replica, 'tr'), row => row.dom.childElementCount === 0);
       each$2(emptyRows, remove$6);
-      if (stats.minCol === stats.ma***REMOVED***Col || stats.minRow === stats.ma***REMOVED***Row) {
+      if (stats.minCol === stats.maxCol || stats.minRow === stats.maxRow) {
         each$2(firstLayer(replica, 'th,td'), cell => {
           remove$7(cell, 'rowspan');
           remove$7(cell, 'colspan');
@@ -2160,17 +2160,17 @@
       tableSize.adjustTableWidth(widthDelta);
     };
     const getTableWidthDelta = (table, warehouse, tableSize, stats) => {
-      if (stats.minCol === 0 && warehouse.grid.columns === stats.ma***REMOVED***Col + 1) {
+      if (stats.minCol === 0 && warehouse.grid.columns === stats.maxCol + 1) {
         return 0;
       }
-      const colWidths = getPi***REMOVED***elWidths(warehouse, table, tableSize);
+      const colWidths = getPixelWidths(warehouse, table, tableSize);
       const allColsWidth = foldl(colWidths, (acc, width) => acc + width, 0);
-      const selectedColsWidth = foldl(colWidths.slice(stats.minCol, stats.ma***REMOVED***Col + 1), (acc, width) => acc + width, 0);
-      const newWidth = selectedColsWidth / allColsWidth * tableSize.pi***REMOVED***elWidth();
-      const delta = newWidth - tableSize.pi***REMOVED***elWidth();
+      const selectedColsWidth = foldl(colWidths.slice(stats.minCol, stats.maxCol + 1), (acc, width) => acc + width, 0);
+      const newWidth = selectedColsWidth / allColsWidth * tableSize.pixelWidth();
+      const delta = newWidth - tableSize.pixelWidth();
       return tableSize.getCellDelta(delta);
     };
-    const e***REMOVED***tract$1 = (table, selectedSelector) => {
+    const extract$1 = (table, selectedSelector) => {
       const isSelected = detail => is$2(detail.element, selectedSelector);
       const replica = deep(table);
       const list = fromTable$1(replica);
@@ -2187,7 +2187,7 @@
       return replica;
     };
 
-    const nbsp = '\***REMOVED***A0';
+    const nbsp = '\xA0';
 
     const NodeValue = (is, name) => {
       const get = element => {
@@ -2210,20 +2210,20 @@
       };
     };
 
-    const api = NodeValue(isTe***REMOVED***t, 'te***REMOVED***t');
+    const api = NodeValue(isText, 'text');
     const get$6 = element => api.get(element);
     const getOption = element => api.getOption(element);
     const set = (element, value) => api.set(element, value);
 
     const getEnd = element => name(element) === 'img' ? 1 : getOption(element).fold(() => children$2(element).length, v => v.length);
-    const isTe***REMOVED***tNodeWithCursorPosition = el => getOption(el).filter(te***REMOVED***t => te***REMOVED***t.trim().length !== 0 || te***REMOVED***t.inde***REMOVED***Of(nbsp) > -1).isSome();
+    const isTextNodeWithCursorPosition = el => getOption(el).filter(text => text.trim().length !== 0 || text.indexOf(nbsp) > -1).isSome();
     const isContentEditableFalse = elem => isHTMLElement(elem) && get$b(elem, 'contenteditable') === 'false';
     const elementsWithCursorPosition = [
       'img',
       'br'
     ];
     const isCursorPosition = elem => {
-      const hasCursorPosition = isTe***REMOVED***tNodeWithCursorPosition(elem);
+      const hasCursorPosition = isTextNodeWithCursorPosition(elem);
       return hasCursorPosition || contains$2(elementsWithCursorPosition, name(elem)) || isContentEditableFalse(elem);
     };
 
@@ -2283,9 +2283,9 @@
     };
     const cloneFormats = (oldCell, newCell, formats) => {
       const first$1 = first(oldCell);
-      return first$1.map(firstTe***REMOVED***t => {
+      return first$1.map(firstText => {
         const formatSelector = formats.join(',');
-        const parents = ancestors$3(firstTe***REMOVED***t, formatSelector, element => {
+        const parents = ancestors$3(firstText, formatSelector, element => {
           return eq$1(element, oldCell);
         });
         return foldr(parents, (last, parent) => {
@@ -2369,19 +2369,19 @@
 
     const option = name => editor => editor.options.get(name);
     const defaultWidth = '100%';
-    const getPi***REMOVED***elForcedWidth = editor => {
+    const getPixelForcedWidth = editor => {
       var _a;
       const dom = editor.dom;
       const parentBlock = (_a = dom.getParent(editor.selection.getStart(), dom.isBlock)) !== null && _a !== void 0 ? _a : editor.getBody();
-      return getInner(SugarElement.fromDom(parentBlock)) + 'p***REMOVED***';
+      return getInner(SugarElement.fromDom(parentBlock)) + 'px';
     };
     const determineDefaultTableStyles = (editor, defaultStyles) => {
       if (isTableResponsiveForced(editor) || !shouldStyleWithCss(editor)) {
         return defaultStyles;
-      } else if (isTablePi***REMOVED***elsForced(editor)) {
+      } else if (isTablePixelsForced(editor)) {
         return {
           ...defaultStyles,
-          width: getPi***REMOVED***elForcedWidth(editor)
+          width: getPixelForcedWidth(editor)
         };
       } else {
         return {
@@ -2393,10 +2393,10 @@
     const determineDefaultTableAttributes = (editor, defaultAttributes) => {
       if (isTableResponsiveForced(editor) || shouldStyleWithCss(editor)) {
         return defaultAttributes;
-      } else if (isTablePi***REMOVED***elsForced(editor)) {
+      } else if (isTablePixelsForced(editor)) {
         return {
           ...defaultAttributes,
-          width: getPi***REMOVED***elForcedWidth(editor)
+          width: getPixelForcedWidth(editor)
         };
       } else {
         return {
@@ -2484,7 +2484,7 @@
     const isResizeTableColumnResizing = editor => getTableColumnResizingBehaviour(editor) === 'resizetable';
     const getTableSizingMode = option('table_sizing_mode');
     const isTablePercentagesForced = editor => getTableSizingMode(editor) === 'relative';
-    const isTablePi***REMOVED***elsForced = editor => getTableSizingMode(editor) === 'fi***REMOVED***ed';
+    const isTablePixelsForced = editor => getTableSizingMode(editor) === 'fixed';
     const isTableResponsiveForced = editor => getTableSizingMode(editor) === 'responsive';
     const hasTableResizeBars = option('table_resize_bars');
     const shouldStyleWithCss = option('table_style_by_css');
@@ -2521,8 +2521,8 @@
       each$2(rows$1(table), removeStyleAttribute);
     };
     const getSelectionStart = editor => SugarElement.fromDom(editor.selection.getStart());
-    const getPi***REMOVED***elWidth = elm => elm.getBoundingClientRect().width;
-    const getPi***REMOVED***elHeight = elm => elm.getBoundingClientRect().height;
+    const getPixelWidth = elm => elm.getBoundingClientRect().width;
+    const getPixelHeight = elm => elm.getBoundingClientRect().height;
     const getRawValue = prop => (editor, elm) => {
       const raw = editor.dom.getStyle(elm, prop) || editor.dom.getAttrib(elm, prop);
       return Optional.from(raw).filter(isNotEmpty);
@@ -2530,8 +2530,8 @@
     const getRawWidth = getRawValue('width');
     const getRawHeight = getRawValue('height');
     const isPercentage$1 = value => /^(\d+(\.\d+)?)%$/.test(value);
-    const isPi***REMOVED***el = value => /^(\d+(\.\d+)?)p***REMOVED***$/.test(value);
-    const isInEditableConte***REMOVED***t$1 = cell => closest$2(cell, isTag('table')).e***REMOVED***ists(isEditable$1);
+    const isPixel = value => /^(\d+(\.\d+)?)px$/.test(value);
+    const isInEditableContext$1 = cell => closest$2(cell, isTag('table')).exists(isEditable$1);
 
     const inSelection = (bounds, detail) => {
       const leftEdge = detail.column;
@@ -2548,16 +2548,16 @@
       const detailIsWithin = curry(isWithin, bounds);
       for (let i = bounds.startRow; i <= bounds.finishRow; i++) {
         for (let j = bounds.startCol; j <= bounds.finishCol; j++) {
-          isRect = isRect && Warehouse.getAt(warehouse, i, j).e***REMOVED***ists(detailIsWithin);
+          isRect = isRect && Warehouse.getAt(warehouse, i, j).exists(detailIsWithin);
         }
       }
       return isRect ? Optional.some(bounds) : Optional.none();
     };
 
     const getBounds = (detailA, detailB) => {
-      return bounds(Math.min(detailA.row, detailB.row), Math.min(detailA.column, detailB.column), Math.ma***REMOVED***(detailA.row + detailA.rowspan - 1, detailB.row + detailB.rowspan - 1), Math.ma***REMOVED***(detailA.column + detailA.colspan - 1, detailB.column + detailB.colspan - 1));
+      return bounds(Math.min(detailA.row, detailB.row), Math.min(detailA.column, detailB.column), Math.max(detailA.row + detailA.rowspan - 1, detailB.row + detailB.rowspan - 1), Math.max(detailA.column + detailA.colspan - 1, detailB.column + detailB.colspan - 1));
     };
-    const getAnyBo***REMOVED*** = (warehouse, startCell, finishCell) => {
+    const getAnyBox = (warehouse, startCell, finishCell) => {
       const startCoords = Warehouse.findItem(warehouse, startCell, eq$1);
       const finishCoords = Warehouse.findItem(warehouse, finishCell, eq$1);
       return startCoords.bind(sc => {
@@ -2566,8 +2566,8 @@
         });
       });
     };
-    const getBo***REMOVED***$1 = (warehouse, startCell, finishCell) => {
-      return getAnyBo***REMOVED***(warehouse, startCell, finishCell).bind(bounds => {
+    const getBox$1 = (warehouse, startCell, finishCell) => {
+      return getAnyBox(warehouse, startCell, finishCell).bind(bounds => {
         return isRectangular(warehouse, bounds);
       });
     };
@@ -2583,7 +2583,7 @@
       });
     };
     const intercepts$1 = (warehouse, start, finish) => {
-      return getAnyBo***REMOVED***(warehouse, start, finish).map(bounds => {
+      return getAnyBox(warehouse, start, finish).map(bounds => {
         const inside = Warehouse.filterItems(warehouse, curry(inSelection, bounds));
         return map$1(inside, detail => {
           return detail.element;
@@ -2615,9 +2615,9 @@
       const optLastCell = eq$1(table, lastTable) ? Optional.some(last) : parentCell(warehouse, last);
       return optStartCell.bind(startCell => optLastCell.bind(lastCell => intercepts$1(warehouse, startCell, lastCell)));
     };
-    const getBo***REMOVED*** = (table, first, last) => {
+    const getBox = (table, first, last) => {
       const warehouse = getWarehouse(table);
-      return getBo***REMOVED***$1(warehouse, first, last);
+      return getBox$1(warehouse, first, last);
     };
     const getWarehouse = Warehouse.fromTable;
 
@@ -2698,8 +2698,8 @@
           'noembed',
           'title',
           'style',
-          'te***REMOVED***tarea',
-          '***REMOVED***mp'
+          'textarea',
+          'xmp'
         ], tag);
       };
       const getLanguage = element => isElement(element) ? getOpt(element, 'lang') : Optional.none();
@@ -2742,25 +2742,25 @@
         create: constant({
           nu: SugarElement.fromTag,
           clone,
-          te***REMOVED***t: SugarElement.fromTe***REMOVED***t
+          text: SugarElement.fromText
         }),
         query: constant({
           comparePosition,
           prevSibling: prevSibling,
-          ne***REMOVED***tSibling: ne***REMOVED***tSibling
+          nextSibling: nextSibling
         }),
         property: constant({
           children: children$2,
           name: name,
           parent: parent,
           document,
-          isTe***REMOVED***t: isTe***REMOVED***t,
+          isText: isText,
           isComment: isComment,
           isElement: isElement,
           isSpecial,
           getLanguage,
-          getTe***REMOVED***t: get$6,
-          setTe***REMOVED***t: set,
+          getText: get$6,
+          setText: set,
           isBoundary,
           isEmptyTag,
           isNonEditable
@@ -2798,8 +2798,8 @@
       const ps1 = [start].concat(universe.up().all(start));
       const ps2 = [end].concat(universe.up().all(end));
       const prune = path => {
-        const inde***REMOVED*** = findInde***REMOVED***(path, isRoot);
-        return inde***REMOVED***.fold(() => {
+        const index = findIndex(path, isRoot);
+        return index.fold(() => {
           return path;
         }, ind => {
           return path.slice(0, ind + 1);
@@ -2807,8 +2807,8 @@
       };
       const pruned1 = prune(ps1);
       const pruned2 = prune(ps2);
-      const shared = find$1(pruned1, ***REMOVED*** => {
-        return e***REMOVED***ists(pruned2, eq(universe, ***REMOVED***));
+      const shared = find$1(pruned1, x => {
+        return exists(pruned2, eq(universe, x));
       });
       return {
         firstpath: pruned1,
@@ -2841,7 +2841,7 @@
       };
       if (eq$1(start, finish)) {
         return Optional.some({
-          bo***REMOVED***es: Optional.some([start]),
+          boxes: Optional.some([start]),
           start,
           finish
         });
@@ -2850,7 +2850,7 @@
           return lookupTable(finish).bind(finishTable => {
             if (eq$1(startTable, finishTable)) {
               return Optional.some({
-                bo***REMOVED***es: intercepts(startTable, start, finish),
+                boxes: intercepts(startTable, start, finish),
                 start,
                 finish
               });
@@ -2858,7 +2858,7 @@
               const ancestorCells = ancestors$3(finish, 'td,th', getIsRoot(startTable));
               const finishCell = ancestorCells.length > 0 ? ancestorCells[ancestorCells.length - 1] : finish;
               return Optional.some({
-                bo***REMOVED***es: nestedIntercepts(startTable, start, startTable, finish, finishTable),
+                boxes: nestedIntercepts(startTable, start, startTable, finish, finishTable),
                 start,
                 finish: finishCell
               });
@@ -2866,7 +2866,7 @@
               const ancestorCells = ancestors$3(start, 'td,th', getIsRoot(finishTable));
               const startCell = ancestorCells.length > 0 ? ancestorCells[ancestorCells.length - 1] : start;
               return Optional.some({
-                bo***REMOVED***es: nestedIntercepts(finishTable, start, startTable, finish, finishTable),
+                boxes: nestedIntercepts(finishTable, start, startTable, finish, finishTable),
                 start,
                 finish: startCell
               });
@@ -2878,7 +2878,7 @@
                   const startAncestorCells = ancestors$3(start, 'td,th', getIsRoot(lcaTable));
                   const startCell = startAncestorCells.length > 0 ? startAncestorCells[startAncestorCells.length - 1] : start;
                   return Optional.some({
-                    bo***REMOVED***es: nestedIntercepts(lcaTable, start, startTable, finish, finishTable),
+                    boxes: nestedIntercepts(lcaTable, start, startTable, finish, finishTable),
                     start: startCell,
                     finish: finishCell
                   });
@@ -2893,9 +2893,9 @@
       const sels = descendants(container, selector);
       return sels.length > 0 ? Optional.some(sels) : Optional.none();
     };
-    const getLast = (bo***REMOVED***es, lastSelectedSelector) => {
-      return find$1(bo***REMOVED***es, bo***REMOVED*** => {
-        return is$2(bo***REMOVED***, lastSelectedSelector);
+    const getLast = (boxes, lastSelectedSelector) => {
+      return find$1(boxes, box => {
+        return is$2(box, lastSelectedSelector);
       });
     };
     const getEdges = (container, firstSelectedSelector, lastSelectedSelector) => {
@@ -2914,13 +2914,13 @@
         });
       });
     };
-    const e***REMOVED***pandTo = (finish, firstSelectedSelector) => {
+    const expandTo = (finish, firstSelectedSelector) => {
       return ancestor$1(finish, 'table').bind(table => {
         return descendant(table, firstSelectedSelector).bind(start => {
           return identify(start, finish).bind(identified => {
-            return identified.bo***REMOVED***es.map(bo***REMOVED***es => {
+            return identified.boxes.map(boxes => {
               return {
-                bo***REMOVED***es,
+                boxes,
                 start: identified.start,
                 finish: identified.finish
               };
@@ -2929,10 +2929,10 @@
         });
       });
     };
-    const shiftSelection = (bo***REMOVED***es, deltaRow, deltaColumn, firstSelectedSelector, lastSelectedSelector) => {
-      return getLast(bo***REMOVED***es, lastSelectedSelector).bind(last => {
+    const shiftSelection = (boxes, deltaRow, deltaColumn, firstSelectedSelector, lastSelectedSelector) => {
+      return getLast(boxes, lastSelectedSelector).bind(last => {
         return moveBy(last, deltaRow, deltaColumn).bind(finish => {
-          return e***REMOVED***pandTo(finish, firstSelectedSelector);
+          return expandTo(finish, firstSelectedSelector);
         });
       });
     };
@@ -2940,7 +2940,7 @@
     const retrieve = (container, selector) => {
       return retrieve$1(container, selector);
     };
-    const retrieveBo***REMOVED*** = (container, firstSelectedSelector, lastSelectedSelector) => {
+    const retrieveBox = (container, firstSelectedSelector, lastSelectedSelector) => {
       return getEdges(container, firstSelectedSelector, lastSelectedSelector).bind(edges => {
         const isRoot = ancestor => {
           return eq$1(container, ancestor);
@@ -2950,7 +2950,7 @@
         const lastAncestor = ancestor$1(edges.last, sectionSelector, isRoot);
         return firstAncestor.bind(fA => {
           return lastAncestor.bind(lA => {
-            return eq$1(fA, lA) ? getBo***REMOVED***(edges.table, edges.first, edges.last) : Optional.none();
+            return eq$1(fA, lA) ? getBox(edges.table, edges.first, edges.last) : Optional.none();
           });
         });
       });
@@ -2958,7 +2958,7 @@
 
     const selection = identity;
     const unmergable = selectedCells => {
-      const hasSpan = (elem, type) => getOpt(elem, type).e***REMOVED***ists(span => parseInt(span, 10) > 1);
+      const hasSpan = (elem, type) => getOpt(elem, type).exists(span => parseInt(span, 10) > 1);
       const hasRowOrColSpan = elem => hasSpan(elem, 'rowspan') || hasSpan(elem, 'colspan');
       return selectedCells.length > 0 && forall(selectedCells, hasRowOrColSpan) ? Optional.some(selectedCells) : Optional.none();
     };
@@ -2966,7 +2966,7 @@
       if (selectedCells.length <= 1) {
         return Optional.none();
       } else {
-        return retrieveBo***REMOVED***(table, ephemera.firstSelectedSelector, ephemera.lastSelectedSelector).map(bounds => ({
+        return retrieveBox(table, ephemera.firstSelectedSelector, ephemera.lastSelectedSelector).map(bounds => ({
           bounds,
           cells: selectedCells
         }));
@@ -3018,27 +3018,27 @@
     const getCellsFromSelection = editor => fromDom(editor.model.table.getSelectedCells());
     const getCellsFromFakeSelection = editor => filter$2(getCellsFromSelection(editor), cell => is$2(cell, ephemera.selectedSelector));
 
-    const e***REMOVED***tractSelected = cells => {
+    const extractSelected = cells => {
       return table(cells[0]).map(table => {
-        const replica = e***REMOVED***tract$1(table, attributeSelector);
+        const replica = extract$1(table, attributeSelector);
         removeDataStyle(replica);
         return [replica];
       });
     };
     const serializeElements = (editor, elements) => map$1(elements, elm => editor.selection.serializer.serialize(elm.dom, {})).join('');
-    const getTe***REMOVED***tContent = elements => map$1(elements, element => element.dom.innerTe***REMOVED***t).join('');
+    const getTextContent = elements => map$1(elements, element => element.dom.innerText).join('');
     const registerEvents = (editor, actions) => {
       editor.on('BeforeGetContent', e => {
-        const multiCellConte***REMOVED***t = cells => {
+        const multiCellContext = cells => {
           e.preventDefault();
-          e***REMOVED***tractSelected(cells).each(elements => {
-            e.content = e.format === 'te***REMOVED***t' ? getTe***REMOVED***tContent(elements) : serializeElements(editor, elements);
+          extractSelected(cells).each(elements => {
+            e.content = e.format === 'text' ? getTextContent(elements) : serializeElements(editor, elements);
           });
         };
         if (e.selection === true) {
           const cells = getCellsFromFakeSelection(editor);
           if (cells.length >= 1) {
-            multiCellConte***REMOVED***t(cells);
+            multiCellContext(cells);
           }
         }
       });
@@ -3072,7 +3072,7 @@
     });
 
     const scan$1 = (universe, element, direction) => {
-      if (universe.property().isTe***REMOVED***t(element) && universe.property().getTe***REMOVED***t(element).trim().length === 0 || universe.property().isComment(element)) {
+      if (universe.property().isText(element) && universe.property().getText(element).trim().length === 0 || universe.property().isComment(element)) {
         return direction(element).bind(elem => {
           return scan$1(universe, elem, direction).orThunk(() => {
             return Optional.some(elem);
@@ -3083,15 +3083,15 @@
       }
     };
     const toEnd = (universe, element) => {
-      if (universe.property().isTe***REMOVED***t(element)) {
-        return universe.property().getTe***REMOVED***t(element).length;
+      if (universe.property().isText(element)) {
+        return universe.property().getText(element).length;
       }
       const children = universe.property().children(element);
       return children.length;
     };
     const freefallRtl$2 = (universe, element) => {
       const candidate = scan$1(universe, element, universe.query().prevSibling).getOr(element);
-      if (universe.property().isTe***REMOVED***t(candidate)) {
+      if (universe.property().isText(candidate)) {
         return point(candidate, toEnd(universe, candidate));
       }
       const children = universe.property().children(candidate);
@@ -3117,54 +3117,54 @@
     };
 
     const zero = array => map$1(array, constant(0));
-    const surround = (sizes, startInde***REMOVED***, endInde***REMOVED***, results, f) => f(sizes.slice(0, startInde***REMOVED***)).concat(results).concat(f(sizes.slice(endInde***REMOVED***)));
-    const clampDeltaHelper = predicate => (sizes, inde***REMOVED***, delta, minCellSize) => {
+    const surround = (sizes, startIndex, endIndex, results, f) => f(sizes.slice(0, startIndex)).concat(results).concat(f(sizes.slice(endIndex)));
+    const clampDeltaHelper = predicate => (sizes, index, delta, minCellSize) => {
       if (!predicate(delta)) {
         return delta;
       } else {
-        const newSize = Math.ma***REMOVED***(minCellSize, sizes[inde***REMOVED***] - Math.abs(delta));
-        const diff = Math.abs(newSize - sizes[inde***REMOVED***]);
+        const newSize = Math.max(minCellSize, sizes[index] - Math.abs(delta));
+        const diff = Math.abs(newSize - sizes[index]);
         return delta >= 0 ? diff : -diff;
       }
     };
     const clampNegativeDelta = clampDeltaHelper(delta => delta < 0);
     const clampDelta = clampDeltaHelper(always);
     const resizeTable = () => {
-      const calcFi***REMOVED***edDeltas = (sizes, inde***REMOVED***, ne***REMOVED***t, delta, minCellSize) => {
-        const clampedDelta = clampNegativeDelta(sizes, inde***REMOVED***, delta, minCellSize);
-        return surround(sizes, inde***REMOVED***, ne***REMOVED***t + 1, [
+      const calcFixedDeltas = (sizes, index, next, delta, minCellSize) => {
+        const clampedDelta = clampNegativeDelta(sizes, index, delta, minCellSize);
+        return surround(sizes, index, next + 1, [
           clampedDelta,
           0
         ], zero);
       };
-      const calcRelativeDeltas = (sizes, inde***REMOVED***, delta, minCellSize) => {
+      const calcRelativeDeltas = (sizes, index, delta, minCellSize) => {
         const ratio = (100 + delta) / 100;
-        const newThis = Math.ma***REMOVED***(minCellSize, (sizes[inde***REMOVED***] + delta) / ratio);
-        return map$1(sizes, (size, id***REMOVED***) => {
-          const newSize = id***REMOVED*** === inde***REMOVED*** ? newThis : size / ratio;
+        const newThis = Math.max(minCellSize, (sizes[index] + delta) / ratio);
+        return map$1(sizes, (size, idx) => {
+          const newSize = idx === index ? newThis : size / ratio;
           return newSize - size;
         });
       };
-      const calcLeftEdgeDeltas = (sizes, inde***REMOVED***, ne***REMOVED***t, delta, minCellSize, isRelative) => {
+      const calcLeftEdgeDeltas = (sizes, index, next, delta, minCellSize, isRelative) => {
         if (isRelative) {
-          return calcRelativeDeltas(sizes, inde***REMOVED***, delta, minCellSize);
+          return calcRelativeDeltas(sizes, index, delta, minCellSize);
         } else {
-          return calcFi***REMOVED***edDeltas(sizes, inde***REMOVED***, ne***REMOVED***t, delta, minCellSize);
+          return calcFixedDeltas(sizes, index, next, delta, minCellSize);
         }
       };
-      const calcMiddleDeltas = (sizes, _prev, inde***REMOVED***, ne***REMOVED***t, delta, minCellSize, isRelative) => calcLeftEdgeDeltas(sizes, inde***REMOVED***, ne***REMOVED***t, delta, minCellSize, isRelative);
+      const calcMiddleDeltas = (sizes, _prev, index, next, delta, minCellSize, isRelative) => calcLeftEdgeDeltas(sizes, index, next, delta, minCellSize, isRelative);
       const resizeTable = (resizer, delta) => resizer(delta);
-      const calcRightEdgeDeltas = (sizes, _prev, inde***REMOVED***, delta, minCellSize, isRelative) => {
+      const calcRightEdgeDeltas = (sizes, _prev, index, delta, minCellSize, isRelative) => {
         if (isRelative) {
-          return calcRelativeDeltas(sizes, inde***REMOVED***, delta, minCellSize);
+          return calcRelativeDeltas(sizes, index, delta, minCellSize);
         } else {
-          const clampedDelta = clampNegativeDelta(sizes, inde***REMOVED***, delta, minCellSize);
-          return zero(sizes.slice(0, inde***REMOVED***)).concat([clampedDelta]);
+          const clampedDelta = clampNegativeDelta(sizes, index, delta, minCellSize);
+          return zero(sizes.slice(0, index)).concat([clampedDelta]);
         }
       };
-      const calcRedestributedWidths = (sizes, totalWidth, pi***REMOVED***elDelta, isRelative) => {
+      const calcRedestributedWidths = (sizes, totalWidth, pixelDelta, isRelative) => {
         if (isRelative) {
-          const tableWidth = totalWidth + pi***REMOVED***elDelta;
+          const tableWidth = totalWidth + pixelDelta;
           const ratio = tableWidth / totalWidth;
           const newSizes = map$1(sizes, size => size / ratio);
           return {
@@ -3173,7 +3173,7 @@
           };
         } else {
           return {
-            delta: pi***REMOVED***elDelta,
+            delta: pixelDelta,
             newSizes: sizes
           };
         }
@@ -3188,21 +3188,21 @@
       };
     };
     const preserveTable = () => {
-      const calcLeftEdgeDeltas = (sizes, inde***REMOVED***, ne***REMOVED***t, delta, minCellSize) => {
-        const id***REMOVED*** = delta >= 0 ? ne***REMOVED***t : inde***REMOVED***;
-        const clampedDelta = clampDelta(sizes, id***REMOVED***, delta, minCellSize);
-        return surround(sizes, inde***REMOVED***, ne***REMOVED***t + 1, [
+      const calcLeftEdgeDeltas = (sizes, index, next, delta, minCellSize) => {
+        const idx = delta >= 0 ? next : index;
+        const clampedDelta = clampDelta(sizes, idx, delta, minCellSize);
+        return surround(sizes, index, next + 1, [
           clampedDelta,
           -clampedDelta
         ], zero);
       };
-      const calcMiddleDeltas = (sizes, _prev, inde***REMOVED***, ne***REMOVED***t, delta, minCellSize) => calcLeftEdgeDeltas(sizes, inde***REMOVED***, ne***REMOVED***t, delta, minCellSize);
+      const calcMiddleDeltas = (sizes, _prev, index, next, delta, minCellSize) => calcLeftEdgeDeltas(sizes, index, next, delta, minCellSize);
       const resizeTable = (resizer, delta, isLastColumn) => {
         if (isLastColumn) {
           resizer(delta);
         }
       };
-      const calcRightEdgeDeltas = (sizes, _prev, _inde***REMOVED***, delta, _minCellSize, isRelative) => {
+      const calcRightEdgeDeltas = (sizes, _prev, _index, delta, _minCellSize, isRelative) => {
         if (isRelative) {
           return zero(sizes);
         } else {
@@ -3210,19 +3210,19 @@
           return map$1(sizes, constant(diff));
         }
       };
-      const clampTableDelta = (sizes, inde***REMOVED***, delta, minCellSize, isLastColumn) => {
+      const clampTableDelta = (sizes, index, delta, minCellSize, isLastColumn) => {
         if (isLastColumn) {
           if (delta >= 0) {
             return delta;
           } else {
-            const ma***REMOVED***Delta = foldl(sizes, (a, b) => a + b - minCellSize, 0);
-            return Math.ma***REMOVED***(-ma***REMOVED***Delta, delta);
+            const maxDelta = foldl(sizes, (a, b) => a + b - minCellSize, 0);
+            return Math.max(-maxDelta, delta);
           }
         } else {
-          return clampNegativeDelta(sizes, inde***REMOVED***, delta, minCellSize);
+          return clampNegativeDelta(sizes, index, delta, minCellSize);
         }
       };
-      const calcRedestributedWidths = (sizes, _totalWidth, _pi***REMOVED***elDelta, _isRelative) => ({
+      const calcRedestributedWidths = (sizes, _totalWidth, _pixelDelta, _isRelative) => ({
         delta: 0,
         newSizes: sizes
       });
@@ -3304,8 +3304,8 @@
       transformRow,
       transformCell: (cell, comparator, substitution) => {
         const newCell = substitution(cell.element, comparator);
-        const fi***REMOVED***edCell = name(newCell) !== 'td' ? mutate$1(newCell, 'td') : newCell;
-        return elementnew(fi***REMOVED***edCell, cell.isNew, cell.isLocked);
+        const fixedCell = name(newCell) !== 'td' ? mutate$1(newCell, 'td') : newCell;
+        return elementnew(fixedCell, cell.isNew, cell.isLocked);
       }
     });
     const sectionCells = () => ({
@@ -3447,23 +3447,23 @@
       return tr;
     });
 
-    const getColumn = (grid, inde***REMOVED***) => {
+    const getColumn = (grid, index) => {
       return map$1(grid, row => {
-        return getCell(row, inde***REMOVED***);
+        return getCell(row, index);
       });
     };
-    const getRow = (grid, inde***REMOVED***) => {
-      return grid[inde***REMOVED***];
+    const getRow = (grid, index) => {
+      return grid[index];
     };
-    const findDiff = (***REMOVED***s, comp) => {
-      if (***REMOVED***s.length === 0) {
+    const findDiff = (xs, comp) => {
+      if (xs.length === 0) {
         return 0;
       }
-      const first = ***REMOVED***s[0];
-      const inde***REMOVED*** = findInde***REMOVED***(***REMOVED***s, ***REMOVED*** => {
-        return !comp(first.element, ***REMOVED***.element);
+      const first = xs[0];
+      const index = findIndex(xs, x => {
+        return !comp(first.element, x.element);
       });
-      return inde***REMOVED***.getOr(***REMOVED***s.length);
+      return index.getOr(xs.length);
     };
     const subgrid = (grid, row, column, comparator) => {
       const gridRow = getRow(grid, row);
@@ -3478,18 +3478,18 @@
 
     const toDetails = (grid, comparator) => {
       const seen = map$1(grid, row => map$1(row.cells, never));
-      const updateSeen = (rowInde***REMOVED***, columnInde***REMOVED***, rowspan, colspan) => {
-        for (let row = rowInde***REMOVED***; row < rowInde***REMOVED*** + rowspan; row++) {
-          for (let column = columnInde***REMOVED***; column < columnInde***REMOVED*** + colspan; column++) {
+      const updateSeen = (rowIndex, columnIndex, rowspan, colspan) => {
+        for (let row = rowIndex; row < rowIndex + rowspan; row++) {
+          for (let column = columnIndex; column < columnIndex + colspan; column++) {
             seen[row][column] = true;
           }
         }
       };
-      return map$1(grid, (row, rowInde***REMOVED***) => {
-        const details = bind$2(row.cells, (cell, columnInde***REMOVED***) => {
-          if (seen[rowInde***REMOVED***][columnInde***REMOVED***] === false) {
-            const result = subgrid(grid, rowInde***REMOVED***, columnInde***REMOVED***, comparator);
-            updateSeen(rowInde***REMOVED***, columnInde***REMOVED***, result.rowspan, result.colspan);
+      return map$1(grid, (row, rowIndex) => {
+        const details = bind$2(row.cells, (cell, columnIndex) => {
+          if (seen[rowIndex][columnIndex] === false) {
+            const result = subgrid(grid, rowIndex, columnIndex, comparator);
+            updateSeen(rowIndex, columnIndex, result.rowspan, result.colspan);
             return [detailnew(cell.element, result.rowspan, result.colspan, cell.isNew)];
           } else {
             return [];
@@ -3502,19 +3502,19 @@
       const grid = [];
       each$2(warehouse.colgroups, colgroup => {
         const colgroupCols = [];
-        for (let columnInde***REMOVED*** = 0; columnInde***REMOVED*** < warehouse.grid.columns; columnInde***REMOVED***++) {
-          const element = Warehouse.getColumnAt(warehouse, columnInde***REMOVED***).map(column => elementnew(column.element, isNew, false)).getOrThunk(() => elementnew(generators.colGap(), true, false));
+        for (let columnIndex = 0; columnIndex < warehouse.grid.columns; columnIndex++) {
+          const element = Warehouse.getColumnAt(warehouse, columnIndex).map(column => elementnew(column.element, isNew, false)).getOrThunk(() => elementnew(generators.colGap(), true, false));
           colgroupCols.push(element);
         }
         grid.push(rowcells(colgroup.element, colgroupCols, 'colgroup', isNew));
       });
-      for (let rowInde***REMOVED*** = 0; rowInde***REMOVED*** < warehouse.grid.rows; rowInde***REMOVED***++) {
+      for (let rowIndex = 0; rowIndex < warehouse.grid.rows; rowIndex++) {
         const rowCells = [];
-        for (let columnInde***REMOVED*** = 0; columnInde***REMOVED*** < warehouse.grid.columns; columnInde***REMOVED***++) {
-          const element = Warehouse.getAt(warehouse, rowInde***REMOVED***, columnInde***REMOVED***).map(item => elementnew(item.element, isNew, item.isLocked)).getOrThunk(() => elementnew(generators.gap(), true, false));
+        for (let columnIndex = 0; columnIndex < warehouse.grid.columns; columnIndex++) {
+          const element = Warehouse.getAt(warehouse, rowIndex, columnIndex).map(item => elementnew(item.element, isNew, item.isLocked)).getOrThunk(() => elementnew(generators.gap(), true, false));
           rowCells.push(element);
         }
-        const rowDetail = warehouse.all[rowInde***REMOVED***];
+        const rowDetail = warehouse.all[rowIndex];
         const row = rowcells(rowDetail.element, rowCells, rowDetail.section, isNew);
         grid.push(row);
       }
@@ -3524,17 +3524,17 @@
     const fromWarehouse = (warehouse, generators) => toGrid(warehouse, generators, false);
     const toDetailList = grid => toDetails(grid, eq$1);
     const findInWarehouse = (warehouse, element) => findMap(warehouse.all, r => find$1(r.cells, e => eq$1(element, e.element)));
-    const e***REMOVED***tractCells = (warehouse, target, predicate) => {
+    const extractCells = (warehouse, target, predicate) => {
       const details = map$1(target.selection, cell$1 => {
         return cell(cell$1).bind(lc => findInWarehouse(warehouse, lc)).filter(predicate);
       });
       const cells = cat(details);
       return someIf(cells.length > 0, cells);
     };
-    const run = (operation, e***REMOVED***tract, adjustment, postAction, genWrappers) => (table, target, generators, behaviours) => {
+    const run = (operation, extract, adjustment, postAction, genWrappers) => (table, target, generators, behaviours) => {
       const warehouse = Warehouse.fromTable(table);
       const tableSection = Optional.from(behaviours === null || behaviours === void 0 ? void 0 : behaviours.section).getOrThunk(TableSection.fallback);
-      const output = e***REMOVED***tract(warehouse, target).map(info => {
+      const output = extract(warehouse, target).map(info => {
         const model = fromWarehouse(warehouse, generators);
         const result = operation(model, info, eq$1, genWrappers(generators), tableSection);
         const lockedColumns = getLockedColumnsFromGrid(result.grid);
@@ -3575,22 +3575,22 @@
       };
       return value;
     }));
-    const onPasteByEditor = (warehouse, target) => e***REMOVED***tractCells(warehouse, target, always).map(cells => ({
+    const onPasteByEditor = (warehouse, target) => extractCells(warehouse, target, always).map(cells => ({
       cells,
       generators: target.generators,
       clipboard: target.clipboard
     }));
     const onMergable = (_warehouse, target) => target.mergable;
     const onUnmergable = (_warehouse, target) => target.unmergable;
-    const onCells = (warehouse, target) => e***REMOVED***tractCells(warehouse, target, always);
-    const onUnlockedCells = (warehouse, target) => e***REMOVED***tractCells(warehouse, target, detail => !detail.isLocked);
-    const isUnlockedTableCell = (warehouse, cell) => findInWarehouse(warehouse, cell).e***REMOVED***ists(detail => !detail.isLocked);
+    const onCells = (warehouse, target) => extractCells(warehouse, target, always);
+    const onUnlockedCells = (warehouse, target) => extractCells(warehouse, target, detail => !detail.isLocked);
+    const isUnlockedTableCell = (warehouse, cell) => findInWarehouse(warehouse, cell).exists(detail => !detail.isLocked);
     const allUnlocked = (warehouse, cells) => forall(cells, cell => isUnlockedTableCell(warehouse, cell));
     const onUnlockedMergable = (warehouse, target) => onMergable(warehouse, target).filter(mergeable => allUnlocked(warehouse, mergeable.cells));
     const onUnlockedUnmergable = (warehouse, target) => onUnmergable(warehouse, target).filter(cells => allUnlocked(warehouse, cells));
 
     const merge$2 = (grid, bounds, comparator, substitution) => {
-      const rows = e***REMOVED***tractGridDetails(grid).rows;
+      const rows = extractGridDetails(grid).rows;
       if (rows.length === 0) {
         return grid;
       }
@@ -3604,7 +3604,7 @@
       return grid;
     };
     const unmerge = (grid, target, comparator, substitution) => {
-      const rows = e***REMOVED***tractGridDetails(grid).rows;
+      const rows = extractGridDetails(grid).rows;
       let first = true;
       for (let i = 0; i < rows.length; i++) {
         for (let j = 0; j < cellLength(rows[0]); j++) {
@@ -3623,33 +3623,33 @@
     };
     const uniqueCells = (row, comparator) => {
       return foldl(row, (rest, cell) => {
-        return e***REMOVED***ists(rest, currentCell => {
+        return exists(rest, currentCell => {
           return comparator(currentCell.element, cell.element);
         }) ? rest : rest.concat([cell]);
       }, []);
     };
-    const splitCols = (grid, inde***REMOVED***, comparator, substitution) => {
-      if (inde***REMOVED*** > 0 && inde***REMOVED*** < grid[0].cells.length) {
+    const splitCols = (grid, index, comparator, substitution) => {
+      if (index > 0 && index < grid[0].cells.length) {
         each$2(grid, row => {
-          const prevCell = row.cells[inde***REMOVED*** - 1];
+          const prevCell = row.cells[index - 1];
           let offset = 0;
           const substitute = substitution();
-          while (row.cells.length > inde***REMOVED*** + offset && comparator(prevCell.element, row.cells[inde***REMOVED*** + offset].element)) {
-            mutateCell(row, inde***REMOVED*** + offset, elementnew(substitute, true, row.cells[inde***REMOVED*** + offset].isLocked));
+          while (row.cells.length > index + offset && comparator(prevCell.element, row.cells[index + offset].element)) {
+            mutateCell(row, index + offset, elementnew(substitute, true, row.cells[index + offset].isLocked));
             offset++;
           }
         });
       }
       return grid;
     };
-    const splitRows = (grid, inde***REMOVED***, comparator, substitution) => {
-      const rows = e***REMOVED***tractGridDetails(grid).rows;
-      if (inde***REMOVED*** > 0 && inde***REMOVED*** < rows.length) {
-        const rowPrevCells = rows[inde***REMOVED*** - 1].cells;
+    const splitRows = (grid, index, comparator, substitution) => {
+      const rows = extractGridDetails(grid).rows;
+      if (index > 0 && index < rows.length) {
+        const rowPrevCells = rows[index - 1].cells;
         const cells = uniqueCells(rowPrevCells, comparator);
         each$2(cells, cell => {
           let replacement = Optional.none();
-          for (let i = inde***REMOVED***; i < rows.length; i++) {
+          for (let i = index; i < rows.length; i++) {
             for (let j = 0; j < cellLength(rows[0]); j++) {
               const row = rows[i];
               const current = getCell(row, j);
@@ -3682,7 +3682,7 @@
         map: mapper => Result.value(mapper(value)),
         mapError: outputHelper,
         bind: applyHelper,
-        e***REMOVED***ists: applyHelper,
+        exists: applyHelper,
         forall: applyHelper,
         getOr: constHelper,
         or: outputHelper,
@@ -3707,7 +3707,7 @@
         map: outputHelper,
         mapError: mapper => Result.error(mapper(error)),
         bind: outputHelper,
-        e***REMOVED***ists: never,
+        exists: never,
         forall: always,
         getOr: identity,
         or: identity,
@@ -3757,20 +3757,20 @@
     };
     const generateElements = (amount, row, generators, isLocked) => {
       const generator = row.section === 'colgroup' ? generators.col : generators.cell;
-      return range$1(amount, id***REMOVED*** => elementnew(generator(), true, isLocked(id***REMOVED***)));
+      return range$1(amount, idx => elementnew(generator(), true, isLocked(idx)));
     };
     const rowFill = (grid, amount, generators, lockedColumns) => {
-      const e***REMOVED***ampleRow = grid[grid.length - 1];
+      const exampleRow = grid[grid.length - 1];
       return grid.concat(range$1(amount, () => {
-        const generator = e***REMOVED***ampleRow.section === 'colgroup' ? generators.colgroup : generators.row;
-        const row = clone(e***REMOVED***ampleRow, generator, identity);
-        const elements = generateElements(row.cells.length, row, generators, id***REMOVED*** => has$1(lockedColumns, id***REMOVED***.toString()));
+        const generator = exampleRow.section === 'colgroup' ? generators.colgroup : generators.row;
+        const row = clone(exampleRow, generator, identity);
+        const elements = generateElements(row.cells.length, row, generators, idx => has$1(lockedColumns, idx.toString()));
         return setCells(row, elements);
       }));
     };
-    const colFill = (grid, amount, generators, startInde***REMOVED***) => map$1(grid, row => {
+    const colFill = (grid, amount, generators, startIndex) => map$1(grid, row => {
       const newChildren = generateElements(amount, row, generators, never);
-      return addCells(row, startInde***REMOVED***, newChildren);
+      return addCells(row, startIndex, newChildren);
     });
     const lockedColFill = (grid, generators, lockedColumns) => map$1(grid, row => {
       return foldl(lockedColumns, (acc, colNum) => {
@@ -3783,7 +3783,7 @@
       const fillRows = delta.rowDelta < 0 ? rowFill : identity;
       const lockedColumns = getLockedColumnsFromGrid(gridA);
       const gridWidth = cellLength(gridA[0]);
-      const isLastColLocked = e***REMOVED***ists(lockedColumns, locked => locked === gridWidth - 1);
+      const isLastColLocked = exists(lockedColumns, locked => locked === gridWidth - 1);
       const modifiedCols = fillCols(gridA, Math.abs(delta.colDelta), generators, isLastColLocked ? gridWidth - 1 : gridWidth);
       const newLockedColumns = getLockedColumnsFromGrid(modifiedCols);
       return fillRows(modifiedCols, Math.abs(delta.rowDelta), generators, mapToObject(newLockedColumns, always));
@@ -3813,8 +3813,8 @@
           if (isSpanning(gridA, r, c, comparator)) {
             unmerge(gridA, getCellElement(gridA[r], c), comparator, generator.cell);
           }
-          const gridBColInde***REMOVED*** = c - startCol - skippedCol;
-          const newCell = getCell(gridBRows[r - startRow], gridBColInde***REMOVED***);
+          const gridBColIndex = c - startCol - skippedCol;
+          const newCell = getCell(gridBRows[r - startRow], gridBColIndex);
           const newCellElm = newCell.element;
           const replacement = generator.replace(newCellElm);
           mutateCell(gridA[r], c, elementnew(replacement, true, newCell.isLocked));
@@ -3824,7 +3824,7 @@
     };
     const getValidStartAddress = (currentStartAddress, grid, lockedColumns) => {
       const gridColLength = cellLength(grid[0]);
-      const adjustedRowAddress = e***REMOVED***tractGridDetails(grid).cols.length + currentStartAddress.row;
+      const adjustedRowAddress = extractGridDetails(grid).cols.length + currentStartAddress.row;
       const possibleColAddresses = range$1(gridColLength - currentStartAddress.column, num => num + currentStartAddress.column);
       const validColAddress = find$1(possibleColAddresses, num => forall(lockedColumns, col => col !== num)).getOr(gridColLength - 1);
       return {
@@ -3836,7 +3836,7 @@
     const merge$1 = (startAddress, gridA, gridB, generator, comparator) => {
       const lockedColumns = getLockedColumnsFromGrid(gridA);
       const validStartAddress = getValidStartAddress(startAddress, gridA, lockedColumns);
-      const gridBRows = e***REMOVED***tractGridDetails(gridB).rows;
+      const gridBRows = extractGridDetails(gridB).rows;
       const lockedColumnsWithinBounds = getLockedColumnsWithinBounds(validStartAddress, gridBRows, lockedColumns);
       const result = measure(validStartAddress, gridA, gridBRows);
       return result.map(diff => {
@@ -3850,18 +3850,18 @@
         return mergeTables(validStartAddress, fittedGrid, gridBRows, generator, comparator, newLockedColumnsWithinBounds);
       });
     };
-    const insertCols = (inde***REMOVED***, gridA, gridB, generator, comparator) => {
-      splitCols(gridA, inde***REMOVED***, comparator, generator.cell);
+    const insertCols = (index, gridA, gridB, generator, comparator) => {
+      splitCols(gridA, index, comparator, generator.cell);
       const delta = measureHeight(gridB, gridA);
       const fittedNewGrid = tailor(gridB, delta, generator);
       const secondDelta = measureHeight(gridA, fittedNewGrid);
       const fittedOldGrid = tailor(gridA, secondDelta, generator);
       return map$1(fittedOldGrid, (gridRow, i) => {
-        return addCells(gridRow, inde***REMOVED***, fittedNewGrid[i].cells);
+        return addCells(gridRow, index, fittedNewGrid[i].cells);
       });
     };
-    const insertRows = (inde***REMOVED***, gridA, gridB, generator, comparator) => {
-      splitRows(gridA, inde***REMOVED***, comparator, generator.cell);
+    const insertRows = (index, gridA, gridB, generator, comparator) => {
+      splitRows(gridA, index, comparator, generator.cell);
       const locked = getLockedColumnsFromGrid(gridA);
       const diff = measureWidth(gridA, gridB);
       const delta = {
@@ -3872,7 +3872,7 @@
       const {
         cols: oldCols,
         rows: oldRows
-      } = e***REMOVED***tractGridDetails(fittedOldGrid);
+      } = extractGridDetails(fittedOldGrid);
       const newLocked = getLockedColumnsFromGrid(fittedOldGrid);
       const secondDiff = measureWidth(gridB, gridA);
       const secondDelta = {
@@ -3883,20 +3883,20 @@
       const fittedNewGrid = tailor(fittedGridB, secondDelta, generator);
       return [
         ...oldCols,
-        ...oldRows.slice(0, inde***REMOVED***),
+        ...oldRows.slice(0, index),
         ...fittedNewGrid,
-        ...oldRows.slice(inde***REMOVED***, oldRows.length)
+        ...oldRows.slice(index, oldRows.length)
       ];
     };
 
     const cloneRow = (row, cloneCell, comparator, substitution) => clone(row, elem => substitution(elem, comparator), cloneCell);
-    const insertRowAt = (grid, inde***REMOVED***, e***REMOVED***ample, comparator, substitution) => {
-      const {rows, cols} = e***REMOVED***tractGridDetails(grid);
-      const before = rows.slice(0, inde***REMOVED***);
-      const after = rows.slice(inde***REMOVED***);
-      const newRow = cloneRow(rows[e***REMOVED***ample], (e***REMOVED***, c) => {
-        const withinSpan = inde***REMOVED*** > 0 && inde***REMOVED*** < rows.length && comparator(getCellElement(rows[inde***REMOVED*** - 1], c), getCellElement(rows[inde***REMOVED***], c));
-        const ret = withinSpan ? getCell(rows[inde***REMOVED***], c) : elementnew(substitution(e***REMOVED***.element, comparator), true, e***REMOVED***.isLocked);
+    const insertRowAt = (grid, index, example, comparator, substitution) => {
+      const {rows, cols} = extractGridDetails(grid);
+      const before = rows.slice(0, index);
+      const after = rows.slice(index);
+      const newRow = cloneRow(rows[example], (ex, c) => {
+        const withinSpan = index > 0 && index < rows.length && comparator(getCellElement(rows[index - 1], c), getCellElement(rows[index], c));
+        const ret = withinSpan ? getCell(rows[index], c) : elementnew(substitution(ex.element, comparator), true, ex.isLocked);
         return ret;
       }, comparator, substitution);
       return [
@@ -3906,26 +3906,26 @@
         ...after
       ];
     };
-    const getElementFor = (row, column, section, withinSpan, e***REMOVED***ample, comparator, substitution) => {
+    const getElementFor = (row, column, section, withinSpan, example, comparator, substitution) => {
       if (section === 'colgroup' || !withinSpan) {
-        const cell = getCell(row, e***REMOVED***ample);
+        const cell = getCell(row, example);
         return elementnew(substitution(cell.element, comparator), true, false);
       } else {
         return getCell(row, column);
       }
     };
-    const insertColumnAt = (grid, inde***REMOVED***, e***REMOVED***ample, comparator, substitution) => map$1(grid, row => {
-      const withinSpan = inde***REMOVED*** > 0 && inde***REMOVED*** < cellLength(row) && comparator(getCellElement(row, inde***REMOVED*** - 1), getCellElement(row, inde***REMOVED***));
-      const sub = getElementFor(row, inde***REMOVED***, row.section, withinSpan, e***REMOVED***ample, comparator, substitution);
-      return addCell(row, inde***REMOVED***, sub);
+    const insertColumnAt = (grid, index, example, comparator, substitution) => map$1(grid, row => {
+      const withinSpan = index > 0 && index < cellLength(row) && comparator(getCellElement(row, index - 1), getCellElement(row, index));
+      const sub = getElementFor(row, index, row.section, withinSpan, example, comparator, substitution);
+      return addCell(row, index, sub);
     });
     const deleteColumnsAt = (grid, columns) => bind$2(grid, row => {
-      const e***REMOVED***istingCells = row.cells;
-      const cells = foldr(columns, (acc, column) => column >= 0 && column < acc.length ? acc.slice(0, column).concat(acc.slice(column + 1)) : acc, e***REMOVED***istingCells);
+      const existingCells = row.cells;
+      const cells = foldr(columns, (acc, column) => column >= 0 && column < acc.length ? acc.slice(0, column).concat(acc.slice(column + 1)) : acc, existingCells);
       return cells.length > 0 ? [rowcells(row.element, cells, row.section, row.isNew)] : [];
     });
     const deleteRowsAt = (grid, start, finish) => {
-      const {rows, cols} = e***REMOVED***tractGridDetails(grid);
+      const {rows, cols} = extractGridDetails(grid);
       return [
         ...cols,
         ...rows.slice(0, start),
@@ -3933,21 +3933,21 @@
       ];
     };
 
-    const notInStartRow = (grid, rowInde***REMOVED***, colInde***REMOVED***, comparator) => getCellElement(grid[rowInde***REMOVED***], colInde***REMOVED***) !== undefined && (rowInde***REMOVED*** > 0 && comparator(getCellElement(grid[rowInde***REMOVED*** - 1], colInde***REMOVED***), getCellElement(grid[rowInde***REMOVED***], colInde***REMOVED***)));
-    const notInStartColumn = (row, inde***REMOVED***, comparator) => inde***REMOVED*** > 0 && comparator(getCellElement(row, inde***REMOVED*** - 1), getCellElement(row, inde***REMOVED***));
-    const isDuplicatedCell = (grid, rowInde***REMOVED***, colInde***REMOVED***, comparator) => notInStartRow(grid, rowInde***REMOVED***, colInde***REMOVED***, comparator) || notInStartColumn(grid[rowInde***REMOVED***], colInde***REMOVED***, comparator);
+    const notInStartRow = (grid, rowIndex, colIndex, comparator) => getCellElement(grid[rowIndex], colIndex) !== undefined && (rowIndex > 0 && comparator(getCellElement(grid[rowIndex - 1], colIndex), getCellElement(grid[rowIndex], colIndex)));
+    const notInStartColumn = (row, index, comparator) => index > 0 && comparator(getCellElement(row, index - 1), getCellElement(row, index));
+    const isDuplicatedCell = (grid, rowIndex, colIndex, comparator) => notInStartRow(grid, rowIndex, colIndex, comparator) || notInStartColumn(grid[rowIndex], colIndex, comparator);
     const rowReplacerPredicate = (targetRow, columnHeaders) => {
       const entireTableIsHeader = forall(columnHeaders, identity) && isHeaderCells(targetRow.cells);
-      return entireTableIsHeader ? always : (cell, _rowInde***REMOVED***, colInde***REMOVED***) => {
+      return entireTableIsHeader ? always : (cell, _rowIndex, colIndex) => {
         const type = name(cell.element);
-        return !(type === 'th' && columnHeaders[colInde***REMOVED***]);
+        return !(type === 'th' && columnHeaders[colIndex]);
       };
     };
     const columnReplacePredicate = (targetColumn, rowHeaders) => {
       const entireTableIsHeader = forall(rowHeaders, identity) && isHeaderCells(targetColumn);
-      return entireTableIsHeader ? always : (cell, rowInde***REMOVED***, _colInde***REMOVED***) => {
+      return entireTableIsHeader ? always : (cell, rowIndex, _colIndex) => {
         const type = name(cell.element);
-        return !(type === 'th' && rowHeaders[rowInde***REMOVED***]);
+        return !(type === 'th' && rowHeaders[rowIndex]);
       };
     };
     const determineScope = (applyScope, cell, newScope, isInHeader) => {
@@ -3962,20 +3962,20 @@
         return null;
       }
     };
-    const rowScopeGenerator = (applyScope, columnHeaders) => (cell, rowInde***REMOVED***, columnInde***REMOVED***) => Optional.some(determineScope(applyScope, cell.element, 'col', columnHeaders[columnInde***REMOVED***]));
-    const columnScopeGenerator = (applyScope, rowHeaders) => (cell, rowInde***REMOVED***) => Optional.some(determineScope(applyScope, cell.element, 'row', rowHeaders[rowInde***REMOVED***]));
+    const rowScopeGenerator = (applyScope, columnHeaders) => (cell, rowIndex, columnIndex) => Optional.some(determineScope(applyScope, cell.element, 'col', columnHeaders[columnIndex]));
+    const columnScopeGenerator = (applyScope, rowHeaders) => (cell, rowIndex) => Optional.some(determineScope(applyScope, cell.element, 'row', rowHeaders[rowIndex]));
     const replace = (cell, comparator, substitute) => elementnew(substitute(cell.element, comparator), true, cell.isLocked);
     const replaceIn = (grid, targets, comparator, substitute, replacer, genScope, shouldReplace) => {
       const isTarget = cell => {
-        return e***REMOVED***ists(targets, target => {
+        return exists(targets, target => {
           return comparator(cell.element, target.element);
         });
       };
-      return map$1(grid, (row, rowInde***REMOVED***) => {
-        return mapCells(row, (cell, colInde***REMOVED***) => {
+      return map$1(grid, (row, rowIndex) => {
+        return mapCells(row, (cell, colIndex) => {
           if (isTarget(cell)) {
-            const newCell = shouldReplace(cell, rowInde***REMOVED***, colInde***REMOVED***) ? replacer(cell, comparator, substitute) : cell;
-            genScope(newCell, rowInde***REMOVED***, colInde***REMOVED***).each(scope => {
+            const newCell = shouldReplace(cell, rowIndex, colIndex) ? replacer(cell, comparator, substitute) : cell;
+            genScope(newCell, rowIndex, colIndex).each(scope => {
               setOptions(newCell.element, { scope: Optional.from(scope) });
             });
             return newCell;
@@ -3985,31 +3985,31 @@
         });
       });
     };
-    const getColumnCells = (rows, columnInde***REMOVED***, comparator) => bind$2(rows, (row, i) => {
-      return isDuplicatedCell(rows, i, columnInde***REMOVED***, comparator) ? [] : [getCell(row, columnInde***REMOVED***)];
+    const getColumnCells = (rows, columnIndex, comparator) => bind$2(rows, (row, i) => {
+      return isDuplicatedCell(rows, i, columnIndex, comparator) ? [] : [getCell(row, columnIndex)];
     });
-    const getRowCells = (rows, rowInde***REMOVED***, comparator) => {
-      const targetRow = rows[rowInde***REMOVED***];
+    const getRowCells = (rows, rowIndex, comparator) => {
+      const targetRow = rows[rowIndex];
       return bind$2(targetRow.cells, (item, i) => {
-        return isDuplicatedCell(rows, rowInde***REMOVED***, i, comparator) ? [] : [item];
+        return isDuplicatedCell(rows, rowIndex, i, comparator) ? [] : [item];
       });
     };
-    const replaceColumns = (grid, inde***REMOVED***es, applyScope, comparator, substitution) => {
-      const rows = e***REMOVED***tractGridDetails(grid).rows;
-      const targets = bind$2(inde***REMOVED***es, inde***REMOVED*** => getColumnCells(rows, inde***REMOVED***, comparator));
+    const replaceColumns = (grid, indexes, applyScope, comparator, substitution) => {
+      const rows = extractGridDetails(grid).rows;
+      const targets = bind$2(indexes, index => getColumnCells(rows, index, comparator));
       const rowHeaders = map$1(rows, row => isHeaderCells(row.cells));
       const shouldReplaceCell = columnReplacePredicate(targets, rowHeaders);
       const scopeGenerator = columnScopeGenerator(applyScope, rowHeaders);
       return replaceIn(grid, targets, comparator, substitution, replace, scopeGenerator, shouldReplaceCell);
     };
-    const replaceRows = (grid, inde***REMOVED***es, section, applyScope, comparator, substitution, tableSection) => {
-      const {cols, rows} = e***REMOVED***tractGridDetails(grid);
-      const targetRow = rows[inde***REMOVED***es[0]];
-      const targets = bind$2(inde***REMOVED***es, inde***REMOVED*** => getRowCells(rows, inde***REMOVED***, comparator));
-      const columnHeaders = map$1(targetRow.cells, (_cell, inde***REMOVED***) => isHeaderCells(getColumnCells(rows, inde***REMOVED***, comparator)));
+    const replaceRows = (grid, indexes, section, applyScope, comparator, substitution, tableSection) => {
+      const {cols, rows} = extractGridDetails(grid);
+      const targetRow = rows[indexes[0]];
+      const targets = bind$2(indexes, index => getRowCells(rows, index, comparator));
+      const columnHeaders = map$1(targetRow.cells, (_cell, index) => isHeaderCells(getColumnCells(rows, index, comparator)));
       const newRows = [...rows];
-      each$2(inde***REMOVED***es, inde***REMOVED*** => {
-        newRows[inde***REMOVED***] = tableSection.transformRow(rows[inde***REMOVED***], section);
+      each$2(indexes, index => {
+        newRows[index] = tableSection.transformRow(rows[index], section);
       });
       const newGrid = [
         ...cols,
@@ -4020,7 +4020,7 @@
       return replaceIn(newGrid, targets, comparator, substitution, tableSection.transformCell, scopeGenerator, shouldReplaceCell);
     };
     const replaceCells = (grid, details, comparator, substitution) => {
-      const rows = e***REMOVED***tractGridDetails(grid).rows;
+      const rows = extractGridDetails(grid).rows;
       const targetCells = map$1(details, detail => getCell(rows[detail.row], detail.column));
       return replaceIn(grid, targetCells, comparator, substitution, replace, Optional.none, always);
     };
@@ -4052,12 +4052,12 @@
         adt[key] = (...args) => {
           const argLength = args.length;
           if (argLength !== value.length) {
-            throw new Error('Wrong number of arguments to case ' + key + '. E***REMOVED***pected ' + value.length + ' (' + value + '), got ' + argLength);
+            throw new Error('Wrong number of arguments to case ' + key + '. Expected ' + value.length + ' (' + value + '), got ' + argLength);
           }
           const match = branches => {
             const branchKeys = keys(branches);
             if (constructors.length !== branchKeys.length) {
-              throw new Error('Wrong number of arguments to match. E***REMOVED***pected: ' + constructors.join(',') + '\nActual: ' + branchKeys.join(','));
+              throw new Error('Wrong number of arguments to match. Expected: ' + constructors.join(',') + '\nActual: ' + branchKeys.join(','));
             }
             const allReqd = forall(constructors, reqKey => {
               return contains$2(branchKeys, reqKey);
@@ -4070,7 +4070,7 @@
           return {
             fold: (...foldArgs) => {
               if (foldArgs.length !== cases.length) {
-                throw new Error('Wrong number of arguments to fold. E***REMOVED***pected ' + cases.length + ', got ' + foldArgs.length);
+                throw new Error('Wrong number of arguments to fold. Expected ' + cases.length + ', got ' + foldArgs.length);
               }
               const target = foldArgs[count];
               return target.apply(null, args);
@@ -4092,56 +4092,56 @@
 
     const adt$6 = Adt.generate([
       { none: [] },
-      { only: ['inde***REMOVED***'] },
+      { only: ['index'] },
       {
         left: [
-          'inde***REMOVED***',
-          'ne***REMOVED***t'
+          'index',
+          'next'
         ]
       },
       {
         middle: [
           'prev',
-          'inde***REMOVED***',
-          'ne***REMOVED***t'
+          'index',
+          'next'
         ]
       },
       {
         right: [
           'prev',
-          'inde***REMOVED***'
+          'index'
         ]
       }
     ]);
-    const ColumnConte***REMOVED***t = { ...adt$6 };
+    const ColumnContext = { ...adt$6 };
 
-    const neighbours = (input, inde***REMOVED***) => {
+    const neighbours = (input, index) => {
       if (input.length === 0) {
-        return ColumnConte***REMOVED***t.none();
+        return ColumnContext.none();
       }
       if (input.length === 1) {
-        return ColumnConte***REMOVED***t.only(0);
+        return ColumnContext.only(0);
       }
-      if (inde***REMOVED*** === 0) {
-        return ColumnConte***REMOVED***t.left(0, 1);
+      if (index === 0) {
+        return ColumnContext.left(0, 1);
       }
-      if (inde***REMOVED*** === input.length - 1) {
-        return ColumnConte***REMOVED***t.right(inde***REMOVED*** - 1, inde***REMOVED***);
+      if (index === input.length - 1) {
+        return ColumnContext.right(index - 1, index);
       }
-      if (inde***REMOVED*** > 0 && inde***REMOVED*** < input.length - 1) {
-        return ColumnConte***REMOVED***t.middle(inde***REMOVED*** - 1, inde***REMOVED***, inde***REMOVED*** + 1);
+      if (index > 0 && index < input.length - 1) {
+        return ColumnContext.middle(index - 1, index, index + 1);
       }
-      return ColumnConte***REMOVED***t.none();
+      return ColumnContext.none();
     };
     const determine = (input, column, step, tableSize, resize) => {
       const result = input.slice(0);
-      const conte***REMOVED***t = neighbours(input, column);
+      const context = neighbours(input, column);
       const onNone = constant(map$1(result, constant(0)));
-      const onOnly = inde***REMOVED*** => tableSize.singleColumnWidth(result[inde***REMOVED***], step);
-      const onLeft = (inde***REMOVED***, ne***REMOVED***t) => resize.calcLeftEdgeDeltas(result, inde***REMOVED***, ne***REMOVED***t, step, tableSize.minCellWidth(), tableSize.isRelative);
-      const onMiddle = (prev, inde***REMOVED***, ne***REMOVED***t) => resize.calcMiddleDeltas(result, prev, inde***REMOVED***, ne***REMOVED***t, step, tableSize.minCellWidth(), tableSize.isRelative);
-      const onRight = (prev, inde***REMOVED***) => resize.calcRightEdgeDeltas(result, prev, inde***REMOVED***, step, tableSize.minCellWidth(), tableSize.isRelative);
-      return conte***REMOVED***t.fold(onNone, onOnly, onLeft, onMiddle, onRight);
+      const onOnly = index => tableSize.singleColumnWidth(result[index], step);
+      const onLeft = (index, next) => resize.calcLeftEdgeDeltas(result, index, next, step, tableSize.minCellWidth(), tableSize.isRelative);
+      const onMiddle = (prev, index, next) => resize.calcMiddleDeltas(result, prev, index, next, step, tableSize.minCellWidth(), tableSize.isRelative);
+      const onRight = (prev, index) => resize.calcRightEdgeDeltas(result, prev, index, step, tableSize.minCellWidth(), tableSize.isRelative);
+      return context.fold(onNone, onOnly, onLeft, onMiddle, onRight);
     };
 
     const total = (start, end, measures) => {
@@ -4164,9 +4164,9 @@
     };
     const recalculateWidthForColumns = (warehouse, widths) => {
       const groups = Warehouse.justColumns(warehouse);
-      return map$1(groups, (column, inde***REMOVED***) => ({
+      return map$1(groups, (column, index) => ({
         element: column.element,
-        width: widths[inde***REMOVED***],
+        width: widths[index],
         colspan: column.colspan
       }));
     };
@@ -4193,21 +4193,21 @@
         tableSize.setElementWidth(cell.element, cell.width);
       });
     };
-    const adjustWidth = (table, delta, inde***REMOVED***, resizing, tableSize) => {
+    const adjustWidth = (table, delta, index, resizing, tableSize) => {
       const warehouse = Warehouse.fromTable(table);
       const step = tableSize.getCellDelta(delta);
       const widths = tableSize.getWidths(warehouse, tableSize);
-      const isLastColumn = inde***REMOVED*** === warehouse.grid.columns - 1;
-      const clampedStep = resizing.clampTableDelta(widths, inde***REMOVED***, step, tableSize.minCellWidth(), isLastColumn);
-      const deltas = determine(widths, inde***REMOVED***, clampedStep, tableSize, resizing);
-      const newWidths = map$1(deltas, (d***REMOVED***, i) => d***REMOVED*** + widths[i]);
+      const isLastColumn = index === warehouse.grid.columns - 1;
+      const clampedStep = resizing.clampTableDelta(widths, index, step, tableSize.minCellWidth(), isLastColumn);
+      const deltas = determine(widths, index, clampedStep, tableSize, resizing);
+      const newWidths = map$1(deltas, (dx, i) => dx + widths[i]);
       recalculateAndApply(warehouse, newWidths, tableSize);
       resizing.resizeTable(tableSize.adjustTableWidth, clampedStep, isLastColumn);
     };
-    const adjustHeight = (table, delta, inde***REMOVED***) => {
+    const adjustHeight = (table, delta, index) => {
       const warehouse = Warehouse.fromTable(table);
-      const heights = getPi***REMOVED***elHeights(warehouse, table);
-      const newHeights = map$1(heights, (dy, i) => inde***REMOVED*** === i ? Math.ma***REMOVED***(delta + dy, minHeight()) : dy);
+      const heights = getPixelHeights(warehouse, table);
+      const newHeights = map$1(heights, (dy, i) => index === i ? Math.max(delta + dy, minHeight()) : dy);
       const newRowSizes = matchRowHeight(warehouse, newHeights);
       each$2(newRowSizes, row => {
         setHeight(row.element, row.height);
@@ -4221,8 +4221,8 @@
     const adjustAndRedistributeWidths$1 = (_table, list, details, tableSize, resizeBehaviour) => {
       const warehouse = Warehouse.generate(list);
       const sizes = tableSize.getWidths(warehouse, tableSize);
-      const tablePi***REMOVED***elWidth = tableSize.pi***REMOVED***elWidth();
-      const {newSizes, delta} = resizeBehaviour.calcRedestributedWidths(sizes, tablePi***REMOVED***elWidth, details.pi***REMOVED***elDelta, tableSize.isRelative);
+      const tablePixelWidth = tableSize.pixelWidth();
+      const {newSizes, delta} = resizeBehaviour.calcRedestributedWidths(sizes, tablePixelWidth, details.pixelDelta, tableSize.isRelative);
       recalculateAndApply(warehouse, newSizes, tableSize);
       tableSize.adjustTableWidth(delta);
     };
@@ -4234,8 +4234,8 @@
 
     const uniqueColumns = details => {
       const uniqueCheck = (rest, detail) => {
-        const columnE***REMOVED***ists = e***REMOVED***ists(rest, currentDetail => currentDetail.column === detail.column);
-        return columnE***REMOVED***ists ? rest : rest.concat([detail]);
+        const columnExists = exists(rest, currentDetail => currentDetail.column === detail.column);
+        return columnExists ? rest : rest.concat([detail]);
       };
       return foldl(details, uniqueCheck, []).sort((detailA, detailB) => detailA.column - detailB.column);
     };
@@ -4282,8 +4282,8 @@
       return generators => {
         const list = [];
         const find = (element, comparator) => {
-          return find$1(list, ***REMOVED*** => {
-            return comparator(***REMOVED***.item, element);
+          return find$1(list, x => {
+            return comparator(x.item, element);
           });
         };
         const makeNew = element => {
@@ -4338,10 +4338,10 @@
               'row',
               'col'
             ];
-            const isMi***REMOVED***ed = e***REMOVED***ists(stringAttributes, attribute => {
+            const isMixed = exists(stringAttributes, attribute => {
               return attribute !== baseScope && contains$2(scopes, attribute);
             });
-            return isMi***REMOVED***ed ? Optional.none() : Optional.from(baseScope);
+            return isMixed ? Optional.none() : Optional.from(baseScope);
           }
         };
         remove$5(cells[0], 'width');
@@ -4426,14 +4426,14 @@
       const isBr = isTag('br');
       const advancedBr = children => {
         return forall(children, c => {
-          return isBr(c) || isTe***REMOVED***t(c) && get$6(c).trim().length === 0;
+          return isBr(c) || isText(c) && get$6(c).trim().length === 0;
         });
       };
       const isListItem = el => {
         return name(el) === 'li' || ancestor$2(el, isList).isSome();
       };
       const siblingIsBlock = el => {
-        return ne***REMOVED***tSibling(el).map(rightSibling => {
+        return nextSibling(el).map(rightSibling => {
           if (isBlock(rightSibling)) {
             return true;
           }
@@ -4480,7 +4480,7 @@
     }));
     const elementFromGrid = (grid, row, column) => {
       var _a, _b;
-      const rows = e***REMOVED***tractGridDetails(grid).rows;
+      const rows = extractGridDetails(grid).rows;
       return Optional.from((_b = (_a = rows[row]) === null || _a === void 0 ? void 0 : _a.cells[column]) === null || _b === void 0 ? void 0 : _b.element).filter(isEditable).orThunk(() => findEditableCursorPosition(rows));
     };
     const bundle = (grid, row, column) => {
@@ -4489,16 +4489,16 @@
     };
     const uniqueRows = details => {
       const rowCompilation = (rest, detail) => {
-        const rowE***REMOVED***ists = e***REMOVED***ists(rest, currentDetail => currentDetail.row === detail.row);
-        return rowE***REMOVED***ists ? rest : rest.concat([detail]);
+        const rowExists = exists(rest, currentDetail => currentDetail.row === detail.row);
+        return rowExists ? rest : rest.concat([detail]);
       };
       return foldl(details, rowCompilation, []).sort((detailA, detailB) => detailA.row - detailB.row);
     };
     const opInsertRowsBefore = (grid, details, comparator, genWrappers) => {
-      const targetInde***REMOVED*** = details[0].row;
+      const targetIndex = details[0].row;
       const rows = uniqueRows(details);
       const newGrid = foldr(rows, (acc, row) => {
-        const newG = insertRowAt(acc.grid, targetInde***REMOVED***, row.row + acc.delta, comparator, genWrappers.getOrInit);
+        const newG = insertRowAt(acc.grid, targetIndex, row.row + acc.delta, comparator, genWrappers.getOrInit);
         return {
           grid: newG,
           delta: acc.delta + 1
@@ -4507,23 +4507,23 @@
         grid,
         delta: 0
       }).grid;
-      return bundle(newGrid, targetInde***REMOVED***, details[0].column);
+      return bundle(newGrid, targetIndex, details[0].column);
     };
     const opInsertRowsAfter = (grid, details, comparator, genWrappers) => {
       const rows = uniqueRows(details);
       const target = rows[rows.length - 1];
-      const targetInde***REMOVED*** = target.row + target.rowspan;
+      const targetIndex = target.row + target.rowspan;
       const newGrid = foldr(rows, (newG, row) => {
-        return insertRowAt(newG, targetInde***REMOVED***, row.row, comparator, genWrappers.getOrInit);
+        return insertRowAt(newG, targetIndex, row.row, comparator, genWrappers.getOrInit);
       }, grid);
-      return bundle(newGrid, targetInde***REMOVED***, details[0].column);
+      return bundle(newGrid, targetIndex, details[0].column);
     };
-    const opInsertColumnsBefore = (grid, e***REMOVED***tractDetail, comparator, genWrappers) => {
-      const details = e***REMOVED***tractDetail.details;
+    const opInsertColumnsBefore = (grid, extractDetail, comparator, genWrappers) => {
+      const details = extractDetail.details;
       const columns = uniqueColumns(details);
-      const targetInde***REMOVED*** = columns[0].column;
+      const targetIndex = columns[0].column;
       const newGrid = foldr(columns, (acc, col) => {
-        const newG = insertColumnAt(acc.grid, targetInde***REMOVED***, col.column + acc.delta, comparator, genWrappers.getOrInit);
+        const newG = insertColumnAt(acc.grid, targetIndex, col.column + acc.delta, comparator, genWrappers.getOrInit);
         return {
           grid: newG,
           delta: acc.delta + 1
@@ -4532,22 +4532,22 @@
         grid,
         delta: 0
       }).grid;
-      return bundle(newGrid, details[0].row, targetInde***REMOVED***);
+      return bundle(newGrid, details[0].row, targetIndex);
     };
-    const opInsertColumnsAfter = (grid, e***REMOVED***tractDetail, comparator, genWrappers) => {
-      const details = e***REMOVED***tractDetail.details;
+    const opInsertColumnsAfter = (grid, extractDetail, comparator, genWrappers) => {
+      const details = extractDetail.details;
       const target = details[details.length - 1];
-      const targetInde***REMOVED*** = target.column + target.colspan;
+      const targetIndex = target.column + target.colspan;
       const columns = uniqueColumns(details);
       const newGrid = foldr(columns, (newG, col) => {
-        return insertColumnAt(newG, targetInde***REMOVED***, col.column, comparator, genWrappers.getOrInit);
+        return insertColumnAt(newG, targetIndex, col.column, comparator, genWrappers.getOrInit);
       }, grid);
-      return bundle(newGrid, details[0].row, targetInde***REMOVED***);
+      return bundle(newGrid, details[0].row, targetIndex);
     };
     const opMakeColumnsHeader = (initialGrid, details, comparator, genWrappers) => {
       const columns = uniqueColumns(details);
-      const columnInde***REMOVED***es = map$1(columns, detail => detail.column);
-      const newGrid = replaceColumns(initialGrid, columnInde***REMOVED***es, true, comparator, genWrappers.replaceOrInit);
+      const columnIndexes = map$1(columns, detail => detail.column);
+      const newGrid = replaceColumns(initialGrid, columnIndexes, true, comparator, genWrappers.replaceOrInit);
       return bundle(newGrid, details[0].row, details[0].column);
     };
     const opMakeCellsHeader = (initialGrid, details, comparator, genWrappers) => {
@@ -4556,8 +4556,8 @@
     };
     const opUnmakeColumnsHeader = (initialGrid, details, comparator, genWrappers) => {
       const columns = uniqueColumns(details);
-      const columnInde***REMOVED***es = map$1(columns, detail => detail.column);
-      const newGrid = replaceColumns(initialGrid, columnInde***REMOVED***es, false, comparator, genWrappers.replaceOrInit);
+      const columnIndexes = map$1(columns, detail => detail.column);
+      const newGrid = replaceColumns(initialGrid, columnIndexes, false, comparator, genWrappers.replaceOrInit);
       return bundle(newGrid, details[0].row, details[0].column);
     };
     const opUnmakeCellsHeader = (initialGrid, details, comparator, genWrappers) => {
@@ -4566,24 +4566,24 @@
     };
     const makeRowsSection = (section, applyScope) => (initialGrid, details, comparator, genWrappers, tableSection) => {
       const rows = uniqueRows(details);
-      const rowInde***REMOVED***es = map$1(rows, detail => detail.row);
-      const newGrid = replaceRows(initialGrid, rowInde***REMOVED***es, section, applyScope, comparator, genWrappers.replaceOrInit, tableSection);
+      const rowIndexes = map$1(rows, detail => detail.row);
+      const newGrid = replaceRows(initialGrid, rowIndexes, section, applyScope, comparator, genWrappers.replaceOrInit, tableSection);
       return bundle(newGrid, details[0].row, details[0].column);
     };
     const opMakeRowsHeader = makeRowsSection('thead', true);
     const opMakeRowsBody = makeRowsSection('tbody', false);
     const opMakeRowsFooter = makeRowsSection('tfoot', false);
-    const opEraseColumns = (grid, e***REMOVED***tractDetail, _comparator, _genWrappers) => {
-      const columns = uniqueColumns(e***REMOVED***tractDetail.details);
+    const opEraseColumns = (grid, extractDetail, _comparator, _genWrappers) => {
+      const columns = uniqueColumns(extractDetail.details);
       const newGrid = deleteColumnsAt(grid, map$1(columns, column => column.column));
-      const ma***REMOVED***ColInde***REMOVED*** = newGrid.length > 0 ? newGrid[0].cells.length - 1 : 0;
-      return bundle(newGrid, columns[0].row, Math.min(columns[0].column, ma***REMOVED***ColInde***REMOVED***));
+      const maxColIndex = newGrid.length > 0 ? newGrid[0].cells.length - 1 : 0;
+      return bundle(newGrid, columns[0].row, Math.min(columns[0].column, maxColIndex));
     };
     const opEraseRows = (grid, details, _comparator, _genWrappers) => {
       const rows = uniqueRows(details);
       const newGrid = deleteRowsAt(grid, rows[0].row, rows[rows.length - 1].row);
-      const ma***REMOVED***RowInde***REMOVED*** = Math.ma***REMOVED***(e***REMOVED***tractGridDetails(newGrid).rows.length - 1, 0);
-      return bundle(newGrid, Math.min(details[0].row, ma***REMOVED***RowInde***REMOVED***), details[0].column);
+      const maxRowIndex = Math.max(extractGridDetails(newGrid).rows.length - 1, 0);
+      return bundle(newGrid, Math.min(details[0].row, maxRowIndex), details[0].column);
     };
     const opMergeCells = (grid, mergable, comparator, genWrappers) => {
       const cells = mergable.cells;
@@ -4608,42 +4608,42 @@
         return bundle(newGrid, pasteDetails.row, pasteDetails.column);
       });
     };
-    const gridifyRows = (rows, generators, conte***REMOVED***t) => {
-      const pasteDetails = fromPastedRows(rows, conte***REMOVED***t.section);
+    const gridifyRows = (rows, generators, context) => {
+      const pasteDetails = fromPastedRows(rows, context.section);
       const wh = Warehouse.generate(pasteDetails);
       return toGrid(wh, generators, true);
     };
     const opPasteColsBefore = (grid, pasteDetails, comparator, _genWrappers) => {
-      const rows = e***REMOVED***tractGridDetails(grid).rows;
-      const inde***REMOVED*** = pasteDetails.cells[0].column;
-      const conte***REMOVED***t = rows[pasteDetails.cells[0].row];
-      const gridB = gridifyRows(pasteDetails.clipboard, pasteDetails.generators, conte***REMOVED***t);
-      const mergedGrid = insertCols(inde***REMOVED***, grid, gridB, pasteDetails.generators, comparator);
+      const rows = extractGridDetails(grid).rows;
+      const index = pasteDetails.cells[0].column;
+      const context = rows[pasteDetails.cells[0].row];
+      const gridB = gridifyRows(pasteDetails.clipboard, pasteDetails.generators, context);
+      const mergedGrid = insertCols(index, grid, gridB, pasteDetails.generators, comparator);
       return bundle(mergedGrid, pasteDetails.cells[0].row, pasteDetails.cells[0].column);
     };
     const opPasteColsAfter = (grid, pasteDetails, comparator, _genWrappers) => {
-      const rows = e***REMOVED***tractGridDetails(grid).rows;
-      const inde***REMOVED*** = pasteDetails.cells[pasteDetails.cells.length - 1].column + pasteDetails.cells[pasteDetails.cells.length - 1].colspan;
-      const conte***REMOVED***t = rows[pasteDetails.cells[0].row];
-      const gridB = gridifyRows(pasteDetails.clipboard, pasteDetails.generators, conte***REMOVED***t);
-      const mergedGrid = insertCols(inde***REMOVED***, grid, gridB, pasteDetails.generators, comparator);
-      return bundle(mergedGrid, pasteDetails.cells[0].row, inde***REMOVED***);
+      const rows = extractGridDetails(grid).rows;
+      const index = pasteDetails.cells[pasteDetails.cells.length - 1].column + pasteDetails.cells[pasteDetails.cells.length - 1].colspan;
+      const context = rows[pasteDetails.cells[0].row];
+      const gridB = gridifyRows(pasteDetails.clipboard, pasteDetails.generators, context);
+      const mergedGrid = insertCols(index, grid, gridB, pasteDetails.generators, comparator);
+      return bundle(mergedGrid, pasteDetails.cells[0].row, index);
     };
     const opPasteRowsBefore = (grid, pasteDetails, comparator, _genWrappers) => {
-      const rows = e***REMOVED***tractGridDetails(grid).rows;
-      const inde***REMOVED*** = pasteDetails.cells[0].row;
-      const conte***REMOVED***t = rows[inde***REMOVED***];
-      const gridB = gridifyRows(pasteDetails.clipboard, pasteDetails.generators, conte***REMOVED***t);
-      const mergedGrid = insertRows(inde***REMOVED***, grid, gridB, pasteDetails.generators, comparator);
+      const rows = extractGridDetails(grid).rows;
+      const index = pasteDetails.cells[0].row;
+      const context = rows[index];
+      const gridB = gridifyRows(pasteDetails.clipboard, pasteDetails.generators, context);
+      const mergedGrid = insertRows(index, grid, gridB, pasteDetails.generators, comparator);
       return bundle(mergedGrid, pasteDetails.cells[0].row, pasteDetails.cells[0].column);
     };
     const opPasteRowsAfter = (grid, pasteDetails, comparator, _genWrappers) => {
-      const rows = e***REMOVED***tractGridDetails(grid).rows;
-      const inde***REMOVED*** = pasteDetails.cells[pasteDetails.cells.length - 1].row + pasteDetails.cells[pasteDetails.cells.length - 1].rowspan;
-      const conte***REMOVED***t = rows[pasteDetails.cells[0].row];
-      const gridB = gridifyRows(pasteDetails.clipboard, pasteDetails.generators, conte***REMOVED***t);
-      const mergedGrid = insertRows(inde***REMOVED***, grid, gridB, pasteDetails.generators, comparator);
-      return bundle(mergedGrid, inde***REMOVED***, pasteDetails.cells[0].column);
+      const rows = extractGridDetails(grid).rows;
+      const index = pasteDetails.cells[pasteDetails.cells.length - 1].row + pasteDetails.cells[pasteDetails.cells.length - 1].rowspan;
+      const context = rows[pasteDetails.cells[0].row];
+      const gridB = gridifyRows(pasteDetails.clipboard, pasteDetails.generators, context);
+      const mergedGrid = insertRows(index, grid, gridB, pasteDetails.generators, comparator);
+      return bundle(mergedGrid, index, pasteDetails.cells[0].column);
     };
     const opGetColumnsType = (table, target) => {
       const house = Warehouse.fromTable(table);
@@ -4651,8 +4651,8 @@
       return details.bind(selectedCells => {
         const lastSelectedCell = selectedCells[selectedCells.length - 1];
         const minColRange = selectedCells[0].column;
-        const ma***REMOVED***ColRange = lastSelectedCell.column + lastSelectedCell.colspan;
-        const selectedColumnCells = flatten(map$1(house.all, row => filter$2(row.cells, cell => cell.column >= minColRange && cell.column < ma***REMOVED***ColRange)));
+        const maxColRange = lastSelectedCell.column + lastSelectedCell.colspan;
+        const selectedColumnCells = flatten(map$1(house.all, row => filter$2(row.cells, cell => cell.column >= minColRange && cell.column < maxColRange)));
         return findCommonCellType(selectedColumnCells);
       }).getOr('');
     };
@@ -4667,15 +4667,15 @@
       return details.bind(selectedCells => {
         const lastSelectedCell = selectedCells[selectedCells.length - 1];
         const minRowRange = selectedCells[0].row;
-        const ma***REMOVED***RowRange = lastSelectedCell.row + lastSelectedCell.rowspan;
-        const selectedRows = house.all.slice(minRowRange, ma***REMOVED***RowRange);
+        const maxRowRange = lastSelectedCell.row + lastSelectedCell.rowspan;
+        const selectedRows = house.all.slice(minRowRange, maxRowRange);
         return findCommonRowType(selectedRows);
       }).getOr('');
     };
     const resize = (table, list, details, behaviours) => adjustWidthTo(table, list, details, behaviours.sizing);
     const adjustAndRedistributeWidths = (table, list, details, behaviours) => adjustAndRedistributeWidths$1(table, list, details, behaviours.sizing, behaviours.resize);
-    const firstColumnIsLocked = (_warehouse, details) => e***REMOVED***ists(details, detail => detail.column === 0 && detail.isLocked);
-    const lastColumnIsLocked = (warehouse, details) => e***REMOVED***ists(details, detail => detail.column + detail.colspan >= warehouse.grid.columns && detail.isLocked);
+    const firstColumnIsLocked = (_warehouse, details) => exists(details, detail => detail.column === 0 && detail.isLocked);
+    const lastColumnIsLocked = (warehouse, details) => exists(details, detail => detail.column + detail.colspan >= warehouse.grid.columns && detail.isLocked);
     const getColumnsWidth = (warehouse, details) => {
       const columns$1 = columns(warehouse);
       const uniqueCols = uniqueColumns(details);
@@ -4685,18 +4685,18 @@
         return acc + colWidth;
       }, 0);
     };
-    const insertColumnsE***REMOVED***tractor = before => (warehouse, target) => onCells(warehouse, target).filter(details => {
+    const insertColumnsExtractor = before => (warehouse, target) => onCells(warehouse, target).filter(details => {
       const checkLocked = before ? firstColumnIsLocked : lastColumnIsLocked;
       return !checkLocked(warehouse, details);
     }).map(details => ({
       details,
-      pi***REMOVED***elDelta: getColumnsWidth(warehouse, details)
+      pixelDelta: getColumnsWidth(warehouse, details)
     }));
-    const eraseColumnsE***REMOVED***tractor = (warehouse, target) => onUnlockedCells(warehouse, target).map(details => ({
+    const eraseColumnsExtractor = (warehouse, target) => onUnlockedCells(warehouse, target).map(details => ({
       details,
-      pi***REMOVED***elDelta: -getColumnsWidth(warehouse, details)
+      pixelDelta: -getColumnsWidth(warehouse, details)
     }));
-    const pasteColumnsE***REMOVED***tractor = before => (warehouse, target) => onPasteByEditor(warehouse, target).filter(details => {
+    const pasteColumnsExtractor = before => (warehouse, target) => onPasteByEditor(warehouse, target).filter(details => {
       const checkLocked = before ? firstColumnIsLocked : lastColumnIsLocked;
       return !checkLocked(warehouse, details.cells);
     });
@@ -4704,9 +4704,9 @@
     const bodyCellGenerator = Generators.transform('td');
     const insertRowsBefore = run(opInsertRowsBefore, onCells, noop, noop, Generators.modification);
     const insertRowsAfter = run(opInsertRowsAfter, onCells, noop, noop, Generators.modification);
-    const insertColumnsBefore = run(opInsertColumnsBefore, insertColumnsE***REMOVED***tractor(true), adjustAndRedistributeWidths, noop, Generators.modification);
-    const insertColumnsAfter = run(opInsertColumnsAfter, insertColumnsE***REMOVED***tractor(false), adjustAndRedistributeWidths, noop, Generators.modification);
-    const eraseColumns = run(opEraseColumns, eraseColumnsE***REMOVED***tractor, adjustAndRedistributeWidths, prune, Generators.modification);
+    const insertColumnsBefore = run(opInsertColumnsBefore, insertColumnsExtractor(true), adjustAndRedistributeWidths, noop, Generators.modification);
+    const insertColumnsAfter = run(opInsertColumnsAfter, insertColumnsExtractor(false), adjustAndRedistributeWidths, noop, Generators.modification);
+    const eraseColumns = run(opEraseColumns, eraseColumnsExtractor, adjustAndRedistributeWidths, prune, Generators.modification);
     const eraseRows = run(opEraseRows, onCells, noop, prune, Generators.modification);
     const makeColumnsHeader = run(opMakeColumnsHeader, onUnlockedCells, noop, noop, headerCellGenerator);
     const unmakeColumnsHeader = run(opUnmakeColumnsHeader, onUnlockedCells, noop, noop, bodyCellGenerator);
@@ -4718,8 +4718,8 @@
     const mergeCells = run(opMergeCells, onUnlockedMergable, resize, noop, Generators.merging);
     const unmergeCells = run(opUnmergeCells, onUnlockedUnmergable, resize, noop, Generators.merging);
     const pasteCells = run(opPasteCells, onPaste, resize, noop, Generators.modification);
-    const pasteColsBefore = run(opPasteColsBefore, pasteColumnsE***REMOVED***tractor(true), noop, noop, Generators.modification);
-    const pasteColsAfter = run(opPasteColsAfter, pasteColumnsE***REMOVED***tractor(false), noop, noop, Generators.modification);
+    const pasteColsBefore = run(opPasteColsBefore, pasteColumnsExtractor(true), noop, noop, Generators.modification);
+    const pasteColsAfter = run(opPasteColsAfter, pasteColumnsExtractor(false), noop, noop, Generators.modification);
     const pasteRowsBefore = run(opPasteRowsBefore, onPasteByEditor, noop, noop, Generators.modification);
     const pasteRowsAfter = run(opPasteRowsAfter, onPasteByEditor, noop, noop, Generators.modification);
     const getColumnsType = opGetColumnsType;
@@ -4777,8 +4777,8 @@
     const get$5 = (editor, table) => {
       if (isTablePercentagesForced(editor)) {
         return TableSize.percentageSize(table);
-      } else if (isTablePi***REMOVED***elsForced(editor)) {
-        return TableSize.pi***REMOVED***elSize(table);
+      } else if (isTablePixelsForced(editor)) {
+        return TableSize.pixelSize(table);
       } else {
         return TableSize.getTableSize(table);
       }
@@ -4821,7 +4821,7 @@
         cellSelectionHandler.clearSelectedCells(table.dom);
         return Optional.some(rng);
       });
-      const e***REMOVED***ecute = (operation, guard, mutate, effect) => (table, target, noEvents = false) => {
+      const execute = (operation, guard, mutate, effect) => (table, target, noEvents = false) => {
         removeDataStyle(table);
         const doc = SugarElement.fromDom(editor.getDoc());
         const generators = cellOperations(mutate, doc, cloneFormats);
@@ -4851,26 +4851,26 @@
           }));
         }) : Optional.none();
       };
-      const deleteRow = e***REMOVED***ecute(eraseRows, lastRowGuard, noop, structureModified);
-      const deleteColumn = e***REMOVED***ecute(eraseColumns, lastColumnGuard, noop, structureModified);
-      const insertRowsBefore$1 = e***REMOVED***ecute(insertRowsBefore, always, noop, structureModified);
-      const insertRowsAfter$1 = e***REMOVED***ecute(insertRowsAfter, always, noop, structureModified);
-      const insertColumnsBefore$1 = e***REMOVED***ecute(insertColumnsBefore, always, colMutationOp, structureModified);
-      const insertColumnsAfter$1 = e***REMOVED***ecute(insertColumnsAfter, always, colMutationOp, structureModified);
-      const mergeCells$1 = e***REMOVED***ecute(mergeCells, always, noop, structureModified);
-      const unmergeCells$1 = e***REMOVED***ecute(unmergeCells, always, noop, structureModified);
-      const pasteColsBefore$1 = e***REMOVED***ecute(pasteColsBefore, always, noop, structureModified);
-      const pasteColsAfter$1 = e***REMOVED***ecute(pasteColsAfter, always, noop, structureModified);
-      const pasteRowsBefore$1 = e***REMOVED***ecute(pasteRowsBefore, always, noop, structureModified);
-      const pasteRowsAfter$1 = e***REMOVED***ecute(pasteRowsAfter, always, noop, structureModified);
-      const pasteCells$1 = e***REMOVED***ecute(pasteCells, always, noop, styleAndStructureModified);
-      const makeCellsHeader$1 = e***REMOVED***ecute(makeCellsHeader, always, noop, structureModified);
-      const unmakeCellsHeader$1 = e***REMOVED***ecute(unmakeCellsHeader, always, noop, structureModified);
-      const makeColumnsHeader$1 = e***REMOVED***ecute(makeColumnsHeader, always, noop, structureModified);
-      const unmakeColumnsHeader$1 = e***REMOVED***ecute(unmakeColumnsHeader, always, noop, structureModified);
-      const makeRowsHeader$1 = e***REMOVED***ecute(makeRowsHeader, always, noop, structureModified);
-      const makeRowsBody$1 = e***REMOVED***ecute(makeRowsBody, always, noop, structureModified);
-      const makeRowsFooter$1 = e***REMOVED***ecute(makeRowsFooter, always, noop, structureModified);
+      const deleteRow = execute(eraseRows, lastRowGuard, noop, structureModified);
+      const deleteColumn = execute(eraseColumns, lastColumnGuard, noop, structureModified);
+      const insertRowsBefore$1 = execute(insertRowsBefore, always, noop, structureModified);
+      const insertRowsAfter$1 = execute(insertRowsAfter, always, noop, structureModified);
+      const insertColumnsBefore$1 = execute(insertColumnsBefore, always, colMutationOp, structureModified);
+      const insertColumnsAfter$1 = execute(insertColumnsAfter, always, colMutationOp, structureModified);
+      const mergeCells$1 = execute(mergeCells, always, noop, structureModified);
+      const unmergeCells$1 = execute(unmergeCells, always, noop, structureModified);
+      const pasteColsBefore$1 = execute(pasteColsBefore, always, noop, structureModified);
+      const pasteColsAfter$1 = execute(pasteColsAfter, always, noop, structureModified);
+      const pasteRowsBefore$1 = execute(pasteRowsBefore, always, noop, structureModified);
+      const pasteRowsAfter$1 = execute(pasteRowsAfter, always, noop, structureModified);
+      const pasteCells$1 = execute(pasteCells, always, noop, styleAndStructureModified);
+      const makeCellsHeader$1 = execute(makeCellsHeader, always, noop, structureModified);
+      const unmakeCellsHeader$1 = execute(unmakeCellsHeader, always, noop, structureModified);
+      const makeColumnsHeader$1 = execute(makeColumnsHeader, always, noop, structureModified);
+      const unmakeColumnsHeader$1 = execute(unmakeColumnsHeader, always, noop, structureModified);
+      const makeRowsHeader$1 = execute(makeRowsHeader, always, noop, structureModified);
+      const makeRowsBody$1 = execute(makeRowsBody, always, noop, structureModified);
+      const makeRowsFooter$1 = execute(makeRowsFooter, always, noop, structureModified);
       const getTableCellType = getCellsType;
       const getTableColType = getColumnsType;
       const getTableRowType = getRowsType;
@@ -4909,17 +4909,17 @@
         set$2(element, property, Math.min(value, currentColspan));
       }
     };
-    const isColInRange = (minColRange, ma***REMOVED***ColRange) => cell => {
+    const isColInRange = (minColRange, maxColRange) => cell => {
       const endCol = cell.column + cell.colspan - 1;
       const startCol = cell.column;
-      return endCol >= minColRange && startCol < ma***REMOVED***ColRange;
+      return endCol >= minColRange && startCol < maxColRange;
     };
-    const generateColGroup = (house, minColRange, ma***REMOVED***ColRange) => {
+    const generateColGroup = (house, minColRange, maxColRange) => {
       if (Warehouse.hasColumns(house)) {
-        const colsToCopy = filter$2(Warehouse.justColumns(house), isColInRange(minColRange, ma***REMOVED***ColRange));
+        const colsToCopy = filter$2(Warehouse.justColumns(house), isColInRange(minColRange, maxColRange));
         const copiedCols = map$1(colsToCopy, c => {
           const clonedCol = deep(c.element);
-          constrainSpan(clonedCol, 'span', ma***REMOVED***ColRange - minColRange);
+          constrainSpan(clonedCol, 'span', maxColRange - minColRange);
           return clonedCol;
         });
         const fakeColgroup = SugarElement.fromTag('colgroup');
@@ -4929,11 +4929,11 @@
         return [];
       }
     };
-    const generateRows = (house, minColRange, ma***REMOVED***ColRange) => map$1(house.all, row => {
-      const cellsToCopy = filter$2(row.cells, isColInRange(minColRange, ma***REMOVED***ColRange));
+    const generateRows = (house, minColRange, maxColRange) => map$1(house.all, row => {
+      const cellsToCopy = filter$2(row.cells, isColInRange(minColRange, maxColRange));
       const copiedCells = map$1(cellsToCopy, cell => {
         const clonedCell = deep(cell.element);
-        constrainSpan(clonedCell, 'colspan', ma***REMOVED***ColRange - minColRange);
+        constrainSpan(clonedCell, 'colspan', maxColRange - minColRange);
         return clonedCell;
       });
       const fakeTR = SugarElement.fromTag('tr');
@@ -4946,9 +4946,9 @@
       return details.map(selectedCells => {
         const lastSelectedCell = selectedCells[selectedCells.length - 1];
         const minColRange = selectedCells[0].column;
-        const ma***REMOVED***ColRange = lastSelectedCell.column + lastSelectedCell.colspan;
-        const fakeColGroups = generateColGroup(house, minColRange, ma***REMOVED***ColRange);
-        const fakeRows = generateRows(house, minColRange, ma***REMOVED***ColRange);
+        const maxColRange = lastSelectedCell.column + lastSelectedCell.colspan;
+        const fakeColGroups = generateColGroup(house, minColRange, maxColRange);
+        const fakeRows = generateRows(house, minColRange, maxColRange);
         return [
           ...fakeColGroups,
           ...fakeRows
@@ -4961,7 +4961,7 @@
       const details = onCells(warehouse, target);
       return details.bind(selectedCells => {
         const grid = toGrid(warehouse, generators, false);
-        const rows = e***REMOVED***tractGridDetails(grid).rows;
+        const rows = extractGridDetails(grid).rows;
         const slicedGrid = rows.slice(selectedCells[0].row, selectedCells[selectedCells.length - 1].row + selectedCells[selectedCells.length - 1].rowspan);
         const filteredGrid = bind$2(slicedGrid, row => {
           const newCells = filter$2(row.cells, cell => !cell.isLocked);
@@ -4977,11 +4977,11 @@
 
     const adt$5 = Adt.generate([
       { invalid: ['raw'] },
-      { pi***REMOVED***els: ['value'] },
+      { pixels: ['value'] },
       { percent: ['value'] }
     ]);
-    const validateFor = (suffi***REMOVED***, type, value) => {
-      const rawAmount = value.substring(0, value.length - suffi***REMOVED***.length);
+    const validateFor = (suffix, type, value) => {
+      const rawAmount = value.substring(0, value.length - suffix.length);
       const amount = parseFloat(rawAmount);
       return rawAmount === amount.toString() ? type(amount) : adt$5.invalid(value);
     };
@@ -4989,8 +4989,8 @@
       if (endsWith(value, '%')) {
         return validateFor('%', adt$5.percent, value);
       }
-      if (endsWith(value, 'p***REMOVED***')) {
-        return validateFor('p***REMOVED***', adt$5.pi***REMOVED***els, value);
+      if (endsWith(value, 'px')) {
+        return validateFor('px', adt$5.pixels, value);
       }
       return adt$5.invalid(value);
     };
@@ -5004,31 +5004,31 @@
         const colType = Size.from(w);
         return colType.fold(() => {
           return w;
-        }, p***REMOVED*** => {
-          const ratio = p***REMOVED*** / totalWidth * 100;
+        }, px => {
+          const ratio = px / totalWidth * 100;
           return ratio + '%';
         }, pc => {
           return pc + '%';
         });
       });
     };
-    const redistributeToP***REMOVED*** = (widths, totalWidth, newTotalWidth) => {
+    const redistributeToPx = (widths, totalWidth, newTotalWidth) => {
       const scale = newTotalWidth / totalWidth;
       return map$1(widths, w => {
         const colType = Size.from(w);
         return colType.fold(() => {
           return w;
-        }, p***REMOVED*** => {
-          return p***REMOVED*** * scale + 'p***REMOVED***';
+        }, px => {
+          return px * scale + 'px';
         }, pc => {
-          return pc / 100 * newTotalWidth + 'p***REMOVED***';
+          return pc / 100 * newTotalWidth + 'px';
         });
       });
     };
     const redistributeEmpty = (newWidthType, columns) => {
-      const f = newWidthType.fold(() => constant(''), pi***REMOVED***els => {
-        const num = pi***REMOVED***els / columns;
-        return constant(num + 'p***REMOVED***');
+      const f = newWidthType.fold(() => constant(''), pixels => {
+        const num = pixels / columns;
+        return constant(num + 'px');
       }, () => {
         const num = 100 / columns;
         return constant(num + '%');
@@ -5038,8 +5038,8 @@
     const redistributeValues = (newWidthType, widths, totalWidth) => {
       return newWidthType.fold(() => {
         return widths;
-      }, p***REMOVED*** => {
-        return redistributeToP***REMOVED***(widths, totalWidth, p***REMOVED***);
+      }, px => {
+        return redistributeToPx(widths, totalWidth, px);
       }, _pc => {
         return redistributeToPercent(widths, totalWidth);
       });
@@ -5047,7 +5047,7 @@
     const redistribute$1 = (widths, totalWidth, newWidth) => {
       const newType = Size.from(newWidth);
       const floats = forall(widths, s => {
-        return s === '0p***REMOVED***';
+        return s === '0px';
       }) ? redistributeEmpty(newType, widths.length) : redistributeValues(newType, widths, totalWidth);
       return normalize(floats);
     };
@@ -5067,8 +5067,8 @@
       };
     };
     const add$3 = (value, amount) => {
-      return Size.from(value).fold(constant(value), p***REMOVED*** => {
-        return p***REMOVED*** + amount + 'p***REMOVED***';
+      return Size.from(value).fold(constant(value), px => {
+        return px + amount + 'px';
       }, pc => {
         return pc + amount + '%';
       });
@@ -5081,7 +5081,7 @@
         const info = Size.from(value).fold(() => ({
           value,
           remainder: 0
-        }), num => roundDown(num, 'p***REMOVED***'), num => ({
+        }), num => roundDown(num, 'px'), num => ({
           value: num + '%',
           remainder: 0
         }));
@@ -5106,8 +5106,8 @@
       });
     };
     const redistributeToColumns = (newWidths, columns, unit) => {
-      each$2(columns, (column, inde***REMOVED***) => {
-        const width = sum([newWidths[inde***REMOVED***]], minWidth());
+      each$2(columns, (column, index) => {
+        const width = sum([newWidths[index]], minWidth());
         set$1(column.element, 'width', width + unit);
       });
     };
@@ -5120,7 +5120,7 @@
       });
     };
     const getUnit = newSize => {
-      return validate(newSize).fold(constant('p***REMOVED***'), constant('p***REMOVED***'), constant('%'));
+      return validate(newSize).fold(constant('px'), constant('px'), constant('%'));
     };
     const redistribute = (table, optWidth, optHeight) => {
       const warehouse = Warehouse.fromTable(table);
@@ -5148,7 +5148,7 @@
       });
     };
     const isPercentSizing = isPercentSizing$1;
-    const isPi***REMOVED***elSizing = isPi***REMOVED***elSizing$1;
+    const isPixelSizing = isPixelSizing$1;
     const isNoneSizing = isNoneSizing$1;
 
     const cleanupLegacyAttributes = element => {
@@ -5160,13 +5160,13 @@
       redistribute(table, Optional.some(newWidth), Optional.none());
       cleanupLegacyAttributes(table);
     };
-    const convertToPi***REMOVED***elSizeWidth = table => {
-      const newWidth = getPi***REMOVED***elTableWidth(table);
+    const convertToPixelSizeWidth = table => {
+      const newWidth = getPixelTableWidth(table);
       redistribute(table, Optional.some(newWidth), Optional.none());
       cleanupLegacyAttributes(table);
     };
-    const convertToPi***REMOVED***elSizeHeight = table => {
-      const newHeight = getPi***REMOVED***elTableHeight(table);
+    const convertToPixelSizeHeight = table => {
+      const newHeight = getPixelTableHeight(table);
       redistribute(table, Optional.none(), Optional.some(newHeight));
       cleanupLegacyAttributes(table);
     };
@@ -5192,14 +5192,14 @@
     const tableHeaderCell = () => SugarElement.fromTag('th');
     const tableCell = () => SugarElement.fromTag('td');
     const tableColumn = () => SugarElement.fromTag('col');
-    const createRow = (columns, rowHeaders, columnHeaders, rowInde***REMOVED***) => {
+    const createRow = (columns, rowHeaders, columnHeaders, rowIndex) => {
       const tr = SugarElement.fromTag('tr');
       for (let j = 0; j < columns; j++) {
-        const td = rowInde***REMOVED*** < rowHeaders || j < columnHeaders ? tableHeaderCell() : tableCell();
+        const td = rowIndex < rowHeaders || j < columnHeaders ? tableHeaderCell() : tableCell();
         if (j < columnHeaders) {
           set$2(td, 'scope', 'row');
         }
-        if (rowInde***REMOVED*** < rowHeaders) {
+        if (rowIndex < rowHeaders) {
           set$2(td, 'scope', 'col');
         }
         append$1(td, SugarElement.fromTag('br'));
@@ -5261,7 +5261,7 @@
         });
       });
     };
-    const isPercentage = width => isString(width) && width.inde***REMOVED***Of('%') !== -1;
+    const isPercentage = width => isString(width) && width.indexOf('%') !== -1;
     const insert = (editor, columns, rows, colHeaders, rowHeaders) => {
       const defaultStyles = getTableDefaultStyles(editor);
       const options = {
@@ -5277,8 +5277,8 @@
         editor.addVisual();
       });
       return descendant(getBody(editor), 'table[data-mce-id="__mce"]').map(table => {
-        if (isTablePi***REMOVED***elsForced(editor)) {
-          convertToPi***REMOVED***elSizeWidth(table);
+        if (isTablePixelsForced(editor)) {
+          convertToPixelSizeWidth(table);
         } else if (isTableResponsiveForced(editor)) {
           convertToNoneSizeWidth(table);
         } else if (isTablePercentagesForced(editor) || isPercentage(defaultStyles.width)) {
@@ -5305,7 +5305,7 @@
 
     var global = tinymce.util.Tools.resolve('tinymce.FakeClipboard');
 
-    const tableTypeBase = '***REMOVED***-tinymce/dom-table-';
+    const tableTypeBase = 'x-tinymce/dom-table-';
     const tableTypeRow = tableTypeBase + 'rows';
     const tableTypeColumn = tableTypeBase + 'columns';
     const setData = items => {
@@ -5333,13 +5333,13 @@
     const getColumns = () => getData(tableTypeColumn);
     const clearColumns = () => clearData(tableTypeColumn);
 
-    const getSelectionStartCellOrCaption = editor => getSelectionCellOrCaption(getSelectionStart(editor), getIsRoot(editor)).filter(isInEditableConte***REMOVED***t$1);
-    const getSelectionStartCell = editor => getSelectionCell(getSelectionStart(editor), getIsRoot(editor)).filter(isInEditableConte***REMOVED***t$1);
+    const getSelectionStartCellOrCaption = editor => getSelectionCellOrCaption(getSelectionStart(editor), getIsRoot(editor)).filter(isInEditableContext$1);
+    const getSelectionStartCell = editor => getSelectionCell(getSelectionStart(editor), getIsRoot(editor)).filter(isInEditableContext$1);
     const registerCommands = (editor, actions) => {
       const isRoot = getIsRoot(editor);
       const eraseTable = () => getSelectionStartCellOrCaption(editor).each(cellOrCaption => {
         table(cellOrCaption, isRoot).filter(not(isRoot)).each(table => {
-          const cursor = SugarElement.fromTe***REMOVED***t('');
+          const cursor = SugarElement.fromText('');
           after$5(table, cursor);
           remove$6(table);
           if (editor.dom.isEmpty(editor.getBody())) {
@@ -5355,13 +5355,13 @@
         });
       });
       const setSizingMode = sizing => getSelectionStartCellOrCaption(editor).each(cellOrCaption => {
-        const isForcedSizing = isTableResponsiveForced(editor) || isTablePi***REMOVED***elsForced(editor) || isTablePercentagesForced(editor);
+        const isForcedSizing = isTableResponsiveForced(editor) || isTablePixelsForced(editor) || isTablePercentagesForced(editor);
         if (!isForcedSizing) {
           table(cellOrCaption, isRoot).each(table => {
             if (sizing === 'relative' && !isPercentSizing(table)) {
               convertToPercentSizeWidth(table);
-            } else if (sizing === 'fi***REMOVED***ed' && !isPi***REMOVED***elSizing(table)) {
-              convertToPi***REMOVED***elSizeWidth(table);
+            } else if (sizing === 'fixed' && !isPixelSizing(table)) {
+              convertToPixelSizeWidth(table);
             } else if (sizing === 'responsive' && !isNoneSizing(table)) {
               convertToNoneSizeWidth(table);
             }
@@ -5392,7 +5392,7 @@
           table(cellOrCaption, isRoot).each(table => {
             child(table, 'caption').fold(() => {
               const caption = SugarElement.fromTag('caption');
-              append$1(caption, SugarElement.fromTe***REMOVED***t('Caption'));
+              append$1(caption, SugarElement.fromText('Caption'));
               appendAt(table, caption, 0);
               editor.selection.setCursorLocation(caption.dom, 0);
             }, caption => {
@@ -5405,12 +5405,12 @@
           });
         });
       };
-      const postE***REMOVED***ecute = _data => {
+      const postExecute = _data => {
         editor.focus();
       };
-      const actOnSelection = (e***REMOVED***ecute, noEvents = false) => performActionOnSelection((table, startCell) => {
+      const actOnSelection = (execute, noEvents = false) => performActionOnSelection((table, startCell) => {
         const targets = forMenu(getCellsFromSelection(editor), table, startCell);
-        e***REMOVED***ecute(table, targets, noEvents).each(postE***REMOVED***ecute);
+        execute(table, targets, noEvents).each(postExecute);
       });
       const copyRowSelection = () => performActionOnSelection((table, startCell) => {
         const targets = forMenu(getCellsFromSelection(editor), table, startCell);
@@ -5421,12 +5421,12 @@
         const targets = forMenu(getCellsFromSelection(editor), table, startCell);
         return copyCols(table, targets);
       });
-      const pasteOnSelection = (e***REMOVED***ecute, getRows) => getRows().each(rows => {
+      const pasteOnSelection = (execute, getRows) => getRows().each(rows => {
         const clonedRows = map$1(rows, row => deep(row));
         performActionOnSelection((table, startCell) => {
           const generators = paste$1(SugarElement.fromDom(editor.getDoc()));
           const targets = pasteRows(getCellsFromSelection(editor), startCell, clonedRows, generators);
-          e***REMOVED***ecute(table, targets).each(postE***REMOVED***ecute);
+          execute(table, targets).each(postExecute);
         });
       });
       const actOnType = getAction => (_ui, args) => get$c(args, 'type').each(type => {
@@ -5481,7 +5481,7 @@
         if (!isObject(args)) {
           return;
         }
-        const cells = filter$2(getCellsFromSelection(editor), isInEditableConte***REMOVED***t$1);
+        const cells = filter$2(getCellsFromSelection(editor), isInEditableContext$1);
         if (cells.length === 0) {
           return;
         }
@@ -5580,7 +5580,7 @@
       setFinish(range, finishSitu);
       return range;
     };
-    const e***REMOVED***actToNative = (win, start, soffset, finish, foffset) => {
+    const exactToNative = (win, start, soffset, finish, foffset) => {
       const rng = win.document.createRange();
       rng.setStart(start.dom, soffset);
       rng.setEnd(finish.dom, foffset);
@@ -5632,10 +5632,10 @@
           rtl: cached(() => Optional.some(relativeToNative(win, finishSitu, startSitu)))
         };
       },
-      e***REMOVED***act: (start, soffset, finish, foffset) => {
+      exact: (start, soffset, finish, foffset) => {
         return {
-          ltr: cached(() => e***REMOVED***actToNative(win, start, soffset, finish, foffset)),
-          rtl: cached(() => Optional.some(e***REMOVED***actToNative(win, finish, foffset, start, soffset)))
+          ltr: cached(() => exactToNative(win, start, soffset, finish, foffset)),
+          rtl: cached(() => Optional.some(exactToNative(win, finish, foffset, start, soffset)))
         };
       }
     });
@@ -5708,9 +5708,9 @@
     const detect = (container, isRoot, start, finish, selectRange) => {
       if (!eq$1(start, finish)) {
         return identify(start, finish, isRoot).bind(cellSel => {
-          const bo***REMOVED***es = cellSel.bo***REMOVED***es.getOr([]);
-          if (bo***REMOVED***es.length > 1) {
-            selectRange(container, bo***REMOVED***es, cellSel.start, cellSel.finish);
+          const boxes = cellSel.boxes.getOr([]);
+          if (boxes.length > 1) {
+            selectRange(container, boxes, cellSel.start, cellSel.finish);
             return Optional.some(Response.create(Optional.some(makeSitus(start, 0, start, getEnd(start))), true));
           } else {
             return Optional.none();
@@ -5723,8 +5723,8 @@
     const update = (rows, columns, container, selected, annotations) => {
       const updateSelection = newSels => {
         annotations.clearBeforeUpdate(container);
-        annotations.selectRange(container, newSels.bo***REMOVED***es, newSels.start, newSels.finish);
-        return newSels.bo***REMOVED***es;
+        annotations.selectRange(container, newSels.boxes, newSels.start, newSels.finish);
+        return newSels.boxes;
       };
       return shiftSelection(selected, rows, columns, annotations.firstSelectedSelector, annotations.lastSelectedSelector).map(updateSelection);
     };
@@ -5753,17 +5753,17 @@
     const successors = [
       {
         current: backtrack,
-        ne***REMOVED***t: sidestep,
+        next: sidestep,
         fallback: Optional.none()
       },
       {
         current: sidestep,
-        ne***REMOVED***t: advance,
+        next: advance,
         fallback: Optional.some(backtrack)
       },
       {
         current: advance,
-        ne***REMOVED***t: advance,
+        next: advance,
         fallback: Optional.some(sidestep)
       }
     ];
@@ -5772,7 +5772,7 @@
         return succ.current === mode;
       });
       return ruleOpt.bind(rule => {
-        return rule.current(universe, item, direction, rule.ne***REMOVED***t).orThunk(() => {
+        return rule.current(universe, item, direction, rule.next).orThunk(() => {
           return rule.fallback.bind(fb => {
             return go(universe, item, fb, direction);
           });
@@ -5794,7 +5794,7 @@
     };
     const right$1 = () => {
       const sibling = (universe, item) => {
-        return universe.query().ne***REMOVED***tSibling(item);
+        return universe.query().nextSibling(item);
       };
       const first = children => {
         return children.length > 0 ? Optional.some(children[0]) : Optional.none();
@@ -5810,8 +5810,8 @@
     };
 
     const hone = (universe, item, predicate, mode, direction, isRoot) => {
-      const ne***REMOVED***t = go(universe, item, mode, direction);
-      return ne***REMOVED***t.bind(n => {
+      const next = go(universe, item, mode, direction);
+      return next.bind(n => {
         if (isRoot(n.item)) {
           return Optional.none();
         } else {
@@ -5893,22 +5893,22 @@
       cata
     };
 
-    const inParent = (parent, children, element, inde***REMOVED***) => ({
+    const inParent = (parent, children, element, index) => ({
       parent,
       children,
       element,
-      inde***REMOVED***
+      index
     });
-    const inde***REMOVED***InParent = element => parent(element).bind(parent => {
+    const indexInParent = element => parent(element).bind(parent => {
       const children = children$2(parent);
-      return inde***REMOVED***Of(children, element).map(inde***REMOVED*** => inParent(parent, children, element, inde***REMOVED***));
+      return indexOf(children, element).map(index => inParent(parent, children, element, index));
     });
-    const inde***REMOVED***Of = (elements, element) => findInde***REMOVED***(elements, curry(eq$1, element));
+    const indexOf = (elements, element) => findIndex(elements, curry(eq$1, element));
 
     const isBr = isTag('br');
     const gatherer = (cand, gather, isRoot) => {
       return gather(cand, isRoot).bind(target => {
-        return isTe***REMOVED***t(target) && get$6(target).trim().length === 0 ? gatherer(target, gather, isRoot) : Optional.some(target);
+        return isText(target) && get$6(target).trim().length === 0 ? gatherer(target, gather, isRoot) : Optional.some(target);
       });
     };
     const handleBr = (isRoot, element, direction) => {
@@ -5926,8 +5926,8 @@
         return direction.traverse(br).fold(() => {
           return gatherer(br, direction.gather, isRoot).map(direction.relative);
         }, adjacent => {
-          return inde***REMOVED***InParent(adjacent).map(info => {
-            return Situ.on(info.parent, info.inde***REMOVED***);
+          return indexInParent(adjacent).map(info => {
+            return Situ.on(info.parent, info.index);
           });
         });
       });
@@ -5969,11 +5969,11 @@
         bottom: caret.bottom - amount
       };
     };
-    const translate = (caret, ***REMOVED***Delta, yDelta) => {
+    const translate = (caret, xDelta, yDelta) => {
       return {
-        left: caret.left + ***REMOVED***Delta,
+        left: caret.left + xDelta,
         top: caret.top + yDelta,
-        right: caret.right + ***REMOVED***Delta,
+        right: caret.right + xDelta,
         bottom: caret.bottom + yDelta
       };
     };
@@ -5984,7 +5984,7 @@
       return caret.bottom;
     };
 
-    const getPartialBo***REMOVED*** = (bridge, element, offset) => {
+    const getPartialBox = (bridge, element, offset) => {
       if (offset >= 0 && offset < getEnd(element)) {
         return bridge.getRangedRect(element, offset, element, offset + 1);
       } else if (offset > 0) {
@@ -5998,22 +5998,22 @@
       right: rect.right,
       bottom: rect.bottom
     });
-    const getElemBo***REMOVED*** = (bridge, element) => {
+    const getElemBox = (bridge, element) => {
       return Optional.some(bridge.getRect(element));
     };
-    const getBo***REMOVED***At = (bridge, element, offset) => {
+    const getBoxAt = (bridge, element, offset) => {
       if (isElement(element)) {
-        return getElemBo***REMOVED***(bridge, element).map(toCaret);
-      } else if (isTe***REMOVED***t(element)) {
-        return getPartialBo***REMOVED***(bridge, element, offset).map(toCaret);
+        return getElemBox(bridge, element).map(toCaret);
+      } else if (isText(element)) {
+        return getPartialBox(bridge, element, offset).map(toCaret);
       } else {
         return Optional.none();
       }
     };
-    const getEntireBo***REMOVED*** = (bridge, element) => {
+    const getEntireBox = (bridge, element) => {
       if (isElement(element)) {
-        return getElemBo***REMOVED***(bridge, element).map(toCaret);
-      } else if (isTe***REMOVED***t(element)) {
+        return getElemBox(bridge, element).map(toCaret);
+      } else if (isText(element)) {
         return bridge.getRangedRect(element, 0, element, getEnd(element)).map(toCaret);
       } else {
         return Optional.none();
@@ -6026,35 +6026,35 @@
       { none: [] },
       { retry: ['caret'] }
     ]);
-    const isOutside = (caret, bo***REMOVED***) => {
-      return caret.left < bo***REMOVED***.left || Math.abs(bo***REMOVED***.right - caret.left) < 1 || caret.left > bo***REMOVED***.right;
+    const isOutside = (caret, box) => {
+      return caret.left < box.left || Math.abs(box.right - caret.left) < 1 || caret.left > box.right;
     };
     const inOutsideBlock = (bridge, element, caret) => {
       return closest$2(element, isBlock).fold(never, cell => {
-        return getEntireBo***REMOVED***(bridge, cell).e***REMOVED***ists(bo***REMOVED*** => {
-          return isOutside(caret, bo***REMOVED***);
+        return getEntireBox(bridge, cell).exists(box => {
+          return isOutside(caret, box);
         });
       });
     };
-    const adjustDown = (bridge, element, guessBo***REMOVED***, original, caret) => {
+    const adjustDown = (bridge, element, guessBox, original, caret) => {
       const lowerCaret = moveDown(caret, JUMP_SIZE);
-      if (Math.abs(guessBo***REMOVED***.bottom - original.bottom) < 1) {
+      if (Math.abs(guessBox.bottom - original.bottom) < 1) {
         return adt$1.retry(lowerCaret);
-      } else if (guessBo***REMOVED***.top > caret.bottom) {
+      } else if (guessBox.top > caret.bottom) {
         return adt$1.retry(lowerCaret);
-      } else if (guessBo***REMOVED***.top === caret.bottom) {
+      } else if (guessBox.top === caret.bottom) {
         return adt$1.retry(moveDown(caret, 1));
       } else {
         return inOutsideBlock(bridge, element, caret) ? adt$1.retry(translate(lowerCaret, JUMP_SIZE, 0)) : adt$1.none();
       }
     };
-    const adjustUp = (bridge, element, guessBo***REMOVED***, original, caret) => {
+    const adjustUp = (bridge, element, guessBox, original, caret) => {
       const higherCaret = moveUp(caret, JUMP_SIZE);
-      if (Math.abs(guessBo***REMOVED***.top - original.top) < 1) {
+      if (Math.abs(guessBox.top - original.top) < 1) {
         return adt$1.retry(higherCaret);
-      } else if (guessBo***REMOVED***.bottom < caret.top) {
+      } else if (guessBox.bottom < caret.top) {
         return adt$1.retry(higherCaret);
-      } else if (guessBo***REMOVED***.bottom === caret.top) {
+      } else if (guessBox.bottom === caret.top) {
         return adt$1.retry(moveUp(caret, 1));
       } else {
         return inOutsideBlock(bridge, element, caret) ? adt$1.retry(translate(higherCaret, JUMP_SIZE, 0)) : adt$1.none();
@@ -6072,8 +6072,8 @@
       move: moveDown,
       gather: after$1
     };
-    const isAtTable = (bridge, ***REMOVED***, y) => {
-      return bridge.elementFromPoint(***REMOVED***, y).filter(elm => {
+    const isAtTable = (bridge, x, y) => {
+      return bridge.elementFromPoint(x, y).filter(elm => {
         return name(elm) === 'table';
       }).isSome();
     };
@@ -6089,8 +6089,8 @@
       }
       return bridge.situsFromPoint(caret.left, movement.point(caret)).bind(guess => {
         return guess.start.fold(Optional.none, element => {
-          return getEntireBo***REMOVED***(bridge, element).bind(guessBo***REMOVED*** => {
-            return movement.adjuster(bridge, element, guessBo***REMOVED***, original, caret).fold(Optional.none, newCaret => {
+          return getEntireBox(bridge, element).bind(guessBox => {
+            return movement.adjuster(bridge, element, guessBox, original, caret).fold(Optional.none, newCaret => {
               return adjustTil(bridge, movement, original, newCaret, numRetries - 1);
             });
           }).orThunk(() => {
@@ -6163,21 +6163,21 @@
       });
     };
     const tryAgain = (bridge, element, offset, move, direction) => {
-      return getBo***REMOVED***At(bridge, element, offset).bind(bo***REMOVED*** => {
-        return tryAt(bridge, direction, move(bo***REMOVED***, Retries.getJumpSize()));
+      return getBoxAt(bridge, element, offset).bind(box => {
+        return tryAt(bridge, direction, move(box, Retries.getJumpSize()));
       });
     };
-    const tryAt = (bridge, direction, bo***REMOVED***) => {
+    const tryAt = (bridge, direction, box) => {
       const browser = detect$2().browser;
-      if (browser.isChromium() || browser.isSafari() || browser.isFirefo***REMOVED***()) {
-        return direction.retry(bridge, bo***REMOVED***);
+      if (browser.isChromium() || browser.isSafari() || browser.isFirefox()) {
+        return direction.retry(bridge, box);
       } else {
         return Optional.none();
       }
     };
     const tryCursor = (bridge, isRoot, element, offset, direction) => {
-      return getBo***REMOVED***At(bridge, element, offset).bind(bo***REMOVED*** => {
-        return tryAt(bridge, direction, bo***REMOVED***);
+      return getBoxAt(bridge, element, offset).bind(box => {
+        return tryAt(bridge, direction, box);
       });
     };
     const handle$1 = (bridge, isRoot, direction) => {
@@ -6188,7 +6188,7 @@
 
     const inSameTable = (elem, table) => {
       return ancestor(elem, e => {
-        return parent(e).e***REMOVED***ists(p => {
+        return parent(e).exists(p => {
           return eq$1(p, table);
         });
       });
@@ -6302,7 +6302,7 @@
     };
 
     const findCell = (target, isRoot) => closest$1(target, 'td,th', isRoot);
-    const isInEditableConte***REMOVED***t = cell => parentElement(cell).e***REMOVED***ists(isEditable$1);
+    const isInEditableContext = cell => parentElement(cell).exists(isEditable$1);
     const MouseSelection = (bridge, container, isRoot, annotations) => {
       const cursor = value();
       const clearstate = cursor.clear;
@@ -6311,16 +6311,16 @@
           annotations.clearBeforeUpdate(container);
           findCell(event.target, isRoot).each(finish => {
             identify(start, finish, isRoot).each(cellSel => {
-              const bo***REMOVED***es = cellSel.bo***REMOVED***es.getOr([]);
-              if (bo***REMOVED***es.length === 1) {
-                const singleCell = bo***REMOVED***es[0];
+              const boxes = cellSel.boxes.getOr([]);
+              if (boxes.length === 1) {
+                const singleCell = boxes[0];
                 const isNonEditableCell = getRaw(singleCell) === 'false';
                 const isCellClosestContentEditable = is(closest(event.target), singleCell, eq$1);
                 if (isNonEditableCell && isCellClosestContentEditable) {
-                  annotations.selectRange(container, bo***REMOVED***es, singleCell, singleCell);
+                  annotations.selectRange(container, boxes, singleCell, singleCell);
                 }
-              } else if (bo***REMOVED***es.length > 1) {
-                annotations.selectRange(container, bo***REMOVED***es, cellSel.start, cellSel.finish);
+              } else if (boxes.length > 1) {
+                annotations.selectRange(container, boxes, cellSel.start, cellSel.finish);
                 bridge.selectContents(finish);
               }
             });
@@ -6329,7 +6329,7 @@
       };
       const mousedown = event => {
         annotations.clear(container);
-        findCell(event.target, isRoot).filter(isInEditableConte***REMOVED***t).each(cursor.set);
+        findCell(event.target, isRoot).filter(isInEditableContext).each(cursor.set);
       };
       const mouseover = event => {
         applySelection(event);
@@ -6347,7 +6347,7 @@
     };
 
     const down = {
-      traverse: ne***REMOVED***tSibling,
+      traverse: nextSibling,
       gather: after$1,
       relative: Situ.before,
       retry: Retries.tryDown,
@@ -6382,15 +6382,15 @@
 
     const get$3 = _DOC => {
       const doc = _DOC !== undefined ? _DOC.dom : document;
-      const ***REMOVED*** = doc.body.scrollLeft || doc.documentElement.scrollLeft;
+      const x = doc.body.scrollLeft || doc.documentElement.scrollLeft;
       const y = doc.body.scrollTop || doc.documentElement.scrollTop;
-      return SugarPosition(***REMOVED***, y);
+      return SugarPosition(x, y);
     };
-    const by = (***REMOVED***, y, _DOC) => {
+    const by = (x, y, _DOC) => {
       const doc = _DOC !== undefined ? _DOC.dom : document;
       const win = doc.defaultView;
       if (win) {
-        win.scrollBy(***REMOVED***, y);
+        win.scrollBy(x, y);
       }
     };
 
@@ -6403,7 +6403,7 @@
         ]
       },
       {
-        e***REMOVED***act: [
+        exact: [
           'start',
           'soffset',
           'finish',
@@ -6411,15 +6411,15 @@
         ]
       }
     ]);
-    const e***REMOVED***actFromRange = simRange => adt.e***REMOVED***act(simRange.start, simRange.soffset, simRange.finish, simRange.foffset);
+    const exactFromRange = simRange => adt.exact(simRange.start, simRange.soffset, simRange.finish, simRange.foffset);
     const getStart = selection => selection.match({
       domRange: rng => SugarElement.fromDom(rng.startContainer),
       relative: (startSitu, _finishSitu) => Situ.getStart(startSitu),
-      e***REMOVED***act: (start, _soffset, _finish, _foffset) => start
+      exact: (start, _soffset, _finish, _foffset) => start
     });
     const domRange = adt.domRange;
     const relative = adt.relative;
-    const e***REMOVED***act = adt.e***REMOVED***act;
+    const exact = adt.exact;
     const getWin = selection => {
       const start = getStart(selection);
       return defaultView(start);
@@ -6428,15 +6428,15 @@
     const SimSelection = {
       domRange,
       relative,
-      e***REMOVED***act,
-      e***REMOVED***actFromRange,
+      exact,
+      exactFromRange,
       getWin,
       range
     };
 
-    const caretPositionFromPoint = (doc, ***REMOVED***, y) => {
+    const caretPositionFromPoint = (doc, x, y) => {
       var _a, _b;
-      return Optional.from((_b = (_a = doc.dom).caretPositionFromPoint) === null || _b === void 0 ? void 0 : _b.call(_a, ***REMOVED***, y)).bind(pos => {
+      return Optional.from((_b = (_a = doc.dom).caretPositionFromPoint) === null || _b === void 0 ? void 0 : _b.call(_a, x, y)).bind(pos => {
         if (pos.offsetNode === null) {
           return Optional.none();
         }
@@ -6446,9 +6446,9 @@
         return Optional.some(r);
       });
     };
-    const caretRangeFromPoint = (doc, ***REMOVED***, y) => {
+    const caretRangeFromPoint = (doc, x, y) => {
       var _a, _b;
-      return Optional.from((_b = (_a = doc.dom).caretRangeFromPoint) === null || _b === void 0 ? void 0 : _b.call(_a, ***REMOVED***, y));
+      return Optional.from((_b = (_a = doc.dom).caretRangeFromPoint) === null || _b === void 0 ? void 0 : _b.call(_a, x, y));
     };
     const availableSearch = (() => {
       if (document.caretPositionFromPoint) {
@@ -6459,9 +6459,9 @@
         return Optional.none;
       }
     })();
-    const fromPoint = (win, ***REMOVED***, y) => {
+    const fromPoint = (win, x, y) => {
       const doc = SugarElement.fromDom(win.document);
-      return availableSearch(doc, ***REMOVED***, y).map(rng => SimRange.create(SugarElement.fromDom(rng.startContainer), rng.startOffset, SugarElement.fromDom(rng.endContainer), rng.endOffset));
+      return availableSearch(doc, x, y).map(rng => SimRange.create(SugarElement.fromDom(rng.startContainer), rng.startOffset, SugarElement.fromDom(rng.endContainer), rng.endOffset));
     };
 
     const beforeSpecial = (element, offset) => {
@@ -6482,7 +6482,7 @@
       const finish = finishSitu.fold(Situ.before, beforeSpecial, Situ.after);
       return SimSelection.relative(start, finish);
     };
-    const preprocessE***REMOVED***act = (start, soffset, finish, foffset) => {
+    const preprocessExact = (start, soffset, finish, foffset) => {
       const startSitu = beforeSpecial(start, soffset);
       const finishSitu = beforeSpecial(finish, foffset);
       return SimSelection.relative(startSitu, finishSitu);
@@ -6509,12 +6509,12 @@
       });
     };
     const doSetRange = (win, start, soffset, finish, foffset) => {
-      const rng = e***REMOVED***actToNative(win, start, soffset, finish, foffset);
+      const rng = exactToNative(win, start, soffset, finish, foffset);
       doSetNativeRange(win, rng);
     };
     const setLegacyRtlRange = (win, selection, start, soffset, finish, foffset) => {
       selection.collapse(start.dom, soffset);
-      selection.e***REMOVED***tend(finish.dom, foffset);
+      selection.extend(finish.dom, foffset);
     };
     const setRangeFromRelative = (win, relative) => diagnose(win, relative).match({
       ltr: (start, soffset, finish, foffset) => {
@@ -6522,9 +6522,9 @@
       },
       rtl: (start, soffset, finish, foffset) => {
         getNativeSelection(win).each(selection => {
-          if (selection.setBaseAndE***REMOVED***tent) {
-            selection.setBaseAndE***REMOVED***tent(start.dom, soffset, finish.dom, foffset);
-          } else if (selection.e***REMOVED***tend) {
+          if (selection.setBaseAndExtent) {
+            selection.setBaseAndExtent(start.dom, soffset, finish.dom, foffset);
+          } else if (selection.extend) {
             try {
               setLegacyRtlRange(win, selection, start, soffset, finish, foffset);
             } catch (e) {
@@ -6536,8 +6536,8 @@
         });
       }
     });
-    const setE***REMOVED***act = (win, start, soffset, finish, foffset) => {
-      const relative = preprocessE***REMOVED***act(start, soffset, finish, foffset);
+    const setExact = (win, start, soffset, finish, foffset) => {
+      const relative = preprocessExact(start, soffset, finish, foffset);
       setRangeFromRelative(win, relative);
     };
     const setRelative = (win, startSitu, finishSitu) => {
@@ -6553,7 +6553,7 @@
         return Optional.none();
       }
     };
-    const doGetE***REMOVED***act = selection => {
+    const doGetExact = selection => {
       if (selection.anchorNode === null || selection.focusNode === null) {
         return readRange(selection);
       } else {
@@ -6567,40 +6567,40 @@
       const rng = rngGetter(win, element);
       doSetNativeRange(win, rng);
     };
-    const getE***REMOVED***act = win => getNativeSelection(win).filter(sel => sel.rangeCount > 0).bind(doGetE***REMOVED***act);
-    const get$2 = win => getE***REMOVED***act(win).map(range => SimSelection.e***REMOVED***act(range.start, range.soffset, range.finish, range.foffset));
+    const getExact = win => getNativeSelection(win).filter(sel => sel.rangeCount > 0).bind(doGetExact);
+    const get$2 = win => getExact(win).map(range => SimSelection.exact(range.start, range.soffset, range.finish, range.foffset));
     const getFirstRect = (win, selection) => {
       const rng = asLtrRange(win, selection);
       return getFirstRect$1(rng);
     };
-    const getAtPoint = (win, ***REMOVED***, y) => fromPoint(win, ***REMOVED***, y);
+    const getAtPoint = (win, x, y) => fromPoint(win, x, y);
     const clear = win => {
       getNativeSelection(win).each(selection => selection.removeAllRanges());
     };
 
     const WindowBridge = win => {
-      const elementFromPoint = (***REMOVED***, y) => {
-        return SugarElement.fromPoint(SugarElement.fromDom(win.document), ***REMOVED***, y);
+      const elementFromPoint = (x, y) => {
+        return SugarElement.fromPoint(SugarElement.fromDom(win.document), x, y);
       };
       const getRect = element => {
         return element.dom.getBoundingClientRect();
       };
       const getRangedRect = (start, soffset, finish, foffset) => {
-        const sel = SimSelection.e***REMOVED***act(start, soffset, finish, foffset);
+        const sel = SimSelection.exact(start, soffset, finish, foffset);
         return getFirstRect(win, sel);
       };
       const getSelection = () => {
-        return get$2(win).map(e***REMOVED***actAdt => {
-          return convertToRange(win, e***REMOVED***actAdt);
+        return get$2(win).map(exactAdt => {
+          return convertToRange(win, exactAdt);
         });
       };
       const fromSitus = situs => {
         const relative = SimSelection.relative(situs.start, situs.finish);
         return convertToRange(win, relative);
       };
-      const situsFromPoint = (***REMOVED***, y) => {
-        return getAtPoint(win, ***REMOVED***, y).map(e***REMOVED***act => {
-          return Situs.create(e***REMOVED***act.start, e***REMOVED***act.soffset, e***REMOVED***act.finish, e***REMOVED***act.foffset);
+      const situsFromPoint = (x, y) => {
+        return getAtPoint(win, x, y).map(exact => {
+          return Situs.create(exact.start, exact.soffset, exact.finish, exact.foffset);
         });
       };
       const clearSelection = () => {
@@ -6613,7 +6613,7 @@
         }, (start, soffset, finish, foffset) => {
           const node = toStart ? start : finish;
           const offset = toStart ? soffset : foffset;
-          setE***REMOVED***act(win, node, offset, node, offset);
+          setExact(win, node, offset, node, offset);
         }));
       };
       const selectNode = element => {
@@ -6623,7 +6623,7 @@
         setToElement(win, element);
       };
       const setSelection = sel => {
-        setE***REMOVED***act(win, sel.start, sel.soffset, sel.finish, sel.foffset);
+        setExact(win, sel.start, sel.soffset, sel.finish, sel.foffset);
       };
       const setRelativeSelection = (start, finish) => {
         setRelative(win, start, finish);
@@ -6635,8 +6635,8 @@
         const pos = get$3(SugarElement.fromDom(win.document));
         return pos.top;
       };
-      const scrollBy = (***REMOVED***, y) => {
-        by(***REMOVED***, y, SugarElement.fromDom(win.document));
+      const scrollBy = (x, y) => {
+        by(x, y, SugarElement.fromDom(win.document));
       };
       return {
         elementFromPoint,
@@ -6671,7 +6671,7 @@
         mouseup: handlers.mouseup
       };
     };
-    const isEditableNode = node => closest$2(node, isHTMLElement).e***REMOVED***ists(isEditable$1);
+    const isEditableNode = node => closest$2(node, isHTMLElement).exists(isEditable$1);
     const isEditableSelection = (start, finish) => isEditableNode(start) || isEditableNode(finish);
     const keyboard = (win, container, isRoot, annotations) => {
       const bridge = WindowBridge(win);
@@ -6762,13 +6762,13 @@
         keyup
       };
     };
-    const e***REMOVED***ternal = (win, container, isRoot, annotations) => {
+    const external = (win, container, isRoot, annotations) => {
       const bridge = WindowBridge(win);
       return (start, finish) => {
         annotations.clearBeforeUpdate(container);
         identify(start, finish, isRoot).each(cellSel => {
-          const bo***REMOVED***es = cellSel.bo***REMOVED***es.getOr([]);
-          annotations.selectRange(container, bo***REMOVED***es, cellSel.start, cellSel.finish);
+          const boxes = cellSel.boxes.getOr([]);
+          annotations.selectRange(container, boxes, cellSel.start, cellSel.finish);
           bridge.selectContents(finish);
           bridge.collapseSelection();
         });
@@ -6825,8 +6825,8 @@
     const has = (element, clazz) => supports(element) && element.dom.classList.contains(clazz);
 
     const remove$1 = (element, classes) => {
-      each$2(classes, ***REMOVED*** => {
-        remove$2(element, ***REMOVED***);
+      each$2(classes, x => {
+        remove$2(element, x);
       });
     };
 
@@ -6947,7 +6947,7 @@
       const details = onCells(warehouse, target);
       return details.map(selectedCells => {
         const grid = toGrid(warehouse, generators, false);
-        const {rows} = e***REMOVED***tractGridDetails(grid);
+        const {rows} = extractGridDetails(grid);
         const upOrLeftCells = getUpOrLeftCells(rows, selectedCells);
         const downOrRightCells = getDownOrRightCells(rows, selectedCells);
         return {
@@ -6957,9 +6957,9 @@
       });
     };
 
-    const mkEvent = (target, ***REMOVED***, y, stop, prevent, kill, raw) => ({
+    const mkEvent = (target, x, y, stop, prevent, kill, raw) => ({
       target,
-      ***REMOVED***,
+      x,
       y,
       stop,
       prevent,
@@ -6992,7 +6992,7 @@
     const bind = (element, event, handler) => bind$1(element, event, filter, handler);
     const fromRawEvent = fromRawEvent$1;
 
-    const hasInternalTarget = e => !has(SugarElement.fromDom(e.target), 'epho***REMOVED***-snooker-resizer-bar');
+    const hasInternalTarget = e => !has(SugarElement.fromDom(e.target), 'ephox-snooker-resizer-bar');
     const TableCellSelectionHandler = (editor, resizeHandler) => {
       const cellSelection = Selections(() => SugarElement.fromDom(editor.getBody()), () => getSelectionCell(getSelectionStart(editor), getIsRoot(editor)), ephemera.selectedSelector);
       const onSelection = (cells, start, finish) => {
@@ -7024,9 +7024,9 @@
         };
         const mouseHandlers = mouse(win, body, isRoot, annotations);
         const keyHandlers = keyboard(win, body, isRoot, annotations);
-        const e***REMOVED***ternal$1 = e***REMOVED***ternal(win, body, isRoot, annotations);
+        const external$1 = external(win, body, isRoot, annotations);
         const hasShiftKey = event => event.raw.shiftKey === true;
-        editor.on('TableSelectorChange', e => e***REMOVED***ternal$1(e.start, e.finish));
+        editor.on('TableSelectorChange', e => external$1(e.start, e.finish));
         const handleResponse = (event, response) => {
           if (!hasShiftKey(event)) {
             return;
@@ -7098,7 +7098,7 @@
               const lTS = lastTimeStamp.get();
               if (eq$1(lT, target) && t.timeStamp - lTS < 300) {
                 t.preventDefault();
-                e***REMOVED***ternal$1(target, target);
+                external$1(target, target);
               }
             }
             lastTarget.set(target);
@@ -7258,7 +7258,7 @@
         return obj;
       };
     };
-    const handleE***REMOVED***act = (required, keys) => {
+    const handleExact = (required, keys) => {
       const unsupported = filter$2(keys, key => {
         return !contains$2(required, key);
       });
@@ -7266,21 +7266,21 @@
         unsuppMessage(unsupported);
       }
     };
-    const e***REMOVED***actly = required => base(handleE***REMOVED***act, required);
+    const exactly = required => base(handleExact, required);
 
-    const DragMode = e***REMOVED***actly([
+    const DragMode = exactly([
       'compare',
-      'e***REMOVED***tract',
+      'extract',
       'mutate',
       'sink'
     ]);
-    const DragSink = e***REMOVED***actly([
+    const DragSink = exactly([
       'element',
       'start',
       'stop',
       'destroy'
     ]);
-    const DragApi = e***REMOVED***actly([
+    const DragApi = exactly([
       'forceDrop',
       'drop',
       'move',
@@ -7300,7 +7300,7 @@
         return result;
       };
       const onEvent = (event, mode) => {
-        const dataOption = mode.e***REMOVED***tract(event);
+        const dataOption = mode.extract(event);
         dataOption.each(data => {
           const offset = update(mode, data);
           offset.each(d => {
@@ -7421,7 +7421,7 @@
       return { resolve };
     };
 
-    const styles$1 = css('epho***REMOVED***-dragster');
+    const styles$1 = css('ephox-dragster');
     const resolve$1 = styles$1.resolve;
 
     const Blocker = options => {
@@ -7432,9 +7432,9 @@
       const div = SugarElement.fromTag('div');
       set$2(div, 'role', 'presentation');
       setAll(div, {
-        position: 'fi***REMOVED***ed',
-        left: '0p***REMOVED***',
-        top: '0p***REMOVED***',
+        position: 'fixed',
+        left: '0px',
+        top: '0px',
         width: '100%',
         height: '100%'
       });
@@ -7453,8 +7453,8 @@
     const compare = (old, nu) => {
       return SugarPosition(nu.left - old.left, nu.top - old.top);
     };
-    const e***REMOVED***tract = event => {
-      return Optional.some(SugarPosition(event.***REMOVED***, event.y));
+    const extract = event => {
+      return Optional.some(SugarPosition(event.x, event.y));
     };
     const mutate = (mutation, info) => {
       mutation.mutate(info.left, info.top);
@@ -7487,7 +7487,7 @@
     };
     var MouseDrag = DragMode({
       compare,
-      e***REMOVED***tract,
+      extract,
       sink,
       mutate
     });
@@ -7498,18 +7498,18 @@
       return setup(mutation, mode, settings);
     };
 
-    const styles = css('epho***REMOVED***-snooker');
+    const styles = css('ephox-snooker');
     const resolve = styles.resolve;
 
     const Mutation = () => {
       const events = create$1({
         drag: Event([
-          '***REMOVED***Delta',
+          'xDelta',
           'yDelta'
         ])
       });
-      const mutate = (***REMOVED***, y) => {
-        events.trigger.drag(***REMOVED***, y);
+      const mutate = (x, y) => {
+        events.trigger.drag(x, y);
       };
       return {
         mutate,
@@ -7520,7 +7520,7 @@
     const BarMutation = () => {
       const events = create$1({
         drag: Event([
-          '***REMOVED***Delta',
+          'xDelta',
           'yDelta',
           'target'
         ])
@@ -7529,7 +7529,7 @@
       const delegate = Mutation();
       delegate.events.drag.bind(event => {
         target.each(t => {
-          events.trigger.drag(event.***REMOVED***Delta, event.yDelta, t);
+          events.trigger.drag(event.xDelta, event.yDelta, t);
         });
       });
       const assign = t => {
@@ -7546,14 +7546,14 @@
       };
     };
 
-    const col = (column, ***REMOVED***, y, w, h) => {
+    const col = (column, x, y, w, h) => {
       const bar = SugarElement.fromTag('div');
       setAll(bar, {
         position: 'absolute',
-        left: ***REMOVED*** - w / 2 + 'p***REMOVED***',
-        top: y + 'p***REMOVED***',
-        height: h + 'p***REMOVED***',
-        width: w + 'p***REMOVED***'
+        left: x - w / 2 + 'px',
+        top: y + 'px',
+        height: h + 'px',
+        width: w + 'px'
       });
       setAll$1(bar, {
         'data-column': column,
@@ -7561,14 +7561,14 @@
       });
       return bar;
     };
-    const row = (r, ***REMOVED***, y, w, h) => {
+    const row = (r, x, y, w, h) => {
       const bar = SugarElement.fromTag('div');
       setAll(bar, {
         position: 'absolute',
-        left: ***REMOVED*** + 'p***REMOVED***',
-        top: y - h / 2 + 'p***REMOVED***',
-        height: h + 'p***REMOVED***',
-        width: w + 'p***REMOVED***'
+        left: x + 'px',
+        top: y - h / 2 + 'px',
+        height: h + 'px',
+        width: w + 'px'
       });
       setAll$1(bar, {
         'data-row': r,
@@ -7584,14 +7584,14 @@
     const resizableRows = (warehouse, isResizable) => bind$2(warehouse.all, (row, i) => isResizable(row.element) ? [i] : []);
     const resizableColumns = (warehouse, isResizable) => {
       const resizableCols = [];
-      range$1(warehouse.grid.columns, inde***REMOVED*** => {
-        const colElmOpt = Warehouse.getColumnAt(warehouse, inde***REMOVED***).map(col => col.element);
+      range$1(warehouse.grid.columns, index => {
+        const colElmOpt = Warehouse.getColumnAt(warehouse, index).map(col => col.element);
         if (colElmOpt.forall(isResizable)) {
-          resizableCols.push(inde***REMOVED***);
+          resizableCols.push(index);
         }
       });
-      return filter$2(resizableCols, colInde***REMOVED*** => {
-        const columnCells = Warehouse.filterItems(warehouse, cell => cell.column === colInde***REMOVED***);
+      return filter$2(resizableCols, colIndex => {
+        const columnCells = Warehouse.filterItems(warehouse, cell => cell.column === colIndex);
         return forall(columnCells, cell => isResizable(cell.element));
       });
     };
@@ -7611,7 +7611,7 @@
     };
     const refreshCol = (wire, colPositions, position, tableHeight) => {
       drawBar(wire, colPositions, (origin, cp) => {
-        const colBar = col(cp.col, cp.***REMOVED*** - origin.left, position.top - origin.top, BAR_THICKNESS, tableHeight);
+        const colBar = col(cp.col, cp.x - origin.left, position.top - origin.top, BAR_THICKNESS, tableHeight);
         add(colBar, resizeColBar);
         return colBar;
       });
@@ -7628,11 +7628,11 @@
       const isResizable = wire.isResizable;
       const rowPositions = rows.length > 0 ? height.positions(rows, table) : [];
       const resizableRowBars = rowPositions.length > 0 ? resizableRows(warhouse, isResizable) : [];
-      const resizableRowPositions = filter$2(rowPositions, (_pos, i) => e***REMOVED***ists(resizableRowBars, barInde***REMOVED*** => i === barInde***REMOVED***));
+      const resizableRowPositions = filter$2(rowPositions, (_pos, i) => exists(resizableRowBars, barIndex => i === barIndex));
       refreshRow(wire, resizableRowPositions, position, getOuter$2(table));
       const colPositions = cols.length > 0 ? width.positions(cols, table) : [];
       const resizableColBars = colPositions.length > 0 ? resizableColumns(warhouse, isResizable) : [];
-      const resizableColPositions = filter$2(colPositions, (_pos, i) => e***REMOVED***ists(resizableColBars, barInde***REMOVED*** => i === barInde***REMOVED***));
+      const resizableColPositions = filter$2(colPositions, (_pos, i) => exists(resizableColBars, barIndex => i === barIndex));
       refreshCol(wire, resizableColPositions, position, getOuter$1(table));
     };
     const refresh = (wire, table) => {
@@ -7676,11 +7676,11 @@
       mutation.events.drag.bind(event => {
         getResizer(event.target, 'data-row').each(_dataRow => {
           const currentRow = getCssValue(event.target, 'top');
-          set$1(event.target, 'top', currentRow + event.yDelta + 'p***REMOVED***');
+          set$1(event.target, 'top', currentRow + event.yDelta + 'px');
         });
         getResizer(event.target, 'data-column').each(_dataCol => {
           const currentCol = getCssValue(event.target, 'left');
-          set$1(event.target, 'left', currentCol + event.***REMOVED***Delta + 'p***REMOVED***');
+          set$1(event.target, 'left', currentCol + event.xDelta + 'px');
         });
       });
       const getDelta = (target, dir) => {
@@ -7870,9 +7870,9 @@
     };
 
     const isTable = node => isNonNullable(node) && node.nodeName === 'TABLE';
-    const barResizerPrefi***REMOVED*** = 'bar-';
+    const barResizerPrefix = 'bar-';
     const isResizable = elm => get$b(elm, 'data-mce-resize') !== 'false';
-    const syncTableCellPi***REMOVED***els = table => {
+    const syncTableCellPixels = table => {
       const warehouse = Warehouse.fromTable(table);
       if (!Warehouse.hasColumns(warehouse)) {
         each$2(cells$1(table), cell => {
@@ -7904,7 +7904,7 @@
           convertToPercentSizeWidth(table);
         }
         if (startRawH === '') {
-          convertToPi***REMOVED***elSizeHeight(table);
+          convertToPixelSizeHeight(table);
         }
         if (width !== startW && startRawW !== '') {
           set$1(table, 'width', startRawW);
@@ -7917,13 +7917,13 @@
           const targetPercentW = width * percentW / startW;
           set$1(table, 'width', targetPercentW + '%');
         }
-        if (isPi***REMOVED***el(startRawW)) {
-          syncTableCellPi***REMOVED***els(table);
+        if (isPixel(startRawW)) {
+          syncTableCellPixels(table);
         }
         if (height !== startH && startRawH !== '') {
           set$1(table, 'height', startRawH);
-          const id***REMOVED*** = isNorthEdgeResize ? 0 : getNumRows(table) - 1;
-          adjustHeight(table, height - startH, id***REMOVED***);
+          const idx = isNorthEdgeResize ? 0 : getNumRows(table) - 1;
+          adjustHeight(table, height - startH, idx);
         }
       };
       const destroy = () => {
@@ -7946,7 +7946,7 @@
           });
           sz.events.beforeResize.bind(event => {
             const rawTable = event.table.dom;
-            fireObjectResizeStart(editor, rawTable, getPi***REMOVED***elWidth(rawTable), getPi***REMOVED***elHeight(rawTable), barResizerPrefi***REMOVED*** + event.type);
+            fireObjectResizeStart(editor, rawTable, getPixelWidth(rawTable), getPixelHeight(rawTable), barResizerPrefix + event.type);
           });
           sz.events.afterResize.bind(event => {
             const table = event.table;
@@ -7956,7 +7956,7 @@
               editor.selection.setRng(rng);
               editor.focus();
             });
-            fireObjectResized(editor, rawTable, getPi***REMOVED***elWidth(rawTable), getPi***REMOVED***elHeight(rawTable), barResizerPrefi***REMOVED*** + event.type);
+            fireObjectResized(editor, rawTable, getPixelWidth(rawTable), getPixelHeight(rawTable), barResizerPrefix + event.type);
             editor.undoManager.add();
           });
           tableResize.set(sz);
@@ -7969,12 +7969,12 @@
           each$2(editor.dom.select('.mce-clonedresizable'), clone => {
             editor.dom.addClass(clone, 'mce-' + getTableColumnResizingBehaviour(editor) + '-columns');
           });
-          if (!isPi***REMOVED***elSizing(table) && isTablePi***REMOVED***elsForced(editor)) {
-            convertToPi***REMOVED***elSizeWidth(table);
+          if (!isPixelSizing(table) && isTablePixelsForced(editor)) {
+            convertToPixelSizeWidth(table);
           } else if (!isPercentSizing(table) && isTablePercentagesForced(editor)) {
             convertToPercentSizeWidth(table);
           }
-          if (isNoneSizing(table) && startsWith(e.origin, barResizerPrefi***REMOVED***)) {
+          if (isNoneSizing(table) && startsWith(e.origin, barResizerPrefix)) {
             convertToPercentSizeWidth(table);
           }
           startW = e.width;

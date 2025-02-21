@@ -48,9 +48,9 @@
       "S"
     ],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Lejuplādēt SVG",
-      "e***REMOVED***portToPNG": "Lejuplādēt PNG",
-      "e***REMOVED***portToCSV": "Lejuplādēt CSV",
+      "exportToSVG": "Lejuplādēt SVG",
+      "exportToPNG": "Lejuplādēt PNG",
+      "exportToCSV": "Lejuplādēt CSV",
       "menu": "Izvēlne",
       "selection": "Atlase",
       "selectionZoom": "Pietuvināt atlasi",

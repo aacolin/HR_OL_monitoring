@@ -1,8 +1,8 @@
-var particleAccessToken = PERTICLE_ACCESS_TOKEN; // process.env.PARTICLE_ACCESS_TOKEN;
-var particleUserName = USERNAME; //process.env.PARTICLE_USERNAME;
-var particlePassword ="PARTICLE_PASSWORD";          // process.env.PARTICLE_PASSWORD;
-var particleClientId = "particle"        	 //process.env.PARTICLE_CLIENT_ID;
-var particleClientSecret ="particle";		 //  process.env.PARTICLE_CLIENT_SECRET;
+process.env.PARTICLE_ACCESS_TOKEN;
+process.env.PARTICLE_USERNAME;
+process.env.PARTICLE_PASSWORD;
+process.env.PARTICLE_CLIENT_ID;
+process.env.PARTICLE_CLIENT_SECRET;
 
 
 function drawGraph(){
@@ -10,7 +10,7 @@ function drawGraph(){
     const iotDeviceId = "johndoedevice123";
     //console.log("button clicked");
     //  drawGraph();
-    $.aja***REMOVED***({
+    $.ajax({
         url: `sensor/plotData?iotDeviceId=${iotDeviceId}`,
         method: 'GET',
         contentType: 'application/json',
@@ -20,66 +20,66 @@ function drawGraph(){
     .done(function(data) {
         // console.log('getting dta', JSON.stringify(data, null, 2));
          // Process the data into the format needed for the graph
-         const heartRateDataR***REMOVED*** = data[0].events.map(entry => ({
-            y: entry.heartRate, // SpO2 data as y-a***REMOVED***is
-            ***REMOVED*** : new Date(entry.eventPublishedTime) //new Date().toLocaleTimeString()  // Format: "HH:MM:SS AM/PM"
+         const heartRateDataRx = data[0].events.map(entry => ({
+            y: entry.heartRate, // SpO2 data as y-axis
+            x : new Date(entry.eventPublishedTime) //new Date().toLocaleTimeString()  // Format: "HH:MM:SS AM/PM"
         }));
 
-        const spo2DataR***REMOVED*** = data[0].events.map(entry => ({
-            y : entry.SpO2,// Time as ***REMOVED***-a***REMOVED***is
-            ***REMOVED*** : new Date(entry.eventPublishedTime) //new Date().toLocaleTimeString()  // Format: "HH:MM:SS AM/PM"
+        const spo2DataRx = data[0].events.map(entry => ({
+            y : entry.SpO2,// Time as x-axis
+            x : new Date(entry.eventPublishedTime) //new Date().toLocaleTimeString()  // Format: "HH:MM:SS AM/PM"
         }));
 
-        heartRateDataR***REMOVED***.forEach(entry => {
-            console.log('hearRate:', entry.***REMOVED***, 'publishedTime :', entry.y);  // Log each ***REMOVED*** and y value
+        heartRateDataRx.forEach(entry => {
+            console.log('hearRate:', entry.x, 'publishedTime :', entry.y);  // Log each x and y value
         });
 
-        spo2DataR***REMOVED***.forEach(entry => {
-            console.log('SPO2:', entry.***REMOVED***, 'publishedTime :', entry.y);  // Log each ***REMOVED*** and y value
+        spo2DataRx.forEach(entry => {
+            console.log('SPO2:', entry.x, 'publishedTime :', entry.y);  // Log each x and y value
         });
 
  // Create heart rate chart (scatter chart)
- const heartRateCt***REMOVED*** = document.getElementById('heartRateChart').getConte***REMOVED***t('2d');
- const heartRateChart = new Chart(heartRateCt***REMOVED***, {
+ const heartRateCtx = document.getElementById('heartRateChart').getContext('2d');
+ const heartRateChart = new Chart(heartRateCtx, {
    type: 'scatter',
    data: {
      datasets: [{
        pointRadius: 1,
        label: 'Heart Rate (BPM)',
        pointBackgroundColor: "rgb(0,0,255)",
-       data: heartRateDataR***REMOVED***
+       data: heartRateDataRx
      }]
    },
    options: {
     responsive: true,
     scales: {
-      ***REMOVED***: {
-        type: 'time',  // Time scale for the X-a***REMOVED***is
+      x: {
+        type: 'time',  // Time scale for the X-axis
         time: {
           unit: 'minute',  // Set unit to minute
           stepSize: 60,  // Step size of 1 hour (60 minutes)
           displayFormats: {
-            minute: 'H:mm'  // Display format for the X-a***REMOVED***is labels
+            minute: 'H:mm'  // Display format for the X-axis labels
           },
           tooltipFormat: 'll HH:mm',  // Tooltip format to show full date and time
         },
         ticks: {
           min: '2024-12-05T00:00:00',  // Start of the day (midnight)
-          ma***REMOVED***: '2024-12-05T23:59:59',  // End of the day (just before midnight)
+          max: '2024-12-05T23:59:59',  // End of the day (just before midnight)
           source: 'data',  // Get ticks from the data
         },
         title: {
           display: true,
-          te***REMOVED***t: 'Time of Day'
+          text: 'Time of Day'
         }
       },
       y: {
         title: {
           display: true,
-          te***REMOVED***t: 'Value'  // This could be heart rate, SpO2, etc.
+          text: 'Value'  // This could be heart rate, SpO2, etc.
         },
         min: 50,  // Adjust as needed
-        ma***REMOVED***: 100,  // Adjust as needed
+        max: 100,  // Adjust as needed
       }
     }
   }
@@ -155,21 +155,21 @@ function dailyFetch(rangeType, aDay,  iotDeviceId){
   .then(response => response.json())
   .then(data => {
    if (Array.isArray(data) && data.length > 0) {
-      const heartRateDataR***REMOVED*** = data[0].events.map(entry => ({
-           y: entry.heartRate, // SpO2 data as y-a***REMOVED***is
-           ***REMOVED*** : new Date(entry.published_at).toISOString() //.toLocaleTimeString() //new Date().toLocaleTimeString()  // Format: "HH:MM:SS AM/PM"
+      const heartRateDataRx = data[0].events.map(entry => ({
+           y: entry.heartRate, // SpO2 data as y-axis
+           x : new Date(entry.published_at).toISOString() //.toLocaleTimeString() //new Date().toLocaleTimeString()  // Format: "HH:MM:SS AM/PM"
       }));
     
-      const spo2DataR***REMOVED*** = data[0].events.map(entry => ({
-          y : entry.SpO2,// Time as ***REMOVED***-a***REMOVED***is
-          ***REMOVED*** : new Date(entry.published_at).toISOString() // ocaleTimeString()  // Format: "HH:MM:SS AM/PM"
+      const spo2DataRx = data[0].events.map(entry => ({
+          y : entry.SpO2,// Time as x-axis
+          x : new Date(entry.published_at).toISOString() // ocaleTimeString()  // Format: "HH:MM:SS AM/PM"
       }));
     
-      heartRateDataR***REMOVED***.forEach(entry => {
-          console.log('hearRate:', entry.y, 'publishedTime :', entry.***REMOVED***);  // Log each ***REMOVED*** and y value
+      heartRateDataRx.forEach(entry => {
+          console.log('hearRate:', entry.y, 'publishedTime :', entry.x);  // Log each x and y value
       });
     
-      // Destroy e***REMOVED***isting charts if e***REMOVED***ists
+      // Destroy existing charts if exists
       let heartRateChartStatus = Chart.getChart("heartRateChart");
       if (heartRateChartStatus != undefined) {
         heartRateChartStatus.destroy();
@@ -181,15 +181,15 @@ function dailyFetch(rangeType, aDay,  iotDeviceId){
       }
     
       // Create the Heart Rate chart
-      const heartRateCt***REMOVED*** = document.getElementById('heartRateChart').getConte***REMOVED***t('2d');
-      new Chart(heartRateCt***REMOVED***, {
+      const heartRateCtx = document.getElementById('heartRateChart').getContext('2d');
+      new Chart(heartRateCtx, {
         type: 'scatter',
         data: {
             //          labels: timestamps,
           datasets: [
             {
               label: 'Heart Rate',
-              data: heartRateDataR***REMOVED***.map((value, inde***REMOVED***) => ({ ***REMOVED***: heartRateDataR***REMOVED***[inde***REMOVED***], y: value })),
+              data: heartRateDataRx.map((value, index) => ({ x: heartRateDataRx[index], y: value })),
               borderColor: 'red',
               fill: false,
               showLine: true,
@@ -199,15 +199,15 @@ function dailyFetch(rangeType, aDay,  iotDeviceId){
       });
     
         // Create the SpO2 chart
-      const SpO2Ct***REMOVED*** = document.getElementById('SpO2Chart').getConte***REMOVED***t('2d');
-      new Chart(SpO2Ct***REMOVED***, {
+      const SpO2Ctx = document.getElementById('SpO2Chart').getContext('2d');
+      new Chart(SpO2Ctx, {
         type: 'scatter',
         data: {
         //              labels: timestamps,
           datasets: [
             {
               label: 'SpO2',
-              data:  spo2DataR***REMOVED***.map((value, inde***REMOVED***) => ({ ***REMOVED***:spo2DataR***REMOVED***[inde***REMOVED***], y: value })),
+              data:  spo2DataRx.map((value, index) => ({ x:spo2DataRx[index], y: value })),
               borderColor: 'blue',
               fill: false,
               showLine: true,
@@ -216,10 +216,10 @@ function dailyFetch(rangeType, aDay,  iotDeviceId){
         },
         options: {
             scales: {
-              ***REMOVED***: {
-                type: 'time',  // Use time scale for the ***REMOVED***-a***REMOVED***is
+              x: {
+                type: 'time',  // Use time scale for the x-axis
                 time: {
-                  unit: 'minute',  // Set the unit to 'minute' for the ***REMOVED***-a***REMOVED***is
+                  unit: 'minute',  // Set the unit to 'minute' for the x-axis
                   stepSize: 30,    // Set the step size to 30 minutes (this is in minutes)
                   tooltipFormat: 'll HH:mm', // Formatting the tooltip
                 },
@@ -229,7 +229,7 @@ function dailyFetch(rangeType, aDay,  iotDeviceId){
               },
               y: {
                 ticks: {
-                  stepSize: 10,  // Set the step size for the y-a***REMOVED***is to 10
+                  stepSize: 10,  // Set the step size for the y-axis to 10
                 },
               },
             },
@@ -249,21 +249,21 @@ function weekelyMonthly(startDate, endDate, rangeType){
   .then(response => response.json())
   .then(data => {
    if (Array.isArray(data) && data.length > 0) {
-      const heartRateDataR***REMOVED*** = data[0].events.map(entry => ({
-           y: entry.heartRate, // SpO2 data as y-a***REMOVED***is
-           ***REMOVED*** : new Date(entry.published_at).toISOString() //.toLocaleTimeString() //new Date().toLocaleTimeString()  // Format: "HH:MM:SS AM/PM"
+      const heartRateDataRx = data[0].events.map(entry => ({
+           y: entry.heartRate, // SpO2 data as y-axis
+           x : new Date(entry.published_at).toISOString() //.toLocaleTimeString() //new Date().toLocaleTimeString()  // Format: "HH:MM:SS AM/PM"
       }));
     
-      const spo2DataR***REMOVED*** = data[0].events.map(entry => ({
-          y : entry.SpO2,// Time as ***REMOVED***-a***REMOVED***is
-          ***REMOVED*** : new Date(entry.published_at).toISOString() // ocaleTimeString()  // Format: "HH:MM:SS AM/PM"
+      const spo2DataRx = data[0].events.map(entry => ({
+          y : entry.SpO2,// Time as x-axis
+          x : new Date(entry.published_at).toISOString() // ocaleTimeString()  // Format: "HH:MM:SS AM/PM"
       }));
     
-      heartRateDataR***REMOVED***.forEach(entry => {
-          console.log('hearRate:', entry.y, 'publishedTime :', entry.***REMOVED***);  // Log each ***REMOVED*** and y value
+      heartRateDataRx.forEach(entry => {
+          console.log('hearRate:', entry.y, 'publishedTime :', entry.x);  // Log each x and y value
       });
     
-      // Destroy e***REMOVED***isting charts if e***REMOVED***ists
+      // Destroy existing charts if exists
       let heartRateChartStatus = Chart.getChart("heartRateChart");
       if (heartRateChartStatus != undefined) {
         heartRateChartStatus.destroy();
@@ -275,15 +275,15 @@ function weekelyMonthly(startDate, endDate, rangeType){
       }
     
       // Create the Heart Rate chart
-      const heartRateCt***REMOVED*** = document.getElementById('heartRateChart').getConte***REMOVED***t('2d');
-      new Chart(heartRateCt***REMOVED***, {
+      const heartRateCtx = document.getElementById('heartRateChart').getContext('2d');
+      new Chart(heartRateCtx, {
         type: 'scatter',
         data: {
             //          labels: timestamps,
           datasets: [
             {
               label: 'Heart Rate',
-              data: heartRateDataR***REMOVED***.map((value, inde***REMOVED***) => ({ ***REMOVED***: heartRateDataR***REMOVED***[inde***REMOVED***], y: value })),
+              data: heartRateDataRx.map((value, index) => ({ x: heartRateDataRx[index], y: value })),
               borderColor: 'red',
               fill: false,
               showLine: true,
@@ -293,15 +293,15 @@ function weekelyMonthly(startDate, endDate, rangeType){
       });
     
         // Create the SpO2 chart
-      const SpO2Ct***REMOVED*** = document.getElementById('SpO2Chart').getConte***REMOVED***t('2d');
-      new Chart(SpO2Ct***REMOVED***, {
+      const SpO2Ctx = document.getElementById('SpO2Chart').getContext('2d');
+      new Chart(SpO2Ctx, {
         type: 'scatter',
         data: {
         //              labels: timestamps,
           datasets: [
             {
               label: 'SpO2',
-              data:  spo2DataR***REMOVED***.map((value, inde***REMOVED***) => ({ ***REMOVED***:spo2DataR***REMOVED***[inde***REMOVED***], y: value })),
+              data:  spo2DataRx.map((value, index) => ({ x:spo2DataRx[index], y: value })),
               borderColor: 'blue',
               fill: false,
               showLine: true,
@@ -310,10 +310,10 @@ function weekelyMonthly(startDate, endDate, rangeType){
         },
         options: {
             scales: {
-              ***REMOVED***: {
-                type: 'time',  // Use time scale for the ***REMOVED***-a***REMOVED***is
+              x: {
+                type: 'time',  // Use time scale for the x-axis
                 time: {
-                  unit: 'minute',  // Set the unit to 'minute' for the ***REMOVED***-a***REMOVED***is
+                  unit: 'minute',  // Set the unit to 'minute' for the x-axis
                   stepSize: 30,    // Set the step size to 30 minutes (this is in minutes)
                   tooltipFormat: 'll HH:mm', // Formatting the tooltip
                 },
@@ -323,7 +323,7 @@ function weekelyMonthly(startDate, endDate, rangeType){
               },
               y: {
                 ticks: {
-                  stepSize: 10,  // Set the step size for the y-a***REMOVED***is to 10
+                  stepSize: 10,  // Set the step size for the y-axis to 10
                 },
               },
             },

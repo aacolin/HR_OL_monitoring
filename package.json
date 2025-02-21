@@ -3,20 +3,20 @@
   "version": "1.0.0",
   "description": "University of Arizona [2024 Fall ECE413/513]\\ Final Project - Team X ======",
   "private": true,
-  "main": "inde***REMOVED***.js",
+  "main": "index.js",
   "scripts": {
-    "start": "nodemon --e***REMOVED***t js,json,html,css ./bin/www"
+    "start": "nodemon --ext js,json,html,css ./bin/www"
   },
   "keywords": [],
   "author": "Aaron Colin",
   "license": "ISC",
   "dependencies": {
-    "a***REMOVED***ios": "^1.7.8",
+    "axios": "^1.7.8",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
     "debug": "^4.3.7",
     "dotenv": "^16.4.5",
-    "e***REMOVED***press": "^4.21.1",
+    "express": "^4.21.1",
     "fs": "^0.0.1-security",
     "http-errors": "^2.0.0",
     "jwt-simple": "^0.5.6",

@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "help" plugin for usage with module loaders
+// Exports the "help" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/help')

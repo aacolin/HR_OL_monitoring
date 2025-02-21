@@ -4,15 +4,15 @@
 
 .errorDiv {
     /* display: inline-block; */
-    display: fle***REMOVED***;
+    display: flex;
     justify-content: center;
     color: red;
-    te***REMOVED***t-align: left;
+    text-align: left;
     font-size: 0.9em;
     margin: 0 auto;
     width: fit-content;
 }
 
 .cancelBtn {
-    margin-left: 20p***REMOVED***;
+    margin-left: 20px;
 }

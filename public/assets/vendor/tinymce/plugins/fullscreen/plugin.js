@@ -31,13 +31,13 @@
         return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
       }
     };
-    const typeOf = ***REMOVED*** => {
-      const t = typeof ***REMOVED***;
-      if (***REMOVED*** === null) {
+    const typeOf = x => {
+      const t = typeof x;
+      if (x === null) {
         return 'null';
-      } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+      } else if (t === 'object' && Array.isArray(x)) {
         return 'array';
-      } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
         return 'string';
       } else {
         return t;
@@ -117,7 +117,7 @@
           return Optional.none();
         }
       }
-      e***REMOVED***ists(predicate) {
+      exists(predicate) {
         return this.tag && predicate(this.value);
       }
       forall(predicate) {
@@ -173,58 +173,58 @@
     Optional.singletonNone = new Optional(false);
 
     const nativePush = Array.prototype.push;
-    const map = (***REMOVED***s, f) => {
-      const len = ***REMOVED***s.length;
+    const map = (xs, f) => {
+      const len = xs.length;
       const r = new Array(len);
       for (let i = 0; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        r[i] = f(***REMOVED***, i);
+        const x = xs[i];
+        r[i] = f(x, i);
       }
       return r;
     };
-    const each$1 = (***REMOVED***s, f) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        f(***REMOVED***, i);
+    const each$1 = (xs, f) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        f(x, i);
       }
     };
-    const filter$1 = (***REMOVED***s, pred) => {
+    const filter$1 = (xs, pred) => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
-          r.push(***REMOVED***);
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
+          r.push(x);
         }
       }
       return r;
     };
-    const findUntil = (***REMOVED***s, pred, until) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
-          return Optional.some(***REMOVED***);
-        } else if (until(***REMOVED***, i)) {
+    const findUntil = (xs, pred, until) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
+          return Optional.some(x);
+        } else if (until(x, i)) {
           break;
         }
       }
       return Optional.none();
     };
-    const find$1 = (***REMOVED***s, pred) => {
-      return findUntil(***REMOVED***s, pred, never);
+    const find$1 = (xs, pred) => {
+      return findUntil(xs, pred, never);
     };
-    const flatten = ***REMOVED***s => {
+    const flatten = xs => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; ++i) {
-        if (!isArray(***REMOVED***s[i])) {
-          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + ***REMOVED***s);
+      for (let i = 0, len = xs.length; i < len; ++i) {
+        if (!isArray(xs[i])) {
+          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + xs);
         }
-        nativePush.apply(r, ***REMOVED***s[i]);
+        nativePush.apply(r, xs[i]);
       }
       return r;
     };
-    const bind$3 = (***REMOVED***s, f) => flatten(map(***REMOVED***s, f));
-    const get$4 = (***REMOVED***s, i) => i >= 0 && i < ***REMOVED***s.length ? Optional.some(***REMOVED***s[i]) : Optional.none();
-    const head = ***REMOVED***s => get$4(***REMOVED***s, 0);
+    const bind$3 = (xs, f) => flatten(map(xs, f));
+    const get$4 = (xs, i) => i >= 0 && i < xs.length ? Optional.some(xs[i]) : Optional.none();
+    const head = xs => get$4(xs, 0);
     const findMap = (arr, f) => {
       for (let i = 0; i < arr.length; i++) {
         const r = f(arr[i], i);
@@ -294,8 +294,8 @@
       const props = keys(obj);
       for (let k = 0, len = props.length; k < len; k++) {
         const i = props[k];
-        const ***REMOVED*** = obj[i];
-        f(***REMOVED***, i);
+        const x = obj[i];
+        f(x, i);
       }
     };
 
@@ -328,9 +328,9 @@
     const sandHTMLElement = scope => {
       return getOrDie('HTMLElement', scope);
     };
-    const isPrototypeOf = ***REMOVED*** => {
-      const scope = resolve('ownerDocument.defaultView', ***REMOVED***);
-      return isObject(***REMOVED***) && (sandHTMLElement(scope).prototype.isPrototypeOf(***REMOVED***) || /^HTML\w*Element$/.test(getPrototypeOf(***REMOVED***).constructor.name));
+    const isPrototypeOf = x => {
+      const scope = resolve('ownerDocument.defaultView', x);
+      return isObject(x) && (sandHTMLElement(scope).prototype.isPrototypeOf(x) || /^HTML\w*Element$/.test(getPrototypeOf(x).constructor.name));
     };
 
     const DOCUMENT = 9;
@@ -342,7 +342,7 @@
     const isType = t => element => type(element) === t;
     const isHTMLElement = element => isElement(element) && isPrototypeOf(element.dom);
     const isElement = isType(ELEMENT);
-    const isTe***REMOVED***t = isType(TEXT);
+    const isText = isType(TEXT);
     const isDocument = isType(DOCUMENT);
     const isDocumentFragment = isType(DOCUMENT_FRAGMENT);
 
@@ -370,9 +370,9 @@
     const has = (element, clazz) => supports(element) && element.dom.classList.contains(clazz);
 
     const contains = (str, substr, start = 0, end) => {
-      const id***REMOVED*** = str.inde***REMOVED***Of(substr, start);
-      if (id***REMOVED*** !== -1) {
-        return isUndefined(end) ? true : id***REMOVED*** + substr.length <= end;
+      const idx = str.indexOf(substr, start);
+      if (idx !== -1) {
+        return isUndefined(end) ? true : idx + substr.length <= end;
       } else {
         return false;
       }
@@ -396,9 +396,9 @@
       const node = doc.createElement(tag);
       return fromDom(node);
     };
-    const fromTe***REMOVED***t = (te***REMOVED***t, scope) => {
+    const fromText = (text, scope) => {
       const doc = scope || document;
-      const node = doc.createTe***REMOVED***tNode(te***REMOVED***t);
+      const node = doc.createTextNode(text);
       return fromDom(node);
     };
     const fromDom = node => {
@@ -407,11 +407,11 @@
       }
       return { dom: node };
     };
-    const fromPoint = (docElm, ***REMOVED***, y) => Optional.from(docElm.dom.elementFromPoint(***REMOVED***, y)).map(fromDom);
+    const fromPoint = (docElm, x, y) => Optional.from(docElm.dom.elementFromPoint(x, y)).map(fromDom);
     const SugarElement = {
       fromHtml,
       fromTag,
-      fromTe***REMOVED***t,
+      fromText,
       fromDom,
       fromPoint
     };
@@ -463,10 +463,10 @@
       return ret;
     };
     const siblings$2 = element => {
-      const filterSelf = elements => filter$1(elements, ***REMOVED*** => !eq(element, ***REMOVED***));
+      const filterSelf = elements => filter$1(elements, x => !eq(element, x));
       return parent(element).map(children).map(filterSelf).getOr([]);
     };
-    const ne***REMOVED***tSibling = element => Optional.from(element.dom.ne***REMOVED***tSibling).map(SugarElement.fromDom);
+    const nextSibling = element => Optional.from(element.dom.nextSibling).map(SugarElement.fromDom);
     const children = element => map(element.dom.childNodes, SugarElement.fromDom);
 
     const isShadowRoot = dos => isDocumentFragment(dos) && isNonNullable(dos.dom.host);
@@ -495,7 +495,7 @@
     const isOpenShadowHost = element => isNonNullable(element.dom.shadowRoot);
 
     const inBody = element => {
-      const dom = isTe***REMOVED***t(element) ? element.dom.parentNode : element.dom;
+      const dom = isText(element) ? element.dom.parentNode : element.dom;
       if (dom === undefined || dom === null || dom.ownerDocument === null) {
         return false;
       }
@@ -537,9 +537,9 @@
     };
     const getUnsafeProperty = (dom, property) => isSupported$1(dom) ? dom.style.getPropertyValue(property) : '';
 
-    const mkEvent = (target, ***REMOVED***, y, stop, prevent, kill, raw) => ({
+    const mkEvent = (target, x, y, stop, prevent, kill, raw) => ({
       target,
-      ***REMOVED***,
+      x,
       y,
       stop,
       prevent,
@@ -588,7 +588,7 @@
       const isiPhone = os.isiOS() && !isiPad;
       const isMobile = os.isiOS() || os.isAndroid();
       const isTouch = isMobile || mediaMatch('(pointer:coarse)');
-      const isTablet = isiPad || !isiPhone && isMobile && mediaMatch('(min-device-width:768p***REMOVED***)');
+      const isTablet = isiPad || !isiPhone && isMobile && mediaMatch('(min-device-width:768px)');
       const isPhone = isiPhone || isMobile && !isTablet;
       const iOSwebview = browser.isSafari() && os.isiOS() && /safari/i.test(userAgent) === false;
       const isDesktop = !isPhone && !isTablet && !iOSwebview;
@@ -605,17 +605,17 @@
       };
     };
 
-    const firstMatch = (rege***REMOVED***es, s) => {
-      for (let i = 0; i < rege***REMOVED***es.length; i++) {
-        const ***REMOVED*** = rege***REMOVED***es[i];
-        if (***REMOVED***.test(s)) {
-          return ***REMOVED***;
+    const firstMatch = (regexes, s) => {
+      for (let i = 0; i < regexes.length; i++) {
+        const x = regexes[i];
+        if (x.test(s)) {
+          return x;
         }
       }
       return undefined;
     };
-    const find = (rege***REMOVED***es, agent) => {
-      const r = firstMatch(rege***REMOVED***es, agent);
+    const find = (regexes, agent) => {
+      const r = firstMatch(regexes, agent);
       if (!r) {
         return {
           major: 0,
@@ -627,12 +627,12 @@
       };
       return nu$2(group(1), group(2));
     };
-    const detect$3 = (versionRege***REMOVED***es, agent) => {
+    const detect$3 = (versionRegexes, agent) => {
       const cleanedAgent = String(agent).toLowerCase();
-      if (versionRege***REMOVED***es.length === 0) {
+      if (versionRegexes.length === 0) {
         return unknown$2();
       }
-      return find(versionRege***REMOVED***es, cleanedAgent);
+      return find(versionRegexes, cleanedAgent);
     };
     const unknown$2 = () => {
       return nu$2(0, 0);
@@ -670,7 +670,7 @@
     };
     const detectBrowser = (browsers, userAgent) => {
       return detect$2(browsers, userAgent).map(browser => {
-        const version = Version.detect(browser.versionRege***REMOVED***es, userAgent);
+        const version = Version.detect(browser.versionRegexes, userAgent);
         return {
           current: browser.name,
           version
@@ -679,7 +679,7 @@
     };
     const detectOs = (oses, userAgent) => {
       return detect$2(oses, userAgent).map(os => {
-        const version = Version.detect(os.versionRege***REMOVED***es, userAgent);
+        const version = Version.detect(os.versionRegexes, userAgent);
         return {
           current: os.name,
           version
@@ -687,7 +687,7 @@
       });
     };
 
-    const normalVersionRege***REMOVED*** = /.*?version\/\ ?([0-9]+)\.([0-9]+).*/;
+    const normalVersionRegex = /.*?version\/\ ?([0-9]+)\.([0-9]+).*/;
     const checkContains = target => {
       return uastring => {
         return contains(uastring, target);
@@ -696,7 +696,7 @@
     const browsers = [
       {
         name: 'Edge',
-        versionRege***REMOVED***es: [/.*?edge\/ ?([0-9]+)\.([0-9]+)$/],
+        versionRegexes: [/.*?edge\/ ?([0-9]+)\.([0-9]+)$/],
         search: uastring => {
           return contains(uastring, 'edge/') && contains(uastring, 'chrome') && contains(uastring, 'safari') && contains(uastring, 'applewebkit');
         }
@@ -704,9 +704,9 @@
       {
         name: 'Chromium',
         brand: 'Chromium',
-        versionRege***REMOVED***es: [
+        versionRegexes: [
           /.*?chrome\/([0-9]+)\.([0-9]+).*/,
-          normalVersionRege***REMOVED***
+          normalVersionRegex
         ],
         search: uastring => {
           return contains(uastring, 'chrome') && !contains(uastring, 'chromeframe');
@@ -714,7 +714,7 @@
       },
       {
         name: 'IE',
-        versionRege***REMOVED***es: [
+        versionRegexes: [
           /.*?msie\ ?([0-9]+)\.([0-9]+).*/,
           /.*?rv:([0-9]+)\.([0-9]+).*/
         ],
@@ -724,21 +724,21 @@
       },
       {
         name: 'Opera',
-        versionRege***REMOVED***es: [
-          normalVersionRege***REMOVED***,
+        versionRegexes: [
+          normalVersionRegex,
           /.*?opera\/([0-9]+)\.([0-9]+).*/
         ],
         search: checkContains('opera')
       },
       {
-        name: 'Firefo***REMOVED***',
-        versionRege***REMOVED***es: [/.*?firefo***REMOVED***\/\ ?([0-9]+)\.([0-9]+).*/],
-        search: checkContains('firefo***REMOVED***')
+        name: 'Firefox',
+        versionRegexes: [/.*?firefox\/\ ?([0-9]+)\.([0-9]+).*/],
+        search: checkContains('firefox')
       },
       {
         name: 'Safari',
-        versionRege***REMOVED***es: [
-          normalVersionRege***REMOVED***,
+        versionRegexes: [
+          normalVersionRegex,
           /.*?cpu os ([0-9]+)_([0-9]+).*/
         ],
         search: uastring => {
@@ -750,14 +750,14 @@
       {
         name: 'Windows',
         search: checkContains('win'),
-        versionRege***REMOVED***es: [/.*?windows\ nt\ ?([0-9]+)\.([0-9]+).*/]
+        versionRegexes: [/.*?windows\ nt\ ?([0-9]+)\.([0-9]+).*/]
       },
       {
         name: 'iOS',
         search: uastring => {
           return contains(uastring, 'iphone') || contains(uastring, 'ipad');
         },
-        versionRege***REMOVED***es: [
+        versionRegexes: [
           /.*?version\/\ ?([0-9]+)\.([0-9]+).*/,
           /.*cpu os ([0-9]+)_([0-9]+).*/,
           /.*cpu iphone os ([0-9]+)_([0-9]+).*/
@@ -766,32 +766,32 @@
       {
         name: 'Android',
         search: checkContains('android'),
-        versionRege***REMOVED***es: [/.*?android\ ?([0-9]+)\.([0-9]+).*/]
+        versionRegexes: [/.*?android\ ?([0-9]+)\.([0-9]+).*/]
       },
       {
         name: 'macOS',
-        search: checkContains('mac os ***REMOVED***'),
-        versionRege***REMOVED***es: [/.*?mac\ os\ ***REMOVED***\ ?([0-9]+)_([0-9]+).*/]
+        search: checkContains('mac os x'),
+        versionRegexes: [/.*?mac\ os\ x\ ?([0-9]+)_([0-9]+).*/]
       },
       {
-        name: 'Linu***REMOVED***',
-        search: checkContains('linu***REMOVED***'),
-        versionRege***REMOVED***es: []
+        name: 'Linux',
+        search: checkContains('linux'),
+        versionRegexes: []
       },
       {
         name: 'Solaris',
         search: checkContains('sunos'),
-        versionRege***REMOVED***es: []
+        versionRegexes: []
       },
       {
         name: 'FreeBSD',
         search: checkContains('freebsd'),
-        versionRege***REMOVED***es: []
+        versionRegexes: []
       },
       {
         name: 'ChromeOS',
         search: checkContains('cros'),
-        versionRege***REMOVED***es: [/.*?chrome\/([0-9]+)\.([0-9]+).*/]
+        versionRegexes: [/.*?chrome\/([0-9]+)\.([0-9]+).*/]
       }
     ];
     const PlatformInfo = {
@@ -803,7 +803,7 @@
     const chromium = 'Chromium';
     const ie = 'IE';
     const opera = 'Opera';
-    const firefo***REMOVED*** = 'Firefo***REMOVED***';
+    const firefox = 'Firefox';
     const safari = 'Safari';
     const unknown$1 = () => {
       return nu$1({
@@ -822,7 +822,7 @@
         isChromium: isBrowser(chromium),
         isIE: isBrowser(ie),
         isOpera: isBrowser(opera),
-        isFirefo***REMOVED***: isBrowser(firefo***REMOVED***),
+        isFirefox: isBrowser(firefox),
         isSafari: isBrowser(safari)
       };
     };
@@ -833,14 +833,14 @@
       chromium: constant(chromium),
       ie: constant(ie),
       opera: constant(opera),
-      firefo***REMOVED***: constant(firefo***REMOVED***),
+      firefox: constant(firefox),
       safari: constant(safari)
     };
 
     const windows = 'Windows';
     const ios = 'iOS';
     const android = 'Android';
-    const linu***REMOVED*** = 'Linu***REMOVED***';
+    const linux = 'Linux';
     const macos = 'macOS';
     const solaris = 'Solaris';
     const freebsd = 'FreeBSD';
@@ -862,7 +862,7 @@
         isiOS: isOS(ios),
         isAndroid: isOS(android),
         isMacOS: isOS(macos),
-        isLinu***REMOVED***: isOS(linu***REMOVED***),
+        isLinux: isOS(linux),
         isSolaris: isOS(solaris),
         isFreeBSD: isOS(freebsd),
         isChromeOS: isOS(chromeos)
@@ -874,7 +874,7 @@
       windows: constant(windows),
       ios: constant(ios),
       android: constant(android),
-      linu***REMOVED***: constant(linu***REMOVED***),
+      linux: constant(linux),
       macos: constant(macos),
       solaris: constant(solaris),
       freebsd: constant(freebsd),
@@ -900,7 +900,7 @@
     const detect = () => platform();
 
     const r = (left, top) => {
-      const translate = (***REMOVED***, y) => r(left + ***REMOVED***, top + y);
+      const translate = (x, y) => r(left + x, top + y);
       return {
         left,
         top,
@@ -911,25 +911,25 @@
 
     const get$1 = _DOC => {
       const doc = _DOC !== undefined ? _DOC.dom : document;
-      const ***REMOVED*** = doc.body.scrollLeft || doc.documentElement.scrollLeft;
+      const x = doc.body.scrollLeft || doc.documentElement.scrollLeft;
       const y = doc.body.scrollTop || doc.documentElement.scrollTop;
-      return SugarPosition(***REMOVED***, y);
+      return SugarPosition(x, y);
     };
 
     const get = _win => {
       const win = _win === undefined ? window : _win;
-      if (detect().browser.isFirefo***REMOVED***()) {
+      if (detect().browser.isFirefox()) {
         return Optional.none();
       } else {
         return Optional.from(win.visualViewport);
       }
     };
-    const bounds = (***REMOVED***, y, width, height) => ({
-      ***REMOVED***,
+    const bounds = (x, y, width, height) => ({
+      x,
       y,
       width,
       height,
-      right: ***REMOVED*** + width,
+      right: x + width,
       bottom: y + height
     });
     const getBounds = _win => {
@@ -941,7 +941,7 @@
         const width = html.clientWidth;
         const height = html.clientHeight;
         return bounds(scroll.left, scroll.top, width, height);
-      }, visualViewport => bounds(Math.ma***REMOVED***(visualViewport.pageLeft, scroll.left), Math.ma***REMOVED***(visualViewport.pageTop, scroll.top), visualViewport.width, visualViewport.height));
+      }, visualViewport => bounds(Math.max(visualViewport.pageLeft, scroll.left), Math.max(visualViewport.pageTop, scroll.top), visualViewport.width, visualViewport.height));
     };
     const bind = (name, callback, _win) => get(_win).map(visualViewport => {
       const handler = e => callback(fromRawEvent(e));
@@ -1004,12 +1004,12 @@
         elem.webkitRequestFullScreen();
       }
     };
-    const e***REMOVED***itFullscreen = sugarDoc => {
+    const exitFullscreen = sugarDoc => {
       const doc = sugarDoc.dom;
-      if (doc.e***REMOVED***itFullscreen) {
-        doc.e***REMOVED***itFullscreen();
-      } else if (doc.msE***REMOVED***itFullscreen) {
-        doc.msE***REMOVED***itFullscreen();
+      if (doc.exitFullscreen) {
+        doc.exitFullscreen();
+      } else if (doc.msExitFullscreen) {
+        doc.msExitFullscreen();
       } else if (doc.webkitCancelFullScreen) {
         doc.webkitCancelFullScreen();
       }
@@ -1023,7 +1023,7 @@
     const ancestors = (scope, selector, isRoot) => ancestors$1(scope, e => is(e, selector), isRoot);
     const siblings = (scope, selector) => siblings$1(scope, e => is(e, selector));
 
-    const attr = 'data-epho***REMOVED***-mobile-fullscreen-style';
+    const attr = 'data-ephox-mobile-fullscreen-style';
     const siblingStyles = 'display:none!important;';
     const ancestorPosition = 'position:absolute!important;';
     const ancestorStyles = 'top:0!important;left:0!important;margin:0!important;padding:0!important;width:100%!important;height:100%!important;overflow:visible!important;';
@@ -1035,7 +1035,7 @@
     };
     const clobberStyles = (dom, container, editorBody) => {
       const gatherSiblings = element => {
-        return siblings(element, '*:not(.to***REMOVED***-silver-sink)');
+        return siblings(element, '*:not(.tox-silver-sink)');
       };
       const clobber = clobberStyle => element => {
         const styles = get$3(element, 'style');
@@ -1070,7 +1070,7 @@
 
     const DOM = global$2.DOM;
     const getScrollPos = () => getBounds(window);
-    const setScrollPos = pos => window.scrollTo(pos.***REMOVED***, pos.y);
+    const setScrollPos = pos => window.scrollTo(pos.x, pos.y);
     const viewportUpdate = get().fold(() => ({
       bind: noop,
       unbind: noop
@@ -1085,10 +1085,10 @@
       const refreshVisualViewport = () => {
         window.requestAnimationFrame(() => {
           editorContainer.on(container => setAll(container, {
-            top: visualViewport.offsetTop + 'p***REMOVED***',
-            left: visualViewport.offsetLeft + 'p***REMOVED***',
-            height: visualViewport.height + 'p***REMOVED***',
-            width: visualViewport.width + 'p***REMOVED***'
+            top: visualViewport.offsetTop + 'px',
+            left: visualViewport.offsetLeft + 'px',
+            height: visualViewport.height + 'px',
+            width: visualViewport.width + 'px'
           }));
         });
       };
@@ -1119,7 +1119,7 @@
       const documentElement = document.documentElement;
       const editorContainer = editor.getContainer();
       const editorContainerS = SugarElement.fromDom(editorContainer);
-      const sinkContainerS = ne***REMOVED***tSibling(editorContainerS).filter(elm => isHTMLElement(elm) && has(elm, 'to***REMOVED***-silver-sink'));
+      const sinkContainerS = nextSibling(editorContainerS).filter(elm => isHTMLElement(elm) && has(elm, 'tox-silver-sink'));
       const fullscreenRoot = getFullscreenRoot(editor);
       const fullscreenInfo = fullscreenState.get();
       const editorBody = SugarElement.fromDom(editor.getBody());
@@ -1128,12 +1128,12 @@
       const iframe = editor.iframeElement;
       const iframeStyle = iframe === null || iframe === void 0 ? void 0 : iframe.style;
       const handleClasses = handler => {
-        handler(body, 'to***REMOVED***-fullscreen');
-        handler(documentElement, 'to***REMOVED***-fullscreen');
-        handler(editorContainer, 'to***REMOVED***-fullscreen');
+        handler(body, 'tox-fullscreen');
+        handler(documentElement, 'tox-fullscreen');
+        handler(editorContainer, 'tox-fullscreen');
         getShadowRoot(editorContainerS).map(root => getShadowHost(root).dom).each(host => {
-          handler(host, 'to***REMOVED***-fullscreen');
-          handler(host, 'to***REMOVED***-shadowhost');
+          handler(host, 'tox-fullscreen');
+          handler(host, 'tox-shadowhost');
         });
       };
       const cleanup = () => {
@@ -1170,7 +1170,7 @@
         editorContainerStyle.width = editorContainerStyle.height = '';
         handleClasses(DOM.addClass);
         sinkContainerS.each(elm => {
-          set(elm, 'position', 'fi***REMOVED***ed');
+          set(elm, 'position', 'fixed');
         });
         viewportUpdate.bind(editorContainerS);
         editor.on('remove', cleanup);
@@ -1182,7 +1182,7 @@
       } else {
         fullscreenInfo.fullscreenChangeHandler.unbind();
         if (getFullscreenNative(editor) && isFullscreenElement(fullscreenRoot)) {
-          e***REMOVED***itFullscreen(owner(fullscreenRoot));
+          exitFullscreen(owner(fullscreenRoot));
         }
         iframeStyle.width = fullscreenInfo.iframeWidth;
         iframeStyle.height = fullscreenInfo.iframeHeight;
@@ -1226,9 +1226,9 @@
       return () => editor.off('FullscreenStateChanged', editorEventCallback);
     };
     const register = (editor, fullscreenState) => {
-      const onAction = () => editor.e***REMOVED***ecCommand('mceFullScreen');
+      const onAction = () => editor.execCommand('mceFullScreen');
       editor.ui.registry.addToggleMenuItem('fullscreen', {
-        te***REMOVED***t: 'Fullscreen',
+        text: 'Fullscreen',
         icon: 'fullscreen',
         shortcut: 'Meta+Shift+F',
         onAction,

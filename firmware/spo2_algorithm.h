@@ -28,7 +28,7 @@
 *
 * ------------------------------------------------------------------------- */
 /*******************************************************************************
-* Copyright (C) 2015 Ma***REMOVED***im Integrated Products, Inc., All Rights Reserved.
+* Copyright (C) 2015 Maxim Integrated Products, Inc., All Rights Reserved.
 *
 * Permission is hereby granted, free of charge, to any person obtaining a
 * copy of this software and associated documentation files (the "Software"),
@@ -48,14 +48,14 @@
 * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 * OTHER DEALINGS IN THE SOFTWARE.
 *
-* E***REMOVED***cept as contained in this notice, the name of Ma***REMOVED***im Integrated
-* Products, Inc. shall not be used e***REMOVED***cept as stated in the Ma***REMOVED***im Integrated
+* Except as contained in this notice, the name of Maxim Integrated
+* Products, Inc. shall not be used except as stated in the Maxim Integrated
 * Products, Inc. Branding Policy.
 *
 * The mere transfer of this software does not imply any licenses
 * of trade secrets, proprietary technology, copyrights, patents,
 * trademarks, maskwork rights, or any other form of intellectual
-* property whatsoever. Ma***REMOVED***im Integrated Products, Inc. retains all
+* property whatsoever. Maxim Integrated Products, Inc. retains all
 * ownership rights.
 *******************************************************************************
 */
@@ -67,9 +67,9 @@
 #define FreqS 25    //sampling frequency
 #define BUFFER_SIZE (FreqS * 4) 
 #define MA4_SIZE 4 // DONOT CHANGE
-//#define min(***REMOVED***,y) ((***REMOVED***) < (y) ? (***REMOVED***) : (y)) //Defined in Arduino.h
+//#define min(x,y) ((x) < (y) ? (x) : (y)) //Defined in Arduino.h
 
-//uch_spo2_table is appro***REMOVED***imated as  -45.060*ratioAverage* ratioAverage + 30.354 *ratioAverage + 94.845 ;
+//uch_spo2_table is approximated as  -45.060*ratioAverage* ratioAverage + 30.354 *ratioAverage + 94.845 ;
 const uint8_t uch_spo2_table[184]={ 95, 95, 95, 96, 96, 96, 97, 97, 97, 97, 97, 98, 98, 98, 98, 98, 99, 99, 99, 99, 
               99, 99, 99, 99, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 
               100, 100, 100, 100, 99, 99, 99, 99, 99, 99, 99, 99, 98, 98, 98, 98, 98, 98, 97, 97, 
@@ -80,23 +80,23 @@ const uint8_t uch_spo2_table[184]={ 95, 95, 95, 96, 96, 96, 97, 97, 97, 97, 97, 
               49, 48, 47, 46, 45, 44, 43, 42, 41, 40, 39, 38, 37, 36, 35, 34, 33, 31, 30, 29, 
               28, 27, 26, 25, 23, 22, 21, 20, 19, 17, 16, 15, 14, 12, 11, 10, 9, 7, 6, 5, 
               3, 2, 1 } ;
-static  int32_t an_***REMOVED***[ BUFFER_SIZE]; //ir
+static  int32_t an_x[ BUFFER_SIZE]; //ir
 static  int32_t an_y[ BUFFER_SIZE]; //red
 
 
 #if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__)
 //Arduino Uno doesn't have enough SRAM to store 100 samples of IR led data and red led data in 32-bit format
 //To solve this problem, 16-bit MSB of the sampled data will be truncated.  Samples become 16-bit data.
-void ma***REMOVED***im_heart_rate_and_o***REMOVED***ygen_saturation(uint16_t *pun_ir_buffer, int32_t n_ir_buffer_length, uint16_t *pun_red_buffer, int32_t *pn_spo2, int8_t *pch_spo2_valid, int32_t *pn_heart_rate, int8_t *pch_hr_valid);
+void maxim_heart_rate_and_oxygen_saturation(uint16_t *pun_ir_buffer, int32_t n_ir_buffer_length, uint16_t *pun_red_buffer, int32_t *pn_spo2, int8_t *pch_spo2_valid, int32_t *pn_heart_rate, int8_t *pch_hr_valid);
 #else
-void ma***REMOVED***im_heart_rate_and_o***REMOVED***ygen_saturation(uint32_t *pun_ir_buffer, int32_t n_ir_buffer_length, uint32_t *pun_red_buffer, int32_t *pn_spo2, int8_t *pch_spo2_valid, int32_t *pn_heart_rate, int8_t *pch_hr_valid);
+void maxim_heart_rate_and_oxygen_saturation(uint32_t *pun_ir_buffer, int32_t n_ir_buffer_length, uint32_t *pun_red_buffer, int32_t *pn_spo2, int8_t *pch_spo2_valid, int32_t *pn_heart_rate, int8_t *pch_hr_valid);
 #endif
 
-void ma***REMOVED***im_find_peaks(int32_t *pn_locs, int32_t *n_npks,  int32_t  *pn_***REMOVED***, int32_t n_size, int32_t n_min_height, int32_t n_min_distance, int32_t n_ma***REMOVED***_num);
-void ma***REMOVED***im_peaks_above_min_height(int32_t *pn_locs, int32_t *n_npks,  int32_t  *pn_***REMOVED***, int32_t n_size, int32_t n_min_height);
-void ma***REMOVED***im_remove_close_peaks(int32_t *pn_locs, int32_t *pn_npks, int32_t *pn_***REMOVED***, int32_t n_min_distance);
-void ma***REMOVED***im_sort_ascend(int32_t  *pn_***REMOVED***, int32_t n_size);
-void ma***REMOVED***im_sort_indices_descend(int32_t  *pn_***REMOVED***, int32_t *pn_ind***REMOVED***, int32_t n_size);
+void maxim_find_peaks(int32_t *pn_locs, int32_t *n_npks,  int32_t  *pn_x, int32_t n_size, int32_t n_min_height, int32_t n_min_distance, int32_t n_max_num);
+void maxim_peaks_above_min_height(int32_t *pn_locs, int32_t *n_npks,  int32_t  *pn_x, int32_t n_size, int32_t n_min_height);
+void maxim_remove_close_peaks(int32_t *pn_locs, int32_t *pn_npks, int32_t *pn_x, int32_t n_min_distance);
+void maxim_sort_ascend(int32_t  *pn_x, int32_t n_size);
+void maxim_sort_indices_descend(int32_t  *pn_x, int32_t *pn_indx, int32_t n_size);
 
 #endif /* ALGORITHM_H_ */
 

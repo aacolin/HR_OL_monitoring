@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.ja',
   '\n' +
   '<dl>\n' +
   '  <dt>メニュー バーをフォーカス</dt>\n' +
-  '  <dd>Windows または Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows または Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>ツール バーをフォーカス</dt>\n' +
-  '  <dd>Windows または Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows または Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>フッターをフォーカス</dt>\n' +
-  '  <dd>Windows または Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows または Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>通知にフォーカス</dt>\n' +
-  '  <dd>Windows または Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows または Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>コンテキスト ツール バーをフォーカス</dt>\n' +
-  '  <dd>Windows、Linu***REMOVED*** または macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows、Linux または macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>ナビゲーションは最初の UI 項目から開始され、強調表示されるか、フッターの要素パスにある最初の項目の場合は\n' +

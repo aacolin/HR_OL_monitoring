@@ -1,4 +1,4 @@
-e***REMOVED***port default class Animations {
+export default class Animations {
     constructor(chart: any, config: any);
     _chart: any;
     _properties: Map<any, any>;

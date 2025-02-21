@@ -15,13 +15,13 @@
         return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
       }
     };
-    const typeOf = ***REMOVED*** => {
-      const t = typeof ***REMOVED***;
-      if (***REMOVED*** === null) {
+    const typeOf = x => {
+      const t = typeof x;
+      if (x === null) {
         return 'null';
-      } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+      } else if (t === 'object' && Array.isArray(x)) {
         return 'array';
-      } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
         return 'string';
       } else {
         return t;
@@ -47,8 +47,8 @@
         return value;
       };
     };
-    const identity = ***REMOVED*** => {
-      return ***REMOVED***;
+    const identity = x => {
+      return x;
     };
     const tripleEquals = (a, b) => {
       return a === b;
@@ -103,7 +103,7 @@
           return Optional.none();
         }
       }
-      e***REMOVED***ists(predicate) {
+      exists(predicate) {
         return this.tag && predicate(this.value);
       }
       forall(predicate) {
@@ -164,16 +164,16 @@
       const props = keys(obj);
       for (let k = 0, len = props.length; k < len; k++) {
         const i = props[k];
-        const ***REMOVED*** = obj[i];
-        f(***REMOVED***, i);
+        const x = obj[i];
+        f(x, i);
       }
     };
-    const objAcc = r => (***REMOVED***, i) => {
-      r[i] = ***REMOVED***;
+    const objAcc = r => (x, i) => {
+      r[i] = x;
     };
     const internalFilter = (obj, pred, onTrue, onFalse) => {
-      each$1(obj, (***REMOVED***, i) => {
-        (pred(***REMOVED***, i) ? onTrue : onFalse)(***REMOVED***, i);
+      each$1(obj, (x, i) => {
+        (pred(x, i) ? onTrue : onFalse)(x, i);
       });
     };
     const filter$1 = (obj, pred) => {
@@ -200,22 +200,22 @@
     const has = (obj, key) => hasOwnProperty.call(obj, key);
     const hasNonNullableKey = (obj, key) => has(obj, key) && obj[key] !== undefined && obj[key] !== null;
     const isEmpty$1 = r => {
-      for (const ***REMOVED*** in r) {
-        if (hasOwnProperty.call(r, ***REMOVED***)) {
+      for (const x in r) {
+        if (hasOwnProperty.call(r, x)) {
           return false;
         }
       }
       return true;
     };
 
-    const nativeInde***REMOVED***Of = Array.prototype.inde***REMOVED***Of;
+    const nativeIndexOf = Array.prototype.indexOf;
     const nativePush = Array.prototype.push;
-    const rawInde***REMOVED***Of = (ts, t) => nativeInde***REMOVED***Of.call(ts, t);
-    const contains = (***REMOVED***s, ***REMOVED***) => rawInde***REMOVED***Of(***REMOVED***s, ***REMOVED***) > -1;
-    const e***REMOVED***ists = (***REMOVED***s, pred) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
+    const rawIndexOf = (ts, t) => nativeIndexOf.call(ts, t);
+    const contains = (xs, x) => rawIndexOf(xs, x) > -1;
+    const exists = (xs, pred) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
           return true;
         }
       }
@@ -228,107 +228,107 @@
       }
       return r;
     };
-    const map = (***REMOVED***s, f) => {
-      const len = ***REMOVED***s.length;
+    const map = (xs, f) => {
+      const len = xs.length;
       const r = new Array(len);
       for (let i = 0; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        r[i] = f(***REMOVED***, i);
+        const x = xs[i];
+        r[i] = f(x, i);
       }
       return r;
     };
-    const each = (***REMOVED***s, f) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        f(***REMOVED***, i);
+    const each = (xs, f) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        f(x, i);
       }
     };
-    const eachr = (***REMOVED***s, f) => {
-      for (let i = ***REMOVED***s.length - 1; i >= 0; i--) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        f(***REMOVED***, i);
+    const eachr = (xs, f) => {
+      for (let i = xs.length - 1; i >= 0; i--) {
+        const x = xs[i];
+        f(x, i);
       }
     };
-    const partition = (***REMOVED***s, pred) => {
+    const partition = (xs, pred) => {
       const pass = [];
       const fail = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        const arr = pred(***REMOVED***, i) ? pass : fail;
-        arr.push(***REMOVED***);
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        const arr = pred(x, i) ? pass : fail;
+        arr.push(x);
       }
       return {
         pass,
         fail
       };
     };
-    const filter = (***REMOVED***s, pred) => {
+    const filter = (xs, pred) => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
-          r.push(***REMOVED***);
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
+          r.push(x);
         }
       }
       return r;
     };
-    const foldr = (***REMOVED***s, f, acc) => {
-      eachr(***REMOVED***s, (***REMOVED***, i) => {
-        acc = f(acc, ***REMOVED***, i);
+    const foldr = (xs, f, acc) => {
+      eachr(xs, (x, i) => {
+        acc = f(acc, x, i);
       });
       return acc;
     };
-    const foldl = (***REMOVED***s, f, acc) => {
-      each(***REMOVED***s, (***REMOVED***, i) => {
-        acc = f(acc, ***REMOVED***, i);
+    const foldl = (xs, f, acc) => {
+      each(xs, (x, i) => {
+        acc = f(acc, x, i);
       });
       return acc;
     };
-    const findUntil = (***REMOVED***s, pred, until) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
-          return Optional.some(***REMOVED***);
-        } else if (until(***REMOVED***, i)) {
+    const findUntil = (xs, pred, until) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
+          return Optional.some(x);
+        } else if (until(x, i)) {
           break;
         }
       }
       return Optional.none();
     };
-    const find = (***REMOVED***s, pred) => {
-      return findUntil(***REMOVED***s, pred, never);
+    const find = (xs, pred) => {
+      return findUntil(xs, pred, never);
     };
-    const flatten$1 = ***REMOVED***s => {
+    const flatten$1 = xs => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; ++i) {
-        if (!isArray(***REMOVED***s[i])) {
-          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + ***REMOVED***s);
+      for (let i = 0, len = xs.length; i < len; ++i) {
+        if (!isArray(xs[i])) {
+          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + xs);
         }
-        nativePush.apply(r, ***REMOVED***s[i]);
+        nativePush.apply(r, xs[i]);
       }
       return r;
     };
-    const bind = (***REMOVED***s, f) => flatten$1(map(***REMOVED***s, f));
-    const forall = (***REMOVED***s, pred) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; ++i) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i) !== true) {
+    const bind = (xs, f) => flatten$1(map(xs, f));
+    const forall = (xs, pred) => {
+      for (let i = 0, len = xs.length; i < len; ++i) {
+        const x = xs[i];
+        if (pred(x, i) !== true) {
           return false;
         }
       }
       return true;
     };
-    const mapToObject = (***REMOVED***s, f) => {
+    const mapToObject = (xs, f) => {
       const r = {};
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        r[String(***REMOVED***)] = f(***REMOVED***, i);
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        r[String(x)] = f(x, i);
       }
       return r;
     };
-    const get$3 = (***REMOVED***s, i) => i >= 0 && i < ***REMOVED***s.length ? Optional.some(***REMOVED***s[i]) : Optional.none();
-    const head = ***REMOVED***s => get$3(***REMOVED***s, 0);
-    const last = ***REMOVED***s => get$3(***REMOVED***s, ***REMOVED***s.length - 1);
+    const get$3 = (xs, i) => i >= 0 && i < xs.length ? Optional.some(xs[i]) : Optional.none();
+    const head = xs => get$3(xs, 0);
+    const last = xs => get$3(xs, xs.length - 1);
     const findMap = (arr, f) => {
       for (let i = 0; i < arr.length; i++) {
         const r = f(arr[i], i);
@@ -361,9 +361,9 @@
       const node = doc.createElement(tag);
       return fromDom$1(node);
     };
-    const fromTe***REMOVED***t = (te***REMOVED***t, scope) => {
+    const fromText = (text, scope) => {
       const doc = scope || document;
-      const node = doc.createTe***REMOVED***tNode(te***REMOVED***t);
+      const node = doc.createTextNode(text);
       return fromDom$1(node);
     };
     const fromDom$1 = node => {
@@ -372,11 +372,11 @@
       }
       return { dom: node };
     };
-    const fromPoint = (docElm, ***REMOVED***, y) => Optional.from(docElm.dom.elementFromPoint(***REMOVED***, y)).map(fromDom$1);
+    const fromPoint = (docElm, x, y) => Optional.from(docElm.dom.elementFromPoint(x, y)).map(fromDom$1);
     const SugarElement = {
       fromHtml,
       fromTag,
-      fromTe***REMOVED***t,
+      fromText,
       fromDom: fromDom$1,
       fromPoint
     };
@@ -423,7 +423,7 @@
     const isType = t => element => type(element) === t;
     const isComment = element => type(element) === COMMENT || name(element) === '#comment';
     const isElement = isType(ELEMENT);
-    const isTe***REMOVED***t = isType(TEXT);
+    const isText = isType(TEXT);
     const isDocument = isType(DOCUMENT);
     const isDocumentFragment = isType(DOCUMENT_FRAGMENT);
     const isTag = tag => e => isElement(e) && name(e) === tag;
@@ -448,11 +448,11 @@
       return ret;
     };
     const prevSibling = element => Optional.from(element.dom.previousSibling).map(SugarElement.fromDom);
-    const ne***REMOVED***tSibling = element => Optional.from(element.dom.ne***REMOVED***tSibling).map(SugarElement.fromDom);
+    const nextSibling = element => Optional.from(element.dom.nextSibling).map(SugarElement.fromDom);
     const children$3 = element => map(element.dom.childNodes, SugarElement.fromDom);
-    const child$3 = (element, inde***REMOVED***) => {
+    const child$3 = (element, index) => {
       const cs = element.dom.childNodes;
-      return Optional.from(cs[inde***REMOVED***]).map(SugarElement.fromDom);
+      return Optional.from(cs[index]).map(SugarElement.fromDom);
     };
     const firstChild = element => child$3(element, 0);
 
@@ -466,7 +466,7 @@
     const getShadowHost = e => SugarElement.fromDom(e.dom.host);
 
     const inBody = element => {
-      const dom = isTe***REMOVED***t(element) ? element.dom.parentNode : element.dom;
+      const dom = isText(element) ? element.dom.parentNode : element.dom;
       if (dom === undefined || dom === null || dom.ownerDocument === null) {
         return false;
       }
@@ -529,20 +529,20 @@
     const getNodeName = elm => elm.nodeName.toLowerCase();
     const getBody = editor => SugarElement.fromDom(editor.getBody());
     const getIsRoot = editor => element => eq(element, getBody(editor));
-    const removeP***REMOVED***Suffi***REMOVED*** = size => size ? size.replace(/p***REMOVED***$/, '') : '';
-    const addP***REMOVED***Suffi***REMOVED*** = size => /^\d+(\.\d+)?$/.test(size) ? size + 'p***REMOVED***' : size;
+    const removePxSuffix = size => size ? size.replace(/px$/, '') : '';
+    const addPxSuffix = size => /^\d+(\.\d+)?$/.test(size) ? size + 'px' : size;
     const getSelectionStart = editor => SugarElement.fromDom(editor.selection.getStart());
     const getSelectionEnd = editor => SugarElement.fromDom(editor.selection.getEnd());
-    const isInEditableConte***REMOVED***t = cell => closest$2(cell, isTag('table')).forall(isEditable);
+    const isInEditableContext = cell => closest$2(cell, isTag('table')).forall(isEditable);
 
     const children$2 = (scope, predicate) => filter(children$3(scope), predicate);
     const descendants$1 = (scope, predicate) => {
       let result = [];
-      each(children$3(scope), ***REMOVED*** => {
-        if (predicate(***REMOVED***)) {
-          result = result.concat([***REMOVED***]);
+      each(children$3(scope), x => {
+        if (predicate(x)) {
+          result = result.concat([x]);
         }
-        result = result.concat(descendants$1(***REMOVED***, predicate));
+        result = result.concat(descendants$1(x, predicate));
       });
       return result;
     };
@@ -580,11 +580,11 @@
       return acc;
     }, {});
 
-    const is = (lhs, rhs, comparator = tripleEquals) => lhs.e***REMOVED***ists(left => comparator(left, rhs));
+    const is = (lhs, rhs, comparator = tripleEquals) => lhs.exists(left => comparator(left, rhs));
     const cat = arr => {
       const r = [];
-      const push = ***REMOVED*** => {
-        r.push(***REMOVED***);
+      const push = x => {
+        r.push(x);
       };
       for (let i = 0; i < arr.length; i++) {
         arr[i].each(push);
@@ -600,18 +600,18 @@
     };
 
     const checkRange = (str, substr, start) => substr === '' || str.length >= substr.length && str.substr(start, start + substr.length) === substr;
-    const removeLeading = (str, prefi***REMOVED***) => {
-      return startsWith(str, prefi***REMOVED***) ? removeFromStart(str, prefi***REMOVED***.length) : str;
+    const removeLeading = (str, prefix) => {
+      return startsWith(str, prefix) ? removeFromStart(str, prefix.length) : str;
     };
-    const startsWith = (str, prefi***REMOVED***) => {
-      return checkRange(str, prefi***REMOVED***, 0);
+    const startsWith = (str, prefix) => {
+      return checkRange(str, prefix, 0);
     };
     const blank = r => s => s.replace(r, '');
     const trim = blank(/^\s+|\s+$/g);
     const isNotEmpty = s => s.length > 0;
     const isEmpty = s => !isNotEmpty(s);
-    const toInt = (value, radi***REMOVED*** = 10) => {
-      const num = parseInt(value, radi***REMOVED***);
+    const toInt = (value, radix = 10) => {
+      const num = parseInt(value, radix);
       return isNaN(num) ? Optional.none() : Optional.some(num);
     };
     const toFloat = value => {
@@ -665,11 +665,11 @@
       return filterFirstLayer(scope, selector, always);
     };
     const filterFirstLayer = (scope, selector, predicate) => {
-      return bind(children$3(scope), ***REMOVED*** => {
-        if (is$2(***REMOVED***, selector)) {
-          return predicate(***REMOVED***) ? [***REMOVED***] : [];
+      return bind(children$3(scope), x => {
+        if (is$2(x, selector)) {
+          return predicate(x) ? [x] : [];
         } else {
-          return filterFirstLayer(***REMOVED***, selector, predicate);
+          return filterFirstLayer(x, selector, predicate);
         }
       });
     };
@@ -690,7 +690,7 @@
       rowspan,
       colspan
     });
-    const e***REMOVED***tended = (element, rowspan, colspan, row, column, isLocked) => ({
+    const extended = (element, rowspan, colspan, row, column, isLocked) => ({
       element,
       rowspan,
       colspan,
@@ -709,7 +709,7 @@
       finishRow,
       finishCol
     });
-    const columne***REMOVED***t = (element, colspan, column) => ({
+    const columnext = (element, colspan, column) => ({
       element,
       colspan,
       column
@@ -796,14 +796,14 @@
     };
     const generateColumns = rowData => {
       const columnsGroup = {};
-      let inde***REMOVED*** = 0;
+      let index = 0;
       each(rowData.cells, column => {
         const colspan = column.colspan;
-        range(colspan, columnInde***REMOVED*** => {
-          const colInde***REMOVED*** = inde***REMOVED*** + columnInde***REMOVED***;
-          columnsGroup[colInde***REMOVED***] = columne***REMOVED***t(column.element, colspan, colInde***REMOVED***);
+        range(colspan, columnIndex => {
+          const colIndex = index + columnIndex;
+          columnsGroup[colIndex] = columnext(column.element, colspan, colIndex);
         });
-        inde***REMOVED*** += colspan;
+        index += colspan;
       });
       return columnsGroup;
     };
@@ -812,8 +812,8 @@
       const cells = [];
       const tableOpt = head(list).map(rowData => rowData.element).bind(table);
       const lockedColumns = tableOpt.bind(getLockedColumnsFromTable).getOr({});
-      let ma***REMOVED***Rows = 0;
-      let ma***REMOVED***Columns = 0;
+      let maxRows = 0;
+      let maxColumns = 0;
       let rowCount = 0;
       const {
         pass: colgroupRows,
@@ -827,19 +827,19 @@
             start++;
           }
           const isLocked = hasNonNullableKey(lockedColumns, start.toString());
-          const current = e***REMOVED***tended(rowCell.element, rowCell.rowspan, rowCell.colspan, rowCount, start, isLocked);
+          const current = extended(rowCell.element, rowCell.rowspan, rowCell.colspan, rowCount, start, isLocked);
           for (let occupiedColumnPosition = 0; occupiedColumnPosition < rowCell.colspan; occupiedColumnPosition++) {
             for (let occupiedRowPosition = 0; occupiedRowPosition < rowCell.rowspan; occupiedRowPosition++) {
               const rowPosition = rowCount + occupiedRowPosition;
               const columnPosition = start + occupiedColumnPosition;
               const newpos = key(rowPosition, columnPosition);
               access[newpos] = current;
-              ma***REMOVED***Columns = Math.ma***REMOVED***(ma***REMOVED***Columns, columnPosition + 1);
+              maxColumns = Math.max(maxColumns, columnPosition + 1);
             }
           }
           currentRow.push(current);
         });
-        ma***REMOVED***Rows++;
+        maxRows++;
         cells.push(rowdetail(rowData.element, currentRow, rowData.section));
         rowCount++;
       });
@@ -854,7 +854,7 @@
         colgroups: [],
         columns: {}
       }));
-      const grid$1 = grid(ma***REMOVED***Rows, ma***REMOVED***Columns);
+      const grid$1 = grid(maxRows, maxColumns);
       return {
         grid: grid$1,
         access,
@@ -870,7 +870,7 @@
     const justCells = warehouse => bind(warehouse.all, w => w.cells);
     const justColumns = warehouse => values(warehouse.columns);
     const hasColumns = warehouse => keys(warehouse.columns).length > 0;
-    const getColumnAt = (warehouse, columnInde***REMOVED***) => Optional.from(warehouse.columns[columnInde***REMOVED***]);
+    const getColumnAt = (warehouse, columnIndex) => Optional.from(warehouse.columns[columnIndex]);
     const Warehouse = {
       fromTable,
       generate: generate$1,
@@ -927,21 +927,21 @@
       });
     };
 
-    const toNumber = (p***REMOVED***, fallback) => toFloat(p***REMOVED***).getOr(fallback);
+    const toNumber = (px, fallback) => toFloat(px).getOr(fallback);
     const getProp = (element, name, fallback) => toNumber(get$1(element, name), fallback);
-    const calcContentBo***REMOVED***Size = (element, size, upper, lower) => {
+    const calcContentBoxSize = (element, size, upper, lower) => {
       const paddingUpper = getProp(element, `padding-${ upper }`, 0);
       const paddingLower = getProp(element, `padding-${ lower }`, 0);
       const borderUpper = getProp(element, `border-${ upper }-width`, 0);
       const borderLower = getProp(element, `border-${ lower }-width`, 0);
       return size - paddingUpper - paddingLower - borderUpper - borderLower;
     };
-    const getCalculatedWidth = (element, bo***REMOVED***Sizing) => {
+    const getCalculatedWidth = (element, boxSizing) => {
       const dom = element.dom;
       const width = dom.getBoundingClientRect().width || dom.offsetWidth;
-      return bo***REMOVED***Sizing === 'border-bo***REMOVED***' ? width : calcContentBo***REMOVED***Size(element, width, 'left', 'right');
+      return boxSizing === 'border-box' ? width : calcContentBoxSize(element, width, 'left', 'right');
     };
-    const getInnerWidth = element => getCalculatedWidth(element, 'content-bo***REMOVED***');
+    const getInnerWidth = element => getCalculatedWidth(element, 'content-box');
 
     const getInner = getInnerWidth;
 
@@ -949,7 +949,7 @@
 
     const defaultTableToolbar = 'tableprops tabledelete | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol';
     const defaultCellBorderWidths = range(5, i => {
-      const size = `${ i + 1 }p***REMOVED***`;
+      const size = `${ i + 1 }px`;
       return {
         title: size,
         value: size
@@ -973,19 +973,19 @@
       };
     });
     const defaultWidth = '100%';
-    const getPi***REMOVED***elForcedWidth = editor => {
+    const getPixelForcedWidth = editor => {
       var _a;
       const dom = editor.dom;
       const parentBlock = (_a = dom.getParent(editor.selection.getStart(), dom.isBlock)) !== null && _a !== void 0 ? _a : editor.getBody();
-      return getInner(SugarElement.fromDom(parentBlock)) + 'p***REMOVED***';
+      return getInner(SugarElement.fromDom(parentBlock)) + 'px';
     };
     const determineDefaultStyles = (editor, defaultStyles) => {
       if (isResponsiveForced(editor) || !shouldStyleWithCss(editor)) {
         return defaultStyles;
-      } else if (isPi***REMOVED***elsForced(editor)) {
+      } else if (isPixelsForced(editor)) {
         return {
           ...defaultStyles,
-          width: getPi***REMOVED***elForcedWidth(editor)
+          width: getPixelForcedWidth(editor)
         };
       } else {
         return {
@@ -997,10 +997,10 @@
     const determineDefaultAttributes = (editor, defaultAttributes) => {
       if (isResponsiveForced(editor) || shouldStyleWithCss(editor)) {
         return defaultAttributes;
-      } else if (isPi***REMOVED***elsForced(editor)) {
+      } else if (isPixelsForced(editor)) {
         return {
           ...defaultAttributes,
-          width: getPi***REMOVED***elForcedWidth(editor)
+          width: getPixelForcedWidth(editor)
         };
       } else {
         return {
@@ -1080,7 +1080,7 @@
     const getToolbar = option('table_toolbar');
     const getTableBackgroundColorMap = option('table_background_color_map');
     const getTableBorderColorMap = option('table_border_color_map');
-    const isPi***REMOVED***elsForced = editor => getTableSizingMode(editor) === 'fi***REMOVED***ed';
+    const isPixelsForced = editor => getTableSizingMode(editor) === 'fixed';
     const isResponsiveForced = editor => getTableSizingMode(editor) === 'responsive';
     const getDefaultStyles = editor => {
       const options = editor.options;
@@ -1101,16 +1101,16 @@
       const detailIsWithin = curry(isWithin, bounds);
       for (let i = bounds.startRow; i <= bounds.finishRow; i++) {
         for (let j = bounds.startCol; j <= bounds.finishCol; j++) {
-          isRect = isRect && Warehouse.getAt(warehouse, i, j).e***REMOVED***ists(detailIsWithin);
+          isRect = isRect && Warehouse.getAt(warehouse, i, j).exists(detailIsWithin);
         }
       }
       return isRect ? Optional.some(bounds) : Optional.none();
     };
 
     const getBounds = (detailA, detailB) => {
-      return bounds(Math.min(detailA.row, detailB.row), Math.min(detailA.column, detailB.column), Math.ma***REMOVED***(detailA.row + detailA.rowspan - 1, detailB.row + detailB.rowspan - 1), Math.ma***REMOVED***(detailA.column + detailA.colspan - 1, detailB.column + detailB.colspan - 1));
+      return bounds(Math.min(detailA.row, detailB.row), Math.min(detailA.column, detailB.column), Math.max(detailA.row + detailA.rowspan - 1, detailB.row + detailB.rowspan - 1), Math.max(detailA.column + detailA.colspan - 1, detailB.column + detailB.colspan - 1));
     };
-    const getAnyBo***REMOVED*** = (warehouse, startCell, finishCell) => {
+    const getAnyBox = (warehouse, startCell, finishCell) => {
       const startCoords = Warehouse.findItem(warehouse, startCell, eq);
       const finishCoords = Warehouse.findItem(warehouse, finishCell, eq);
       return startCoords.bind(sc => {
@@ -1119,15 +1119,15 @@
         });
       });
     };
-    const getBo***REMOVED***$1 = (warehouse, startCell, finishCell) => {
-      return getAnyBo***REMOVED***(warehouse, startCell, finishCell).bind(bounds => {
+    const getBox$1 = (warehouse, startCell, finishCell) => {
+      return getAnyBox(warehouse, startCell, finishCell).bind(bounds => {
         return isRectangular(warehouse, bounds);
       });
     };
 
-    const getBo***REMOVED*** = (table, first, last) => {
+    const getBox = (table, first, last) => {
       const warehouse = getWarehouse(table);
-      return getBo***REMOVED***$1(warehouse, first, last);
+      return getBox$1(warehouse, first, last);
     };
     const getWarehouse = Warehouse.fromTable;
 
@@ -1138,7 +1138,7 @@
       });
     };
     const after$1 = (marker, element) => {
-      const sibling = ne***REMOVED***tSibling(marker);
+      const sibling = nextSibling(marker);
       sibling.fold(() => {
         const parent$1 = parent(marker);
         parent$1.each(v => {
@@ -1165,14 +1165,14 @@
     };
 
     const after = (marker, elements) => {
-      each(elements, (***REMOVED***, i) => {
+      each(elements, (x, i) => {
         const e = i === 0 ? marker : elements[i - 1];
-        after$1(e, ***REMOVED***);
+        after$1(e, x);
       });
     };
     const append = (parent, elements) => {
-      each(elements, ***REMOVED*** => {
-        append$1(parent, ***REMOVED***);
+      each(elements, x => {
+        append$1(parent, x);
       });
     };
 
@@ -1211,7 +1211,7 @@
       };
     };
 
-    const api = NodeValue(isTe***REMOVED***t, 'te***REMOVED***t');
+    const api = NodeValue(isText, 'text');
     const get = element => api.get(element);
     const set = (element, value) => api.set(element, value);
 
@@ -1292,8 +1292,8 @@
           'noembed',
           'title',
           'style',
-          'te***REMOVED***tarea',
-          '***REMOVED***mp'
+          'textarea',
+          'xmp'
         ], tag);
       };
       const getLanguage = element => isElement(element) ? getOpt(element, 'lang') : Optional.none();
@@ -1336,25 +1336,25 @@
         create: constant({
           nu: SugarElement.fromTag,
           clone: clone$1,
-          te***REMOVED***t: SugarElement.fromTe***REMOVED***t
+          text: SugarElement.fromText
         }),
         query: constant({
           comparePosition,
           prevSibling: prevSibling,
-          ne***REMOVED***tSibling: ne***REMOVED***tSibling
+          nextSibling: nextSibling
         }),
         property: constant({
           children: children$3,
           name: name,
           parent: parent,
           document,
-          isTe***REMOVED***t: isTe***REMOVED***t,
+          isText: isText,
           isComment: isComment,
           isElement: isElement,
           isSpecial,
           getLanguage,
-          getTe***REMOVED***t: get,
-          setTe***REMOVED***t: set,
+          getText: get,
+          setText: set,
           isBoundary,
           isEmptyTag,
           isNonEditable
@@ -1421,7 +1421,7 @@
     const retrieve = (container, selector) => {
       return retrieve$1(container, selector);
     };
-    const retrieveBo***REMOVED*** = (container, firstSelectedSelector, lastSelectedSelector) => {
+    const retrieveBox = (container, firstSelectedSelector, lastSelectedSelector) => {
       return getEdges(container, firstSelectedSelector, lastSelectedSelector).bind(edges => {
         const isRoot = ancestor => {
           return eq(container, ancestor);
@@ -1431,7 +1431,7 @@
         const lastAncestor = ancestor(edges.last, sectionSelector, isRoot);
         return firstAncestor.bind(fA => {
           return lastAncestor.bind(lA => {
-            return eq(fA, lA) ? getBo***REMOVED***(edges.table, edges.first, edges.last) : Optional.none();
+            return eq(fA, lA) ? getBox(edges.table, edges.first, edges.last) : Optional.none();
           });
         });
       });
@@ -1466,45 +1466,45 @@
     const getRowsFromSelection = (selected, selector) => {
       const cellOpt = getSelectionCell(selected);
       const rowsOpt = cellOpt.bind(cell => table(cell)).map(table => rows(table));
-      return lift2(cellOpt, rowsOpt, (cell, rows) => filter(rows, row => e***REMOVED***ists(fromDom(row.dom.cells), rowCell => get$2(rowCell, selector) === '1' || eq(rowCell, cell)))).getOr([]);
+      return lift2(cellOpt, rowsOpt, (cell, rows) => filter(rows, row => exists(fromDom(row.dom.cells), rowCell => get$2(rowCell, selector) === '1' || eq(rowCell, cell)))).getOr([]);
     };
 
     const verticalAlignValues = [
       {
-        te***REMOVED***t: 'None',
+        text: 'None',
         value: ''
       },
       {
-        te***REMOVED***t: 'Top',
+        text: 'Top',
         value: 'top'
       },
       {
-        te***REMOVED***t: 'Middle',
+        text: 'Middle',
         value: 'middle'
       },
       {
-        te***REMOVED***t: 'Bottom',
+        text: 'Bottom',
         value: 'bottom'
       }
     ];
 
-    const he***REMOVED***Colour = value => ({ value: normalizeHe***REMOVED***(value) });
-    const shorthandRege***REMOVED*** = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-    const longformRege***REMOVED*** = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
-    const isHe***REMOVED***String = he***REMOVED*** => shorthandRege***REMOVED***.test(he***REMOVED***) || longformRege***REMOVED***.test(he***REMOVED***);
-    const normalizeHe***REMOVED*** = he***REMOVED*** => removeLeading(he***REMOVED***, '#').toUpperCase();
-    const fromString$1 = he***REMOVED*** => isHe***REMOVED***String(he***REMOVED***) ? Optional.some({ value: normalizeHe***REMOVED***(he***REMOVED***) }) : Optional.none();
-    const toHe***REMOVED*** = component => {
-      const he***REMOVED*** = component.toString(16);
-      return (he***REMOVED***.length === 1 ? '0' + he***REMOVED*** : he***REMOVED***).toUpperCase();
+    const hexColour = value => ({ value: normalizeHex(value) });
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    const longformRegex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i;
+    const isHexString = hex => shorthandRegex.test(hex) || longformRegex.test(hex);
+    const normalizeHex = hex => removeLeading(hex, '#').toUpperCase();
+    const fromString$1 = hex => isHexString(hex) ? Optional.some({ value: normalizeHex(hex) }) : Optional.none();
+    const toHex = component => {
+      const hex = component.toString(16);
+      return (hex.length === 1 ? '0' + hex : hex).toUpperCase();
     };
     const fromRgba = rgbaColour => {
-      const value = toHe***REMOVED***(rgbaColour.red) + toHe***REMOVED***(rgbaColour.green) + toHe***REMOVED***(rgbaColour.blue);
-      return he***REMOVED***Colour(value);
+      const value = toHex(rgbaColour.red) + toHex(rgbaColour.green) + toHex(rgbaColour.blue);
+      return hexColour(value);
     };
 
-    const rgbRege***REMOVED*** = /^\s*rgb\s*\(\s*(\d+)\s*[,\s]\s*(\d+)\s*[,\s]\s*(\d+)\s*\)\s*$/i;
-    const rgbaRege***REMOVED*** = /^\s*rgba\s*\(\s*(\d+)\s*[,\s]\s*(\d+)\s*[,\s]\s*(\d+)\s*[,\s]\s*((?:\d?\.\d+|\d+)%?)\s*\)\s*$/i;
+    const rgbRegex = /^\s*rgb\s*\(\s*(\d+)\s*[,\s]\s*(\d+)\s*[,\s]\s*(\d+)\s*\)\s*$/i;
+    const rgbaRegex = /^\s*rgba\s*\(\s*(\d+)\s*[,\s]\s*(\d+)\s*[,\s]\s*(\d+)\s*[,\s]\s*((?:\d?\.\d+|\d+)%?)\s*\)\s*$/i;
     const rgbaColour = (red, green, blue, alpha) => ({
       red,
       green,
@@ -1519,34 +1519,34 @@
       return rgbaColour(r, g, b, a);
     };
     const fromString = rgbaString => {
-      const rgbMatch = rgbRege***REMOVED***.e***REMOVED***ec(rgbaString);
+      const rgbMatch = rgbRegex.exec(rgbaString);
       if (rgbMatch !== null) {
         return Optional.some(fromStringValues(rgbMatch[1], rgbMatch[2], rgbMatch[3], '1'));
       }
-      const rgbaMatch = rgbaRege***REMOVED***.e***REMOVED***ec(rgbaString);
+      const rgbaMatch = rgbaRegex.exec(rgbaString);
       if (rgbaMatch !== null) {
         return Optional.some(fromStringValues(rgbaMatch[1], rgbaMatch[2], rgbaMatch[3], rgbaMatch[4]));
       }
       return Optional.none();
     };
 
-    const anyToHe***REMOVED*** = color => fromString$1(color).orThunk(() => fromString(color).map(fromRgba)).getOrThunk(() => {
+    const anyToHex = color => fromString$1(color).orThunk(() => fromString(color).map(fromRgba)).getOrThunk(() => {
       const canvas = document.createElement('canvas');
       canvas.height = 1;
       canvas.width = 1;
-      const canvasConte***REMOVED***t = canvas.getConte***REMOVED***t('2d');
-      canvasConte***REMOVED***t.clearRect(0, 0, canvas.width, canvas.height);
-      canvasConte***REMOVED***t.fillStyle = '#FFFFFF';
-      canvasConte***REMOVED***t.fillStyle = color;
-      canvasConte***REMOVED***t.fillRect(0, 0, 1, 1);
-      const rgba = canvasConte***REMOVED***t.getImageData(0, 0, 1, 1).data;
+      const canvasContext = canvas.getContext('2d');
+      canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+      canvasContext.fillStyle = '#FFFFFF';
+      canvasContext.fillStyle = color;
+      canvasContext.fillRect(0, 0, 1, 1);
+      const rgba = canvasContext.getImageData(0, 0, 1, 1).data;
       const r = rgba[0];
       const g = rgba[1];
       const b = rgba[2];
       const a = rgba[3];
       return fromRgba(rgbaColour(r, g, b, a));
     });
-    const rgbaToHe***REMOVED***String = color => fromString(color).map(fromRgba).map(h => '#' + h.value).getOr(color);
+    const rgbaToHexString = color => fromString(color).map(fromRgba).map(h => '#' + h.value).getOr(color);
 
     const Cell = initial => {
       let value = initial;
@@ -1592,7 +1592,7 @@
           const selectedCells = getCellsFromSelection(editor);
           const checkNode = cell => editor.formatter.match(formatName, { value: formatValue }, cell.dom, isNone);
           if (isNone) {
-            api.setActive(!e***REMOVED***ists(selectedCells, checkNode));
+            api.setActive(!exists(selectedCells, checkNode));
             boundCallback.set(editor.formatter.formatChanged(formatName, match => api.setActive(!match), true));
           } else {
             api.setActive(forall(selectedCells, checkNode));
@@ -1605,15 +1605,15 @@
     };
     const isListGroup = item => hasNonNullableKey(item, 'menu');
     const buildListItems = items => map(items, item => {
-      const te***REMOVED***t = item.te***REMOVED***t || item.title || '';
+      const text = item.text || item.title || '';
       if (isListGroup(item)) {
         return {
-          te***REMOVED***t,
+          text,
           items: buildListItems(item.menu)
         };
       } else {
         return {
-          te***REMOVED***t,
+          text,
           value: item.value
         };
       }
@@ -1624,23 +1624,23 @@
       }
       return Optional.some(buildListItems([
         {
-          te***REMOVED***t: 'Select...',
+          text: 'Select...',
           value: 'mce-no-match'
         },
         ...classList
       ]));
     };
     const buildMenuItems = (editor, items, format, onAction) => map(items, item => {
-      const te***REMOVED***t = item.te***REMOVED***t || item.title;
+      const text = item.text || item.title;
       if (isListGroup(item)) {
         return {
           type: 'nestedmenuitem',
-          te***REMOVED***t,
+          text,
           getSubmenuItems: () => buildMenuItems(editor, item.menu, format, onAction)
         };
       } else {
         return {
-          te***REMOVED***t,
+          text,
           type: 'togglemenuitem',
           onAction: () => onAction(item.value),
           onSetup: onSetupToggle(editor, format, item.value)
@@ -1648,7 +1648,7 @@
       }
     });
     const applyTableCellStyle = (editor, style) => value => {
-      editor.e***REMOVED***ecCommand('mceTableApplyCellStyle', false, { [style]: value });
+      editor.execCommand('mceTableApplyCellStyle', false, { [style]: value });
     };
     const filterNoneItem = list => bind(list, item => {
       if (isListGroup(item)) {
@@ -1663,8 +1663,8 @@
     const generateMenuItemsCallback = (editor, items, format, onAction) => callback => callback(buildMenuItems(editor, items, format, onAction));
     const buildColorMenu = (editor, colorList, style) => {
       const colorMap = map(colorList, entry => ({
-        te***REMOVED***t: entry.title,
-        value: '#' + anyToHe***REMOVED***(entry.value).value,
+        text: entry.title,
+        value: '#' + anyToHex(entry.value).value,
         type: 'choiceitem'
       }));
       return [{
@@ -1676,24 +1676,24 @@
           },
           onAction: data => {
             const value = data.value === 'remove' ? '' : data.value;
-            editor.e***REMOVED***ecCommand('mceTableApplyCellStyle', false, { [style]: value });
+            editor.execCommand('mceTableApplyCellStyle', false, { [style]: value });
           }
         }];
     };
     const changeRowHeader = editor => () => {
       const currentType = editor.queryCommandValue('mceTableRowType');
       const newType = currentType === 'header' ? 'body' : 'header';
-      editor.e***REMOVED***ecCommand('mceTableRowType', false, { type: newType });
+      editor.execCommand('mceTableRowType', false, { type: newType });
     };
     const changeColumnHeader = editor => () => {
       const currentType = editor.queryCommandValue('mceTableColType');
       const newType = currentType === 'th' ? 'td' : 'th';
-      editor.e***REMOVED***ecCommand('mceTableColType', false, { type: newType });
+      editor.execCommand('mceTableColType', false, { type: newType });
     };
 
     const getClassList$1 = editor => buildClassList(getCellClassList(editor)).map(items => ({
       name: 'class',
-      type: 'listbo***REMOVED***',
+      type: 'listbox',
       label: 'Class',
       items
     }));
@@ -1705,72 +1705,72 @@
       },
       {
         name: 'celltype',
-        type: 'listbo***REMOVED***',
+        type: 'listbox',
         label: 'Cell type',
         items: [
           {
-            te***REMOVED***t: 'Cell',
+            text: 'Cell',
             value: 'td'
           },
           {
-            te***REMOVED***t: 'Header cell',
+            text: 'Header cell',
             value: 'th'
           }
         ]
       },
       {
         name: 'scope',
-        type: 'listbo***REMOVED***',
+        type: 'listbox',
         label: 'Scope',
         items: [
           {
-            te***REMOVED***t: 'None',
+            text: 'None',
             value: ''
           },
           {
-            te***REMOVED***t: 'Row',
+            text: 'Row',
             value: 'row'
           },
           {
-            te***REMOVED***t: 'Column',
+            text: 'Column',
             value: 'col'
           },
           {
-            te***REMOVED***t: 'Row group',
+            text: 'Row group',
             value: 'rowgroup'
           },
           {
-            te***REMOVED***t: 'Column group',
+            text: 'Column group',
             value: 'colgroup'
           }
         ]
       },
       {
         name: 'halign',
-        type: 'listbo***REMOVED***',
+        type: 'listbox',
         label: 'Horizontal align',
         items: [
           {
-            te***REMOVED***t: 'None',
+            text: 'None',
             value: ''
           },
           {
-            te***REMOVED***t: 'Left',
+            text: 'Left',
             value: 'left'
           },
           {
-            te***REMOVED***t: 'Center',
+            text: 'Center',
             value: 'center'
           },
           {
-            te***REMOVED***t: 'Right',
+            text: 'Right',
             value: 'right'
           }
         ]
       },
       {
         name: 'valign',
-        type: 'listbo***REMOVED***',
+        type: 'listbox',
         label: 'Vertical align',
         items: verticalAlignValues
       }
@@ -1779,13 +1779,13 @@
 
     const getAdvancedTab = (editor, dialogName) => {
       const emptyBorderStyle = [{
-          te***REMOVED***t: 'Select...',
+          text: 'Select...',
           value: ''
         }];
       const advTabItems = [
         {
           name: 'borderstyle',
-          type: 'listbo***REMOVED***',
+          type: 'listbox',
           label: 'Border style',
           items: emptyBorderStyle.concat(buildListItems(getTableBorderStyles(editor)))
         },
@@ -1901,7 +1901,7 @@
     };
 
     const findInWarehouse = (warehouse, element) => findMap(warehouse.all, r => find(r.cells, e => eq(element, e.element)));
-    const e***REMOVED***tractCells = (warehouse, target, predicate) => {
+    const extractCells = (warehouse, target, predicate) => {
       const details = map(target.selection, cell$1 => {
         return cell(cell$1).bind(lc => findInWarehouse(warehouse, lc)).filter(predicate);
       });
@@ -1910,8 +1910,8 @@
     };
     const onMergable = (_warehouse, target) => target.mergable;
     const onUnmergable = (_warehouse, target) => target.unmergable;
-    const onCells = (warehouse, target) => e***REMOVED***tractCells(warehouse, target, always);
-    const isUnlockedTableCell = (warehouse, cell) => findInWarehouse(warehouse, cell).e***REMOVED***ists(detail => !detail.isLocked);
+    const onCells = (warehouse, target) => extractCells(warehouse, target, always);
+    const isUnlockedTableCell = (warehouse, cell) => findInWarehouse(warehouse, cell).exists(detail => !detail.isLocked);
     const allUnlocked = (warehouse, cells) => forall(cells, cell => isUnlockedTableCell(warehouse, cell));
     const onUnlockedMergable = (warehouse, target) => onMergable(warehouse, target).filter(mergeable => allUnlocked(warehouse, mergeable.cells));
     const onUnlockedUnmergable = (warehouse, target) => onUnmergable(warehouse, target).filter(cells => allUnlocked(warehouse, cells));
@@ -1943,12 +1943,12 @@
         adt[key] = (...args) => {
           const argLength = args.length;
           if (argLength !== value.length) {
-            throw new Error('Wrong number of arguments to case ' + key + '. E***REMOVED***pected ' + value.length + ' (' + value + '), got ' + argLength);
+            throw new Error('Wrong number of arguments to case ' + key + '. Expected ' + value.length + ' (' + value + '), got ' + argLength);
           }
           const match = branches => {
             const branchKeys = keys(branches);
             if (constructors.length !== branchKeys.length) {
-              throw new Error('Wrong number of arguments to match. E***REMOVED***pected: ' + constructors.join(',') + '\nActual: ' + branchKeys.join(','));
+              throw new Error('Wrong number of arguments to match. Expected: ' + constructors.join(',') + '\nActual: ' + branchKeys.join(','));
             }
             const allReqd = forall(constructors, reqKey => {
               return contains(branchKeys, reqKey);
@@ -1961,7 +1961,7 @@
           return {
             fold: (...foldArgs) => {
               if (foldArgs.length !== cases.length) {
-                throw new Error('Wrong number of arguments to fold. E***REMOVED***pected ' + cases.length + ', got ' + foldArgs.length);
+                throw new Error('Wrong number of arguments to fold. Expected ' + cases.length + ', got ' + foldArgs.length);
               }
               const target = foldArgs[count];
               return target.apply(null, args);
@@ -1983,24 +1983,24 @@
 
     const adt = Adt.generate([
       { none: [] },
-      { only: ['inde***REMOVED***'] },
+      { only: ['index'] },
       {
         left: [
-          'inde***REMOVED***',
-          'ne***REMOVED***t'
+          'index',
+          'next'
         ]
       },
       {
         middle: [
           'prev',
-          'inde***REMOVED***',
-          'ne***REMOVED***t'
+          'index',
+          'next'
         ]
       },
       {
         right: [
           'prev',
-          'inde***REMOVED***'
+          'index'
         ]
       }
     ]);
@@ -2012,21 +2012,21 @@
       return details.bind(selectedCells => {
         const lastSelectedCell = selectedCells[selectedCells.length - 1];
         const minRowRange = selectedCells[0].row;
-        const ma***REMOVED***RowRange = lastSelectedCell.row + lastSelectedCell.rowspan;
-        const selectedRows = house.all.slice(minRowRange, ma***REMOVED***RowRange);
+        const maxRowRange = lastSelectedCell.row + lastSelectedCell.rowspan;
+        const selectedRows = house.all.slice(minRowRange, maxRowRange);
         return findCommonRowType(selectedRows);
       }).getOr('');
     };
     const getRowsType = opGetRowsType;
 
-    const rgbToHe***REMOVED*** = value => startsWith(value, 'rgb') ? rgbaToHe***REMOVED***String(value) : value;
-    const e***REMOVED***tractAdvancedStyles = elm => {
+    const rgbToHex = value => startsWith(value, 'rgb') ? rgbaToHexString(value) : value;
+    const extractAdvancedStyles = elm => {
       const element = SugarElement.fromDom(elm);
       return {
         borderwidth: getRaw(element, 'border-width').getOr(''),
         borderstyle: getRaw(element, 'border-style').getOr(''),
-        bordercolor: getRaw(element, 'border-color').map(rgbToHe***REMOVED***).getOr(''),
-        backgroundcolor: getRaw(element, 'background-color').map(rgbToHe***REMOVED***).getOr('')
+        bordercolor: getRaw(element, 'border-color').map(rgbToHex).getOr(''),
+        backgroundcolor: getRaw(element, 'background-color').map(rgbToHex).getOr('')
       };
     };
     const getSharedValues = data => {
@@ -2057,13 +2057,13 @@
       'middle',
       'bottom'
     ], 'valign');
-    const e***REMOVED***tractDataFromSettings = (editor, hasAdvTableTab) => {
+    const extractDataFromSettings = (editor, hasAdvTableTab) => {
       const style = getDefaultStyles(editor);
       const attrs = getDefaultAttributes(editor);
-      const e***REMOVED***tractAdvancedStyleData = () => ({
+      const extractAdvancedStyleData = () => ({
         borderstyle: get$4(style, 'border-style').getOr(''),
-        bordercolor: rgbToHe***REMOVED***(get$4(style, 'border-color').getOr('')),
-        backgroundcolor: rgbToHe***REMOVED***(get$4(style, 'background-color').getOr(''))
+        bordercolor: rgbToHex(get$4(style, 'border-color').getOr('')),
+        backgroundcolor: rgbToHex(get$4(style, 'background-color').getOr(''))
       });
       const defaultData = {
         height: '',
@@ -2082,7 +2082,7 @@
         }
         return get$4(attrs, 'border').fold(() => ({}), border => ({ border }));
       };
-      const advStyle = hasAdvTableTab ? e***REMOVED***tractAdvancedStyleData() : {};
+      const advStyle = hasAdvTableTab ? extractAdvancedStyleData() : {};
       const getCellPaddingCellSpacing = () => {
         const spacing = get$4(style, 'border-spacing').or(get$4(attrs, 'cellspacing')).fold(() => ({}), cellspacing => ({ cellspacing }));
         const padding = get$4(style, 'border-padding').or(get$4(attrs, 'cellpadding')).fold(() => ({}), cellpadding => ({ cellpadding }));
@@ -2105,7 +2105,7 @@
       const target = { selection: fromDom(elm.cells) };
       return getRowsType(table, target);
     }).getOr('');
-    const e***REMOVED***tractDataFromTableElement = (editor, elm, hasAdvTableTab) => {
+    const extractDataFromTableElement = (editor, elm, hasAdvTableTab) => {
       const getBorder = (dom, elm) => {
         const optBorderWidth = getRaw(SugarElement.fromDom(elm), 'border-width');
         if (shouldStyleWithCss(editor) && optBorderWidth.isSome()) {
@@ -2125,20 +2125,20 @@
         caption: !!dom.select('caption', elm)[0],
         class: dom.getAttrib(elm, 'class', ''),
         align: getHAlignment(editor, elm),
-        ...hasAdvTableTab ? e***REMOVED***tractAdvancedStyles(elm) : {}
+        ...hasAdvTableTab ? extractAdvancedStyles(elm) : {}
       };
     };
-    const e***REMOVED***tractDataFromRowElement = (editor, elm, hasAdvancedRowTab) => {
+    const extractDataFromRowElement = (editor, elm, hasAdvancedRowTab) => {
       const dom = editor.dom;
       return {
         height: dom.getStyle(elm, 'height') || dom.getAttrib(elm, 'height'),
         class: dom.getAttrib(elm, 'class', ''),
         type: getRowType(elm),
         align: getHAlignment(editor, elm),
-        ...hasAdvancedRowTab ? e***REMOVED***tractAdvancedStyles(elm) : {}
+        ...hasAdvancedRowTab ? extractAdvancedStyles(elm) : {}
       };
     };
-    const e***REMOVED***tractDataFromCellElement = (editor, cell, hasAdvancedCellTab, column) => {
+    const extractDataFromCellElement = (editor, cell, hasAdvancedCellTab, column) => {
       const dom = editor.dom;
       const colElm = column.getOr(cell);
       const getStyle = (element, style) => dom.getStyle(element, style) || dom.getAttrib(element, style);
@@ -2149,14 +2149,14 @@
         class: dom.getAttrib(cell, 'class', ''),
         halign: getHAlignment(editor, cell),
         valign: getVAlignment(editor, cell),
-        ...hasAdvancedCellTab ? e***REMOVED***tractAdvancedStyles(cell) : {}
+        ...hasAdvancedCellTab ? extractAdvancedStyles(cell) : {}
       };
     };
 
     const getSelectedCells = (table, cells) => {
       const warehouse = Warehouse.fromTable(table);
       const allCells = Warehouse.justCells(warehouse);
-      const filtered = filter(allCells, cellA => e***REMOVED***ists(cells, cellB => eq(cellA.element, cellB)));
+      const filtered = filter(allCells, cellA => exists(cells, cellB => eq(cellA.element, cellB)));
       return map(filtered, cell => ({
         element: cell.element.dom,
         column: Warehouse.getColumnAt(warehouse, cell.column).map(col => col.element.dom)
@@ -2170,7 +2170,7 @@
         modifier.setAttrib('class', data.class);
       }
       if (shouldUpdate('width')) {
-        colModifier.setStyle('width', addP***REMOVED***Suffi***REMOVED***(data.width));
+        colModifier.setStyle('width', addPxSuffix(data.width));
       }
     };
     const updateAdvancedProps$1 = (modifier, data, shouldUpdate) => {
@@ -2184,7 +2184,7 @@
         modifier.setFormat('tablecellborderstyle', data.borderstyle);
       }
       if (shouldUpdate('borderwidth')) {
-        modifier.setFormat('tablecellborderwidth', addP***REMOVED***Suffi***REMOVED***(data.borderwidth));
+        modifier.setFormat('tablecellborderwidth', addPxSuffix(data.borderwidth));
       }
     };
     const applyStyleData$1 = (editor, cells, data, wasChanged) => {
@@ -2207,7 +2207,7 @@
       });
     };
     const applyStructureData$1 = (editor, data) => {
-      editor.e***REMOVED***ecCommand('mceTableCellType', false, {
+      editor.execCommand('mceTableCellType', false, {
         type: data.celltype,
         no_events: true
       });
@@ -2241,7 +2241,7 @@
       });
     };
     const getData$1 = (editor, cells) => {
-      const cellsData = table(cells[0]).map(table => map(getSelectedCells(table, cells), item => e***REMOVED***tractDataFromCellElement(editor, item.element, hasAdvancedCellTab(editor), item.column)));
+      const cellsData = table(cells[0]).map(table => map(getSelectedCells(table, cells), item => extractDataFromCellElement(editor, item.element, hasAdvancedCellTab(editor), item.column)));
       return getSharedValues(cellsData.getOrDie());
     };
     const open$2 = editor => {
@@ -2277,12 +2277,12 @@
           {
             type: 'cancel',
             name: 'cancel',
-            te***REMOVED***t: 'Cancel'
+            text: 'Cancel'
           },
           {
             type: 'submit',
             name: 'save',
-            te***REMOVED***t: 'Save',
+            text: 'Save',
             primary: true
           }
         ],
@@ -2293,49 +2293,49 @@
 
     const getClassList = editor => buildClassList(getRowClassList(editor)).map(items => ({
       name: 'class',
-      type: 'listbo***REMOVED***',
+      type: 'listbox',
       label: 'Class',
       items
     }));
     const formChildren = [
       {
-        type: 'listbo***REMOVED***',
+        type: 'listbox',
         name: 'type',
         label: 'Row type',
         items: [
           {
-            te***REMOVED***t: 'Header',
+            text: 'Header',
             value: 'header'
           },
           {
-            te***REMOVED***t: 'Body',
+            text: 'Body',
             value: 'body'
           },
           {
-            te***REMOVED***t: 'Footer',
+            text: 'Footer',
             value: 'footer'
           }
         ]
       },
       {
-        type: 'listbo***REMOVED***',
+        type: 'listbox',
         name: 'align',
         label: 'Alignment',
         items: [
           {
-            te***REMOVED***t: 'None',
+            text: 'None',
             value: ''
           },
           {
-            te***REMOVED***t: 'Left',
+            text: 'Left',
             value: 'left'
           },
           {
-            te***REMOVED***t: 'Center',
+            text: 'Center',
             value: 'center'
           },
           {
-            te***REMOVED***t: 'Right',
+            text: 'Right',
             value: 'right'
           }
         ]
@@ -2353,7 +2353,7 @@
         modifier.setAttrib('class', data.class);
       }
       if (shouldUpdate('height')) {
-        modifier.setStyle('height', addP***REMOVED***Suffi***REMOVED***(data.height));
+        modifier.setStyle('height', addPxSuffix(data.height));
       }
     };
     const updateAdvancedProps = (modifier, data, shouldUpdate) => {
@@ -2388,7 +2388,7 @@
       });
     };
     const applyStructureData = (editor, data) => {
-      editor.e***REMOVED***ecCommand('mceTableRowType', false, {
+      editor.execCommand('mceTableRowType', false, {
         type: data.type,
         no_events: true
       });
@@ -2423,7 +2423,7 @@
       if (rows.length === 0) {
         return;
       }
-      const rowsData = map(rows, rowElm => e***REMOVED***tractDataFromRowElement(editor, rowElm.dom, hasAdvancedRowTab(editor)));
+      const rowsData = map(rows, rowElm => extractDataFromRowElement(editor, rowElm.dom, hasAdvancedRowTab(editor)));
       const data = getSharedValues(rowsData);
       const dialogTabPanel = {
         type: 'tabpanel',
@@ -2452,12 +2452,12 @@
           {
             type: 'cancel',
             name: 'cancel',
-            te***REMOVED***t: 'Cancel'
+            text: 'Cancel'
           },
           {
             type: 'submit',
             name: 'save',
-            te***REMOVED***t: 'Save',
+            text: 'Save',
             primary: true
           }
         ],
@@ -2515,38 +2515,38 @@
           type: 'label',
           label: 'Caption',
           items: [{
-              type: 'checkbo***REMOVED***',
+              type: 'checkbox',
               name: 'caption',
               label: 'Show caption'
             }]
         }
       ] : [];
       const alignmentItem = [{
-          type: 'listbo***REMOVED***',
+          type: 'listbox',
           name: 'align',
           label: 'Alignment',
           items: [
             {
-              te***REMOVED***t: 'None',
+              text: 'None',
               value: ''
             },
             {
-              te***REMOVED***t: 'Left',
+              text: 'Left',
               value: 'left'
             },
             {
-              te***REMOVED***t: 'Center',
+              text: 'Center',
               value: 'center'
             },
             {
-              te***REMOVED***t: 'Right',
+              text: 'Right',
               value: 'right'
             }
           ]
         }];
       const classListItem = classes.length > 0 ? [{
           name: 'class',
-          type: 'listbo***REMOVED***',
+          type: 'listbox',
           label: 'Class',
           items: classes
         }] : [];
@@ -2578,21 +2578,21 @@
       if (!isUndefined(data.class) && data.class !== 'mce-no-match') {
         attrs.class = data.class;
       }
-      styles.height = addP***REMOVED***Suffi***REMOVED***(data.height);
+      styles.height = addPxSuffix(data.height);
       if (shouldStyleWithCss$1) {
-        styles.width = addP***REMOVED***Suffi***REMOVED***(data.width);
+        styles.width = addPxSuffix(data.width);
       } else if (dom.getAttrib(tableElm, 'width')) {
-        attrs.width = removeP***REMOVED***Suffi***REMOVED***(data.width);
+        attrs.width = removePxSuffix(data.width);
       }
       if (shouldStyleWithCss$1) {
         if (borderIsZero) {
           attrs.border = 0;
           styles['border-width'] = '';
         } else {
-          styles['border-width'] = addP***REMOVED***Suffi***REMOVED***(data.border);
+          styles['border-width'] = addPxSuffix(data.border);
           attrs.border = 1;
         }
-        styles['border-spacing'] = addP***REMOVED***Suffi***REMOVED***(data.cellspacing);
+        styles['border-spacing'] = addPxSuffix(data.cellspacing);
       } else {
         attrs.border = borderIsZero ? 0 : data.border;
         attrs.cellpadding = data.cellpadding;
@@ -2603,10 +2603,10 @@
         if (borderIsZero) {
           cellStyles['border-width'] = '';
         } else if (shouldApplyOnCell.border) {
-          cellStyles['border-width'] = addP***REMOVED***Suffi***REMOVED***(data.border);
+          cellStyles['border-width'] = addPxSuffix(data.border);
         }
         if (shouldApplyOnCell.cellpadding) {
-          cellStyles.padding = addP***REMOVED***Suffi***REMOVED***(data.cellpadding);
+          cellStyles.padding = addPxSuffix(data.cellpadding);
         }
         if (hasAdvancedTableTab$1 && shouldApplyOnCell.bordercolor) {
           cellStyles['border-color'] = data.bordercolor;
@@ -2641,7 +2641,7 @@
         if (!tableElm) {
           const cols = toInt(data.cols).getOr(1);
           const rows = toInt(data.rows).getOr(1);
-          editor.e***REMOVED***ecCommand('mceInsertTable', false, {
+          editor.execCommand('mceInsertTable', false, {
             rows,
             columns: cols
           });
@@ -2656,7 +2656,7 @@
           applyDataToElement(editor, tableElm, data, applicableCellProperties);
           const captionElm = dom.select('caption', tableElm)[0];
           if (captionElm && !data.caption || !captionElm && data.caption) {
-            editor.e***REMOVED***ecCommand('mceTableToggleCaption');
+            editor.execCommand('mceTableToggleCaption');
           }
           setAlign(editor, tableElm, data.align);
         }
@@ -2675,7 +2675,7 @@
     const open = (editor, insertNewTable) => {
       const dom = editor.dom;
       let tableElm;
-      let data = e***REMOVED***tractDataFromSettings(editor, hasAdvancedTableTab(editor));
+      let data = extractDataFromSettings(editor, hasAdvancedTableTab(editor));
       if (insertNewTable) {
         data.cols = '1';
         data.rows = '1';
@@ -2687,7 +2687,7 @@
       } else {
         tableElm = dom.getParent(editor.selection.getStart(), 'table', editor.getBody());
         if (tableElm) {
-          data = e***REMOVED***tractDataFromTableElement(editor, tableElm, hasAdvancedTableTab(editor));
+          data = extractDataFromTableElement(editor, tableElm, hasAdvancedTableTab(editor));
         } else {
           if (hasAdvancedTableTab(editor)) {
             data.borderstyle = '';
@@ -2732,12 +2732,12 @@
           {
             type: 'cancel',
             name: 'cancel',
-            te***REMOVED***t: 'Cancel'
+            text: 'Cancel'
           },
           {
             type: 'submit',
             name: 'save',
-            te***REMOVED***t: 'Save',
+            text: 'Save',
             primary: true
           }
         ],
@@ -2747,7 +2747,7 @@
 
     const registerCommands = editor => {
       const runAction = f => {
-        if (isInEditableConte***REMOVED***t(getSelectionStart(editor))) {
+        if (isInEditableContext(getSelectionStart(editor))) {
           f();
         }
       };
@@ -2763,7 +2763,7 @@
 
     const selection = identity;
     const unmergable = selectedCells => {
-      const hasSpan = (elem, type) => getOpt(elem, type).e***REMOVED***ists(span => parseInt(span, 10) > 1);
+      const hasSpan = (elem, type) => getOpt(elem, type).exists(span => parseInt(span, 10) > 1);
       const hasRowOrColSpan = elem => hasSpan(elem, 'rowspan') || hasSpan(elem, 'colspan');
       return selectedCells.length > 0 && forall(selectedCells, hasRowOrColSpan) ? Optional.some(selectedCells) : Optional.none();
     };
@@ -2771,7 +2771,7 @@
       if (selectedCells.length <= 1) {
         return Optional.none();
       } else {
-        return retrieveBo***REMOVED***(table, ephemera.firstSelectedSelector, ephemera.lastSelectedSelector).map(bounds => ({
+        return retrieveBox(table, ephemera.firstSelectedSelector, ephemera.lastSelectedSelector).map(bounds => ({
           bounds,
           cells: selectedCells
         }));
@@ -2809,7 +2809,7 @@
         }
         return Optional.none();
       })));
-      const getE***REMOVED***tractedDetails = targets => {
+      const getExtractedDetails = targets => {
         const tableOpt = table(targets.element);
         return tableOpt.map(table => {
           const warehouse = Warehouse.fromTable(table);
@@ -2838,7 +2838,7 @@
       };
       const resetTargets = () => {
         targets.set(cached(findTargets)());
-        selectionDetails = targets.get().bind(getE***REMOVED***tractedDetails);
+        selectionDetails = targets.get().bind(getExtractedDetails);
         each(changeHandlers.get(), call);
       };
       const setupHandler = handler => {
@@ -2860,7 +2860,7 @@
         api.setEnabled(!isDisabled(targets) && editor.selection.isEditable());
         api.setActive(isActive(targets));
       }));
-      const isDisabledFromLocked = lockedDisable => selectionDetails.e***REMOVED***ists(details => details.locked[lockedDisable]);
+      const isDisabledFromLocked = lockedDisable => selectionDetails.exists(details => details.locked[lockedDisable]);
       const onSetupTable = api => onSetup(api, _ => false);
       const onSetupCellOrRow = api => onSetup(api, targets => isCaption(targets.element));
       const onSetupColumn = lockedDisable => api => onSetup(api, targets => isCaption(targets.element) || isDisabledFromLocked(lockedDisable));
@@ -2871,7 +2871,7 @@
       const onSetupTableWithCaption = api => {
         return onSetupWithToggle(api, never, targets => {
           const tableOpt = table(targets.element, getIsRoot(editor));
-          return tableOpt.e***REMOVED***ists(table => child(table, 'caption'));
+          return tableOpt.exists(table => child(table, 'caption'));
         });
       };
       const onSetupTableHeaders = (command, headerType) => api => {
@@ -2879,7 +2879,7 @@
       };
       const onSetupTableRowHeaders = onSetupTableHeaders('mceTableRowType', 'header');
       const onSetupTableColumnHeaders = onSetupTableHeaders('mceTableColType', 'th');
-      editor.on('NodeChange E***REMOVED***ecCommand TableSelectorChange', resetTargets);
+      editor.on('NodeChange ExecCommand TableSelectorChange', resetTargets);
       return {
         onSetupTable,
         onSetupCellOrRow,
@@ -2898,7 +2898,7 @@
 
     var global = tinymce.util.Tools.resolve('tinymce.FakeClipboard');
 
-    const tableTypeBase = '***REMOVED***-tinymce/dom-table-';
+    const tableTypeBase = 'x-tinymce/dom-table-';
     const tableTypeRow = tableTypeBase + 'rows';
     const tableTypeColumn = tableTypeBase + 'columns';
     const getData = type => {
@@ -2926,7 +2926,7 @@
         onSetup: onSetupEditable$1(editor),
         fetch: callback => callback('inserttable | cell row column | advtablesort | tableprops deletetable')
       });
-      const cmd = command => () => editor.e***REMOVED***ecCommand(command);
+      const cmd = command => () => editor.execCommand(command);
       const addButtonIfRegistered = (name, spec) => {
         if (editor.queryCommandSupported(spec.command)) {
           editor.ui.registry.addButton(name, {
@@ -3074,7 +3074,7 @@
         editor.ui.registry.addMenuButton('tableclass', {
           icon: 'table-classes',
           tooltip: 'Table styles',
-          fetch: generateMenuItemsCallback(editor, tableClassList, 'tableclass', value => editor.e***REMOVED***ecCommand('mceTableToggleClass', false, value)),
+          fetch: generateMenuItemsCallback(editor, tableClassList, 'tableclass', value => editor.execCommand('mceTableToggleClass', false, value)),
           onSetup: selectionTargets.onSetupTable
         });
       }
@@ -3083,7 +3083,7 @@
         editor.ui.registry.addMenuButton('tablecellclass', {
           icon: 'table-cell-classes',
           tooltip: 'Cell styles',
-          fetch: generateMenuItemsCallback(editor, tableCellClassList, 'tablecellclass', value => editor.e***REMOVED***ecCommand('mceTableCellToggleClass', false, value)),
+          fetch: generateMenuItemsCallback(editor, tableCellClassList, 'tablecellclass', value => editor.execCommand('mceTableCellToggleClass', false, value)),
           onSetup: selectionTargets.onSetupCellOrRow
         });
       }
@@ -3144,7 +3144,7 @@
       const isEditableTable = table => editor.dom.is(table, 'table') && editor.getBody().contains(table) && editor.dom.isEditable(table.parentNode);
       const toolbar = getToolbar(editor);
       if (toolbar.length > 0) {
-        editor.ui.registry.addConte***REMOVED***tToolbar('table', {
+        editor.ui.registry.addContextToolbar('table', {
           predicate: isEditableTable,
           items: toolbar,
           scope: 'node',
@@ -3164,7 +3164,7 @@
       };
     };
     const addMenuItems = (editor, selectionTargets) => {
-      const cmd = command => () => editor.e***REMOVED***ecCommand(command);
+      const cmd = command => () => editor.execCommand(command);
       const addMenuIfRegistered = (name, spec) => {
         if (editor.queryCommandSupported(spec.command)) {
           editor.ui.registry.addMenuItem(name, {
@@ -3185,56 +3185,56 @@
         }
       };
       const insertTableAction = data => {
-        editor.e***REMOVED***ecCommand('mceInsertTable', false, {
+        editor.execCommand('mceInsertTable', false, {
           rows: data.numRows,
           columns: data.numColumns
         });
       };
       const hasRowMenuItems = [
         addMenuIfRegistered('tableinsertrowbefore', {
-          te***REMOVED***t: 'Insert row before',
+          text: 'Insert row before',
           icon: 'table-insert-row-above',
           command: 'mceTableInsertRowBefore',
           onSetup: selectionTargets.onSetupCellOrRow
         }),
         addMenuIfRegistered('tableinsertrowafter', {
-          te***REMOVED***t: 'Insert row after',
+          text: 'Insert row after',
           icon: 'table-insert-row-after',
           command: 'mceTableInsertRowAfter',
           onSetup: selectionTargets.onSetupCellOrRow
         }),
         addMenuIfRegistered('tabledeleterow', {
-          te***REMOVED***t: 'Delete row',
+          text: 'Delete row',
           icon: 'table-delete-row',
           command: 'mceTableDeleteRow',
           onSetup: selectionTargets.onSetupCellOrRow
         }),
         addMenuIfRegistered('tablerowprops', {
-          te***REMOVED***t: 'Row properties',
+          text: 'Row properties',
           icon: 'table-row-properties',
           command: 'mceTableRowProps',
           onSetup: selectionTargets.onSetupCellOrRow
         }),
         addMenuIfRegistered('tablecutrow', {
-          te***REMOVED***t: 'Cut row',
+          text: 'Cut row',
           icon: 'cut-row',
           command: 'mceTableCutRow',
           onSetup: selectionTargets.onSetupCellOrRow
         }),
         addMenuIfRegistered('tablecopyrow', {
-          te***REMOVED***t: 'Copy row',
+          text: 'Copy row',
           icon: 'duplicate-row',
           command: 'mceTableCopyRow',
           onSetup: selectionTargets.onSetupCellOrRow
         }),
         addMenuIfRegistered('tablepasterowbefore', {
-          te***REMOVED***t: 'Paste row before',
+          text: 'Paste row before',
           icon: 'paste-row-before',
           command: 'mceTablePasteRowBefore',
           onSetup: selectionTargets.onSetupPasteable(getRows)
         }),
         addMenuIfRegistered('tablepasterowafter', {
-          te***REMOVED***t: 'Paste row after',
+          text: 'Paste row after',
           icon: 'paste-row-after',
           command: 'mceTablePasteRowAfter',
           onSetup: selectionTargets.onSetupPasteable(getRows)
@@ -3242,43 +3242,43 @@
       ];
       const hasColumnMenuItems = [
         addMenuIfRegistered('tableinsertcolumnbefore', {
-          te***REMOVED***t: 'Insert column before',
+          text: 'Insert column before',
           icon: 'table-insert-column-before',
           command: 'mceTableInsertColBefore',
           onSetup: selectionTargets.onSetupColumn('onFirst')
         }),
         addMenuIfRegistered('tableinsertcolumnafter', {
-          te***REMOVED***t: 'Insert column after',
+          text: 'Insert column after',
           icon: 'table-insert-column-after',
           command: 'mceTableInsertColAfter',
           onSetup: selectionTargets.onSetupColumn('onLast')
         }),
         addMenuIfRegistered('tabledeletecolumn', {
-          te***REMOVED***t: 'Delete column',
+          text: 'Delete column',
           icon: 'table-delete-column',
           command: 'mceTableDeleteCol',
           onSetup: selectionTargets.onSetupColumn('onAny')
         }),
         addMenuIfRegistered('tablecutcolumn', {
-          te***REMOVED***t: 'Cut column',
+          text: 'Cut column',
           icon: 'cut-column',
           command: 'mceTableCutCol',
           onSetup: selectionTargets.onSetupColumn('onAny')
         }),
         addMenuIfRegistered('tablecopycolumn', {
-          te***REMOVED***t: 'Copy column',
+          text: 'Copy column',
           icon: 'duplicate-column',
           command: 'mceTableCopyCol',
           onSetup: selectionTargets.onSetupColumn('onAny')
         }),
         addMenuIfRegistered('tablepastecolumnbefore', {
-          te***REMOVED***t: 'Paste column before',
+          text: 'Paste column before',
           icon: 'paste-column-before',
           command: 'mceTablePasteColBefore',
           onSetup: selectionTargets.onSetupPasteableColumn(getColumns, 'onFirst')
         }),
         addMenuIfRegistered('tablepastecolumnafter', {
-          te***REMOVED***t: 'Paste column after',
+          text: 'Paste column after',
           icon: 'paste-column-after',
           command: 'mceTablePasteColAfter',
           onSetup: selectionTargets.onSetupPasteableColumn(getColumns, 'onLast')
@@ -3286,19 +3286,19 @@
       ];
       const hasCellMenuItems = [
         addMenuIfRegistered('tablecellprops', {
-          te***REMOVED***t: 'Cell properties',
+          text: 'Cell properties',
           icon: 'table-cell-properties',
           command: 'mceTableCellProps',
           onSetup: selectionTargets.onSetupCellOrRow
         }),
         addMenuIfRegistered('tablemergecells', {
-          te***REMOVED***t: 'Merge cells',
+          text: 'Merge cells',
           icon: 'table-merge-cells',
           command: 'mceTableMergeCells',
           onSetup: selectionTargets.onSetupMergeable
         }),
         addMenuIfRegistered('tablesplitcells', {
-          te***REMOVED***t: 'Split cell',
+          text: 'Split cell',
           icon: 'table-split-cells',
           command: 'mceTableSplitCells',
           onSetup: selectionTargets.onSetupUnmergeable
@@ -3306,14 +3306,14 @@
       ];
       if (!hasTableGrid(editor)) {
         editor.ui.registry.addMenuItem('inserttable', {
-          te***REMOVED***t: 'Table',
+          text: 'Table',
           icon: 'table',
           onAction: cmd('mceInsertTableDialog'),
           onSetup: onSetupEditable(editor)
         });
       } else {
         editor.ui.registry.addNestedMenuItem('inserttable', {
-          te***REMOVED***t: 'Table',
+          text: 'Table',
           icon: 'table',
           getSubmenuItems: () => [{
               type: 'fancymenuitem',
@@ -3324,18 +3324,18 @@
         });
       }
       editor.ui.registry.addMenuItem('inserttabledialog', {
-        te***REMOVED***t: 'Insert table',
+        text: 'Insert table',
         icon: 'table',
         onAction: cmd('mceInsertTableDialog'),
         onSetup: onSetupEditable(editor)
       });
       addMenuIfRegistered('tableprops', {
-        te***REMOVED***t: 'Table properties',
+        text: 'Table properties',
         onSetup: selectionTargets.onSetupTable,
         command: 'mceTableProps'
       });
       addMenuIfRegistered('deletetable', {
-        te***REMOVED***t: 'Delete table',
+        text: 'Delete table',
         icon: 'table-delete-table',
         onSetup: selectionTargets.onSetupTable,
         command: 'mceTableDelete'
@@ -3343,25 +3343,25 @@
       if (contains(hasRowMenuItems, true)) {
         editor.ui.registry.addNestedMenuItem('row', {
           type: 'nestedmenuitem',
-          te***REMOVED***t: 'Row',
+          text: 'Row',
           getSubmenuItems: constant('tableinsertrowbefore tableinsertrowafter tabledeleterow tablerowprops | tablecutrow tablecopyrow tablepasterowbefore tablepasterowafter')
         });
       }
       if (contains(hasColumnMenuItems, true)) {
         editor.ui.registry.addNestedMenuItem('column', {
           type: 'nestedmenuitem',
-          te***REMOVED***t: 'Column',
+          text: 'Column',
           getSubmenuItems: constant('tableinsertcolumnbefore tableinsertcolumnafter tabledeletecolumn | tablecutcolumn tablecopycolumn tablepastecolumnbefore tablepastecolumnafter')
         });
       }
       if (contains(hasCellMenuItems, true)) {
         editor.ui.registry.addNestedMenuItem('cell', {
           type: 'nestedmenuitem',
-          te***REMOVED***t: 'Cell',
+          text: 'Cell',
           getSubmenuItems: constant('tablecellprops tablemergecells tablesplitcells')
         });
       }
-      editor.ui.registry.addConte***REMOVED***tMenu('table', {
+      editor.ui.registry.addContextMenu('table', {
         update: () => {
           selectionTargets.resetTargets();
           return selectionTargets.targets().fold(constant(''), targets => {
@@ -3377,8 +3377,8 @@
       if (tableClassList.length !== 0 && editor.queryCommandSupported('mceTableToggleClass')) {
         editor.ui.registry.addNestedMenuItem('tableclass', {
           icon: 'table-classes',
-          te***REMOVED***t: 'Table styles',
-          getSubmenuItems: () => buildMenuItems(editor, tableClassList, 'tableclass', value => editor.e***REMOVED***ecCommand('mceTableToggleClass', false, value)),
+          text: 'Table styles',
+          getSubmenuItems: () => buildMenuItems(editor, tableClassList, 'tableclass', value => editor.execCommand('mceTableToggleClass', false, value)),
           onSetup: selectionTargets.onSetupTable
         });
       }
@@ -3386,58 +3386,58 @@
       if (tableCellClassList.length !== 0 && editor.queryCommandSupported('mceTableCellToggleClass')) {
         editor.ui.registry.addNestedMenuItem('tablecellclass', {
           icon: 'table-cell-classes',
-          te***REMOVED***t: 'Cell styles',
-          getSubmenuItems: () => buildMenuItems(editor, tableCellClassList, 'tablecellclass', value => editor.e***REMOVED***ecCommand('mceTableCellToggleClass', false, value)),
+          text: 'Cell styles',
+          getSubmenuItems: () => buildMenuItems(editor, tableCellClassList, 'tablecellclass', value => editor.execCommand('mceTableCellToggleClass', false, value)),
           onSetup: selectionTargets.onSetupCellOrRow
         });
       }
       if (editor.queryCommandSupported('mceTableApplyCellStyle')) {
         editor.ui.registry.addNestedMenuItem('tablecellvalign', {
           icon: 'vertical-align',
-          te***REMOVED***t: 'Vertical align',
+          text: 'Vertical align',
           getSubmenuItems: () => buildMenuItems(editor, verticalAlignValues, 'tablecellverticalalign', applyTableCellStyle(editor, 'vertical-align')),
           onSetup: selectionTargets.onSetupCellOrRow
         });
         editor.ui.registry.addNestedMenuItem('tablecellborderwidth', {
           icon: 'border-width',
-          te***REMOVED***t: 'Border width',
+          text: 'Border width',
           getSubmenuItems: () => buildMenuItems(editor, getTableBorderWidths(editor), 'tablecellborderwidth', applyTableCellStyle(editor, 'border-width')),
           onSetup: selectionTargets.onSetupCellOrRow
         });
         editor.ui.registry.addNestedMenuItem('tablecellborderstyle', {
           icon: 'border-style',
-          te***REMOVED***t: 'Border style',
+          text: 'Border style',
           getSubmenuItems: () => buildMenuItems(editor, getTableBorderStyles(editor), 'tablecellborderstyle', applyTableCellStyle(editor, 'border-style')),
           onSetup: selectionTargets.onSetupCellOrRow
         });
         editor.ui.registry.addNestedMenuItem('tablecellbackgroundcolor', {
           icon: 'cell-background-color',
-          te***REMOVED***t: 'Background color',
+          text: 'Background color',
           getSubmenuItems: () => buildColorMenu(editor, getTableBackgroundColorMap(editor), 'background-color'),
           onSetup: selectionTargets.onSetupCellOrRow
         });
         editor.ui.registry.addNestedMenuItem('tablecellbordercolor', {
           icon: 'cell-border-color',
-          te***REMOVED***t: 'Border color',
+          text: 'Border color',
           getSubmenuItems: () => buildColorMenu(editor, getTableBorderColorMap(editor), 'border-color'),
           onSetup: selectionTargets.onSetupCellOrRow
         });
       }
       addToggleMenuIfRegistered('tablecaption', {
         icon: 'table-caption',
-        te***REMOVED***t: 'Table caption',
+        text: 'Table caption',
         command: 'mceTableToggleCaption',
         onSetup: selectionTargets.onSetupTableWithCaption
       });
       addToggleMenuIfRegistered('tablerowheader', {
-        te***REMOVED***t: 'Row header',
+        text: 'Row header',
         icon: 'table-top-header',
         command: 'mceTableRowType',
         onAction: changeRowHeader(editor),
         onSetup: selectionTargets.onSetupTableRowHeaders
       });
       addToggleMenuIfRegistered('tablecolheader', {
-        te***REMOVED***t: 'Column header',
+        text: 'Column header',
         icon: 'table-left-header',
         command: 'mceTableColType',
         onAction: changeColumnHeader(editor),

@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "lists" plugin for usage with module loaders
+// Exports the "lists" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/lists')

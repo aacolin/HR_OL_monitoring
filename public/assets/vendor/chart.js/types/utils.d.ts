@@ -3,28 +3,28 @@
 // DeepPartial implementation taken from the utility-types NPM package, which is
 // Copyright (c) 2016 Piotr Witek <piotrek.witek@gmail.com> (http://piotrwitek.github.io)
 // and used under the terms of the MIT license
-e***REMOVED***port type DeepPartial<T> = T e***REMOVED***tends Function
+export type DeepPartial<T> = T extends Function
   ? T
-  : T e***REMOVED***tends Array<infer U>
+  : T extends Array<infer U>
     ? _DeepPartialArray<U>
-    : T e***REMOVED***tends object
+    : T extends object
       ? _DeepPartialObject<T>
       : T | undefined;
 
 type _DeepPartialArray<T> = Array<DeepPartial<T>>
 type _DeepPartialObject<T> = { [P in keyof T]?: DeepPartial<T[P]> };
 
-e***REMOVED***port type DistributiveArray<T> = [T] e***REMOVED***tends [unknown] ? Array<T> : never
+export type DistributiveArray<T> = [T] extends [unknown] ? Array<T> : never
 
 // https://stackoverflow.com/a/50375286
-e***REMOVED***port type UnionToIntersection<U> = (U e***REMOVED***tends unknown ? (k: U) => void : never) e***REMOVED***tends (k: infer I) => void ? I : never;
+export type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
 
-e***REMOVED***port type AllKeys<T> = T e***REMOVED***tends any ? keyof T : never;
+export type AllKeys<T> = T extends any ? keyof T : never;
 
-e***REMOVED***port type PickType<T, K e***REMOVED***tends AllKeys<T>> = T e***REMOVED***tends { [k in K]?: any }
+export type PickType<T, K extends AllKeys<T>> = T extends { [k in K]?: any }
   ? T[K]
   : undefined;
 
-e***REMOVED***port type Merge<T e***REMOVED***tends object> = {
+export type Merge<T extends object> = {
   [k in AllKeys<T>]: PickType<T, k>;
 };

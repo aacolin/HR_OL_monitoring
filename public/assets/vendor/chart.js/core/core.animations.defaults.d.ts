@@ -1,1 +1,1 @@
-e***REMOVED***port function applyAnimationsDefaults(defaults: any): void;
+export function applyAnimationsDefaults(defaults: any): void;

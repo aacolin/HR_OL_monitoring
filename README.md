@@ -3,10 +3,10 @@
 # Final Project - Heart Rate Monitoring Project
 
 ## Overview
-This project implements the **Heart Track** application, an IoT-enabled system for monitoring heart rate and blood o***REMOVED***ygen saturation levels. It integrates hardware, backend services, and a responsive web application to provide a seamless user e***REMOVED***perience for individuals or physicians (for advanced functionality).
+This project implements the **Heart Track** application, an IoT-enabled system for monitoring heart rate and blood oxygen saturation levels. It integrates hardware, backend services, and a responsive web application to provide a seamless user experience for individuals or physicians (for advanced functionality).
 
 ## Features
-- Periodic heart rate and blood o***REMOVED***ygen saturation monitoring using the MAX30102 sensor.
+- Periodic heart rate and blood oxygen saturation monitoring using the MAX30102 sensor.
 - IoT device integration with configurable measurement schedules.
 - Responsive web application for monitoring and visualization.
 - Secure backend with RESTful API endpoints and token-based authentication.
@@ -15,7 +15,7 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 
 ## Team Members
 - Member 1: Aaron Colin   - aaroncolin@arizona.edu
-- Member 2: Ashish Khadka - khadka***REMOVED***ashish@arizona.edu
+- Member 2: Ashish Khadka - khadkaxashish@arizona.edu
 - Member 3: Taron Bashar  - taronbashar@arizona.edu
 
 ---
@@ -30,7 +30,7 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 | `public/`            | Static assets (CSS, JS, images) for the frontend.                                           |
 | `views/`             | EJS templates for rendering the frontend.                                                   |
 | `firmware/`          | Embedded code for the IoT device.                                                           |
-| `node_modules/`      | Node.js dependencies (e***REMOVED***cluded via `.gitignore`).                                           |
+| `node_modules/`      | Node.js dependencies (excluded via `.gitignore`).                                           |
 | `package.json`       | Project metadata and dependencies.                                                          |
 | `README.md`          | Documentation for the project.                                                              |
 
@@ -95,15 +95,15 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 | `/api/physicians`         | GET        | Retrieve aggregated patient data.             |
 | `/api/physicians/manage`  | POST       | Manage patient accounts and linked devices.   |  
 | `/sensor/data`            | POST       | Particle Server Endpoint reach                |
-| `/sensor/readAll`         | GET        | Reads all the e***REMOVED***isting data in DB             |
+| `/sensor/readAll`         | GET        | Reads all the existing data in DB             |
 | `/sensor/userDayLog`      | GET        | Read user day activity from DB (in progress)  |
-| `/sensor/deleteAll`       | POST       | Drops all the content of e***REMOVED***isting DB          |
+| `/sensor/deleteAll`       | POST       | Drops all the content of existing DB          |
 ---
 
 ## Web Application Features
 - **Login/Logout:** Secure user authentication.
-- **Weekly Summary:** View average, minimum, and ma***REMOVED***imum heart rate for the past 7 days.
-- **Daily Details:** Visualize time-series data for heart rate and blood o***REMOVED***ygen levels.
+- **Weekly Summary:** View average, minimum, and maximum heart rate for the past 7 days.
+- **Daily Details:** Visualize time-series data for heart rate and blood oxygen levels.
 - **Responsive Design:** Optimized for desktop, tablet, and mobile devices.
 
 ---
@@ -111,11 +111,11 @@ This project implements the **Heart Track** application, an IoT-enabled system f
 ## Default Login Credentials
 
 ### Patient Account
-- **Username:** patient@e***REMOVED***ample.com
+- **Username:** patient@example.com
 - **Password:** patient123
 
 ### Physician Account
-- **Username:** physician@e***REMOVED***ample.com
+- **Username:** physician@example.com
 - **Password:** doctor123
 
 ---
@@ -130,7 +130,7 @@ The following sections are incomplete and require input:
 
 - **Live Server URL:**  
    - [AWS serving http](http://ec2-3-142-184-106.us-east-2.compute.amazonaws.com:3000/)
-   - [NGROK serving https port forwared and reverse pro***REMOVED***y technique ]( https://45a9-3-142-184-106.ngrok-free.app/user-profile.html)
+   - [NGROK serving https port forwared and reverse proxy technique ]( https://45a9-3-142-184-106.ngrok-free.app/user-profile.html)
 
 - **Project Documentation**
   - [Project submission PDF File](https://gitlab.com/ece_iot/hart_rate_monitoring/-/blob/main/Project_Report.pdf)
@@ -158,9 +158,9 @@ The following sections are incomplete and require input:
 - [Particle Photon Documentation](https://docs.particle.io/)
 - [Particle Argon Documentation](https://docs.particle.io/reference/datasheets/wi-fi/argon-datasheet/)
 - [Particle CLI Tools](https://docs.particle.io/reference/developer-tools/cli/)
-- [SparkFun-MAX3010***REMOVED*** (community library) Maintained by Particle](https://docs.particle.io/reference/device-os/libraries/s/SparkFun-MAX3010***REMOVED***/)
-- [Firmware and Driver for the sensor by SparkFun](https://github.com/sparkfun/SparkFun_MAX3010***REMOVED***_Sensor_Library/blob/master/src/MAX30105.h)
-- [Demonstartaion and how to MAX30105 Sensor by SparkFun](https://learn.sparkfun.com/tutorials/ma***REMOVED***30105-particle-and-pulse-o***REMOVED***-sensor-hookup-guide#e***REMOVED***ample-2---presence-sensing)
+- [SparkFun-MAX3010x (community library) Maintained by Particle](https://docs.particle.io/reference/device-os/libraries/s/SparkFun-MAX3010x/)
+- [Firmware and Driver for the sensor by SparkFun](https://github.com/sparkfun/SparkFun_MAX3010x_Sensor_Library/blob/master/src/MAX30105.h)
+- [Demonstartaion and how to MAX30105 Sensor by SparkFun](https://learn.sparkfun.com/tutorials/max30105-particle-and-pulse-ox-sensor-hookup-guide#example-2---presence-sensing)
 
 ---
 

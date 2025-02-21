@@ -1,4 +1,4 @@
-e***REMOVED***port default class LineElement e***REMOVED***tends Element<import("../types/basic.js").AnyObject, import("../types/basic.js").AnyObject> {
+export default class LineElement extends Element<import("../types/basic.js").AnyObject, import("../types/basic.js").AnyObject> {
     static id: string;
     /**
      * @type {any}
@@ -6,7 +6,7 @@ e***REMOVED***port default class LineElement e***REMOVED***tends Element<import(
     static defaults: any;
     static descriptors: {
         _scriptable: boolean;
-        _inde***REMOVED***able: (name: any) => boolean;
+        _indexable: (name: any) => boolean;
     };
     constructor(cfg: any);
     animated: boolean;
@@ -19,8 +19,8 @@ e***REMOVED***port default class LineElement e***REMOVED***tends Element<import(
     _segments: import("../helpers/helpers.segment.js").Segment[];
     _decimated: boolean;
     _pointsUpdated: boolean;
-    _datasetInde***REMOVED***: any;
-    updateControlPoints(chartArea: any, inde***REMOVED***A***REMOVED***is: any): void;
+    _datasetIndex: any;
+    updateControlPoints(chartArea: any, indexAxis: any): void;
     set points(arg: any);
     get points(): any;
     get segments(): import("../helpers/helpers.segment.js").Segment[];
@@ -44,19 +44,19 @@ e***REMOVED***port default class LineElement e***REMOVED***tends Element<import(
     interpolate(point: PointElement, property: string): PointElement | undefined;
     /**
        * Append a segment of this line to current path.
-       * @param {CanvasRenderingConte***REMOVED***t2D} ct***REMOVED***
+       * @param {CanvasRenderingContext2D} ctx
        * @param {object} segment
-       * @param {number} segment.start - start inde***REMOVED*** of the segment, referring the points array
-       * @param {number} segment.end - end inde***REMOVED*** of the segment, referring the points array
+       * @param {number} segment.start - start index of the segment, referring the points array
+       * @param {number} segment.end - end index of the segment, referring the points array
        * @param {boolean} segment.loop - indicates that the segment is a loop
        * @param {object} params
        * @param {boolean} params.move - move to starting point (vs line to it)
        * @param {boolean} params.reverse - path the segment from end to start
-       * @param {number} params.start - limit segment to points starting from `start` inde***REMOVED***
-       * @param {number} params.end - limit segment to points ending at `start` + `count` inde***REMOVED***
+       * @param {number} params.start - limit segment to points starting from `start` index
+       * @param {number} params.end - limit segment to points ending at `start` + `count` index
        * @returns {undefined|boolean} - true if the segment is a full loop (path should be closed)
        */
-    pathSegment(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, segment: {
+    pathSegment(ctx: CanvasRenderingContext2D, segment: {
         start: number;
         end: number;
         loop: boolean;
@@ -68,20 +68,20 @@ e***REMOVED***port default class LineElement e***REMOVED***tends Element<import(
     }): undefined | boolean;
     /**
        * Append all segments of this line to current path.
-       * @param {CanvasRenderingConte***REMOVED***t2D|Path2D} ct***REMOVED***
+       * @param {CanvasRenderingContext2D|Path2D} ctx
        * @param {number} [start]
        * @param {number} [count]
        * @returns {undefined|boolean} - true if line is a full loop (path should be closed)
        */
-    path(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D | Path2D, start?: number, count?: number): undefined | boolean;
+    path(ctx: CanvasRenderingContext2D | Path2D, start?: number, count?: number): undefined | boolean;
     /**
        * Draw
-       * @param {CanvasRenderingConte***REMOVED***t2D} ct***REMOVED***
+       * @param {CanvasRenderingContext2D} ctx
        * @param {object} chartArea
        * @param {number} [start]
        * @param {number} [count]
        */
-    draw(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, chartArea: object, start?: number, count?: number): void;
+    draw(ctx: CanvasRenderingContext2D, chartArea: object, start?: number, count?: number): void;
 }
-e***REMOVED***port type PointElement = import('./element.point.js').default;
+export type PointElement = import('./element.point.js').default;
 import Element from "../core/core.element.js";

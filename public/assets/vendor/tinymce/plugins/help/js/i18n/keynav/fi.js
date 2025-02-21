@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.fi',
   '\n' +
   '<dl>\n' +
   '  <dt>Siirrä kohdistus valikkopalkkiin</dt>\n' +
-  '  <dd>Windows tai Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows tai Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Siirrä kohdistus työkalupalkkiin</dt>\n' +
-  '  <dd>Windows tai Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows tai Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Siirrä kohdistus alatunnisteeseen</dt>\n' +
-  '  <dd>Windows tai Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows tai Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Keskitä ilmoitukseen</dt>\n' +
-  '  <dd>Windows ja Linu***REMOVED***: Alt + F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows ja Linux: Alt + F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>Siirrä kohdistus kontekstuaaliseen työkalupalkkiin</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** tai macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux tai macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Navigointi aloitetaan ensimmäisestä käyttöliittymän kohteesta, joka joko korostetaan tai alleviivataan, jos\n' +

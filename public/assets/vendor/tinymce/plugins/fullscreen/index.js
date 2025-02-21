@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "fullscreen" plugin for usage with module loaders
+// Exports the "fullscreen" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/fullscreen')

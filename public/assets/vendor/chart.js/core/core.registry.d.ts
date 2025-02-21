@@ -1,8 +1,8 @@
 /**
- * Please use the module's default e***REMOVED***port which provides a singleton instance
- * Note: class is e***REMOVED***ported for typedoc
+ * Please use the module's default export which provides a singleton instance
+ * Note: class is exported for typedoc
  */
-e***REMOVED***port class Registry {
+export class Registry {
     controllers: TypedRegistry;
     elements: TypedRegistry;
     plugins: TypedRegistry;
@@ -72,7 +72,7 @@ e***REMOVED***port class Registry {
     /**
        * @private
        */
-    private _e***REMOVED***ec;
+    private _exec;
     /**
        * @private
        */
@@ -83,7 +83,7 @@ e***REMOVED***port class Registry {
     private _get;
 }
 declare const _default: Registry;
-e***REMOVED***port default _default;
+export default _default;
 import TypedRegistry from "./core.typedRegistry.js";
 import DatasetController from "./core.datasetController.js";
 import Element from "./core.element.js";

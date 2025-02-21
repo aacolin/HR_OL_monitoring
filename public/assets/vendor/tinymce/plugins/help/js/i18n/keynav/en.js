@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.en',
   '\n' +
   '<dl>\n' +
   '  <dt>Focus the Menu bar</dt>\n' +
-  '  <dd>Windows or Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows or Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Focus the Toolbar</dt>\n' +
-  '  <dd>Windows or Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows or Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Focus the footer</dt>\n' +
-  '  <dd>Windows or Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows or Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Focus the notification</dt>\n' +
-  '  <dd>Windows or Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
-  '  <dt>Focus a conte***REMOVED***tual toolbar</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** or macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows or Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
+  '  <dt>Focus a contextual toolbar</dt>\n' +
+  '  <dd>Windows, Linux or macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Navigation will start at the first UI item, which will be highlighted, or underlined in the case of the first item in\n' +
@@ -23,7 +23,7 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.en',
   '\n' +
   '<h1>Navigate between UI sections</h1>\n' +
   '\n' +
-  '<p>To move from one UI section to the ne***REMOVED***t, press <strong>Tab</strong>.</p>\n' +
+  '<p>To move from one UI section to the next, press <strong>Tab</strong>.</p>\n' +
   '\n' +
   '<p>To move from one UI section to the previous, press <strong>Shift+Tab</strong>.</p>\n' +
   '\n' +
@@ -46,7 +46,7 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.en',
   '\n' +
   '<h1>Navigate within UI sections</h1>\n' +
   '\n' +
-  '<p>To move from one UI element to the ne***REMOVED***t, press the appropriate <strong>Arrow</strong> key.</p>\n' +
+  '<p>To move from one UI element to the next, press the appropriate <strong>Arrow</strong> key.</p>\n' +
   '\n' +
   '<p>The <strong>Left</strong> and <strong>Right</strong> arrow keys</p>\n' +
   '\n' +
@@ -68,13 +68,13 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.en',
   '\n' +
   '<p>To close an open menu, an open sub-menu, or an open pop-up menu, press the <strong>Esc</strong> key.</p>\n' +
   '\n' +
-  '<p>If the current focus is at the ‘top’ of a particular UI section, pressing the <strong>Esc</strong> key also e***REMOVED***its\n' +
+  '<p>If the current focus is at the ‘top’ of a particular UI section, pressing the <strong>Esc</strong> key also exits\n' +
   '  keyboard navigation entirely.</p>\n' +
   '\n' +
-  '<h1>E***REMOVED***ecute a menu item or toolbar button</h1>\n' +
+  '<h1>Execute a menu item or toolbar button</h1>\n' +
   '\n' +
   '<p>When the desired menu item or toolbar button is highlighted, press <strong>Return</strong>, <strong>Enter</strong>,\n' +
-  '  or the <strong>Space bar</strong> to e***REMOVED***ecute the item.</p>\n' +
+  '  or the <strong>Space bar</strong> to execute the item.</p>\n' +
   '\n' +
   '<h1>Navigate non-tabbed dialogs</h1>\n' +
   '\n' +

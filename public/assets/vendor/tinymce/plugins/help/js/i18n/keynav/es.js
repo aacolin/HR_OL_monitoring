@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.es',
   '\n' +
   '<dl>\n' +
   '  <dt>Enfocar la barra de menús</dt>\n' +
-  '  <dd>Windows o Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows o Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Enfocar la barra de herramientas</dt>\n' +
-  '  <dd>Windows o Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows o Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Enfocar el pie de página</dt>\n' +
-  '  <dd>Windows o Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows o Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Enfocar la notificación</dt>\n' +
-  '  <dd>Windows o Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
-  '  <dt>Enfocar una barra de herramientas conte***REMOVED***tual</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** o macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows o Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
+  '  <dt>Enfocar una barra de herramientas contextual</dt>\n' +
+  '  <dd>Windows, Linux o macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>La navegación comenzará por el primer elemento de la interfaz de usuario (IU), de tal manera que se resaltará, o bien se subrayará si se trata del primer elemento de\n' +

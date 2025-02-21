@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.ca',
   '\n' +
   '<dl>\n' +
   '  <dt>Enfocar la barra de menús</dt>\n' +
-  '  <dd>Windows o Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows o Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   "  <dt>Enfocar la barra d'eines</dt>\n" +
-  '  <dd>Windows o Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows o Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Enfocar el peu de pàgina</dt>\n' +
-  '  <dd>Windows o Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows o Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Enfocar la notificació</dt>\n' +
-  '  <dd>Windows o Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
-  "  <dt>Enfocar una barra d'eines conte***REMOVED***tual</dt>\n" +
-  '  <dd>Windows, Linu***REMOVED*** o macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows o Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
+  "  <dt>Enfocar una barra d'eines contextual</dt>\n" +
+  '  <dd>Windows, Linux o macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   "<p>La navegació començarà en el primer element de la interfície d'usuari, que es ressaltarà o subratllarà per al primer element a\n" +
@@ -46,9 +46,9 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.ca',
   '\n' +
   "<h1>Navegació dins de les seccions de la interfície d'usuari</h1>\n" +
   '\n' +
-  "<p>Per desplaçar-vos des d'un element de la interfície d'usuari al següent, premeu la tecla de <strong>Flet***REMOVED***a</strong> adequada.</p>\n" +
+  "<p>Per desplaçar-vos des d'un element de la interfície d'usuari al següent, premeu la tecla de <strong>Fletxa</strong> adequada.</p>\n" +
   '\n' +
-  '<p>Les tecles de flet***REMOVED***a <strong>Esquerra</strong> i <strong>Dreta</strong></p>\n' +
+  '<p>Les tecles de fletxa <strong>Esquerra</strong> i <strong>Dreta</strong></p>\n' +
   '\n' +
   '<ul>\n' +
   '  <li>us permeten desplaçar-vos entre menús de la barra de menús.</li>\n' +
@@ -57,24 +57,24 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.ca',
   "  <li>us permeten desplaçar-vos entre elements de la ruta d'elements del peu de pàgina.</li>\n" +
   '</ul>\n' +
   '\n' +
-  '<p>Les tecles de flet***REMOVED***a <strong>Avall</strong> i <strong>Amunt</strong></p>\n' +
+  '<p>Les tecles de fletxa <strong>Avall</strong> i <strong>Amunt</strong></p>\n' +
   '\n' +
   '<ul>\n' +
   "  <li>us permeten desplaçar-vos entre elements de menú d'un menú.</li>\n" +
   "  <li>us permeten desplaçar-vos entre elements d'un menú emergent de la barra d'eines.</li>\n" +
   '</ul>\n' +
   '\n' +
-  "<p>Les tecles de <strong>Flet***REMOVED***a</strong> us permeten desplaçar-vos dins de la secció de la interfície d'usuari que té el focus.</p>\n" +
+  "<p>Les tecles de <strong>Fletxa</strong> us permeten desplaçar-vos dins de la secció de la interfície d'usuari que té el focus.</p>\n" +
   '\n' +
   '<p>Per tancar un menú, un submenú o un menú emergent oberts, premeu la tecla <strong>Esc</strong>.</p>\n' +
   '\n' +
   "<p>Si el focus actual es troba a la ‘part superior’ d'una secció específica de la interfície d'usuari, en prémer la tecla <strong>Esc</strong> també es tanca\n" +
   '  completament la navegació amb el teclat.</p>\n' +
   '\n' +
-  "<h1>E***REMOVED***ecució d'un element de menú o d'un botó de la barra d'eines</h1>\n" +
+  "<h1>Execució d'un element de menú o d'un botó de la barra d'eines</h1>\n" +
   '\n' +
   "<p>Quan l'element del menú o el botó de la barra d'eines que desitgeu estigui ressaltat, premeu <strong>Retorn</strong>, <strong>Intro</strong>\n" +
-  "  o la <strong>barra d'espai</strong> per e***REMOVED***ecutar l'element.</p>\n" +
+  "  o la <strong>barra d'espai</strong> per executar l'element.</p>\n" +
   '\n' +
   '<h1>Navegació per quadres de diàleg sense pestanyes</h1>\n' +
   '\n' +
@@ -89,5 +89,5 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.ca',
   "<p>Per desplaçar-vos entre components interactius d'aquest quadre de diàleg, premeu la tecla <strong>Tab</strong> o\n" +
   '  les tecles <strong>Maj+Tab</strong>.</p>\n' +
   '\n' +
-  "<p>Canvieu a la pestanya d'un altre quadre de diàleg, tot enfocant el menú de la pestanya, i després premeu la tecla <strong>Flet***REMOVED***a</strong> adequada\n" +
+  "<p>Canvieu a la pestanya d'un altre quadre de diàleg, tot enfocant el menú de la pestanya, i després premeu la tecla <strong>Fletxa</strong> adequada\n" +
   '  per canviar entre les pestanyes disponibles.</p>\n');

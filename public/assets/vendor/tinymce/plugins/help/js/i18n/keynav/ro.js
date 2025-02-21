@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.ro',
   '\n' +
   '<dl>\n' +
   '  <dt>Focalizare pe bara de meniu</dt>\n' +
-  '  <dd>Windows sau Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows sau Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Focalizare pe bara de instrumente</dt>\n' +
-  '  <dd>Windows sau Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows sau Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Focalizare pe subsol</dt>\n' +
-  '  <dd>Windows sau Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows sau Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Focalizare pe notificare</dt>\n' +
-  '  <dd>Windows sau Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
-  '  <dt>Focalizare pe o bară de instrumente conte***REMOVED***tuală</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** sau macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows sau Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
+  '  <dt>Focalizare pe o bară de instrumente contextuală</dt>\n' +
+  '  <dd>Windows, Linux sau macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Navigarea va începe de la primul element al interfeței cu utilizatorul, care va fi evidențiat sau subliniat în cazul primului element din\n' +
@@ -41,7 +41,7 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.ro',
   '\n' +
   '<p>În cazul în care o secțiune a interfeței cu utilizatorul nu este prezentă, aceasta este omisă.</p>\n' +
   '\n' +
-  '<p>În cazul în care subsolul are focalizarea navigației asupra tastaturii și nu e***REMOVED***istă o bară laterală vizibilă, apăsarea butonului <strong>Shift+Tab</strong>\n' +
+  '<p>În cazul în care subsolul are focalizarea navigației asupra tastaturii și nu există o bară laterală vizibilă, apăsarea butonului <strong>Shift+Tab</strong>\n' +
   '  mută focalizarea pe primul grup de bare de instrumente, nu pe ultimul.</p>\n' +
   '\n' +
   '<h1>Navigați în secțiunile interfeței cu utilizatorul</h1>\n' +
@@ -71,10 +71,10 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.ro',
   '<p>Dacă focalizarea curentă este asupra „părții superioare” a unei anumite secțiuni a interfeței cu utilizatorul, prin apăsarea tastei <strong>Esc</strong> se iese, de asemenea,\n' +
   '  în întregime din navigarea de la tastatură.</p>\n' +
   '\n' +
-  '<h1>E***REMOVED***ecutarea unui element de meniu sau a unui buton din bara de instrumente</h1>\n' +
+  '<h1>Executarea unui element de meniu sau a unui buton din bara de instrumente</h1>\n' +
   '\n' +
   '<p>Atunci când elementul de meniu dorit sau butonul dorit din bara de instrumente este evidențiat, apăsați <strong>Return</strong>, <strong>Enter</strong>,\n' +
-  '  sau <strong>bara de spațiu</strong> pentru a e***REMOVED***ecuta elementul.</p>\n' +
+  '  sau <strong>bara de spațiu</strong> pentru a executa elementul.</p>\n' +
   '\n' +
   '<h1>Navigarea de dialoguri fără file</h1>\n' +
   '\n' +

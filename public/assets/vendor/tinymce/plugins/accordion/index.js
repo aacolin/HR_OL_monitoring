@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "accordion" plugin for usage with module loaders
+// Exports the "accordion" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/accordion')

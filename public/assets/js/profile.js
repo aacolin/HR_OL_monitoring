@@ -32,11 +32,11 @@ function redirectToHomePage() {
 }
 
 function validateTokenWithServer(token) {
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/patients/token-auth',
         method: 'GET',
         contentType: 'application/json',
-        headers: {'***REMOVED***-auth': token},
+        headers: {'x-auth': token},
         dataType: 'json',
     }).done(function(data) {
         document.body.classList.remove('hidden');
@@ -63,7 +63,7 @@ function setupLogoutHandler() {
 }
 
 function getPatientProfile(token) {
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/patients/profile',
         method: 'POST',
         contentType: 'application/json',
@@ -87,7 +87,7 @@ function getPatientProfile(token) {
 function getPhysicianInfo(physicianEmail) {
     return new Promise(function(resolve, reject) {
         const email = physicianEmail;
-        $.aja***REMOVED***({
+        $.ajax({
             url: '/physicians/physician-info',
             method: 'POST',
             contentType: 'application/json',
@@ -107,13 +107,13 @@ function displayPatientProfile(patient, physician) {
     const patientFullName = `${patient.firstName} ${patient.lastName}`;
     const patientEmail = patient.email;
 
-    $('#patientEmail').te***REMOVED***t(patientEmail);
-    $('.patientFullName').te***REMOVED***t(patientFullName);
+    $('#patientEmail').text(patientEmail);
+    $('.patientFullName').text(patientFullName);
 
     if (!physician.email) {
-        $('#physicianName').te***REMOVED***t('No Physician Assigned. Please select a physician.');
+        $('#physicianName').text('No Physician Assigned. Please select a physician.');
     } else {
-        $('#physicianName').te***REMOVED***t(`Dr. ${physician.firstName} ${physician.lastName}`);
+        $('#physicianName').text(`Dr. ${physician.firstName} ${physician.lastName}`);
     }
 }
 
@@ -143,7 +143,7 @@ function setupSaveProfileChangesHandler() {
 
 function saveProfileChanges(firstName, lastName) {
     const token = window.sessionStorage.getItem('patient-token');
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/patients/profile',
         method: 'PUT',
         contentType: 'application/json',
@@ -241,7 +241,7 @@ function setupChangePasswordHandler() {
 
 function changePassword(currentPassword, newPassword) {
     const token = window.sessionStorage.getItem('patient-token');
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/patients/change-password',
         method: 'PUT',
         contentType: 'application/json',
@@ -286,7 +286,7 @@ function setupTabSwitchHandlers() {
 function setupPhysicianListHandler() {
     const email = window.sessionStorage.getItem('patient-token');
  
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/physicians/physicians-list',
         method: 'POST',
         contentType: 'application/json',
@@ -313,14 +313,14 @@ function setupChangePhysicianHandler() {
         event.preventDefault();
         const physicianEmail = $('#physicianList').val();
         // alert(physicianEmail);   
-        const patientEmail = $('#patientEmail').te***REMOVED***t();
+        const patientEmail = $('#patientEmail').text();
         // alert(patientEmail); 
         changePhysician(physicianEmail, patientEmail);
     });
 }
 
 function changePhysician(physicianEmail, patientEmail) {
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/patients/change-physician',
         method: 'PUT',
         contentType: 'application/json',
@@ -342,7 +342,7 @@ function changePhysician(physicianEmail, patientEmail) {
 
 function getPatientDeviceInfo() {
     const token = window.sessionStorage.getItem('patient-token');
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/devices/device-info',
         method: 'POST',
         contentType: 'application/json',
@@ -353,8 +353,8 @@ function getPatientDeviceInfo() {
        
         const deviceName = serverResponse.product_id === 32 ? "Photon" : "Argon";
         const firmwareVersion = serverResponse.system_firmware_version;
-        $('#currentDevice').te***REMOVED***t(deviceName);
-        $('#firmwareVersion').te***REMOVED***t(firmwareVersion);
+        $('#currentDevice').text(deviceName);
+        $('#firmwareVersion').text(firmwareVersion);
         
     })
     .fail(function(err) {

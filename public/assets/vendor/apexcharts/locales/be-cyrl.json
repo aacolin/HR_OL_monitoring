@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Нд", "Пн", "Аў", "Ср", "Чц", "Пт", "Сб"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Спампаваць SVG",
-      "e***REMOVED***portToPNG": "Спампаваць PNG",
-      "e***REMOVED***portToCSV": "Спампаваць CSV",
+      "exportToSVG": "Спампаваць SVG",
+      "exportToPNG": "Спампаваць PNG",
+      "exportToCSV": "Спампаваць CSV",
       "menu": "Мэню",
       "selection": "Вылучэньне",
       "selectionZoom": "Вылучэньне з маштабаваньнем",

@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.hi',
   '\n' +
   '<dl>\n' +
   '  <dt>मेन्यू बार पर फ़ोकस करें</dt>\n' +
-  '  <dd>Windows या Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows या Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>टूलबार पर फ़ोकस करें</dt>\n' +
-  '  <dd>Windows या Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows या Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>फ़ुटर पर फ़ोकस करें</dt>\n' +
-  '  <dd>Windows या Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows या Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>नोटिफ़िकेशन फ़ोकस</dt>\n' +
-  '  <dd>Windows या Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows या Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>प्रासंगिक टूलबार पर फ़ोकस करें</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** या macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux या macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>नेविगेशन पहले UI आइटम पर शुरू होगा, जिसे हाइलाइट किया जाएगा या पहले आइटम के मामले में फ़ुटर तत्व पथ में\n' +

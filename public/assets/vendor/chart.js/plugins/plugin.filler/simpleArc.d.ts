@@ -1,11 +1,11 @@
-e***REMOVED***port class simpleArc {
+export class simpleArc {
     constructor(opts: any);
-    ***REMOVED***: any;
+    x: any;
     y: any;
     radius: any;
-    pathSegment(ct***REMOVED***: any, bounds: any, opts: any): boolean;
+    pathSegment(ctx: any, bounds: any, opts: any): boolean;
     interpolate(point: any): {
-        ***REMOVED***: any;
+        x: any;
         y: any;
         angle: any;
     };

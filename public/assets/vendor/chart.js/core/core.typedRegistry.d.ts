@@ -1,7 +1,7 @@
 /**
  * @typedef {{id: string, defaults: any, overrides?: any, defaultRoutes: any}} IChartComponent
  */
-e***REMOVED***port default class TypedRegistry {
+export default class TypedRegistry {
     constructor(type: any, scope: any, override: any);
     type: any;
     scope: any;
@@ -23,7 +23,7 @@ e***REMOVED***port default class TypedRegistry {
        */
     unregister(item: IChartComponent): void;
 }
-e***REMOVED***port type IChartComponent = {
+export type IChartComponent = {
     id: string;
     defaults: any;
     overrides?: any;

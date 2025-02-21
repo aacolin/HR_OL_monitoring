@@ -7,4 +7,4 @@ declare namespace _default {
     function beforeElementsUpdate(chart: any, args: any, options: any): void;
     function destroy(chart: any): void;
 }
-e***REMOVED***port default _default;
+export default _default;

@@ -40,9 +40,9 @@
     ],
     "shortDays": ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "ดาวน์โหลด SVG",
-      "e***REMOVED***portToPNG": "ดาวน์โหลด PNG",
-      "e***REMOVED***portToCSV": "ดาวน์โหลด CSV",
+      "exportToSVG": "ดาวน์โหลด SVG",
+      "exportToPNG": "ดาวน์โหลด PNG",
+      "exportToCSV": "ดาวน์โหลด CSV",
       "menu": "เมนู",
       "selection": "เลือก",
       "selectionZoom": "เลือกจุดที่จะซูม",

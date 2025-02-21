@@ -1,4 +1,4 @@
-e***REMOVED***port class Tooltip e***REMOVED***tends Element<import("../types/basic.js").AnyObject, import("../types/basic.js").AnyObject> {
+export class Tooltip extends Element<import("../types/basic.js").AnyObject, import("../types/basic.js").AnyObject> {
     /**
      * @namespace Chart.Tooltip.positioners
      */
@@ -7,14 +7,14 @@ e***REMOVED***port class Tooltip e***REMOVED***tends Element<import("../types/ba
            * Average mode places the tooltip at the average position of the elements shown
            */
         average(items: any): false | {
-            ***REMOVED***: number;
+            x: number;
             y: number;
         };
         /**
            * Gets the tooltip position nearest of the item nearest to the event position
            */
         nearest(items: any, eventPosition: any): false | {
-            ***REMOVED***: any;
+            x: any;
             y: any;
         };
     };
@@ -29,7 +29,7 @@ e***REMOVED***port class Tooltip e***REMOVED***tends Element<import("../types/ba
     _cachedAnimations: Readonly<Animations>;
     _tooltipItems: any[];
     $animations: any;
-    $conte***REMOVED***t: any;
+    $context: any;
     chart: any;
     options: any;
     dataPoints: {
@@ -39,8 +39,8 @@ e***REMOVED***port class Tooltip e***REMOVED***tends Element<import("../types/ba
         raw: any;
         formattedValue: any;
         dataset: any;
-        dataInde***REMOVED***: number;
-        datasetInde***REMOVED***: number;
+        dataIndex: number;
+        datasetIndex: number;
         element: Element<import("../types/basic.js").AnyObject, import("../types/basic.js").AnyObject>;
     }[];
     title: any;
@@ -48,9 +48,9 @@ e***REMOVED***port class Tooltip e***REMOVED***tends Element<import("../types/ba
     body: any[];
     afterBody: any;
     footer: any;
-    ***REMOVED***Align: any;
+    xAlign: any;
     yAlign: any;
-    ***REMOVED***: any;
+    x: any;
     y: any;
     height: number;
     width: number;
@@ -58,7 +58,7 @@ e***REMOVED***port class Tooltip e***REMOVED***tends Element<import("../types/ba
     caretY: any;
     labelColors: any[];
     labelPointStyles: any[];
-    labelTe***REMOVED***tColors: any[];
+    labelTextColors: any[];
     initialize(options: any): void;
     /**
        * @private
@@ -67,8 +67,8 @@ e***REMOVED***port class Tooltip e***REMOVED***tends Element<import("../types/ba
     /**
        * @protected
        */
-    protected getConte***REMOVED***t(): any;
-    getTitle(conte***REMOVED***t: any, options: any): any;
+    protected getContext(): any;
+    getTitle(context: any, options: any): any;
     getBeforeBody(tooltipItems: any, options: any): any;
     getBody(tooltipItems: any, options: any): any[];
     getAfterBody(tooltipItems: any, options: any): any;
@@ -78,25 +78,25 @@ e***REMOVED***port class Tooltip e***REMOVED***tends Element<import("../types/ba
        */
     private _createItems;
     update(changed: any, replay: any): void;
-    drawCaret(tooltipPoint: any, ct***REMOVED***: any, size: any, options: any): void;
+    drawCaret(tooltipPoint: any, ctx: any, size: any, options: any): void;
     getCaretPosition(tooltipPoint: any, size: any, options: any): {
-        ***REMOVED***1: any;
-        ***REMOVED***2: any;
-        ***REMOVED***3: any;
+        x1: any;
+        x2: any;
+        x3: any;
         y1: any;
         y2: any;
         y3: any;
     };
-    drawTitle(pt: any, ct***REMOVED***: any, options: any): void;
+    drawTitle(pt: any, ctx: any, options: any): void;
     /**
        * @private
        */
-    private _drawColorBo***REMOVED***;
-    drawBody(pt: any, ct***REMOVED***: any, options: any): void;
-    drawFooter(pt: any, ct***REMOVED***: any, options: any): void;
-    drawBackground(pt: any, ct***REMOVED***: any, tooltipSize: any, options: any): void;
+    private _drawColorBox;
+    drawBody(pt: any, ctx: any, options: any): void;
+    drawFooter(pt: any, ctx: any, options: any): void;
+    drawBackground(pt: any, ctx: any, tooltipSize: any, options: any): void;
     /**
-       * Update ***REMOVED***/y animation targets when _active elements are animating too
+       * Update x/y animation targets when _active elements are animating too
        * @private
        */
     private _updateAnimationTarget;
@@ -105,7 +105,7 @@ e***REMOVED***port class Tooltip e***REMOVED***tends Element<import("../types/ba
      * @returns {boolean} True if the tooltip will render
      */
     _willRender(): boolean;
-    draw(ct***REMOVED***: any): void;
+    draw(ctx: any): void;
     /**
        * Get active elements in the tooltip
        * @returns {Array} Array of elements that are active in the tooltip
@@ -113,7 +113,7 @@ e***REMOVED***port class Tooltip e***REMOVED***tends Element<import("../types/ba
     getActiveElements(): any[];
     /**
        * Set active elements in the tooltip
-       * @param {array} activeElements Array of active datasetInde***REMOVED***/inde***REMOVED*** pairs.
+       * @param {array} activeElements Array of active datasetIndex/index pairs.
        * @param {object} eventPosition Synthetic event position used in positioning
        */
     setActiveElements(activeElements: any[], eventPosition: object): void;
@@ -146,101 +146,101 @@ e***REMOVED***port class Tooltip e***REMOVED***tends Element<import("../types/ba
     _positionChanged(active: any[], e: ChartEvent): boolean;
 }
 declare namespace _default {
-    e***REMOVED***port const id: string;
-    e***REMOVED***port { Tooltip as _element };
-    e***REMOVED***port { positioners };
-    e***REMOVED***port function afterInit(chart: any, _args: any, options: any): void;
-    e***REMOVED***port function beforeUpdate(chart: any, _args: any, options: any): void;
-    e***REMOVED***port function reset(chart: any, _args: any, options: any): void;
-    e***REMOVED***port function afterDraw(chart: any): void;
-    e***REMOVED***port function afterEvent(chart: any, args: any): void;
-    e***REMOVED***port namespace defaults {
-        e***REMOVED***port const enabled: boolean;
-        e***REMOVED***port const e***REMOVED***ternal: any;
-        e***REMOVED***port const position: string;
-        e***REMOVED***port const backgroundColor: string;
-        e***REMOVED***port const titleColor: string;
-        e***REMOVED***port namespace titleFont {
+    export const id: string;
+    export { Tooltip as _element };
+    export { positioners };
+    export function afterInit(chart: any, _args: any, options: any): void;
+    export function beforeUpdate(chart: any, _args: any, options: any): void;
+    export function reset(chart: any, _args: any, options: any): void;
+    export function afterDraw(chart: any): void;
+    export function afterEvent(chart: any, args: any): void;
+    export namespace defaults {
+        export const enabled: boolean;
+        export const external: any;
+        export const position: string;
+        export const backgroundColor: string;
+        export const titleColor: string;
+        export namespace titleFont {
             const weight: string;
         }
-        e***REMOVED***port const titleSpacing: number;
-        e***REMOVED***port const titleMarginBottom: number;
-        e***REMOVED***port const titleAlign: string;
-        e***REMOVED***port const bodyColor: string;
-        e***REMOVED***port const bodySpacing: number;
-        e***REMOVED***port const bodyFont: {};
-        e***REMOVED***port const bodyAlign: string;
-        e***REMOVED***port const footerColor: string;
-        e***REMOVED***port const footerSpacing: number;
-        e***REMOVED***port const footerMarginTop: number;
-        e***REMOVED***port namespace footerFont {
+        export const titleSpacing: number;
+        export const titleMarginBottom: number;
+        export const titleAlign: string;
+        export const bodyColor: string;
+        export const bodySpacing: number;
+        export const bodyFont: {};
+        export const bodyAlign: string;
+        export const footerColor: string;
+        export const footerSpacing: number;
+        export const footerMarginTop: number;
+        export namespace footerFont {
             const weight_1: string;
-            e***REMOVED***port { weight_1 as weight };
+            export { weight_1 as weight };
         }
-        e***REMOVED***port const footerAlign: string;
-        e***REMOVED***port const padding: number;
-        e***REMOVED***port const caretPadding: number;
-        e***REMOVED***port const caretSize: number;
-        e***REMOVED***port const cornerRadius: number;
-        e***REMOVED***port function bo***REMOVED***Height(ct***REMOVED***: any, opts: any): any;
-        e***REMOVED***port function bo***REMOVED***Width(ct***REMOVED***: any, opts: any): any;
-        e***REMOVED***port const multiKeyBackground: string;
-        e***REMOVED***port const displayColors: boolean;
-        e***REMOVED***port const bo***REMOVED***Padding: number;
-        e***REMOVED***port const borderColor: string;
-        e***REMOVED***port const borderWidth: number;
-        e***REMOVED***port namespace animation {
+        export const footerAlign: string;
+        export const padding: number;
+        export const caretPadding: number;
+        export const caretSize: number;
+        export const cornerRadius: number;
+        export function boxHeight(ctx: any, opts: any): any;
+        export function boxWidth(ctx: any, opts: any): any;
+        export const multiKeyBackground: string;
+        export const displayColors: boolean;
+        export const boxPadding: number;
+        export const borderColor: string;
+        export const borderWidth: number;
+        export namespace animation {
             const duration: number;
             const easing: string;
         }
-        e***REMOVED***port namespace animations {
+        export namespace animations {
             namespace numbers {
                 const type: string;
                 const properties: string[];
             }
             namespace opacity {
                 const easing_1: string;
-                e***REMOVED***port { easing_1 as easing };
+                export { easing_1 as easing };
                 const duration_1: number;
-                e***REMOVED***port { duration_1 as duration };
+                export { duration_1 as duration };
             }
         }
-        e***REMOVED***port { defaultCallbacks as callbacks };
+        export { defaultCallbacks as callbacks };
     }
-    e***REMOVED***port namespace defaultRoutes {
+    export namespace defaultRoutes {
         const bodyFont_1: string;
-        e***REMOVED***port { bodyFont_1 as bodyFont };
+        export { bodyFont_1 as bodyFont };
         const footerFont_1: string;
-        e***REMOVED***port { footerFont_1 as footerFont };
+        export { footerFont_1 as footerFont };
         const titleFont_1: string;
-        e***REMOVED***port { titleFont_1 as titleFont };
+        export { titleFont_1 as titleFont };
     }
-    e***REMOVED***port namespace descriptors {
-        e***REMOVED***port function _scriptable(name: any): boolean;
-        e***REMOVED***port const _inde***REMOVED***able: boolean;
-        e***REMOVED***port namespace callbacks {
+    export namespace descriptors {
+        export function _scriptable(name: any): boolean;
+        export const _indexable: boolean;
+        export namespace callbacks {
             const _scriptable_1: boolean;
-            e***REMOVED***port { _scriptable_1 as _scriptable };
-            const _inde***REMOVED***able_1: boolean;
-            e***REMOVED***port { _inde***REMOVED***able_1 as _inde***REMOVED***able };
+            export { _scriptable_1 as _scriptable };
+            const _indexable_1: boolean;
+            export { _indexable_1 as _indexable };
         }
-        e***REMOVED***port namespace animation_1 {
+        export namespace animation_1 {
             const _fallback: boolean;
         }
-        e***REMOVED***port { animation_1 as animation };
-        e***REMOVED***port namespace animations_1 {
+        export { animation_1 as animation };
+        export namespace animations_1 {
             const _fallback_1: string;
-            e***REMOVED***port { _fallback_1 as _fallback };
+            export { _fallback_1 as _fallback };
         }
-        e***REMOVED***port { animations_1 as animations };
+        export { animations_1 as animations };
     }
-    e***REMOVED***port const additionalOptionScopes: string[];
+    export const additionalOptionScopes: string[];
 }
-e***REMOVED***port default _default;
-e***REMOVED***port type Chart = import('../platform/platform.base.js').Chart;
-e***REMOVED***port type ChartEvent = import('../types/inde***REMOVED***.js').ChartEvent;
-e***REMOVED***port type ActiveElement = import('../types/inde***REMOVED***.js').ActiveElement;
-e***REMOVED***port type InteractionItem = import('../core/core.interaction.js').InteractionItem;
+export default _default;
+export type Chart = import('../platform/platform.base.js').Chart;
+export type ChartEvent = import('../types/index.js').ChartEvent;
+export type ActiveElement = import('../types/index.js').ActiveElement;
+export type InteractionItem = import('../core/core.interaction.js').InteractionItem;
 import Element from "../core/core.element.js";
 import Animations from "../core/core.animations.js";
 declare namespace positioners {
@@ -248,25 +248,25 @@ declare namespace positioners {
        * Average mode places the tooltip at the average position of the elements shown
        */
     function average(items: any): false | {
-        ***REMOVED***: number;
+        x: number;
         y: number;
     };
     /**
        * Gets the tooltip position nearest of the item nearest to the event position
        */
     function nearest(items: any, eventPosition: any): false | {
-        ***REMOVED***: any;
+        x: any;
         y: any;
     };
 }
 declare namespace defaultCallbacks {
-    e***REMOVED***port { noop as beforeTitle };
-    e***REMOVED***port function title(tooltipItems: any): any;
-    e***REMOVED***port { noop as afterTitle };
-    e***REMOVED***port { noop as beforeBody };
-    e***REMOVED***port { noop as beforeLabel };
-    e***REMOVED***port function label(tooltipItem: any): any;
-    e***REMOVED***port function labelColor(tooltipItem: any): {
+    export { noop as beforeTitle };
+    export function title(tooltipItems: any): any;
+    export { noop as afterTitle };
+    export { noop as beforeBody };
+    export { noop as beforeLabel };
+    export function label(tooltipItem: any): any;
+    export function labelColor(tooltipItem: any): {
         borderColor: any;
         backgroundColor: any;
         borderWidth: any;
@@ -274,15 +274,15 @@ declare namespace defaultCallbacks {
         borderDashOffset: any;
         borderRadius: number;
     };
-    e***REMOVED***port function labelTe***REMOVED***tColor(): any;
-    e***REMOVED***port function labelPointStyle(tooltipItem: any): {
+    export function labelTextColor(): any;
+    export function labelPointStyle(tooltipItem: any): {
         pointStyle: any;
         rotation: any;
     };
-    e***REMOVED***port { noop as afterLabel };
-    e***REMOVED***port { noop as afterBody };
-    e***REMOVED***port { noop as beforeFooter };
-    e***REMOVED***port { noop as footer };
-    e***REMOVED***port { noop as afterFooter };
+    export { noop as afterLabel };
+    export { noop as afterBody };
+    export { noop as beforeFooter };
+    export { noop as footer };
+    export { noop as afterFooter };
 }
 import { noop } from "../helpers/helpers.core.js";

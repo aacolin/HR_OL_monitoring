@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.pt_PT',
   '\n' +
   '<dl>\n' +
   '  <dt>Foco na barra de menu</dt>\n' +
-  '  <dd>Windows ou Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows ou Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Foco na barra de ferramentas</dt>\n' +
-  '  <dd>Windows ou Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows ou Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Foco no rodapé</dt>\n' +
-  '  <dd>Windows ou Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows ou Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Focar a notificação</dt>\n' +
-  '  <dd>Windows ou Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
-  '  <dt>Foco numa barra de ferramentas conte***REMOVED***tual</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** ou macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows ou Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
+  '  <dt>Foco numa barra de ferramentas contextual</dt>\n' +
+  '  <dd>Windows, Linux ou macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>A navegação começará no primeiro item de IU, que estará realçado ou sublinhado, no caso do primeiro item no\n' +
@@ -41,7 +41,7 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.pt_PT',
   '\n' +
   '<p>Se uma secção de IU não estiver presente, é ignorada.</p>\n' +
   '\n' +
-  '<p>Se o rodapé tiver foco de navegação com teclado e não e***REMOVED***istir uma barra lateral visível, premir <strong>Shift+Tab</strong>\n' +
+  '<p>Se o rodapé tiver foco de navegação com teclado e não existir uma barra lateral visível, premir <strong>Shift+Tab</strong>\n' +
   '  move o foco para o primeiro grupo da barra de ferramentas e não para o último.</p>\n' +
   '\n' +
   '<h1>Navegar nas secções de IU</h1>\n' +
@@ -57,7 +57,7 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.pt_PT',
   '  <li>movem-se entre itens no caminho do elemento do rodapé.</li>\n' +
   '</ul>\n' +
   '\n' +
-  '<p>As teclas de seta <strong>Para cima</strong> e <strong>Para bai***REMOVED***o</strong></p>\n' +
+  '<p>As teclas de seta <strong>Para cima</strong> e <strong>Para baixo</strong></p>\n' +
   '\n' +
   '<ul>\n' +
   '  <li>movem-se entre itens de menu num menu.</li>\n' +
@@ -71,10 +71,10 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.pt_PT',
   '<p>Se o foco atual estiver no "topo" de determinada secção de IU, premir a tecla <strong>Esc</strong> também fecha\n' +
   '  completamente a navegação com teclado.</p>\n' +
   '\n' +
-  '<h1>E***REMOVED***ecutar um item de menu ou botão da barra de ferramentas</h1>\n' +
+  '<h1>Executar um item de menu ou botão da barra de ferramentas</h1>\n' +
   '\n' +
   '<p>Quando o item de menu ou o botão da barra de ferramentas pretendido estiver realçado, prima <strong>Retrocesso</strong>, <strong>Enter</strong>\n' +
-  '  ou a <strong>Barra de espaço</strong> para e***REMOVED***ecutar o item.</p>\n' +
+  '  ou a <strong>Barra de espaço</strong> para executar o item.</p>\n' +
   '\n' +
   '<h1>Navegar em diálogos sem separadores</h1>\n' +
   '\n' +

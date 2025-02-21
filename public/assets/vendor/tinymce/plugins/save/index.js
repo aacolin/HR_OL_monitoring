@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "save" plugin for usage with module loaders
+// Exports the "save" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/save')

@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.tr',
   '\n' +
   '<dl>\n' +
   '  <dt>Menü çubuğuna odaklan</dt>\n' +
-  '  <dd>Windows veya Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows veya Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Araç çubuğuna odaklan</dt>\n' +
-  '  <dd>Windows veya Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows veya Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Alt bilgiye odaklan</dt>\n' +
-  '  <dd>Windows veya Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows veya Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Bildirime odakla</dt>\n' +
-  '  <dd>Windows veya Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows veya Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>Bağlamsal araç çubuğuna odaklan</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** veya macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux veya macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Gezinti ilk kullanıcı arabirimi öğesinden başlar, bu öğe vurgulanır ya da ilk öğe, Alt bilgi elemanı\n' +

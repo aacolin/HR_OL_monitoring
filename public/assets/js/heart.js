@@ -38,11 +38,11 @@ function redirectToHomePage() {
 }
 
 function validateTokenWithServer(token) {
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/patients/token-auth',
         method: 'GET',
         contentType: 'application/json',
-        headers: {'***REMOVED***-auth': token},
+        headers: {'x-auth': token},
         dataType: 'json',
     }).done(function(data) {
         document.body.classList.remove('hidden');
@@ -69,7 +69,7 @@ function setupLogoutHandler() {
 
 
 function getPatientProfile(token) {
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/patients/profile',
         method: 'POST',
         contentType: 'application/json',
@@ -90,7 +90,7 @@ function displayPatientProfile(serverResponse) {
 
     const patientFullName = `${patient.firstName} ${patient.lastName}`;
 
-    $('.patientFullName').te***REMOVED***t(patientFullName);
+    $('.patientFullName').text(patientFullName);
 
 }
 

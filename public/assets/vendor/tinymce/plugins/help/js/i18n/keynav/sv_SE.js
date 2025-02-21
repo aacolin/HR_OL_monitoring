@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.sv_SE',
   '\n' +
   '<dl>\n' +
   '  <dt>Fokusera på menyraden</dt>\n' +
-  '  <dd>Windows eller Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows eller Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Fokusera på verktygsraden</dt>\n' +
-  '  <dd>Windows eller Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows eller Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Fokusera på verktygsraden</dt>\n' +
-  '  <dd>Windows eller Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows eller Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Fokusera aviseringen</dt>\n' +
-  '  <dd>Windows eller Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows eller Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>Fokusera på en snabbverktygsrad</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** eller macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux eller macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Navigeringen börjar vid det första gränssnittsobjektet, vilket är markerat eller understruket om det gäller det första objektet i\n' +
@@ -34,7 +34,7 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.sv_SE',
   '  <li>Varje verktygsradsgrupp</li>\n' +
   '  <li>Sidoruta</li>\n' +
   '  <li>Elementsökväg i sidfoten</li>\n' +
-  '  <li>Vä***REMOVED***lingsknapp för ordantal i sidfoten</li>\n' +
+  '  <li>Växlingsknapp för ordantal i sidfoten</li>\n' +
   '  <li>Varumärkeslänk i sidfoten</li>\n' +
   '  <li>Storlekshandtag för redigeraren i sidfoten</li>\n' +
   '</ol>\n' +
@@ -89,5 +89,5 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.sv_SE',
   '<p>Navigera mellan interaktiva komponenter på dialogrutefliken genom att trycka på <strong>Tabb</strong> eller\n' +
   '  <strong>Skift+Tabb</strong>.</p>\n' +
   '\n' +
-  '<p>Vä***REMOVED***la till en annan dialogruta genom att fokusera på flikmenyn och sedan trycka på motsvarande <strong>piltangent</strong>\n' +
+  '<p>Växla till en annan dialogruta genom att fokusera på flikmenyn och sedan trycka på motsvarande <strong>piltangent</strong>\n' +
   '  för att cirkulera mellan de tillgängliga flikarna.</p>\n');

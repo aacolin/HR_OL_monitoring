@@ -1,12 +1,12 @@
 /*************************************************** 
- This is a library written for the Ma***REMOVED***im MAX30105 Optical Smoke Detector
+ This is a library written for the Maxim MAX30105 Optical Smoke Detector
  It should also work with the MAX30102. However, the MAX30102 does not have a Green LED.
 
  These sensors use I2C to communicate, as well as a single (optional)
  interrupt line that is not currently supported in this driver.
  
  Written by Peter Jansen and Nathan Seidle (SparkFun)
- BSD license, all te***REMOVED***t above must be included in any redistribution.
+ BSD license, all text above must be included in any redistribution.
  *****************************************************/
 
 #pragma once
@@ -19,7 +19,7 @@
 
 #include <Wire.h>
 
-#define MAX30105_ADDRESS          0***REMOVED***57 //7-bit I2C Address
+#define MAX30105_ADDRESS          0x57 //7-bit I2C Address
 //Note that MAX30102 has the same I2C address and Part ID
 
 #define I2C_SPEED_STANDARD        100000
@@ -52,7 +52,7 @@ class MAX30105 {
   uint32_t getRed(void); //Returns immediate red value
   uint32_t getIR(void); //Returns immediate IR value
   uint32_t getGreen(void); //Returns immediate green value
-  bool safeCheck(uint8_t ma***REMOVED***TimeToCheck); //Given a ma***REMOVED*** amount of time, check for new data
+  bool safeCheck(uint8_t maxTimeToCheck); //Given a max amount of time, check for new data
 
   // Configuration
   void softReset();
@@ -68,9 +68,9 @@ class MAX30105 {
   void setPulseAmplitudeRed(uint8_t value);
   void setPulseAmplitudeIR(uint8_t value);
   void setPulseAmplitudeGreen(uint8_t value);
-  void setPulseAmplitudePro***REMOVED***imity(uint8_t value);
+  void setPulseAmplitudeProximity(uint8_t value);
 
-  void setPro***REMOVED***imityThreshold(uint8_t threshMSB);
+  void setProximityThreshold(uint8_t threshMSB);
 
   //Multi-led configuration mode (page 22)
   void enableSlot(uint8_t slotNumber, uint8_t device); //Given slot number, assign a device to slot
@@ -101,7 +101,7 @@ class MAX30105 {
   //FIFO Reading
   uint16_t check(void); //Checks for new data and fills FIFO
   uint8_t available(void); //Tells caller how many new samples are available (head - tail)
-  void ne***REMOVED***tSample(void); //Advances the tail of the sense array
+  void nextSample(void); //Advances the tail of the sense array
   uint32_t getFIFORed(void); //Returns the FIFO sample pointed to by tail
   uint32_t getFIFOIR(void); //Returns the FIFO sample pointed to by tail
   uint32_t getFIFOGreen(void); //Returns the FIFO sample pointed to by tail
@@ -110,7 +110,7 @@ class MAX30105 {
   uint8_t getReadPointer(void);
   void clearFIFO(void); //Sets the read/write pointers to zero
 
-  //Pro***REMOVED***imity Mode Interrupt Threshold
+  //Proximity Mode Interrupt Threshold
   void setPROXINTTHRESH(uint8_t val);
 
   // Die Temperature
@@ -122,7 +122,7 @@ class MAX30105 {
   uint8_t readPartID();  
 
   // Setup the IC with user selectable settings
-  void setup(byte powerLevel = 0***REMOVED***1F, byte sampleAverage = 4, byte ledMode = 3, int sampleRate = 400, int pulseWidth = 411, int adcRange = 4096);
+  void setup(byte powerLevel = 0x1F, byte sampleAverage = 4, byte ledMode = 3, int sampleRate = 400, int pulseWidth = 411, int adcRange = 4096);
 
   // Low-level I2C communication
   uint8_t readRegister8(uint8_t address, uint8_t reg);

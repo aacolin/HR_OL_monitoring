@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.fr_FR',
   '\n' +
   '<dl>\n' +
   '  <dt>Cibler la barre du menu</dt>\n' +
-  '  <dd>Windows ou Linu***REMOVED*** : Alt+F9</dd>\n' +
-  '  <dd>macOS : &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows ou Linux : Alt+F9</dd>\n' +
+  '  <dd>macOS : &#x2325;F9</dd>\n' +
   "  <dt>Cibler la barre d'outils</dt>\n" +
-  '  <dd>Windows ou Linu***REMOVED*** : Alt+F10</dd>\n' +
-  '  <dd>macOS : &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows ou Linux : Alt+F10</dd>\n' +
+  '  <dd>macOS : &#x2325;F10</dd>\n' +
   '  <dt>Cibler le pied de page</dt>\n' +
-  '  <dd>Windows ou Linu***REMOVED*** : Alt+F11</dd>\n' +
-  '  <dd>macOS : &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows ou Linux : Alt+F11</dd>\n' +
+  '  <dd>macOS : &#x2325;F11</dd>\n' +
   '  <dt>Cibler la notification</dt>\n' +
-  '  <dd>Windows ou Linu***REMOVED*** : Alt+F12</dd>\n' +
-  '  <dd>macOS : &#***REMOVED***2325;F12</dd>\n' +
-  "  <dt>Cibler une barre d'outils conte***REMOVED***tuelle</dt>\n" +
-  '  <dd>Windows, Linu***REMOVED*** ou macOS : Ctrl+F9</dd>\n' +
+  '  <dd>Windows ou Linux : Alt+F12</dd>\n' +
+  '  <dd>macOS : &#x2325;F12</dd>\n' +
+  "  <dt>Cibler une barre d'outils contextuelle</dt>\n" +
+  '  <dd>Windows, Linux ou macOS : Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   "<p>La navigation débutera sur le premier élément de l'interface utilisateur, qui sera mis en surbrillance ou bien souligné dans le cas du premier élément du\n" +
@@ -61,20 +61,20 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.fr_FR',
   '\n' +
   '<ul>\n' +
   "  <li>se déplacent entre les éléments de menu au sein d'un menu.</li>\n" +
-  "  <li>se déplacent entre les éléments au sein d'un menu conte***REMOVED***tuel de barre d'outils.</li>\n" +
+  "  <li>se déplacent entre les éléments au sein d'un menu contextuel de barre d'outils.</li>\n" +
   '</ul>\n' +
   '\n' +
   "<p>Les <strong>Flèches</strong> parcourent la section de l'interface utilisateur ciblée.</p>\n" +
   '\n' +
-  '<p>Pour fermer un menu ouvert, un sous-menu ouvert ou un menu conte***REMOVED***tuel ouvert, appuyez sur <strong>Echap</strong>.</p>\n' +
+  '<p>Pour fermer un menu ouvert, un sous-menu ouvert ou un menu contextuel ouvert, appuyez sur <strong>Echap</strong>.</p>\n' +
   '\n' +
   "<p>Si l'actuel ciblage se trouve en « haut » d'une section spécifique de l'interface utilisateur, appuyer sur <strong>Echap</strong> permet également de quitter\n" +
   '  entièrement la navigation au clavier.</p>\n' +
   '\n' +
-  "<h1>E***REMOVED***écuter un élément de menu ou un bouton de barre d'outils</h1>\n" +
+  "<h1>Exécuter un élément de menu ou un bouton de barre d'outils</h1>\n" +
   '\n' +
   "<p>Lorsque l'élément de menu ou le bouton de barre d'outils désiré est mis en surbrillance, appuyez sur la touche <strong>Retour arrière</strong>, <strong>Entrée</strong>\n" +
-  "  ou la <strong>Barre d'espace</strong> pour e***REMOVED***écuter l'élément.</p>\n" +
+  "  ou la <strong>Barre d'espace</strong> pour exécuter l'élément.</p>\n" +
   '\n' +
   '<h1>Naviguer au sein de dialogues sans onglets</h1>\n' +
   '\n' +

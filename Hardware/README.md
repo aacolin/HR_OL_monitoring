@@ -28,7 +28,7 @@ For hardware setting, please provide BOM list and Pin Assignment.
 ### BOM List and Pin Assignment
 |Device|Spec.|Number|Pin Assignment|
 | :- | :- | :- | :- |
-|Resistor|...|N|D***REMOVED***, Dy, Dz|
+|Resistor|...|N|Dx, Dy, Dz|
 |Heartrate Sensor|MAX30102|1|X, Y|
 |...|...|...|...|
 

@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "searchreplace" plugin for usage with module loaders
+// Exports the "searchreplace" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/searchreplace')

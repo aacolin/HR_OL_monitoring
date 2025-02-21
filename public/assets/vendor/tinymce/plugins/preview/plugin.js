@@ -25,10 +25,10 @@
       headHtml += '<base href="' + encode(editor.documentBaseURI.getURI()) + '">';
       const cors = shouldUseContentCssCors(editor) ? ' crossorigin="anonymous"' : '';
       global.each(editor.contentCSS, url => {
-        headHtml += '<link type="te***REMOVED***t/css" rel="stylesheet" href="' + encode(editor.documentBaseURI.toAbsolute(url)) + '"' + cors + '>';
+        headHtml += '<link type="text/css" rel="stylesheet" href="' + encode(editor.documentBaseURI.toAbsolute(url)) + '"' + cors + '>';
       });
       if (contentStyle) {
-        headHtml += '<style type="te***REMOVED***t/css">' + contentStyle + '</style>';
+        headHtml += '<style type="text/css">' + contentStyle + '</style>';
       }
       const bodyId = getBodyId(editor);
       const bodyClass = getBodyClass(editor);
@@ -50,14 +50,14 @@
           items: [{
               name: 'preview',
               type: 'iframe',
-              sandbo***REMOVED***ed: true,
+              sandboxed: true,
               transparent: false
             }]
         },
         buttons: [{
             type: 'cancel',
             name: 'close',
-            te***REMOVED***t: 'Close',
+            text: 'Close',
             primary: true
           }],
         initialData: { preview: content }
@@ -72,7 +72,7 @@
     };
 
     const register = editor => {
-      const onAction = () => editor.e***REMOVED***ecCommand('mcePreview');
+      const onAction = () => editor.execCommand('mcePreview');
       editor.ui.registry.addButton('preview', {
         icon: 'preview',
         tooltip: 'Preview',
@@ -80,7 +80,7 @@
       });
       editor.ui.registry.addMenuItem('preview', {
         icon: 'preview',
-        te***REMOVED***t: 'Preview',
+        text: 'Preview',
         onAction
       });
     };

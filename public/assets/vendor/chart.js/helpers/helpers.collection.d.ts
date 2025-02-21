@@ -5,11 +5,11 @@
  * @param cmp
  * @private
  */
-e***REMOVED***port declare function _lookup(table: number[], value: number, cmp?: (value: number) => boolean): {
+export declare function _lookup(table: number[], value: number, cmp?: (value: number) => boolean): {
     lo: number;
     hi: number;
 };
-e***REMOVED***port declare function _lookup<T>(table: T[], value: number, cmp: (value: number) => boolean): {
+export declare function _lookup<T>(table: T[], value: number, cmp: (value: number) => boolean): {
     lo: number;
     hi: number;
 };
@@ -18,10 +18,10 @@ e***REMOVED***port declare function _lookup<T>(table: T[], value: number, cmp: (
  * @param table - the table search. must be sorted!
  * @param key - property name for the value in each entry
  * @param value - value to find
- * @param last - lookup last inde***REMOVED***
+ * @param last - lookup last index
  * @private
  */
-e***REMOVED***port declare const _lookupByKey: (table: Record<string, number>[], key: string, value: number, last?: boolean) => {
+export declare const _lookupByKey: (table: Record<string, number>[], key: string, value: number, last?: boolean) => {
     lo: number;
     hi: number;
 };
@@ -32,23 +32,23 @@ e***REMOVED***port declare const _lookupByKey: (table: Record<string, number>[],
  * @param value - value to find
  * @private
  */
-e***REMOVED***port declare const _rlookupByKey: (table: Record<string, number>[], key: string, value: number) => {
+export declare const _rlookupByKey: (table: Record<string, number>[], key: string, value: number) => {
     lo: number;
     hi: number;
 };
 /**
- * Return subset of `values` between `min` and `ma***REMOVED***` inclusive.
+ * Return subset of `values` between `min` and `max` inclusive.
  * Values are assumed to be in sorted order.
  * @param values - sorted array of values
  * @param min - min value
- * @param ma***REMOVED*** - ma***REMOVED*** value
+ * @param max - max value
  */
-e***REMOVED***port declare function _filterBetween(values: number[], min: number, ma***REMOVED***: number): number[];
-e***REMOVED***port interface ArrayListener<T> {
+export declare function _filterBetween(values: number[], min: number, max: number): number[];
+export interface ArrayListener<T> {
     _onDataPush?(...item: T[]): void;
     _onDataPop?(): void;
     _onDataShift?(): void;
-    _onDataSplice?(inde***REMOVED***: number, deleteCount: number, ...items: T[]): void;
+    _onDataSplice?(index: number, deleteCount: number, ...items: T[]): void;
     _onDataUnshift?(...item: T[]): void;
 }
 /**
@@ -56,13 +56,13 @@ e***REMOVED***port interface ArrayListener<T> {
  * 'unshift') and notify the listener AFTER the array has been altered. Listeners are
  * called on the '_onData*' callbacks (e.g. _onDataPush, etc.) with same arguments.
  */
-e***REMOVED***port declare function listenArrayEvents<T>(array: T[], listener: ArrayListener<T>): void;
+export declare function listenArrayEvents<T>(array: T[], listener: ArrayListener<T>): void;
 /**
- * Removes the given array event listener and cleanup e***REMOVED***tra attached properties (such as
+ * Removes the given array event listener and cleanup extra attached properties (such as
  * the _chartjs stub and overridden methods) if array doesn't have any more listeners.
  */
-e***REMOVED***port declare function unlistenArrayEvents<T>(array: T[], listener: ArrayListener<T>): void;
+export declare function unlistenArrayEvents<T>(array: T[], listener: ArrayListener<T>): void;
 /**
  * @param items
  */
-e***REMOVED***port declare function _arrayUnique<T>(items: T[]): T[];
+export declare function _arrayUnique<T>(items: T[]): T[];

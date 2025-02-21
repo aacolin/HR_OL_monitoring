@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "codesample" plugin for usage with module loaders
+// Exports the "codesample" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/codesample')

@@ -1,6 +1,6 @@
-e***REMOVED***port function getInde***REMOVED***A***REMOVED***is(type: any, options: any): any;
-e***REMOVED***port function determineA***REMOVED***is(id: any, ...scaleOptions: any[]): any;
-e***REMOVED***port default class Config {
+export function getIndexAxis(type: any, options: any): any;
+export function determineAxis(id: any, ...scaleOptions: any[]): any;
+export default class Config {
     constructor(config: any);
     _config: any;
     _scopeCache: Map<any, any>;
@@ -67,20 +67,20 @@ e***REMOVED***port default class Config {
     /**
      * @param {object[]} scopes
      * @param {string[]} names
-     * @param {function|object} conte***REMOVED***t
-     * @param {string[]} [prefi***REMOVED***es]
+     * @param {function|object} context
+     * @param {string[]} [prefixes]
      * @return {object}
      */
-    resolveNamedOptions(scopes: object[], names: string[], conte***REMOVED***t: Function | object, prefi***REMOVED***es?: string[]): object;
+    resolveNamedOptions(scopes: object[], names: string[], context: Function | object, prefixes?: string[]): object;
     /**
      * @param {object[]} scopes
-     * @param {object} [conte***REMOVED***t]
-     * @param {string[]} [prefi***REMOVED***es]
-     * @param {{scriptable: boolean, inde***REMOVED***able: boolean, allKeys?: boolean}} [descriptorDefaults]
+     * @param {object} [context]
+     * @param {string[]} [prefixes]
+     * @param {{scriptable: boolean, indexable: boolean, allKeys?: boolean}} [descriptorDefaults]
      */
-    createResolver(scopes: object[], conte***REMOVED***t?: object, prefi***REMOVED***es?: string[], descriptorDefaults?: {
+    createResolver(scopes: object[], context?: object, prefixes?: string[], descriptorDefaults?: {
         scriptable: boolean;
-        inde***REMOVED***able: boolean;
+        indexable: boolean;
         allKeys?: boolean;
     }): any;
 }

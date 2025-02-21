@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Nd", "Pn", "Wt", "Śr", "Cz", "Pt", "Sb"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Pobierz SVG",
-      "e***REMOVED***portToPNG": "Pobierz PNG",
-      "e***REMOVED***portToCSV": "Pobierz CSV",
+      "exportToSVG": "Pobierz SVG",
+      "exportToPNG": "Pobierz PNG",
+      "exportToCSV": "Pobierz CSV",
       "menu": "Menu",
       "selection": "Wybieranie",
       "selectionZoom": "Zoom: Wybieranie",

@@ -1,23 +1,23 @@
-e***REMOVED***port default class BarController e***REMOVED***tends DatasetController {
+export default class BarController extends DatasetController {
     static id: string;
     /**
      * @type {any}
      */
     static overrides: any;
     /**
-       * Overriding primitive data parsing since we support mi***REMOVED***ed primitive/array
+       * Overriding primitive data parsing since we support mixed primitive/array
        * data for float bars
        * @protected
        */
     protected parsePrimitiveData(meta: any, data: any, start: any, count: any): any[];
     /**
-       * Overriding array data parsing since we support mi***REMOVED***ed primitive/array
+       * Overriding array data parsing since we support mixed primitive/array
        * data for float bars
        * @protected
        */
     protected parseArrayData(meta: any, data: any, start: any, count: any): any[];
     /**
-       * Overriding object data parsing since we support mi***REMOVED***ed primitive/array
+       * Overriding object data parsing since we support mixed primitive/array
        * value-scale data for float bars
        * @protected
        */
@@ -25,8 +25,8 @@ e***REMOVED***port default class BarController e***REMOVED***tends DatasetContro
     update(mode: any): void;
     /**
        * Returns the stacks based on groups and bar visibility.
-       * @param {number} [last] - The dataset inde***REMOVED***
-       * @param {number} [dataInde***REMOVED***] - The data inde***REMOVED*** of the ruler
+       * @param {number} [last] - The dataset index
+       * @param {number} [dataIndex] - The data index of the ruler
        * @returns {string[]} The list of stack IDs
        * @private
        */
@@ -37,26 +37,26 @@ e***REMOVED***port default class BarController e***REMOVED***tends DatasetContro
        */
     private _getStackCount;
     /**
-       * Returns the stack inde***REMOVED*** for the given dataset based on groups and bar visibility.
-       * @param {number} [datasetInde***REMOVED***] - The dataset inde***REMOVED***
+       * Returns the stack index for the given dataset based on groups and bar visibility.
+       * @param {number} [datasetIndex] - The dataset index
        * @param {string} [name] - The stack name to find
-     * @param {number} [dataInde***REMOVED***]
-       * @returns {number} The stack inde***REMOVED***
+     * @param {number} [dataIndex]
+       * @returns {number} The stack index
        * @private
        */
-    private _getStackInde***REMOVED***;
+    private _getStackIndex;
     /**
        * @private
        */
     private _getRuler;
     /**
-       * Note: pi***REMOVED***el values are not clamped to the scale area.
+       * Note: pixel values are not clamped to the scale area.
        * @private
        */
-    private _calculateBarValuePi***REMOVED***els;
+    private _calculateBarValuePixels;
     /**
        * @private
        */
-    private _calculateBarInde***REMOVED***Pi***REMOVED***els;
+    private _calculateBarIndexPixels;
 }
 import DatasetController from "../core/core.datasetController.js";

@@ -114,7 +114,7 @@ class Animator {
         }
         anims.running = true;
         anims.start = Date.now();
-        anims.duration = anims.items.reduce((acc, cur)=>Math.ma***REMOVED***(acc, cur._duration), 0);
+        anims.duration = anims.items.reduce((acc, cur)=>Math.max(acc, cur._duration), 0);
         this._refresh();
     }
     running(chart) {
@@ -154,7 +154,7 @@ const interpolators = {
  color (from, to, factor) {
         const c0 = helpers_segment.color(from || transparent);
         const c1 = c0.valid && helpers_segment.color(to || transparent);
-        return c1 && c1.valid ? c1.mi***REMOVED***(c0, factor).he***REMOVED***String() : to;
+        return c1 && c1.valid ? c1.mix(c0, factor).hexString() : to;
     },
     number (from, to, factor) {
         return from + (to - from) * factor;
@@ -196,7 +196,7 @@ class Animation {
             const elapsed = date - this._start;
             const remain = this._duration - elapsed;
             this._start = date;
-            this._duration = Math.floor(Math.ma***REMOVED***(remain, cfg.duration));
+            this._duration = Math.floor(Math.max(remain, cfg.duration));
             this._total += elapsed;
             this._loop = !!cfg.loop;
             this._to = helpers_segment.resolve([
@@ -239,7 +239,7 @@ class Animation {
         }
         factor = elapsed / duration % 2;
         factor = loop && factor > 1 ? 2 - factor : factor;
-        factor = this._easing(Math.min(1, Math.ma***REMOVED***(0, factor)));
+        factor = this._easing(Math.min(1, Math.max(0, factor)));
         this._target[prop] = this._fn(from, to, factor);
     }
     wait() {
@@ -386,23 +386,23 @@ function scaleClip(scale, allowedOverflow) {
     const opts = scale && scale.options || {};
     const reverse = opts.reverse;
     const min = opts.min === undefined ? allowedOverflow : 0;
-    const ma***REMOVED*** = opts.ma***REMOVED*** === undefined ? allowedOverflow : 0;
+    const max = opts.max === undefined ? allowedOverflow : 0;
     return {
-        start: reverse ? ma***REMOVED*** : min,
-        end: reverse ? min : ma***REMOVED***
+        start: reverse ? max : min,
+        end: reverse ? min : max
     };
 }
-function defaultClip(***REMOVED***Scale, yScale, allowedOverflow) {
+function defaultClip(xScale, yScale, allowedOverflow) {
     if (allowedOverflow === false) {
         return false;
     }
-    const ***REMOVED*** = scaleClip(***REMOVED***Scale, allowedOverflow);
+    const x = scaleClip(xScale, allowedOverflow);
     const y = scaleClip(yScale, allowedOverflow);
     return {
         top: y.end,
-        right: ***REMOVED***.end,
+        right: x.end,
         bottom: y.start,
-        left: ***REMOVED***.start
+        left: x.start
     };
 }
 function toClip(value) {
@@ -428,26 +428,26 @@ function getSortedDatasetIndices(chart, filterVisible) {
     const metasets = chart._getSortedDatasetMetas(filterVisible);
     let i, ilen;
     for(i = 0, ilen = metasets.length; i < ilen; ++i){
-        keys.push(metasets[i].inde***REMOVED***);
+        keys.push(metasets[i].index);
     }
     return keys;
 }
-function applyStack(stack, value, dsInde***REMOVED***, options = {}) {
+function applyStack(stack, value, dsIndex, options = {}) {
     const keys = stack.keys;
     const singleMode = options.mode === 'single';
-    let i, ilen, datasetInde***REMOVED***, otherValue;
+    let i, ilen, datasetIndex, otherValue;
     if (value === null) {
         return;
     }
     for(i = 0, ilen = keys.length; i < ilen; ++i){
-        datasetInde***REMOVED*** = +keys[i];
-        if (datasetInde***REMOVED*** === dsInde***REMOVED***) {
+        datasetIndex = +keys[i];
+        if (datasetIndex === dsIndex) {
             if (options.all) {
                 continue;
             }
             break;
         }
-        otherValue = stack.values[datasetInde***REMOVED***];
+        otherValue = stack.values[datasetIndex];
         if (helpers_segment.isNumberFinite(otherValue) && (singleMode || value === 0 || helpers_segment.sign(value) === helpers_segment.sign(otherValue))) {
             value += otherValue;
         }
@@ -456,16 +456,16 @@ function applyStack(stack, value, dsInde***REMOVED***, options = {}) {
 }
 function convertObjectDataToArray(data, meta) {
     const { iScale , vScale  } = meta;
-    const iA***REMOVED***isKey = iScale.a***REMOVED***is === '***REMOVED***' ? '***REMOVED***' : 'y';
-    const vA***REMOVED***isKey = vScale.a***REMOVED***is === '***REMOVED***' ? '***REMOVED***' : 'y';
+    const iAxisKey = iScale.axis === 'x' ? 'x' : 'y';
+    const vAxisKey = vScale.axis === 'x' ? 'x' : 'y';
     const keys = Object.keys(data);
     const adata = new Array(keys.length);
     let i, ilen, key;
     for(i = 0, ilen = keys.length; i < ilen; ++i){
         key = keys[i];
         adata[i] = {
-            [iA***REMOVED***isKey]: key,
-            [vA***REMOVED***isKey]: data[key]
+            [iAxisKey]: key,
+            [vAxisKey]: data[key]
         };
     }
     return adata;
@@ -474,25 +474,25 @@ function isStacked(scale, meta) {
     const stacked = scale && scale.options.stacked;
     return stacked || stacked === undefined && meta.stack !== undefined;
 }
-function getStackKey(inde***REMOVED***Scale, valueScale, meta) {
-    return `${inde***REMOVED***Scale.id}.${valueScale.id}.${meta.stack || meta.type}`;
+function getStackKey(indexScale, valueScale, meta) {
+    return `${indexScale.id}.${valueScale.id}.${meta.stack || meta.type}`;
 }
 function getUserBounds(scale) {
-    const { min , ma***REMOVED*** , minDefined , ma***REMOVED***Defined  } = scale.getUserBounds();
+    const { min , max , minDefined , maxDefined  } = scale.getUserBounds();
     return {
         min: minDefined ? min : Number.NEGATIVE_INFINITY,
-        ma***REMOVED***: ma***REMOVED***Defined ? ma***REMOVED*** : Number.POSITIVE_INFINITY
+        max: maxDefined ? max : Number.POSITIVE_INFINITY
     };
 }
-function getOrCreateStack(stacks, stackKey, inde***REMOVED***Value) {
+function getOrCreateStack(stacks, stackKey, indexValue) {
     const subStack = stacks[stackKey] || (stacks[stackKey] = {});
-    return subStack[inde***REMOVED***Value] || (subStack[inde***REMOVED***Value] = {});
+    return subStack[indexValue] || (subStack[indexValue] = {});
 }
-function getLastInde***REMOVED***InStack(stack, vScale, positive, type) {
+function getLastIndexInStack(stack, vScale, positive, type) {
     for (const meta of vScale.getMatchingVisibleMetas(type).reverse()){
-        const value = stack[meta.inde***REMOVED***];
+        const value = stack[meta.index];
         if (positive && value > 0 || !positive && value < 0) {
-            return meta.inde***REMOVED***;
+            return meta.index;
         }
     }
     return null;
@@ -500,65 +500,65 @@ function getLastInde***REMOVED***InStack(stack, vScale, positive, type) {
 function updateStacks(controller, parsed) {
     const { chart , _cachedMeta: meta  } = controller;
     const stacks = chart._stacks || (chart._stacks = {});
-    const { iScale , vScale , inde***REMOVED***: datasetInde***REMOVED***  } = meta;
-    const iA***REMOVED***is = iScale.a***REMOVED***is;
-    const vA***REMOVED***is = vScale.a***REMOVED***is;
+    const { iScale , vScale , index: datasetIndex  } = meta;
+    const iAxis = iScale.axis;
+    const vAxis = vScale.axis;
     const key = getStackKey(iScale, vScale, meta);
     const ilen = parsed.length;
     let stack;
     for(let i = 0; i < ilen; ++i){
         const item = parsed[i];
-        const { [iA***REMOVED***is]: inde***REMOVED*** , [vA***REMOVED***is]: value  } = item;
+        const { [iAxis]: index , [vAxis]: value  } = item;
         const itemStacks = item._stacks || (item._stacks = {});
-        stack = itemStacks[vA***REMOVED***is] = getOrCreateStack(stacks, key, inde***REMOVED***);
-        stack[datasetInde***REMOVED***] = value;
-        stack._top = getLastInde***REMOVED***InStack(stack, vScale, true, meta.type);
-        stack._bottom = getLastInde***REMOVED***InStack(stack, vScale, false, meta.type);
+        stack = itemStacks[vAxis] = getOrCreateStack(stacks, key, index);
+        stack[datasetIndex] = value;
+        stack._top = getLastIndexInStack(stack, vScale, true, meta.type);
+        stack._bottom = getLastIndexInStack(stack, vScale, false, meta.type);
         const visualValues = stack._visualValues || (stack._visualValues = {});
-        visualValues[datasetInde***REMOVED***] = value;
+        visualValues[datasetIndex] = value;
     }
 }
-function getFirstScaleId(chart, a***REMOVED***is) {
+function getFirstScaleId(chart, axis) {
     const scales = chart.scales;
-    return Object.keys(scales).filter((key)=>scales[key].a***REMOVED***is === a***REMOVED***is).shift();
+    return Object.keys(scales).filter((key)=>scales[key].axis === axis).shift();
 }
-function createDatasetConte***REMOVED***t(parent, inde***REMOVED***) {
-    return helpers_segment.createConte***REMOVED***t(parent, {
+function createDatasetContext(parent, index) {
+    return helpers_segment.createContext(parent, {
         active: false,
         dataset: undefined,
-        datasetInde***REMOVED***: inde***REMOVED***,
-        inde***REMOVED***,
+        datasetIndex: index,
+        index,
         mode: 'default',
         type: 'dataset'
     });
 }
-function createDataConte***REMOVED***t(parent, inde***REMOVED***, element) {
-    return helpers_segment.createConte***REMOVED***t(parent, {
+function createDataContext(parent, index, element) {
+    return helpers_segment.createContext(parent, {
         active: false,
-        dataInde***REMOVED***: inde***REMOVED***,
+        dataIndex: index,
         parsed: undefined,
         raw: undefined,
         element,
-        inde***REMOVED***,
+        index,
         mode: 'default',
         type: 'data'
     });
 }
 function clearStacks(meta, items) {
-    const datasetInde***REMOVED*** = meta.controller.inde***REMOVED***;
-    const a***REMOVED***is = meta.vScale && meta.vScale.a***REMOVED***is;
-    if (!a***REMOVED***is) {
+    const datasetIndex = meta.controller.index;
+    const axis = meta.vScale && meta.vScale.axis;
+    if (!axis) {
         return;
     }
     items = items || meta._parsed;
     for (const parsed of items){
         const stacks = parsed._stacks;
-        if (!stacks || stacks[a***REMOVED***is] === undefined || stacks[a***REMOVED***is][datasetInde***REMOVED***] === undefined) {
+        if (!stacks || stacks[axis] === undefined || stacks[axis][datasetIndex] === undefined) {
             return;
         }
-        delete stacks[a***REMOVED***is][datasetInde***REMOVED***];
-        if (stacks[a***REMOVED***is]._visualValues !== undefined && stacks[a***REMOVED***is]._visualValues[datasetInde***REMOVED***] !== undefined) {
-            delete stacks[a***REMOVED***is]._visualValues[datasetInde***REMOVED***];
+        delete stacks[axis][datasetIndex];
+        if (stacks[axis]._visualValues !== undefined && stacks[axis]._visualValues[datasetIndex] !== undefined) {
+            delete stacks[axis]._visualValues[datasetIndex];
         }
     }
 }
@@ -572,10 +572,10 @@ class DatasetController {
  static defaults = {};
  static datasetElementType = null;
  static dataElementType = null;
- constructor(chart, datasetInde***REMOVED***){
+ constructor(chart, datasetIndex){
         this.chart = chart;
-        this._ct***REMOVED*** = chart.ct***REMOVED***;
-        this.inde***REMOVED*** = datasetInde***REMOVED***;
+        this._ctx = chart.ctx;
+        this.index = datasetIndex;
         this._cachedDataOpts = {};
         this._cachedMeta = this.getMeta();
         this._type = this._cachedMeta.type;
@@ -588,7 +588,7 @@ class DatasetController {
         this._drawCount = undefined;
         this.enableOptionSharing = false;
         this.supportsDecimation = false;
-        this.$conte***REMOVED***t = undefined;
+        this.$context = undefined;
         this._syncList = [];
         this.datasetElementType = new.target.datasetElementType;
         this.dataElementType = new.target.dataElementType;
@@ -604,34 +604,34 @@ class DatasetController {
             console.warn("Tried to use the 'fill' option without the 'Filler' plugin enabled. Please import and register the 'Filler' plugin and make sure it is not disabled in the options");
         }
     }
-    updateInde***REMOVED***(datasetInde***REMOVED***) {
-        if (this.inde***REMOVED*** !== datasetInde***REMOVED***) {
+    updateIndex(datasetIndex) {
+        if (this.index !== datasetIndex) {
             clearStacks(this._cachedMeta);
         }
-        this.inde***REMOVED*** = datasetInde***REMOVED***;
+        this.index = datasetIndex;
     }
     linkScales() {
         const chart = this.chart;
         const meta = this._cachedMeta;
         const dataset = this.getDataset();
-        const chooseId = (a***REMOVED***is, ***REMOVED***, y, r)=>a***REMOVED***is === '***REMOVED***' ? ***REMOVED*** : a***REMOVED***is === 'r' ? r : y;
-        const ***REMOVED***id = meta.***REMOVED***A***REMOVED***isID = helpers_segment.valueOrDefault(dataset.***REMOVED***A***REMOVED***isID, getFirstScaleId(chart, '***REMOVED***'));
-        const yid = meta.yA***REMOVED***isID = helpers_segment.valueOrDefault(dataset.yA***REMOVED***isID, getFirstScaleId(chart, 'y'));
-        const rid = meta.rA***REMOVED***isID = helpers_segment.valueOrDefault(dataset.rA***REMOVED***isID, getFirstScaleId(chart, 'r'));
-        const inde***REMOVED***A***REMOVED***is = meta.inde***REMOVED***A***REMOVED***is;
-        const iid = meta.iA***REMOVED***isID = chooseId(inde***REMOVED***A***REMOVED***is, ***REMOVED***id, yid, rid);
-        const vid = meta.vA***REMOVED***isID = chooseId(inde***REMOVED***A***REMOVED***is, yid, ***REMOVED***id, rid);
-        meta.***REMOVED***Scale = this.getScaleForId(***REMOVED***id);
+        const chooseId = (axis, x, y, r)=>axis === 'x' ? x : axis === 'r' ? r : y;
+        const xid = meta.xAxisID = helpers_segment.valueOrDefault(dataset.xAxisID, getFirstScaleId(chart, 'x'));
+        const yid = meta.yAxisID = helpers_segment.valueOrDefault(dataset.yAxisID, getFirstScaleId(chart, 'y'));
+        const rid = meta.rAxisID = helpers_segment.valueOrDefault(dataset.rAxisID, getFirstScaleId(chart, 'r'));
+        const indexAxis = meta.indexAxis;
+        const iid = meta.iAxisID = chooseId(indexAxis, xid, yid, rid);
+        const vid = meta.vAxisID = chooseId(indexAxis, yid, xid, rid);
+        meta.xScale = this.getScaleForId(xid);
         meta.yScale = this.getScaleForId(yid);
         meta.rScale = this.getScaleForId(rid);
         meta.iScale = this.getScaleForId(iid);
         meta.vScale = this.getScaleForId(vid);
     }
     getDataset() {
-        return this.chart.data.datasets[this.inde***REMOVED***];
+        return this.chart.data.datasets[this.index];
     }
     getMeta() {
-        return this.chart.getDatasetMeta(this.inde***REMOVED***);
+        return this.chart.getDatasetMeta(this.index);
     }
  getScaleForId(scaleID) {
         return this.chart.scales[scaleID];
@@ -666,7 +666,7 @@ class DatasetController {
                 clearStacks(meta);
                 meta._parsed = [];
             }
-            if (data && Object.isE***REMOVED***tensible(data)) {
+            if (data && Object.isExtensible(data)) {
                 helpers_segment.listenArrayEvents(data, this);
             }
             this._syncList = [];
@@ -701,14 +701,14 @@ class DatasetController {
         const config = this.chart.config;
         const scopeKeys = config.datasetScopeKeys(this._type);
         const scopes = config.getOptionScopes(this.getDataset(), scopeKeys, true);
-        this.options = config.createResolver(scopes, this.getConte***REMOVED***t());
+        this.options = config.createResolver(scopes, this.getContext());
         this._parsing = this.options.parsing;
         this._cachedDataOpts = {};
     }
  parse(start, count) {
         const { _cachedMeta: meta , _data: data  } = this;
         const { iScale , _stacked  } = meta;
-        const iA***REMOVED***is = iScale.a***REMOVED***is;
+        const iAxis = iScale.axis;
         let sorted = start === 0 && count === data.length ? true : meta._sorted;
         let prev = start > 0 && meta._parsed[start - 1];
         let i, cur, parsed;
@@ -724,7 +724,7 @@ class DatasetController {
             } else {
                 parsed = this.parsePrimitiveData(meta, data, start, count);
             }
-            const isNotInOrderComparedToPrev = ()=>cur[iA***REMOVED***is] === null || prev && cur[iA***REMOVED***is] < prev[iA***REMOVED***is];
+            const isNotInOrderComparedToPrev = ()=>cur[iAxis] === null || prev && cur[iAxis] < prev[iAxis];
             for(i = 0; i < count; ++i){
                 meta._parsed[i + start] = cur = parsed[i];
                 if (sorted) {
@@ -742,80 +742,80 @@ class DatasetController {
     }
  parsePrimitiveData(meta, data, start, count) {
         const { iScale , vScale  } = meta;
-        const iA***REMOVED***is = iScale.a***REMOVED***is;
-        const vA***REMOVED***is = vScale.a***REMOVED***is;
+        const iAxis = iScale.axis;
+        const vAxis = vScale.axis;
         const labels = iScale.getLabels();
         const singleScale = iScale === vScale;
         const parsed = new Array(count);
-        let i, ilen, inde***REMOVED***;
+        let i, ilen, index;
         for(i = 0, ilen = count; i < ilen; ++i){
-            inde***REMOVED*** = i + start;
+            index = i + start;
             parsed[i] = {
-                [iA***REMOVED***is]: singleScale || iScale.parse(labels[inde***REMOVED***], inde***REMOVED***),
-                [vA***REMOVED***is]: vScale.parse(data[inde***REMOVED***], inde***REMOVED***)
+                [iAxis]: singleScale || iScale.parse(labels[index], index),
+                [vAxis]: vScale.parse(data[index], index)
             };
         }
         return parsed;
     }
  parseArrayData(meta, data, start, count) {
-        const { ***REMOVED***Scale , yScale  } = meta;
+        const { xScale , yScale  } = meta;
         const parsed = new Array(count);
-        let i, ilen, inde***REMOVED***, item;
+        let i, ilen, index, item;
         for(i = 0, ilen = count; i < ilen; ++i){
-            inde***REMOVED*** = i + start;
-            item = data[inde***REMOVED***];
+            index = i + start;
+            item = data[index];
             parsed[i] = {
-                ***REMOVED***: ***REMOVED***Scale.parse(item[0], inde***REMOVED***),
-                y: yScale.parse(item[1], inde***REMOVED***)
+                x: xScale.parse(item[0], index),
+                y: yScale.parse(item[1], index)
             };
         }
         return parsed;
     }
  parseObjectData(meta, data, start, count) {
-        const { ***REMOVED***Scale , yScale  } = meta;
-        const { ***REMOVED***A***REMOVED***isKey ='***REMOVED***' , yA***REMOVED***isKey ='y'  } = this._parsing;
+        const { xScale , yScale  } = meta;
+        const { xAxisKey ='x' , yAxisKey ='y'  } = this._parsing;
         const parsed = new Array(count);
-        let i, ilen, inde***REMOVED***, item;
+        let i, ilen, index, item;
         for(i = 0, ilen = count; i < ilen; ++i){
-            inde***REMOVED*** = i + start;
-            item = data[inde***REMOVED***];
+            index = i + start;
+            item = data[index];
             parsed[i] = {
-                ***REMOVED***: ***REMOVED***Scale.parse(helpers_segment.resolveObjectKey(item, ***REMOVED***A***REMOVED***isKey), inde***REMOVED***),
-                y: yScale.parse(helpers_segment.resolveObjectKey(item, yA***REMOVED***isKey), inde***REMOVED***)
+                x: xScale.parse(helpers_segment.resolveObjectKey(item, xAxisKey), index),
+                y: yScale.parse(helpers_segment.resolveObjectKey(item, yAxisKey), index)
             };
         }
         return parsed;
     }
- getParsed(inde***REMOVED***) {
-        return this._cachedMeta._parsed[inde***REMOVED***];
+ getParsed(index) {
+        return this._cachedMeta._parsed[index];
     }
- getDataElement(inde***REMOVED***) {
-        return this._cachedMeta.data[inde***REMOVED***];
+ getDataElement(index) {
+        return this._cachedMeta.data[index];
     }
  applyStack(scale, parsed, mode) {
         const chart = this.chart;
         const meta = this._cachedMeta;
-        const value = parsed[scale.a***REMOVED***is];
+        const value = parsed[scale.axis];
         const stack = {
             keys: getSortedDatasetIndices(chart, true),
-            values: parsed._stacks[scale.a***REMOVED***is]._visualValues
+            values: parsed._stacks[scale.axis]._visualValues
         };
-        return applyStack(stack, value, meta.inde***REMOVED***, {
+        return applyStack(stack, value, meta.index, {
             mode
         });
     }
  updateRangeFromParsed(range, scale, parsed, stack) {
-        const parsedValue = parsed[scale.a***REMOVED***is];
+        const parsedValue = parsed[scale.axis];
         let value = parsedValue === null ? NaN : parsedValue;
-        const values = stack && parsed._stacks[scale.a***REMOVED***is];
+        const values = stack && parsed._stacks[scale.axis];
         if (stack && values) {
             stack.values = values;
-            value = applyStack(stack, parsedValue, this._cachedMeta.inde***REMOVED***);
+            value = applyStack(stack, parsedValue, this._cachedMeta.index);
         }
         range.min = Math.min(range.min, value);
-        range.ma***REMOVED*** = Math.ma***REMOVED***(range.ma***REMOVED***, value);
+        range.max = Math.max(range.max, value);
     }
- getMinMa***REMOVED***(scale, canStack) {
+ getMinMax(scale, canStack) {
         const meta = this._cachedMeta;
         const _parsed = meta._parsed;
         const sorted = meta._sorted && scale === meta.iScale;
@@ -824,14 +824,14 @@ class DatasetController {
         const stack = createStack(canStack, meta, this.chart);
         const range = {
             min: Number.POSITIVE_INFINITY,
-            ma***REMOVED***: Number.NEGATIVE_INFINITY
+            max: Number.NEGATIVE_INFINITY
         };
-        const { min: otherMin , ma***REMOVED***: otherMa***REMOVED***  } = getUserBounds(otherScale);
+        const { min: otherMin , max: otherMax  } = getUserBounds(otherScale);
         let i, parsed;
         function _skip() {
             parsed = _parsed[i];
-            const otherValue = parsed[otherScale.a***REMOVED***is];
-            return !helpers_segment.isNumberFinite(parsed[scale.a***REMOVED***is]) || otherMin > otherValue || otherMa***REMOVED*** < otherValue;
+            const otherValue = parsed[otherScale.axis];
+            return !helpers_segment.isNumberFinite(parsed[scale.axis]) || otherMin > otherValue || otherMax < otherValue;
         }
         for(i = 0; i < ilen; ++i){
             if (_skip()) {
@@ -858,34 +858,34 @@ class DatasetController {
         const values = [];
         let i, ilen, value;
         for(i = 0, ilen = parsed.length; i < ilen; ++i){
-            value = parsed[i][scale.a***REMOVED***is];
+            value = parsed[i][scale.axis];
             if (helpers_segment.isNumberFinite(value)) {
                 values.push(value);
             }
         }
         return values;
     }
- getMa***REMOVED***Overflow() {
+ getMaxOverflow() {
         return false;
     }
- getLabelAndValue(inde***REMOVED***) {
+ getLabelAndValue(index) {
         const meta = this._cachedMeta;
         const iScale = meta.iScale;
         const vScale = meta.vScale;
-        const parsed = this.getParsed(inde***REMOVED***);
+        const parsed = this.getParsed(index);
         return {
-            label: iScale ? '' + iScale.getLabelForValue(parsed[iScale.a***REMOVED***is]) : '',
-            value: vScale ? '' + vScale.getLabelForValue(parsed[vScale.a***REMOVED***is]) : ''
+            label: iScale ? '' + iScale.getLabelForValue(parsed[iScale.axis]) : '',
+            value: vScale ? '' + vScale.getLabelForValue(parsed[vScale.axis]) : ''
         };
     }
  _update(mode) {
         const meta = this._cachedMeta;
         this.update(mode || 'default');
-        meta._clip = toClip(helpers_segment.valueOrDefault(this.options.clip, defaultClip(meta.***REMOVED***Scale, meta.yScale, this.getMa***REMOVED***Overflow())));
+        meta._clip = toClip(helpers_segment.valueOrDefault(this.options.clip, defaultClip(meta.xScale, meta.yScale, this.getMaxOverflow())));
     }
  update(mode) {}
     draw() {
-        const ct***REMOVED*** = this._ct***REMOVED***;
+        const ctx = this._ctx;
         const chart = this.chart;
         const meta = this._cachedMeta;
         const elements = meta.data || [];
@@ -896,7 +896,7 @@ class DatasetController {
         const drawActiveElementsOnTop = this.options.drawActiveElementsOnTop;
         let i;
         if (meta.dataset) {
-            meta.dataset.draw(ct***REMOVED***, area, start, count);
+            meta.dataset.draw(ctx, area, start, count);
         }
         for(i = start; i < start + count; ++i){
             const element = elements[i];
@@ -906,53 +906,53 @@ class DatasetController {
             if (element.active && drawActiveElementsOnTop) {
                 active.push(element);
             } else {
-                element.draw(ct***REMOVED***, area);
+                element.draw(ctx, area);
             }
         }
         for(i = 0; i < active.length; ++i){
-            active[i].draw(ct***REMOVED***, area);
+            active[i].draw(ctx, area);
         }
     }
- getStyle(inde***REMOVED***, active) {
+ getStyle(index, active) {
         const mode = active ? 'active' : 'default';
-        return inde***REMOVED*** === undefined && this._cachedMeta.dataset ? this.resolveDatasetElementOptions(mode) : this.resolveDataElementOptions(inde***REMOVED*** || 0, mode);
+        return index === undefined && this._cachedMeta.dataset ? this.resolveDatasetElementOptions(mode) : this.resolveDataElementOptions(index || 0, mode);
     }
- getConte***REMOVED***t(inde***REMOVED***, active, mode) {
+ getContext(index, active, mode) {
         const dataset = this.getDataset();
-        let conte***REMOVED***t;
-        if (inde***REMOVED*** >= 0 && inde***REMOVED*** < this._cachedMeta.data.length) {
-            const element = this._cachedMeta.data[inde***REMOVED***];
-            conte***REMOVED***t = element.$conte***REMOVED***t || (element.$conte***REMOVED***t = createDataConte***REMOVED***t(this.getConte***REMOVED***t(), inde***REMOVED***, element));
-            conte***REMOVED***t.parsed = this.getParsed(inde***REMOVED***);
-            conte***REMOVED***t.raw = dataset.data[inde***REMOVED***];
-            conte***REMOVED***t.inde***REMOVED*** = conte***REMOVED***t.dataInde***REMOVED*** = inde***REMOVED***;
+        let context;
+        if (index >= 0 && index < this._cachedMeta.data.length) {
+            const element = this._cachedMeta.data[index];
+            context = element.$context || (element.$context = createDataContext(this.getContext(), index, element));
+            context.parsed = this.getParsed(index);
+            context.raw = dataset.data[index];
+            context.index = context.dataIndex = index;
         } else {
-            conte***REMOVED***t = this.$conte***REMOVED***t || (this.$conte***REMOVED***t = createDatasetConte***REMOVED***t(this.chart.getConte***REMOVED***t(), this.inde***REMOVED***));
-            conte***REMOVED***t.dataset = dataset;
-            conte***REMOVED***t.inde***REMOVED*** = conte***REMOVED***t.datasetInde***REMOVED*** = this.inde***REMOVED***;
+            context = this.$context || (this.$context = createDatasetContext(this.chart.getContext(), this.index));
+            context.dataset = dataset;
+            context.index = context.datasetIndex = this.index;
         }
-        conte***REMOVED***t.active = !!active;
-        conte***REMOVED***t.mode = mode;
-        return conte***REMOVED***t;
+        context.active = !!active;
+        context.mode = mode;
+        return context;
     }
  resolveDatasetElementOptions(mode) {
         return this._resolveElementOptions(this.datasetElementType.id, mode);
     }
- resolveDataElementOptions(inde***REMOVED***, mode) {
-        return this._resolveElementOptions(this.dataElementType.id, mode, inde***REMOVED***);
+ resolveDataElementOptions(index, mode) {
+        return this._resolveElementOptions(this.dataElementType.id, mode, index);
     }
- _resolveElementOptions(elementType, mode = 'default', inde***REMOVED***) {
+ _resolveElementOptions(elementType, mode = 'default', index) {
         const active = mode === 'active';
         const cache = this._cachedDataOpts;
         const cacheKey = elementType + '-' + mode;
         const cached = cache[cacheKey];
-        const sharing = this.enableOptionSharing && helpers_segment.defined(inde***REMOVED***);
+        const sharing = this.enableOptionSharing && helpers_segment.defined(index);
         if (cached) {
             return cloneIfNotShared(cached, sharing);
         }
         const config = this.chart.config;
         const scopeKeys = config.datasetElementScopeKeys(this._type, elementType);
-        const prefi***REMOVED***es = active ? [
+        const prefixes = active ? [
             `${elementType}Hover`,
             'hover',
             elementType,
@@ -963,15 +963,15 @@ class DatasetController {
         ];
         const scopes = config.getOptionScopes(this.getDataset(), scopeKeys);
         const names = Object.keys(helpers_segment.defaults.elements[elementType]);
-        const conte***REMOVED***t = ()=>this.getConte***REMOVED***t(inde***REMOVED***, active, mode);
-        const values = config.resolveNamedOptions(scopes, names, conte***REMOVED***t, prefi***REMOVED***es);
+        const context = ()=>this.getContext(index, active, mode);
+        const values = config.resolveNamedOptions(scopes, names, context, prefixes);
         if (values.$shared) {
             values.$shared = sharing;
             cache[cacheKey] = Object.freeze(cloneIfNotShared(values, sharing));
         }
         return values;
     }
- _resolveAnimations(inde***REMOVED***, transition, active) {
+ _resolveAnimations(index, transition, active) {
         const chart = this.chart;
         const cache = this._cachedDataOpts;
         const cacheKey = `animation-${transition}`;
@@ -984,7 +984,7 @@ class DatasetController {
             const config = this.chart.config;
             const scopeKeys = config.datasetAnimationScopeKeys(this._type, transition);
             const scopes = config.getOptionScopes(this.getDataset(), scopeKeys);
-            options = config.createResolver(scopes, this.getConte***REMOVED***t(inde***REMOVED***, active, transition));
+            options = config.createResolver(scopes, this.getContext(index, active, transition));
         }
         const animations = new Animations(chart, options && options.animations);
         if (options && options._cacheable) {
@@ -1012,11 +1012,11 @@ class DatasetController {
             includeOptions
         };
     }
- updateElement(element, inde***REMOVED***, properties, mode) {
+ updateElement(element, index, properties, mode) {
         if (isDirectUpdateMode(mode)) {
             Object.assign(element, properties);
         } else {
-            this._resolveAnimations(inde***REMOVED***, mode).update(element, properties);
+            this._resolveAnimations(index, mode).update(element, properties);
         }
     }
  updateSharedOptions(sharedOptions, mode, newOptions) {
@@ -1024,18 +1024,18 @@ class DatasetController {
             this._resolveAnimations(undefined, mode).update(sharedOptions, newOptions);
         }
     }
- _setStyle(element, inde***REMOVED***, mode, active) {
+ _setStyle(element, index, mode, active) {
         element.active = active;
-        const options = this.getStyle(inde***REMOVED***, active);
-        this._resolveAnimations(inde***REMOVED***, mode, active).update(element, {
+        const options = this.getStyle(index, active);
+        this._resolveAnimations(index, mode, active).update(element, {
             options: !active && this.getSharedOptions(options) || options
         });
     }
-    removeHoverStyle(element, datasetInde***REMOVED***, inde***REMOVED***) {
-        this._setStyle(element, inde***REMOVED***, 'active', false);
+    removeHoverStyle(element, datasetIndex, index) {
+        this._setStyle(element, index, 'active', false);
     }
-    setHoverStyle(element, datasetInde***REMOVED***, inde***REMOVED***) {
-        this._setStyle(element, inde***REMOVED***, 'active', true);
+    setHoverStyle(element, datasetIndex, index) {
+        this._setStyle(element, index, 'active', true);
     }
  _removeDatasetHoverStyle() {
         const element = this._cachedMeta.dataset;
@@ -1110,7 +1110,7 @@ class DatasetController {
             this[method](arg1, arg2);
         }
         this.chart._dataChanges.push([
-            this.inde***REMOVED***,
+            this.index,
             ...args
         ]);
     }
@@ -1188,17 +1188,17 @@ function getAllScaleValues(scale, type) {
         prev = curr;
     };
     for(i = 0, ilen = values.length; i < ilen; ++i){
-        curr = scale.getPi***REMOVED***elForValue(values[i]);
+        curr = scale.getPixelForValue(values[i]);
         updateMinAndPrev();
     }
     prev = undefined;
     for(i = 0, ilen = scale.ticks.length; i < ilen; ++i){
-        curr = scale.getPi***REMOVED***elForTick(i);
+        curr = scale.getPixelForTick(i);
         updateMinAndPrev();
     }
     return min;
 }
- function computeFitCategoryTraits(inde***REMOVED***, ruler, options, stackCount) {
+ function computeFitCategoryTraits(index, ruler, options, stackCount) {
     const thickness = options.barThickness;
     let size, ratio;
     if (helpers_segment.isNullOrUndef(thickness)) {
@@ -1211,23 +1211,23 @@ function getAllScaleValues(scale, type) {
     return {
         chunk: size / stackCount,
         ratio,
-        start: ruler.pi***REMOVED***els[inde***REMOVED***] - size / 2
+        start: ruler.pixels[index] - size / 2
     };
 }
- function computeFle***REMOVED***CategoryTraits(inde***REMOVED***, ruler, options, stackCount) {
-    const pi***REMOVED***els = ruler.pi***REMOVED***els;
-    const curr = pi***REMOVED***els[inde***REMOVED***];
-    let prev = inde***REMOVED*** > 0 ? pi***REMOVED***els[inde***REMOVED*** - 1] : null;
-    let ne***REMOVED***t = inde***REMOVED*** < pi***REMOVED***els.length - 1 ? pi***REMOVED***els[inde***REMOVED*** + 1] : null;
+ function computeFlexCategoryTraits(index, ruler, options, stackCount) {
+    const pixels = ruler.pixels;
+    const curr = pixels[index];
+    let prev = index > 0 ? pixels[index - 1] : null;
+    let next = index < pixels.length - 1 ? pixels[index + 1] : null;
     const percent = options.categoryPercentage;
     if (prev === null) {
-        prev = curr - (ne***REMOVED***t === null ? ruler.end - ruler.start : ne***REMOVED***t - curr);
+        prev = curr - (next === null ? ruler.end - ruler.start : next - curr);
     }
-    if (ne***REMOVED***t === null) {
-        ne***REMOVED***t = curr + curr - prev;
+    if (next === null) {
+        next = curr + curr - prev;
     }
-    const start = curr - (curr - Math.min(prev, ne***REMOVED***t)) / 2 * percent;
-    const size = Math.abs(ne***REMOVED***t - prev) / 2 * percent;
+    const start = curr - (curr - Math.min(prev, next)) / 2 * percent;
+    const size = Math.abs(next - prev) / 2 * percent;
     return {
         chunk: size / stackCount,
         ratio: options.barPercentage,
@@ -1238,28 +1238,28 @@ function parseFloatBar(entry, item, vScale, i) {
     const startValue = vScale.parse(entry[0], i);
     const endValue = vScale.parse(entry[1], i);
     const min = Math.min(startValue, endValue);
-    const ma***REMOVED*** = Math.ma***REMOVED***(startValue, endValue);
+    const max = Math.max(startValue, endValue);
     let barStart = min;
-    let barEnd = ma***REMOVED***;
-    if (Math.abs(min) > Math.abs(ma***REMOVED***)) {
-        barStart = ma***REMOVED***;
+    let barEnd = max;
+    if (Math.abs(min) > Math.abs(max)) {
+        barStart = max;
         barEnd = min;
     }
-    item[vScale.a***REMOVED***is] = barEnd;
+    item[vScale.axis] = barEnd;
     item._custom = {
         barStart,
         barEnd,
         start: startValue,
         end: endValue,
         min,
-        ma***REMOVED***
+        max
     };
 }
 function parseValue(entry, item, vScale, i) {
     if (helpers_segment.isArray(entry)) {
         parseFloatBar(entry, item, vScale, i);
     } else {
-        item[vScale.a***REMOVED***is] = vScale.parse(entry, i);
+        item[vScale.axis] = vScale.parse(entry, i);
     }
     return item;
 }
@@ -1273,7 +1273,7 @@ function parseArrayOrPrimitive(meta, data, start, count) {
     for(i = start, ilen = start + count; i < ilen; ++i){
         entry = data[i];
         item = {};
-        item[iScale.a***REMOVED***is] = singleScale || iScale.parse(labels[i], i);
+        item[iScale.axis] = singleScale || iScale.parse(labels[i], i);
         parsed.push(parseValue(entry, item, vScale, i));
     }
     return parsed;
@@ -1290,7 +1290,7 @@ function barSign(size, vScale, actualBase) {
 function borderProps(properties) {
     let reverse, start, end, top, bottom;
     if (properties.horizontal) {
-        reverse = properties.base > properties.***REMOVED***;
+        reverse = properties.base > properties.x;
         start = 'left';
         end = 'right';
     } else {
@@ -1313,7 +1313,7 @@ function borderProps(properties) {
         bottom
     };
 }
-function setBorderSkipped(properties, options, stack, inde***REMOVED***) {
+function setBorderSkipped(properties, options, stack, index) {
     let edge = options.borderSkipped;
     const res = {};
     if (!edge) {
@@ -1332,9 +1332,9 @@ function setBorderSkipped(properties, options, stack, inde***REMOVED***) {
     const { start , end , reverse , top , bottom  } = borderProps(properties);
     if (edge === 'middle' && stack) {
         properties.enableBorderRadius = true;
-        if ((stack._top || 0) === inde***REMOVED***) {
+        if ((stack._top || 0) === index) {
             edge = top;
-        } else if ((stack._bottom || 0) === inde***REMOVED***) {
+        } else if ((stack._bottom || 0) === index) {
             edge = bottom;
         } else {
             res[parseEdge(bottom, start, end, reverse)] = true;
@@ -1362,7 +1362,7 @@ function startEnd(v, start, end) {
 function setInflateAmount(properties, { inflateAmount  }, ratio) {
     properties.inflateAmount = inflateAmount === 'auto' ? ratio === 1 ? 0.33 : 0 : inflateAmount;
 }
-class BarController e***REMOVED***tends DatasetController {
+class BarController extends DatasetController {
     static id = 'bar';
  static defaults = {
         datasetElementType: false,
@@ -1374,7 +1374,7 @@ class BarController e***REMOVED***tends DatasetController {
             numbers: {
                 type: 'number',
                 properties: [
-                    '***REMOVED***',
+                    'x',
                     'y',
                     'base',
                     'width',
@@ -1385,7 +1385,7 @@ class BarController e***REMOVED***tends DatasetController {
     };
  static overrides = {
         scales: {
-            _inde***REMOVED***_: {
+            _index_: {
                 type: 'category',
                 offset: true,
                 grid: {
@@ -1406,16 +1406,16 @@ class BarController e***REMOVED***tends DatasetController {
     }
  parseObjectData(meta, data, start, count) {
         const { iScale , vScale  } = meta;
-        const { ***REMOVED***A***REMOVED***isKey ='***REMOVED***' , yA***REMOVED***isKey ='y'  } = this._parsing;
-        const iA***REMOVED***isKey = iScale.a***REMOVED***is === '***REMOVED***' ? ***REMOVED***A***REMOVED***isKey : yA***REMOVED***isKey;
-        const vA***REMOVED***isKey = vScale.a***REMOVED***is === '***REMOVED***' ? ***REMOVED***A***REMOVED***isKey : yA***REMOVED***isKey;
+        const { xAxisKey ='x' , yAxisKey ='y'  } = this._parsing;
+        const iAxisKey = iScale.axis === 'x' ? xAxisKey : yAxisKey;
+        const vAxisKey = vScale.axis === 'x' ? xAxisKey : yAxisKey;
         const parsed = [];
         let i, ilen, item, obj;
         for(i = start, ilen = start + count; i < ilen; ++i){
             obj = data[i];
             item = {};
-            item[iScale.a***REMOVED***is] = iScale.parse(helpers_segment.resolveObjectKey(obj, iA***REMOVED***isKey), i);
-            parsed.push(parseValue(helpers_segment.resolveObjectKey(obj, vA***REMOVED***isKey), item, vScale, i));
+            item[iScale.axis] = iScale.parse(helpers_segment.resolveObjectKey(obj, iAxisKey), i);
+            parsed.push(parseValue(helpers_segment.resolveObjectKey(obj, vAxisKey), item, vScale, i));
         }
         return parsed;
     }
@@ -1424,20 +1424,20 @@ class BarController e***REMOVED***tends DatasetController {
         const custom = parsed._custom;
         if (custom && scale === this._cachedMeta.vScale) {
             range.min = Math.min(range.min, custom.min);
-            range.ma***REMOVED*** = Math.ma***REMOVED***(range.ma***REMOVED***, custom.ma***REMOVED***);
+            range.max = Math.max(range.max, custom.max);
         }
     }
- getMa***REMOVED***Overflow() {
+ getMaxOverflow() {
         return 0;
     }
- getLabelAndValue(inde***REMOVED***) {
+ getLabelAndValue(index) {
         const meta = this._cachedMeta;
         const { iScale , vScale  } = meta;
-        const parsed = this.getParsed(inde***REMOVED***);
+        const parsed = this.getParsed(index);
         const custom = parsed._custom;
-        const value = isFloatBar(custom) ? '[' + custom.start + ', ' + custom.end + ']' : '' + vScale.getLabelForValue(parsed[vScale.a***REMOVED***is]);
+        const value = isFloatBar(custom) ? '[' + custom.start + ', ' + custom.end + ']' : '' + vScale.getLabelForValue(parsed[vScale.axis]);
         return {
-            label: '' + iScale.getLabelForValue(parsed[iScale.a***REMOVED***is]),
+            label: '' + iScale.getLabelForValue(parsed[iScale.axis]),
             value
         };
     }
@@ -1453,57 +1453,57 @@ class BarController e***REMOVED***tends DatasetController {
     }
     updateElements(bars, start, count, mode) {
         const reset = mode === 'reset';
-        const { inde***REMOVED*** , _cachedMeta: { vScale  }  } = this;
-        const base = vScale.getBasePi***REMOVED***el();
+        const { index , _cachedMeta: { vScale  }  } = this;
+        const base = vScale.getBasePixel();
         const horizontal = vScale.isHorizontal();
         const ruler = this._getRuler();
         const { sharedOptions , includeOptions  } = this._getSharedOptions(start, mode);
         for(let i = start; i < start + count; i++){
             const parsed = this.getParsed(i);
-            const vpi***REMOVED***els = reset || helpers_segment.isNullOrUndef(parsed[vScale.a***REMOVED***is]) ? {
+            const vpixels = reset || helpers_segment.isNullOrUndef(parsed[vScale.axis]) ? {
                 base,
                 head: base
-            } : this._calculateBarValuePi***REMOVED***els(i);
-            const ipi***REMOVED***els = this._calculateBarInde***REMOVED***Pi***REMOVED***els(i, ruler);
-            const stack = (parsed._stacks || {})[vScale.a***REMOVED***is];
+            } : this._calculateBarValuePixels(i);
+            const ipixels = this._calculateBarIndexPixels(i, ruler);
+            const stack = (parsed._stacks || {})[vScale.axis];
             const properties = {
                 horizontal,
-                base: vpi***REMOVED***els.base,
-                enableBorderRadius: !stack || isFloatBar(parsed._custom) || inde***REMOVED*** === stack._top || inde***REMOVED*** === stack._bottom,
-                ***REMOVED***: horizontal ? vpi***REMOVED***els.head : ipi***REMOVED***els.center,
-                y: horizontal ? ipi***REMOVED***els.center : vpi***REMOVED***els.head,
-                height: horizontal ? ipi***REMOVED***els.size : Math.abs(vpi***REMOVED***els.size),
-                width: horizontal ? Math.abs(vpi***REMOVED***els.size) : ipi***REMOVED***els.size
+                base: vpixels.base,
+                enableBorderRadius: !stack || isFloatBar(parsed._custom) || index === stack._top || index === stack._bottom,
+                x: horizontal ? vpixels.head : ipixels.center,
+                y: horizontal ? ipixels.center : vpixels.head,
+                height: horizontal ? ipixels.size : Math.abs(vpixels.size),
+                width: horizontal ? Math.abs(vpixels.size) : ipixels.size
             };
             if (includeOptions) {
                 properties.options = sharedOptions || this.resolveDataElementOptions(i, bars[i].active ? 'active' : mode);
             }
             const options = properties.options || bars[i].options;
-            setBorderSkipped(properties, options, stack, inde***REMOVED***);
+            setBorderSkipped(properties, options, stack, index);
             setInflateAmount(properties, options, ruler.ratio);
             this.updateElement(bars[i], i, properties, mode);
         }
     }
- _getStacks(last, dataInde***REMOVED***) {
+ _getStacks(last, dataIndex) {
         const { iScale  } = this._cachedMeta;
         const metasets = iScale.getMatchingVisibleMetas(this._type).filter((meta)=>meta.controller.options.grouped);
         const stacked = iScale.options.stacked;
         const stacks = [];
         const skipNull = (meta)=>{
-            const parsed = meta.controller.getParsed(dataInde***REMOVED***);
-            const val = parsed && parsed[meta.vScale.a***REMOVED***is];
+            const parsed = meta.controller.getParsed(dataIndex);
+            const val = parsed && parsed[meta.vScale.axis];
             if (helpers_segment.isNullOrUndef(val) || isNaN(val)) {
                 return true;
             }
         };
         for (const meta of metasets){
-            if (dataInde***REMOVED*** !== undefined && skipNull(meta)) {
+            if (dataIndex !== undefined && skipNull(meta)) {
                 continue;
             }
-            if (stacked === false || stacks.inde***REMOVED***Of(meta.stack) === -1 || stacked === undefined && meta.stack === undefined) {
+            if (stacked === false || stacks.indexOf(meta.stack) === -1 || stacked === undefined && meta.stack === undefined) {
                 stacks.push(meta.stack);
             }
-            if (meta.inde***REMOVED*** === last) {
+            if (meta.index === last) {
                 break;
             }
         }
@@ -1512,43 +1512,43 @@ class BarController e***REMOVED***tends DatasetController {
         }
         return stacks;
     }
- _getStackCount(inde***REMOVED***) {
-        return this._getStacks(undefined, inde***REMOVED***).length;
+ _getStackCount(index) {
+        return this._getStacks(undefined, index).length;
     }
- _getStackInde***REMOVED***(datasetInde***REMOVED***, name, dataInde***REMOVED***) {
-        const stacks = this._getStacks(datasetInde***REMOVED***, dataInde***REMOVED***);
-        const inde***REMOVED*** = name !== undefined ? stacks.inde***REMOVED***Of(name) : -1;
-        return inde***REMOVED*** === -1 ? stacks.length - 1 : inde***REMOVED***;
+ _getStackIndex(datasetIndex, name, dataIndex) {
+        const stacks = this._getStacks(datasetIndex, dataIndex);
+        const index = name !== undefined ? stacks.indexOf(name) : -1;
+        return index === -1 ? stacks.length - 1 : index;
     }
  _getRuler() {
         const opts = this.options;
         const meta = this._cachedMeta;
         const iScale = meta.iScale;
-        const pi***REMOVED***els = [];
+        const pixels = [];
         let i, ilen;
         for(i = 0, ilen = meta.data.length; i < ilen; ++i){
-            pi***REMOVED***els.push(iScale.getPi***REMOVED***elForValue(this.getParsed(i)[iScale.a***REMOVED***is], i));
+            pixels.push(iScale.getPixelForValue(this.getParsed(i)[iScale.axis], i));
         }
         const barThickness = opts.barThickness;
         const min = barThickness || computeMinSampleSize(meta);
         return {
             min,
-            pi***REMOVED***els,
-            start: iScale._startPi***REMOVED***el,
-            end: iScale._endPi***REMOVED***el,
+            pixels,
+            start: iScale._startPixel,
+            end: iScale._endPixel,
             stackCount: this._getStackCount(),
             scale: iScale,
             grouped: opts.grouped,
             ratio: barThickness ? 1 : opts.categoryPercentage * opts.barPercentage
         };
     }
- _calculateBarValuePi***REMOVED***els(inde***REMOVED***) {
-        const { _cachedMeta: { vScale , _stacked , inde***REMOVED***: datasetInde***REMOVED***  } , options: { base: baseValue , minBarLength  }  } = this;
+ _calculateBarValuePixels(index) {
+        const { _cachedMeta: { vScale , _stacked , index: datasetIndex  } , options: { base: baseValue , minBarLength  }  } = this;
         const actualBase = baseValue || 0;
-        const parsed = this.getParsed(inde***REMOVED***);
+        const parsed = this.getParsed(index);
         const custom = parsed._custom;
         const floating = isFloatBar(custom);
-        let value = parsed[vScale.a***REMOVED***is];
+        let value = parsed[vScale.axis];
         let start = 0;
         let length = _stacked ? this.applyStack(vScale, parsed, _stacked) : value;
         let head, size;
@@ -1565,9 +1565,9 @@ class BarController e***REMOVED***tends DatasetController {
             start += value;
         }
         const startValue = !helpers_segment.isNullOrUndef(baseValue) && !floating ? baseValue : start;
-        let base = vScale.getPi***REMOVED***elForValue(startValue);
-        if (this.chart.getDataVisibility(inde***REMOVED***)) {
-            head = vScale.getPi***REMOVED***elForValue(start + length);
+        let base = vScale.getPixelForValue(startValue);
+        if (this.chart.getDataVisibility(index)) {
+            head = vScale.getPixelForValue(start + length);
         } else {
             head = base;
         }
@@ -1577,17 +1577,17 @@ class BarController e***REMOVED***tends DatasetController {
             if (value === actualBase) {
                 base -= size / 2;
             }
-            const startPi***REMOVED***el = vScale.getPi***REMOVED***elForDecimal(0);
-            const endPi***REMOVED***el = vScale.getPi***REMOVED***elForDecimal(1);
-            const min = Math.min(startPi***REMOVED***el, endPi***REMOVED***el);
-            const ma***REMOVED*** = Math.ma***REMOVED***(startPi***REMOVED***el, endPi***REMOVED***el);
-            base = Math.ma***REMOVED***(Math.min(base, ma***REMOVED***), min);
+            const startPixel = vScale.getPixelForDecimal(0);
+            const endPixel = vScale.getPixelForDecimal(1);
+            const min = Math.min(startPixel, endPixel);
+            const max = Math.max(startPixel, endPixel);
+            base = Math.max(Math.min(base, max), min);
             head = base + size;
             if (_stacked && !floating) {
-                parsed._stacks[vScale.a***REMOVED***is]._visualValues[datasetInde***REMOVED***] = vScale.getValueForPi***REMOVED***el(head) - vScale.getValueForPi***REMOVED***el(base);
+                parsed._stacks[vScale.axis]._visualValues[datasetIndex] = vScale.getValueForPixel(head) - vScale.getValueForPixel(base);
             }
         }
-        if (base === vScale.getPi***REMOVED***elForValue(actualBase)) {
+        if (base === vScale.getPixelForValue(actualBase)) {
             const halfGrid = helpers_segment.sign(size) * vScale.getLineWidthForValue(actualBase) / 2;
             base += halfGrid;
             size -= halfGrid;
@@ -1599,21 +1599,21 @@ class BarController e***REMOVED***tends DatasetController {
             center: head + size / 2
         };
     }
- _calculateBarInde***REMOVED***Pi***REMOVED***els(inde***REMOVED***, ruler) {
+ _calculateBarIndexPixels(index, ruler) {
         const scale = ruler.scale;
         const options = this.options;
         const skipNull = options.skipNull;
-        const ma***REMOVED***BarThickness = helpers_segment.valueOrDefault(options.ma***REMOVED***BarThickness, Infinity);
+        const maxBarThickness = helpers_segment.valueOrDefault(options.maxBarThickness, Infinity);
         let center, size;
         if (ruler.grouped) {
-            const stackCount = skipNull ? this._getStackCount(inde***REMOVED***) : ruler.stackCount;
-            const range = options.barThickness === 'fle***REMOVED***' ? computeFle***REMOVED***CategoryTraits(inde***REMOVED***, ruler, options, stackCount) : computeFitCategoryTraits(inde***REMOVED***, ruler, options, stackCount);
-            const stackInde***REMOVED*** = this._getStackInde***REMOVED***(this.inde***REMOVED***, this._cachedMeta.stack, skipNull ? inde***REMOVED*** : undefined);
-            center = range.start + range.chunk * stackInde***REMOVED*** + range.chunk / 2;
-            size = Math.min(ma***REMOVED***BarThickness, range.chunk * range.ratio);
+            const stackCount = skipNull ? this._getStackCount(index) : ruler.stackCount;
+            const range = options.barThickness === 'flex' ? computeFlexCategoryTraits(index, ruler, options, stackCount) : computeFitCategoryTraits(index, ruler, options, stackCount);
+            const stackIndex = this._getStackIndex(this.index, this._cachedMeta.stack, skipNull ? index : undefined);
+            center = range.start + range.chunk * stackIndex + range.chunk / 2;
+            size = Math.min(maxBarThickness, range.chunk * range.ratio);
         } else {
-            center = scale.getPi***REMOVED***elForValue(this.getParsed(inde***REMOVED***)[scale.a***REMOVED***is], inde***REMOVED***);
-            size = Math.min(ma***REMOVED***BarThickness, ruler.min * ruler.ratio);
+            center = scale.getPixelForValue(this.getParsed(index)[scale.axis], index);
+            size = Math.min(maxBarThickness, ruler.min * ruler.ratio);
         }
         return {
             base: center - size / 2,
@@ -1629,14 +1629,14 @@ class BarController e***REMOVED***tends DatasetController {
         const ilen = rects.length;
         let i = 0;
         for(; i < ilen; ++i){
-            if (this.getParsed(i)[vScale.a***REMOVED***is] !== null && !rects[i].hidden) {
-                rects[i].draw(this._ct***REMOVED***);
+            if (this.getParsed(i)[vScale.axis] !== null && !rects[i].hidden) {
+                rects[i].draw(this._ctx);
             }
         }
     }
 }
 
-class BubbleController e***REMOVED***tends DatasetController {
+class BubbleController extends DatasetController {
     static id = 'bubble';
  static defaults = {
         datasetElementType: false,
@@ -1645,7 +1645,7 @@ class BubbleController e***REMOVED***tends DatasetController {
             numbers: {
                 type: 'number',
                 properties: [
-                    '***REMOVED***',
+                    'x',
                     'y',
                     'borderWidth',
                     'radius'
@@ -1655,7 +1655,7 @@ class BubbleController e***REMOVED***tends DatasetController {
     };
  static overrides = {
         scales: {
-            ***REMOVED***: {
+            x: {
                 type: 'linear'
             },
             y: {
@@ -1690,25 +1690,25 @@ class BubbleController e***REMOVED***tends DatasetController {
         }
         return parsed;
     }
- getMa***REMOVED***Overflow() {
+ getMaxOverflow() {
         const data = this._cachedMeta.data;
-        let ma***REMOVED*** = 0;
+        let max = 0;
         for(let i = data.length - 1; i >= 0; --i){
-            ma***REMOVED*** = Math.ma***REMOVED***(ma***REMOVED***, data[i].size(this.resolveDataElementOptions(i)) / 2);
+            max = Math.max(max, data[i].size(this.resolveDataElementOptions(i)) / 2);
         }
-        return ma***REMOVED*** > 0 && ma***REMOVED***;
+        return max > 0 && max;
     }
- getLabelAndValue(inde***REMOVED***) {
+ getLabelAndValue(index) {
         const meta = this._cachedMeta;
         const labels = this.chart.data.labels || [];
-        const { ***REMOVED***Scale , yScale  } = meta;
-        const parsed = this.getParsed(inde***REMOVED***);
-        const ***REMOVED*** = ***REMOVED***Scale.getLabelForValue(parsed.***REMOVED***);
+        const { xScale , yScale  } = meta;
+        const parsed = this.getParsed(index);
+        const x = xScale.getLabelForValue(parsed.x);
         const y = yScale.getLabelForValue(parsed.y);
         const r = parsed._custom;
         return {
-            label: labels[inde***REMOVED***] || '',
-            value: '(' + ***REMOVED*** + ', ' + y + (r ? ', ' + r : '') + ')'
+            label: labels[index] || '',
+            value: '(' + x + ', ' + y + (r ? ', ' + r : '') + ')'
         };
     }
     update(mode) {
@@ -1719,15 +1719,15 @@ class BubbleController e***REMOVED***tends DatasetController {
         const reset = mode === 'reset';
         const { iScale , vScale  } = this._cachedMeta;
         const { sharedOptions , includeOptions  } = this._getSharedOptions(start, mode);
-        const iA***REMOVED***is = iScale.a***REMOVED***is;
-        const vA***REMOVED***is = vScale.a***REMOVED***is;
+        const iAxis = iScale.axis;
+        const vAxis = vScale.axis;
         for(let i = start; i < start + count; i++){
             const point = points[i];
             const parsed = !reset && this.getParsed(i);
             const properties = {};
-            const iPi***REMOVED***el = properties[iA***REMOVED***is] = reset ? iScale.getPi***REMOVED***elForDecimal(0.5) : iScale.getPi***REMOVED***elForValue(parsed[iA***REMOVED***is]);
-            const vPi***REMOVED***el = properties[vA***REMOVED***is] = reset ? vScale.getBasePi***REMOVED***el() : vScale.getPi***REMOVED***elForValue(parsed[vA***REMOVED***is]);
-            properties.skip = isNaN(iPi***REMOVED***el) || isNaN(vPi***REMOVED***el);
+            const iPixel = properties[iAxis] = reset ? iScale.getPixelForDecimal(0.5) : iScale.getPixelForValue(parsed[iAxis]);
+            const vPixel = properties[vAxis] = reset ? vScale.getBasePixel() : vScale.getPixelForValue(parsed[vAxis]);
+            properties.skip = isNaN(iPixel) || isNaN(vPixel);
             if (includeOptions) {
                 properties.options = sharedOptions || this.resolveDataElementOptions(i, point.active ? 'active' : mode);
                 if (reset) {
@@ -1737,9 +1737,9 @@ class BubbleController e***REMOVED***tends DatasetController {
             this.updateElement(point, i, properties, mode);
         }
     }
- resolveDataElementOptions(inde***REMOVED***, mode) {
-        const parsed = this.getParsed(inde***REMOVED***);
-        let values = super.resolveDataElementOptions(inde***REMOVED***, mode);
+ resolveDataElementOptions(index, mode) {
+        const parsed = this.getParsed(index);
+        let values = super.resolveDataElementOptions(index, mode);
         if (values.$shared) {
             values = Object.assign({}, values, {
                 $shared: false
@@ -1766,16 +1766,16 @@ function getRatioAndOffset(rotation, circumference, cutout) {
         const startY = Math.sin(startAngle);
         const endX = Math.cos(endAngle);
         const endY = Math.sin(endAngle);
-        const calcMa***REMOVED*** = (angle, a, b)=>helpers_segment._angleBetween(angle, startAngle, endAngle, true) ? 1 : Math.ma***REMOVED***(a, a * cutout, b, b * cutout);
+        const calcMax = (angle, a, b)=>helpers_segment._angleBetween(angle, startAngle, endAngle, true) ? 1 : Math.max(a, a * cutout, b, b * cutout);
         const calcMin = (angle, a, b)=>helpers_segment._angleBetween(angle, startAngle, endAngle, true) ? -1 : Math.min(a, a * cutout, b, b * cutout);
-        const ma***REMOVED***X = calcMa***REMOVED***(0, startX, endX);
-        const ma***REMOVED***Y = calcMa***REMOVED***(helpers_segment.HALF_PI, startY, endY);
+        const maxX = calcMax(0, startX, endX);
+        const maxY = calcMax(helpers_segment.HALF_PI, startY, endY);
         const minX = calcMin(helpers_segment.PI, startX, endX);
         const minY = calcMin(helpers_segment.PI + helpers_segment.HALF_PI, startY, endY);
-        ratioX = (ma***REMOVED***X - minX) / 2;
-        ratioY = (ma***REMOVED***Y - minY) / 2;
-        offsetX = -(ma***REMOVED***X + minX) / 2;
-        offsetY = -(ma***REMOVED***Y + minY) / 2;
+        ratioX = (maxX - minX) / 2;
+        ratioY = (maxY - minY) / 2;
+        offsetX = -(maxX + minX) / 2;
+        offsetY = -(maxY + minY) / 2;
     }
     return {
         ratioX,
@@ -1784,7 +1784,7 @@ function getRatioAndOffset(rotation, circumference, cutout) {
         offsetY
     };
 }
-class DoughnutController e***REMOVED***tends DatasetController {
+class DoughnutController extends DatasetController {
     static id = 'doughnut';
  static defaults = {
         datasetElementType: false,
@@ -1802,7 +1802,7 @@ class DoughnutController e***REMOVED***tends DatasetController {
                     'innerRadius',
                     'outerRadius',
                     'startAngle',
-                    '***REMOVED***',
+                    'x',
                     'y',
                     'offset',
                     'borderWidth',
@@ -1815,11 +1815,11 @@ class DoughnutController e***REMOVED***tends DatasetController {
         circumference: 360,
         radius: '100%',
         spacing: 0,
-        inde***REMOVED***A***REMOVED***is: 'r'
+        indexAxis: 'r'
     };
     static descriptors = {
         _scriptable: (name)=>name !== 'spacing',
-        _inde***REMOVED***able: (name)=>name !== 'spacing' && !name.startsWith('borderDash') && !name.startsWith('hoverBorderDash')
+        _indexable: (name)=>name !== 'spacing' && !name.startsWith('borderDash') && !name.startsWith('hoverBorderDash')
     };
  static overrides = {
         aspectRatio: 1,
@@ -1834,14 +1834,14 @@ class DoughnutController e***REMOVED***tends DatasetController {
                                 const meta = chart.getDatasetMeta(0);
                                 const style = meta.controller.getStyle(i);
                                 return {
-                                    te***REMOVED***t: label,
+                                    text: label,
                                     fillStyle: style.backgroundColor,
                                     strokeStyle: style.borderColor,
                                     fontColor: color,
                                     lineWidth: style.borderWidth,
                                     pointStyle: pointStyle,
                                     hidden: !chart.getDataVisibility(i),
-                                    inde***REMOVED***: i
+                                    index: i
                                 };
                             });
                         }
@@ -1849,14 +1849,14 @@ class DoughnutController e***REMOVED***tends DatasetController {
                     }
                 },
                 onClick (e, legendItem, legend) {
-                    legend.chart.toggleDataVisibility(legendItem.inde***REMOVED***);
+                    legend.chart.toggleDataVisibility(legendItem.index);
                     legend.chart.update();
                 }
             }
         }
     };
-    constructor(chart, datasetInde***REMOVED***){
-        super(chart, datasetInde***REMOVED***);
+    constructor(chart, datasetIndex){
+        super(chart, datasetIndex);
         this.enableOptionSharing = true;
         this.innerRadius = undefined;
         this.outerRadius = undefined;
@@ -1887,21 +1887,21 @@ class DoughnutController e***REMOVED***tends DatasetController {
  _getCircumference() {
         return helpers_segment.toRadians(this.options.circumference);
     }
- _getRotationE***REMOVED***tents() {
+ _getRotationExtents() {
         let min = helpers_segment.TAU;
-        let ma***REMOVED*** = -helpers_segment.TAU;
+        let max = -helpers_segment.TAU;
         for(let i = 0; i < this.chart.data.datasets.length; ++i){
             if (this.chart.isDatasetVisible(i) && this.chart.getDatasetMeta(i).type === this._type) {
                 const controller = this.chart.getDatasetMeta(i).controller;
                 const rotation = controller._getRotation();
                 const circumference = controller._getCircumference();
                 min = Math.min(min, rotation);
-                ma***REMOVED*** = Math.ma***REMOVED***(ma***REMOVED***, rotation + circumference);
+                max = Math.max(max, rotation + circumference);
             }
         }
         return {
             rotation: min,
-            circumference: ma***REMOVED*** - min
+            circumference: max - min
         };
     }
  update(mode) {
@@ -1909,23 +1909,23 @@ class DoughnutController e***REMOVED***tends DatasetController {
         const { chartArea  } = chart;
         const meta = this._cachedMeta;
         const arcs = meta.data;
-        const spacing = this.getMa***REMOVED***BorderWidth() + this.getMa***REMOVED***Offset(arcs) + this.options.spacing;
-        const ma***REMOVED***Size = Math.ma***REMOVED***((Math.min(chartArea.width, chartArea.height) - spacing) / 2, 0);
-        const cutout = Math.min(helpers_segment.toPercentage(this.options.cutout, ma***REMOVED***Size), 1);
-        const chartWeight = this._getRingWeight(this.inde***REMOVED***);
-        const { circumference , rotation  } = this._getRotationE***REMOVED***tents();
+        const spacing = this.getMaxBorderWidth() + this.getMaxOffset(arcs) + this.options.spacing;
+        const maxSize = Math.max((Math.min(chartArea.width, chartArea.height) - spacing) / 2, 0);
+        const cutout = Math.min(helpers_segment.toPercentage(this.options.cutout, maxSize), 1);
+        const chartWeight = this._getRingWeight(this.index);
+        const { circumference , rotation  } = this._getRotationExtents();
         const { ratioX , ratioY , offsetX , offsetY  } = getRatioAndOffset(rotation, circumference, cutout);
-        const ma***REMOVED***Width = (chartArea.width - spacing) / ratioX;
-        const ma***REMOVED***Height = (chartArea.height - spacing) / ratioY;
-        const ma***REMOVED***Radius = Math.ma***REMOVED***(Math.min(ma***REMOVED***Width, ma***REMOVED***Height) / 2, 0);
-        const outerRadius = helpers_segment.toDimension(this.options.radius, ma***REMOVED***Radius);
-        const innerRadius = Math.ma***REMOVED***(outerRadius * cutout, 0);
+        const maxWidth = (chartArea.width - spacing) / ratioX;
+        const maxHeight = (chartArea.height - spacing) / ratioY;
+        const maxRadius = Math.max(Math.min(maxWidth, maxHeight) / 2, 0);
+        const outerRadius = helpers_segment.toDimension(this.options.radius, maxRadius);
+        const innerRadius = Math.max(outerRadius * cutout, 0);
         const radiusLength = (outerRadius - innerRadius) / this._getVisibleDatasetWeightTotal();
         this.offsetX = offsetX * outerRadius;
         this.offsetY = offsetY * outerRadius;
         meta.total = this.calculateTotal();
-        this.outerRadius = outerRadius - radiusLength * this._getRingWeightOffset(this.inde***REMOVED***);
-        this.innerRadius = Math.ma***REMOVED***(this.outerRadius - radiusLength * chartWeight, 0);
+        this.outerRadius = outerRadius - radiusLength * this._getRingWeightOffset(this.index);
+        this.innerRadius = Math.max(this.outerRadius - radiusLength * chartWeight, 0);
         this.updateElements(arcs, 0, arcs.length, mode);
     }
  _circumference(i, reset) {
@@ -1958,7 +1958,7 @@ class DoughnutController e***REMOVED***tends DatasetController {
             const circumference = this._circumference(i, reset);
             const arc = arcs[i];
             const properties = {
-                ***REMOVED***: centerX + this.offsetX,
+                x: centerX + this.offsetX,
                 y: centerY + this.offsetY,
                 startAngle,
                 endAngle: startAngle + circumference,
@@ -1993,18 +1993,18 @@ class DoughnutController e***REMOVED***tends DatasetController {
         }
         return 0;
     }
-    getLabelAndValue(inde***REMOVED***) {
+    getLabelAndValue(index) {
         const meta = this._cachedMeta;
         const chart = this.chart;
         const labels = chart.data.labels || [];
-        const value = helpers_segment.formatNumber(meta._parsed[inde***REMOVED***], chart.options.locale);
+        const value = helpers_segment.formatNumber(meta._parsed[index], chart.options.locale);
         return {
-            label: labels[inde***REMOVED***] || '',
+            label: labels[index] || '',
             value
         };
     }
-    getMa***REMOVED***BorderWidth(arcs) {
-        let ma***REMOVED*** = 0;
+    getMaxBorderWidth(arcs) {
+        let max = 0;
         const chart = this.chart;
         let i, ilen, meta, controller, options;
         if (!arcs) {
@@ -2023,37 +2023,37 @@ class DoughnutController e***REMOVED***tends DatasetController {
         for(i = 0, ilen = arcs.length; i < ilen; ++i){
             options = controller.resolveDataElementOptions(i);
             if (options.borderAlign !== 'inner') {
-                ma***REMOVED*** = Math.ma***REMOVED***(ma***REMOVED***, options.borderWidth || 0, options.hoverBorderWidth || 0);
+                max = Math.max(max, options.borderWidth || 0, options.hoverBorderWidth || 0);
             }
         }
-        return ma***REMOVED***;
+        return max;
     }
-    getMa***REMOVED***Offset(arcs) {
-        let ma***REMOVED*** = 0;
+    getMaxOffset(arcs) {
+        let max = 0;
         for(let i = 0, ilen = arcs.length; i < ilen; ++i){
             const options = this.resolveDataElementOptions(i);
-            ma***REMOVED*** = Math.ma***REMOVED***(ma***REMOVED***, options.offset || 0, options.hoverOffset || 0);
+            max = Math.max(max, options.offset || 0, options.hoverOffset || 0);
         }
-        return ma***REMOVED***;
+        return max;
     }
- _getRingWeightOffset(datasetInde***REMOVED***) {
+ _getRingWeightOffset(datasetIndex) {
         let ringWeightOffset = 0;
-        for(let i = 0; i < datasetInde***REMOVED***; ++i){
+        for(let i = 0; i < datasetIndex; ++i){
             if (this.chart.isDatasetVisible(i)) {
                 ringWeightOffset += this._getRingWeight(i);
             }
         }
         return ringWeightOffset;
     }
- _getRingWeight(datasetInde***REMOVED***) {
-        return Math.ma***REMOVED***(helpers_segment.valueOrDefault(this.chart.data.datasets[datasetInde***REMOVED***].weight, 1), 0);
+ _getRingWeight(datasetIndex) {
+        return Math.max(helpers_segment.valueOrDefault(this.chart.data.datasets[datasetIndex].weight, 1), 0);
     }
  _getVisibleDatasetWeightTotal() {
         return this._getRingWeightOffset(this.chart.data.datasets.length) || 1;
     }
 }
 
-class LineController e***REMOVED***tends DatasetController {
+class LineController extends DatasetController {
     static id = 'line';
  static defaults = {
         datasetElementType: 'line',
@@ -2063,7 +2063,7 @@ class LineController e***REMOVED***tends DatasetController {
     };
  static overrides = {
         scales: {
-            _inde***REMOVED***_: {
+            _index_: {
                 type: 'category'
             },
             _value_: {
@@ -2088,7 +2088,7 @@ class LineController e***REMOVED***tends DatasetController {
             count = points.length;
         }
         line._chart = this.chart;
-        line._datasetInde***REMOVED*** = this.inde***REMOVED***;
+        line._datasetIndex = this.index;
         line._decimated = !!_dataset._decimated;
         line.points = points;
         const options = this.resolveDatasetElementOptions(mode);
@@ -2106,10 +2106,10 @@ class LineController e***REMOVED***tends DatasetController {
         const reset = mode === 'reset';
         const { iScale , vScale , _stacked , _dataset  } = this._cachedMeta;
         const { sharedOptions , includeOptions  } = this._getSharedOptions(start, mode);
-        const iA***REMOVED***is = iScale.a***REMOVED***is;
-        const vA***REMOVED***is = vScale.a***REMOVED***is;
+        const iAxis = iScale.axis;
+        const vAxis = vScale.axis;
         const { spanGaps , segment  } = this.options;
-        const ma***REMOVED***GapLength = helpers_segment.isNumber(spanGaps) ? spanGaps : Number.POSITIVE_INFINITY;
+        const maxGapLength = helpers_segment.isNumber(spanGaps) ? spanGaps : Number.POSITIVE_INFINITY;
         const directUpdate = this.chart._animationsDisabled || reset || mode === 'none';
         const end = start + count;
         const pointsCount = points.length;
@@ -2122,11 +2122,11 @@ class LineController e***REMOVED***tends DatasetController {
                 continue;
             }
             const parsed = this.getParsed(i);
-            const nullData = helpers_segment.isNullOrUndef(parsed[vA***REMOVED***is]);
-            const iPi***REMOVED***el = properties[iA***REMOVED***is] = iScale.getPi***REMOVED***elForValue(parsed[iA***REMOVED***is], i);
-            const vPi***REMOVED***el = properties[vA***REMOVED***is] = reset || nullData ? vScale.getBasePi***REMOVED***el() : vScale.getPi***REMOVED***elForValue(_stacked ? this.applyStack(vScale, parsed, _stacked) : parsed[vA***REMOVED***is], i);
-            properties.skip = isNaN(iPi***REMOVED***el) || isNaN(vPi***REMOVED***el) || nullData;
-            properties.stop = i > 0 && Math.abs(parsed[iA***REMOVED***is] - prevParsed[iA***REMOVED***is]) > ma***REMOVED***GapLength;
+            const nullData = helpers_segment.isNullOrUndef(parsed[vAxis]);
+            const iPixel = properties[iAxis] = iScale.getPixelForValue(parsed[iAxis], i);
+            const vPixel = properties[vAxis] = reset || nullData ? vScale.getBasePixel() : vScale.getPixelForValue(_stacked ? this.applyStack(vScale, parsed, _stacked) : parsed[vAxis], i);
+            properties.skip = isNaN(iPixel) || isNaN(vPixel) || nullData;
+            properties.stop = i > 0 && Math.abs(parsed[iAxis] - prevParsed[iAxis]) > maxGapLength;
             if (segment) {
                 properties.parsed = parsed;
                 properties.raw = _dataset.data[i];
@@ -2140,7 +2140,7 @@ class LineController e***REMOVED***tends DatasetController {
             prevParsed = parsed;
         }
     }
- getMa***REMOVED***Overflow() {
+ getMaxOverflow() {
         const meta = this._cachedMeta;
         const dataset = meta.dataset;
         const border = dataset.options && dataset.options.borderWidth || 0;
@@ -2150,16 +2150,16 @@ class LineController e***REMOVED***tends DatasetController {
         }
         const firstPoint = data[0].size(this.resolveDataElementOptions(0));
         const lastPoint = data[data.length - 1].size(this.resolveDataElementOptions(data.length - 1));
-        return Math.ma***REMOVED***(border, firstPoint, lastPoint) / 2;
+        return Math.max(border, firstPoint, lastPoint) / 2;
     }
     draw() {
         const meta = this._cachedMeta;
-        meta.dataset.updateControlPoints(this.chart.chartArea, meta.iScale.a***REMOVED***is);
+        meta.dataset.updateControlPoints(this.chart.chartArea, meta.iScale.axis);
         super.draw();
     }
 }
 
-class PolarAreaController e***REMOVED***tends DatasetController {
+class PolarAreaController extends DatasetController {
     static id = 'polarArea';
  static defaults = {
         dataElementType: 'arc',
@@ -2171,7 +2171,7 @@ class PolarAreaController e***REMOVED***tends DatasetController {
             numbers: {
                 type: 'number',
                 properties: [
-                    '***REMOVED***',
+                    'x',
                     'y',
                     'startAngle',
                     'endAngle',
@@ -2180,7 +2180,7 @@ class PolarAreaController e***REMOVED***tends DatasetController {
                 ]
             }
         },
-        inde***REMOVED***A***REMOVED***is: 'r',
+        indexAxis: 'r',
         startAngle: 0
     };
  static overrides = {
@@ -2196,14 +2196,14 @@ class PolarAreaController e***REMOVED***tends DatasetController {
                                 const meta = chart.getDatasetMeta(0);
                                 const style = meta.controller.getStyle(i);
                                 return {
-                                    te***REMOVED***t: label,
+                                    text: label,
                                     fillStyle: style.backgroundColor,
                                     strokeStyle: style.borderColor,
                                     fontColor: color,
                                     lineWidth: style.borderWidth,
                                     pointStyle: pointStyle,
                                     hidden: !chart.getDataVisibility(i),
-                                    inde***REMOVED***: i
+                                    index: i
                                 };
                             });
                         }
@@ -2211,7 +2211,7 @@ class PolarAreaController e***REMOVED***tends DatasetController {
                     }
                 },
                 onClick (e, legendItem, legend) {
-                    legend.chart.toggleDataVisibility(legendItem.inde***REMOVED***);
+                    legend.chart.toggleDataVisibility(legendItem.index);
                     legend.chart.update();
                 }
             }
@@ -2233,18 +2233,18 @@ class PolarAreaController e***REMOVED***tends DatasetController {
             }
         }
     };
-    constructor(chart, datasetInde***REMOVED***){
-        super(chart, datasetInde***REMOVED***);
+    constructor(chart, datasetIndex){
+        super(chart, datasetIndex);
         this.innerRadius = undefined;
         this.outerRadius = undefined;
     }
-    getLabelAndValue(inde***REMOVED***) {
+    getLabelAndValue(index) {
         const meta = this._cachedMeta;
         const chart = this.chart;
         const labels = chart.data.labels || [];
-        const value = helpers_segment.formatNumber(meta._parsed[inde***REMOVED***].r, chart.options.locale);
+        const value = helpers_segment.formatNumber(meta._parsed[index].r, chart.options.locale);
         return {
-            label: labels[inde***REMOVED***] || '',
+            label: labels[index] || '',
             value
         };
     }
@@ -2256,20 +2256,20 @@ class PolarAreaController e***REMOVED***tends DatasetController {
         this._updateRadius();
         this.updateElements(arcs, 0, arcs.length, mode);
     }
- getMinMa***REMOVED***() {
+ getMinMax() {
         const meta = this._cachedMeta;
         const range = {
             min: Number.POSITIVE_INFINITY,
-            ma***REMOVED***: Number.NEGATIVE_INFINITY
+            max: Number.NEGATIVE_INFINITY
         };
-        meta.data.forEach((element, inde***REMOVED***)=>{
-            const parsed = this.getParsed(inde***REMOVED***).r;
-            if (!isNaN(parsed) && this.chart.getDataVisibility(inde***REMOVED***)) {
+        meta.data.forEach((element, index)=>{
+            const parsed = this.getParsed(index).r;
+            if (!isNaN(parsed) && this.chart.getDataVisibility(index)) {
                 if (parsed < range.min) {
                     range.min = parsed;
                 }
-                if (parsed > range.ma***REMOVED***) {
-                    range.ma***REMOVED*** = parsed;
+                if (parsed > range.max) {
+                    range.max = parsed;
                 }
             }
         });
@@ -2280,10 +2280,10 @@ class PolarAreaController e***REMOVED***tends DatasetController {
         const chartArea = chart.chartArea;
         const opts = chart.options;
         const minSize = Math.min(chartArea.right - chartArea.left, chartArea.bottom - chartArea.top);
-        const outerRadius = Math.ma***REMOVED***(minSize / 2, 0);
-        const innerRadius = Math.ma***REMOVED***(opts.cutoutPercentage ? outerRadius / 100 * opts.cutoutPercentage : 1, 0);
+        const outerRadius = Math.max(minSize / 2, 0);
+        const innerRadius = Math.max(opts.cutoutPercentage ? outerRadius / 100 * opts.cutoutPercentage : 1, 0);
         const radiusLength = (outerRadius - innerRadius) / chart.getVisibleDatasetCount();
-        this.outerRadius = outerRadius - radiusLength * this.inde***REMOVED***;
+        this.outerRadius = outerRadius - radiusLength * this.index;
         this.innerRadius = this.outerRadius - radiusLength;
     }
     updateElements(arcs, start, count, mode) {
@@ -2292,9 +2292,9 @@ class PolarAreaController e***REMOVED***tends DatasetController {
         const opts = chart.options;
         const animationOpts = opts.animation;
         const scale = this._cachedMeta.rScale;
-        const centerX = scale.***REMOVED***Center;
+        const centerX = scale.xCenter;
         const centerY = scale.yCenter;
-        const datasetStartAngle = scale.getInde***REMOVED***Angle(0) - 0.5 * helpers_segment.PI;
+        const datasetStartAngle = scale.getIndexAngle(0) - 0.5 * helpers_segment.PI;
         let angle = datasetStartAngle;
         let i;
         const defaultAngle = 360 / this.countVisibleElements();
@@ -2316,7 +2316,7 @@ class PolarAreaController e***REMOVED***tends DatasetController {
                 }
             }
             const properties = {
-                ***REMOVED***: centerX,
+                x: centerX,
                 y: centerY,
                 innerRadius: 0,
                 outerRadius,
@@ -2330,19 +2330,19 @@ class PolarAreaController e***REMOVED***tends DatasetController {
     countVisibleElements() {
         const meta = this._cachedMeta;
         let count = 0;
-        meta.data.forEach((element, inde***REMOVED***)=>{
-            if (!isNaN(this.getParsed(inde***REMOVED***).r) && this.chart.getDataVisibility(inde***REMOVED***)) {
+        meta.data.forEach((element, index)=>{
+            if (!isNaN(this.getParsed(index).r) && this.chart.getDataVisibility(index)) {
                 count++;
             }
         });
         return count;
     }
- _computeAngle(inde***REMOVED***, mode, defaultAngle) {
-        return this.chart.getDataVisibility(inde***REMOVED***) ? helpers_segment.toRadians(this.resolveDataElementOptions(inde***REMOVED***, mode).angle || defaultAngle) : 0;
+ _computeAngle(index, mode, defaultAngle) {
+        return this.chart.getDataVisibility(index) ? helpers_segment.toRadians(this.resolveDataElementOptions(index, mode).angle || defaultAngle) : 0;
     }
 }
 
-class PieController e***REMOVED***tends DoughnutController {
+class PieController extends DoughnutController {
     static id = 'pie';
  static defaults = {
         cutout: 0,
@@ -2352,12 +2352,12 @@ class PieController e***REMOVED***tends DoughnutController {
     };
 }
 
-class RadarController e***REMOVED***tends DatasetController {
+class RadarController extends DatasetController {
     static id = 'radar';
  static defaults = {
         datasetElementType: 'line',
         dataElementType: 'point',
-        inde***REMOVED***A***REMOVED***is: 'r',
+        indexAxis: 'r',
         showLine: true,
         elements: {
             line: {
@@ -2373,12 +2373,12 @@ class RadarController e***REMOVED***tends DatasetController {
             }
         }
     };
- getLabelAndValue(inde***REMOVED***) {
+ getLabelAndValue(index) {
         const vScale = this._cachedMeta.vScale;
-        const parsed = this.getParsed(inde***REMOVED***);
+        const parsed = this.getParsed(index);
         return {
-            label: vScale.getLabels()[inde***REMOVED***],
-            value: '' + vScale.getLabelForValue(parsed[vScale.a***REMOVED***is])
+            label: vScale.getLabels()[index],
+            value: '' + vScale.getLabelForValue(parsed[vScale.axis])
         };
     }
     parseObjectData(meta, data, start, count) {
@@ -2411,13 +2411,13 @@ class RadarController e***REMOVED***tends DatasetController {
             const point = points[i];
             const options = this.resolveDataElementOptions(i, point.active ? 'active' : mode);
             const pointPosition = scale.getPointPositionForValue(i, this.getParsed(i).r);
-            const ***REMOVED*** = reset ? scale.***REMOVED***Center : pointPosition.***REMOVED***;
+            const x = reset ? scale.xCenter : pointPosition.x;
             const y = reset ? scale.yCenter : pointPosition.y;
             const properties = {
-                ***REMOVED***,
+                x,
                 y,
                 angle: pointPosition.angle,
-                skip: isNaN(***REMOVED***) || isNaN(y),
+                skip: isNaN(x) || isNaN(y),
                 options
             };
             this.updateElement(point, i, properties, mode);
@@ -2425,7 +2425,7 @@ class RadarController e***REMOVED***tends DatasetController {
     }
 }
 
-class ScatterController e***REMOVED***tends DatasetController {
+class ScatterController extends DatasetController {
     static id = 'scatter';
  static defaults = {
         datasetElementType: false,
@@ -2438,7 +2438,7 @@ class ScatterController e***REMOVED***tends DatasetController {
             mode: 'point'
         },
         scales: {
-            ***REMOVED***: {
+            x: {
                 type: 'linear'
             },
             y: {
@@ -2446,16 +2446,16 @@ class ScatterController e***REMOVED***tends DatasetController {
             }
         }
     };
- getLabelAndValue(inde***REMOVED***) {
+ getLabelAndValue(index) {
         const meta = this._cachedMeta;
         const labels = this.chart.data.labels || [];
-        const { ***REMOVED***Scale , yScale  } = meta;
-        const parsed = this.getParsed(inde***REMOVED***);
-        const ***REMOVED*** = ***REMOVED***Scale.getLabelForValue(parsed.***REMOVED***);
+        const { xScale , yScale  } = meta;
+        const parsed = this.getParsed(index);
+        const x = xScale.getLabelForValue(parsed.x);
         const y = yScale.getLabelForValue(parsed.y);
         return {
-            label: labels[inde***REMOVED***] || '',
-            value: '(' + ***REMOVED*** + ', ' + y + ')'
+            label: labels[index] || '',
+            value: '(' + x + ', ' + y + ')'
         };
     }
     update(mode) {
@@ -2475,7 +2475,7 @@ class ScatterController e***REMOVED***tends DatasetController {
             }
             const { dataset: line , _dataset  } = meta;
             line._chart = this.chart;
-            line._datasetInde***REMOVED*** = this.inde***REMOVED***;
+            line._datasetIndex = this.index;
             line._decimated = !!_dataset._decimated;
             line.points = points;
             const options = this.resolveDatasetElementOptions(mode);
@@ -2503,21 +2503,21 @@ class ScatterController e***REMOVED***tends DatasetController {
         const firstOpts = this.resolveDataElementOptions(start, mode);
         const sharedOptions = this.getSharedOptions(firstOpts);
         const includeOptions = this.includeOptions(mode, sharedOptions);
-        const iA***REMOVED***is = iScale.a***REMOVED***is;
-        const vA***REMOVED***is = vScale.a***REMOVED***is;
+        const iAxis = iScale.axis;
+        const vAxis = vScale.axis;
         const { spanGaps , segment  } = this.options;
-        const ma***REMOVED***GapLength = helpers_segment.isNumber(spanGaps) ? spanGaps : Number.POSITIVE_INFINITY;
+        const maxGapLength = helpers_segment.isNumber(spanGaps) ? spanGaps : Number.POSITIVE_INFINITY;
         const directUpdate = this.chart._animationsDisabled || reset || mode === 'none';
         let prevParsed = start > 0 && this.getParsed(start - 1);
         for(let i = start; i < start + count; ++i){
             const point = points[i];
             const parsed = this.getParsed(i);
             const properties = directUpdate ? point : {};
-            const nullData = helpers_segment.isNullOrUndef(parsed[vA***REMOVED***is]);
-            const iPi***REMOVED***el = properties[iA***REMOVED***is] = iScale.getPi***REMOVED***elForValue(parsed[iA***REMOVED***is], i);
-            const vPi***REMOVED***el = properties[vA***REMOVED***is] = reset || nullData ? vScale.getBasePi***REMOVED***el() : vScale.getPi***REMOVED***elForValue(_stacked ? this.applyStack(vScale, parsed, _stacked) : parsed[vA***REMOVED***is], i);
-            properties.skip = isNaN(iPi***REMOVED***el) || isNaN(vPi***REMOVED***el) || nullData;
-            properties.stop = i > 0 && Math.abs(parsed[iA***REMOVED***is] - prevParsed[iA***REMOVED***is]) > ma***REMOVED***GapLength;
+            const nullData = helpers_segment.isNullOrUndef(parsed[vAxis]);
+            const iPixel = properties[iAxis] = iScale.getPixelForValue(parsed[iAxis], i);
+            const vPixel = properties[vAxis] = reset || nullData ? vScale.getBasePixel() : vScale.getPixelForValue(_stacked ? this.applyStack(vScale, parsed, _stacked) : parsed[vAxis], i);
+            properties.skip = isNaN(iPixel) || isNaN(vPixel) || nullData;
+            properties.stop = i > 0 && Math.abs(parsed[iAxis] - prevParsed[iAxis]) > maxGapLength;
             if (segment) {
                 properties.parsed = parsed;
                 properties.raw = _dataset.data[i];
@@ -2532,15 +2532,15 @@ class ScatterController e***REMOVED***tends DatasetController {
         }
         this.updateSharedOptions(sharedOptions, mode, firstOpts);
     }
- getMa***REMOVED***Overflow() {
+ getMaxOverflow() {
         const meta = this._cachedMeta;
         const data = meta.data || [];
         if (!this.options.showLine) {
-            let ma***REMOVED*** = 0;
+            let max = 0;
             for(let i = data.length - 1; i >= 0; --i){
-                ma***REMOVED*** = Math.ma***REMOVED***(ma***REMOVED***, data[i].size(this.resolveDataElementOptions(i)) / 2);
+                max = Math.max(max, data[i].size(this.resolveDataElementOptions(i)) / 2);
             }
-            return ma***REMOVED*** > 0 && ma***REMOVED***;
+            return max > 0 && max;
         }
         const dataset = meta.dataset;
         const border = dataset.options && dataset.options.borderWidth || 0;
@@ -2549,7 +2549,7 @@ class ScatterController e***REMOVED***tends DatasetController {
         }
         const firstPoint = data[0].size(this.resolveDataElementOptions(0));
         const lastPoint = data[data.length - 1].size(this.resolveDataElementOptions(data.length - 1));
-        return Math.ma***REMOVED***(border, firstPoint, lastPoint) / 2;
+        return Math.max(border, firstPoint, lastPoint) / 2;
     }
 }
 
@@ -2581,7 +2581,7 @@ ScatterController: ScatterController
     /**
    * Override default date adapter methods.
    * Accepts type parameter to define options type.
-   * @e***REMOVED***ample
+   * @example
    * Chart._adapters._date.override<{myAdapterOption: string}>({
    *   init() {
    *     console.log(this.options.myAdapterOption);
@@ -2594,7 +2594,7 @@ ScatterController: ScatterController
     constructor(options){
         this.options = options || {};
     }
-    // eslint-disable-ne***REMOVED***t-line @typescript-eslint/no-empty-function
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     init() {}
     formats() {
         return abstract();
@@ -2622,19 +2622,19 @@ var adapters = {
     _date: DateAdapterBase
 };
 
-function binarySearch(metaset, a***REMOVED***is, value, intersect) {
+function binarySearch(metaset, axis, value, intersect) {
     const { controller , data , _sorted  } = metaset;
     const iScale = controller._cachedMeta.iScale;
-    if (iScale && a***REMOVED***is === iScale.a***REMOVED***is && a***REMOVED***is !== 'r' && _sorted && data.length) {
-        const lookupMethod = iScale._reversePi***REMOVED***els ? helpers_segment._rlookupByKey : helpers_segment._lookupByKey;
+    if (iScale && axis === iScale.axis && axis !== 'r' && _sorted && data.length) {
+        const lookupMethod = iScale._reversePixels ? helpers_segment._rlookupByKey : helpers_segment._lookupByKey;
         if (!intersect) {
-            return lookupMethod(data, a***REMOVED***is, value);
+            return lookupMethod(data, axis, value);
         } else if (controller._sharedOptions) {
             const el = data[0];
-            const range = typeof el.getRange === 'function' && el.getRange(a***REMOVED***is);
+            const range = typeof el.getRange === 'function' && el.getRange(axis);
             if (range) {
-                const start = lookupMethod(data, a***REMOVED***is, value - range);
-                const end = lookupMethod(data, a***REMOVED***is, value + range);
+                const start = lookupMethod(data, axis, value - range);
+                const end = lookupMethod(data, axis, value + range);
                 return {
                     lo: start.lo,
                     hi: end.hi
@@ -2647,77 +2647,77 @@ function binarySearch(metaset, a***REMOVED***is, value, intersect) {
         hi: data.length - 1
     };
 }
- function evaluateInteractionItems(chart, a***REMOVED***is, position, handler, intersect) {
+ function evaluateInteractionItems(chart, axis, position, handler, intersect) {
     const metasets = chart.getSortedVisibleDatasetMetas();
-    const value = position[a***REMOVED***is];
+    const value = position[axis];
     for(let i = 0, ilen = metasets.length; i < ilen; ++i){
-        const { inde***REMOVED*** , data  } = metasets[i];
-        const { lo , hi  } = binarySearch(metasets[i], a***REMOVED***is, value, intersect);
+        const { index , data  } = metasets[i];
+        const { lo , hi  } = binarySearch(metasets[i], axis, value, intersect);
         for(let j = lo; j <= hi; ++j){
             const element = data[j];
             if (!element.skip) {
-                handler(element, inde***REMOVED***, j);
+                handler(element, index, j);
             }
         }
     }
 }
- function getDistanceMetricForA***REMOVED***is(a***REMOVED***is) {
-    const useX = a***REMOVED***is.inde***REMOVED***Of('***REMOVED***') !== -1;
-    const useY = a***REMOVED***is.inde***REMOVED***Of('y') !== -1;
+ function getDistanceMetricForAxis(axis) {
+    const useX = axis.indexOf('x') !== -1;
+    const useY = axis.indexOf('y') !== -1;
     return function(pt1, pt2) {
-        const deltaX = useX ? Math.abs(pt1.***REMOVED*** - pt2.***REMOVED***) : 0;
+        const deltaX = useX ? Math.abs(pt1.x - pt2.x) : 0;
         const deltaY = useY ? Math.abs(pt1.y - pt2.y) : 0;
         return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
     };
 }
- function getIntersectItems(chart, position, a***REMOVED***is, useFinalPosition, includeInvisible) {
+ function getIntersectItems(chart, position, axis, useFinalPosition, includeInvisible) {
     const items = [];
     if (!includeInvisible && !chart.isPointInArea(position)) {
         return items;
     }
-    const evaluationFunc = function(element, datasetInde***REMOVED***, inde***REMOVED***) {
+    const evaluationFunc = function(element, datasetIndex, index) {
         if (!includeInvisible && !helpers_segment._isPointInArea(element, chart.chartArea, 0)) {
             return;
         }
-        if (element.inRange(position.***REMOVED***, position.y, useFinalPosition)) {
+        if (element.inRange(position.x, position.y, useFinalPosition)) {
             items.push({
                 element,
-                datasetInde***REMOVED***,
-                inde***REMOVED***
+                datasetIndex,
+                index
             });
         }
     };
-    evaluateInteractionItems(chart, a***REMOVED***is, position, evaluationFunc, true);
+    evaluateInteractionItems(chart, axis, position, evaluationFunc, true);
     return items;
 }
- function getNearestRadialItems(chart, position, a***REMOVED***is, useFinalPosition) {
+ function getNearestRadialItems(chart, position, axis, useFinalPosition) {
     let items = [];
-    function evaluationFunc(element, datasetInde***REMOVED***, inde***REMOVED***) {
+    function evaluationFunc(element, datasetIndex, index) {
         const { startAngle , endAngle  } = element.getProps([
             'startAngle',
             'endAngle'
         ], useFinalPosition);
         const { angle  } = helpers_segment.getAngleFromPoint(element, {
-            ***REMOVED***: position.***REMOVED***,
+            x: position.x,
             y: position.y
         });
         if (helpers_segment._angleBetween(angle, startAngle, endAngle)) {
             items.push({
                 element,
-                datasetInde***REMOVED***,
-                inde***REMOVED***
+                datasetIndex,
+                index
             });
         }
     }
-    evaluateInteractionItems(chart, a***REMOVED***is, position, evaluationFunc);
+    evaluateInteractionItems(chart, axis, position, evaluationFunc);
     return items;
 }
- function getNearestCartesianItems(chart, position, a***REMOVED***is, intersect, useFinalPosition, includeInvisible) {
+ function getNearestCartesianItems(chart, position, axis, intersect, useFinalPosition, includeInvisible) {
     let items = [];
-    const distanceMetric = getDistanceMetricForA***REMOVED***is(a***REMOVED***is);
+    const distanceMetric = getDistanceMetricForAxis(axis);
     let minDistance = Number.POSITIVE_INFINITY;
-    function evaluationFunc(element, datasetInde***REMOVED***, inde***REMOVED***) {
-        const inRange = element.inRange(position.***REMOVED***, position.y, useFinalPosition);
+    function evaluationFunc(element, datasetIndex, index) {
+        const inRange = element.inRange(position.x, position.y, useFinalPosition);
         if (intersect && !inRange) {
             return;
         }
@@ -2731,40 +2731,40 @@ function binarySearch(metaset, a***REMOVED***is, value, intersect) {
             items = [
                 {
                     element,
-                    datasetInde***REMOVED***,
-                    inde***REMOVED***
+                    datasetIndex,
+                    index
                 }
             ];
             minDistance = distance;
         } else if (distance === minDistance) {
             items.push({
                 element,
-                datasetInde***REMOVED***,
-                inde***REMOVED***
+                datasetIndex,
+                index
             });
         }
     }
-    evaluateInteractionItems(chart, a***REMOVED***is, position, evaluationFunc);
+    evaluateInteractionItems(chart, axis, position, evaluationFunc);
     return items;
 }
- function getNearestItems(chart, position, a***REMOVED***is, intersect, useFinalPosition, includeInvisible) {
+ function getNearestItems(chart, position, axis, intersect, useFinalPosition, includeInvisible) {
     if (!includeInvisible && !chart.isPointInArea(position)) {
         return [];
     }
-    return a***REMOVED***is === 'r' && !intersect ? getNearestRadialItems(chart, position, a***REMOVED***is, useFinalPosition) : getNearestCartesianItems(chart, position, a***REMOVED***is, intersect, useFinalPosition, includeInvisible);
+    return axis === 'r' && !intersect ? getNearestRadialItems(chart, position, axis, useFinalPosition) : getNearestCartesianItems(chart, position, axis, intersect, useFinalPosition, includeInvisible);
 }
- function getA***REMOVED***isItems(chart, position, a***REMOVED***is, intersect, useFinalPosition) {
+ function getAxisItems(chart, position, axis, intersect, useFinalPosition) {
     const items = [];
-    const rangeMethod = a***REMOVED***is === '***REMOVED***' ? 'inXRange' : 'inYRange';
+    const rangeMethod = axis === 'x' ? 'inXRange' : 'inYRange';
     let intersectsItem = false;
-    evaluateInteractionItems(chart, a***REMOVED***is, position, (element, datasetInde***REMOVED***, inde***REMOVED***)=>{
-        if (element[rangeMethod](position[a***REMOVED***is], useFinalPosition)) {
+    evaluateInteractionItems(chart, axis, position, (element, datasetIndex, index)=>{
+        if (element[rangeMethod](position[axis], useFinalPosition)) {
             items.push({
                 element,
-                datasetInde***REMOVED***,
-                inde***REMOVED***
+                datasetIndex,
+                index
             });
-            intersectsItem = intersectsItem || element.inRange(position.***REMOVED***, position.y, useFinalPosition);
+            intersectsItem = intersectsItem || element.inRange(position.x, position.y, useFinalPosition);
         }
     });
     if (intersect && !intersectsItem) {
@@ -2775,23 +2775,23 @@ function binarySearch(metaset, a***REMOVED***is, value, intersect) {
  var Interaction = {
     evaluateInteractionItems,
     modes: {
- inde***REMOVED*** (chart, e, options, useFinalPosition) {
+ index (chart, e, options, useFinalPosition) {
             const position = helpers_segment.getRelativePosition(e, chart);
-            const a***REMOVED***is = options.a***REMOVED***is || '***REMOVED***';
+            const axis = options.axis || 'x';
             const includeInvisible = options.includeInvisible || false;
-            const items = options.intersect ? getIntersectItems(chart, position, a***REMOVED***is, useFinalPosition, includeInvisible) : getNearestItems(chart, position, a***REMOVED***is, false, useFinalPosition, includeInvisible);
+            const items = options.intersect ? getIntersectItems(chart, position, axis, useFinalPosition, includeInvisible) : getNearestItems(chart, position, axis, false, useFinalPosition, includeInvisible);
             const elements = [];
             if (!items.length) {
                 return [];
             }
             chart.getSortedVisibleDatasetMetas().forEach((meta)=>{
-                const inde***REMOVED*** = items[0].inde***REMOVED***;
-                const element = meta.data[inde***REMOVED***];
+                const index = items[0].index;
+                const element = meta.data[index];
                 if (element && !element.skip) {
                     elements.push({
                         element,
-                        datasetInde***REMOVED***: meta.inde***REMOVED***,
-                        inde***REMOVED***
+                        datasetIndex: meta.index,
+                        index
                     });
                 }
             });
@@ -2799,18 +2799,18 @@ function binarySearch(metaset, a***REMOVED***is, value, intersect) {
         },
  dataset (chart, e, options, useFinalPosition) {
             const position = helpers_segment.getRelativePosition(e, chart);
-            const a***REMOVED***is = options.a***REMOVED***is || '***REMOVED***y';
+            const axis = options.axis || 'xy';
             const includeInvisible = options.includeInvisible || false;
-            let items = options.intersect ? getIntersectItems(chart, position, a***REMOVED***is, useFinalPosition, includeInvisible) : getNearestItems(chart, position, a***REMOVED***is, false, useFinalPosition, includeInvisible);
+            let items = options.intersect ? getIntersectItems(chart, position, axis, useFinalPosition, includeInvisible) : getNearestItems(chart, position, axis, false, useFinalPosition, includeInvisible);
             if (items.length > 0) {
-                const datasetInde***REMOVED*** = items[0].datasetInde***REMOVED***;
-                const data = chart.getDatasetMeta(datasetInde***REMOVED***).data;
+                const datasetIndex = items[0].datasetIndex;
+                const data = chart.getDatasetMeta(datasetIndex).data;
                 items = [];
                 for(let i = 0; i < data.length; ++i){
                     items.push({
                         element: data[i],
-                        datasetInde***REMOVED***,
-                        inde***REMOVED***: i
+                        datasetIndex,
+                        index: i
                     });
                 }
             }
@@ -2818,23 +2818,23 @@ function binarySearch(metaset, a***REMOVED***is, value, intersect) {
         },
  point (chart, e, options, useFinalPosition) {
             const position = helpers_segment.getRelativePosition(e, chart);
-            const a***REMOVED***is = options.a***REMOVED***is || '***REMOVED***y';
+            const axis = options.axis || 'xy';
             const includeInvisible = options.includeInvisible || false;
-            return getIntersectItems(chart, position, a***REMOVED***is, useFinalPosition, includeInvisible);
+            return getIntersectItems(chart, position, axis, useFinalPosition, includeInvisible);
         },
  nearest (chart, e, options, useFinalPosition) {
             const position = helpers_segment.getRelativePosition(e, chart);
-            const a***REMOVED***is = options.a***REMOVED***is || '***REMOVED***y';
+            const axis = options.axis || 'xy';
             const includeInvisible = options.includeInvisible || false;
-            return getNearestItems(chart, position, a***REMOVED***is, options.intersect, useFinalPosition, includeInvisible);
+            return getNearestItems(chart, position, axis, options.intersect, useFinalPosition, includeInvisible);
         },
- ***REMOVED*** (chart, e, options, useFinalPosition) {
+ x (chart, e, options, useFinalPosition) {
             const position = helpers_segment.getRelativePosition(e, chart);
-            return getA***REMOVED***isItems(chart, position, '***REMOVED***', options.intersect, useFinalPosition);
+            return getAxisItems(chart, position, 'x', options.intersect, useFinalPosition);
         },
  y (chart, e, options, useFinalPosition) {
             const position = helpers_segment.getRelativePosition(e, chart);
-            return getA***REMOVED***isItems(chart, position, 'y', options.intersect, useFinalPosition);
+            return getAxisItems(chart, position, 'y', options.intersect, useFinalPosition);
         }
     }
 };
@@ -2848,33 +2848,33 @@ const STATIC_POSITIONS = [
 function filterByPosition(array, position) {
     return array.filter((v)=>v.pos === position);
 }
-function filterDynamicPositionByA***REMOVED***is(array, a***REMOVED***is) {
-    return array.filter((v)=>STATIC_POSITIONS.inde***REMOVED***Of(v.pos) === -1 && v.bo***REMOVED***.a***REMOVED***is === a***REMOVED***is);
+function filterDynamicPositionByAxis(array, axis) {
+    return array.filter((v)=>STATIC_POSITIONS.indexOf(v.pos) === -1 && v.box.axis === axis);
 }
 function sortByWeight(array, reverse) {
     return array.sort((a, b)=>{
         const v0 = reverse ? b : a;
         const v1 = reverse ? a : b;
-        return v0.weight === v1.weight ? v0.inde***REMOVED*** - v1.inde***REMOVED*** : v0.weight - v1.weight;
+        return v0.weight === v1.weight ? v0.index - v1.index : v0.weight - v1.weight;
     });
 }
-function wrapBo***REMOVED***es(bo***REMOVED***es) {
-    const layoutBo***REMOVED***es = [];
-    let i, ilen, bo***REMOVED***, pos, stack, stackWeight;
-    for(i = 0, ilen = (bo***REMOVED***es || []).length; i < ilen; ++i){
-        bo***REMOVED*** = bo***REMOVED***es[i];
-        ({ position: pos , options: { stack , stackWeight =1  }  } = bo***REMOVED***);
-        layoutBo***REMOVED***es.push({
-            inde***REMOVED***: i,
-            bo***REMOVED***,
+function wrapBoxes(boxes) {
+    const layoutBoxes = [];
+    let i, ilen, box, pos, stack, stackWeight;
+    for(i = 0, ilen = (boxes || []).length; i < ilen; ++i){
+        box = boxes[i];
+        ({ position: pos , options: { stack , stackWeight =1  }  } = box);
+        layoutBoxes.push({
+            index: i,
+            box,
             pos,
-            horizontal: bo***REMOVED***.isHorizontal(),
-            weight: bo***REMOVED***.weight,
+            horizontal: box.isHorizontal(),
+            weight: box.weight,
             stack: stack && pos + stack,
             stackWeight
         });
     }
-    return layoutBo***REMOVED***es;
+    return layoutBoxes;
 }
 function buildStacks(layouts) {
     const stacks = {};
@@ -2896,53 +2896,53 @@ function buildStacks(layouts) {
 }
  function setLayoutDims(layouts, params) {
     const stacks = buildStacks(layouts);
-    const { vBo***REMOVED***Ma***REMOVED***Width , hBo***REMOVED***Ma***REMOVED***Height  } = params;
+    const { vBoxMaxWidth , hBoxMaxHeight  } = params;
     let i, ilen, layout;
     for(i = 0, ilen = layouts.length; i < ilen; ++i){
         layout = layouts[i];
-        const { fullSize  } = layout.bo***REMOVED***;
+        const { fullSize  } = layout.box;
         const stack = stacks[layout.stack];
         const factor = stack && layout.stackWeight / stack.weight;
         if (layout.horizontal) {
-            layout.width = factor ? factor * vBo***REMOVED***Ma***REMOVED***Width : fullSize && params.availableWidth;
-            layout.height = hBo***REMOVED***Ma***REMOVED***Height;
+            layout.width = factor ? factor * vBoxMaxWidth : fullSize && params.availableWidth;
+            layout.height = hBoxMaxHeight;
         } else {
-            layout.width = vBo***REMOVED***Ma***REMOVED***Width;
-            layout.height = factor ? factor * hBo***REMOVED***Ma***REMOVED***Height : fullSize && params.availableHeight;
+            layout.width = vBoxMaxWidth;
+            layout.height = factor ? factor * hBoxMaxHeight : fullSize && params.availableHeight;
         }
     }
     return stacks;
 }
-function buildLayoutBo***REMOVED***es(bo***REMOVED***es) {
-    const layoutBo***REMOVED***es = wrapBo***REMOVED***es(bo***REMOVED***es);
-    const fullSize = sortByWeight(layoutBo***REMOVED***es.filter((wrap)=>wrap.bo***REMOVED***.fullSize), true);
-    const left = sortByWeight(filterByPosition(layoutBo***REMOVED***es, 'left'), true);
-    const right = sortByWeight(filterByPosition(layoutBo***REMOVED***es, 'right'));
-    const top = sortByWeight(filterByPosition(layoutBo***REMOVED***es, 'top'), true);
-    const bottom = sortByWeight(filterByPosition(layoutBo***REMOVED***es, 'bottom'));
-    const centerHorizontal = filterDynamicPositionByA***REMOVED***is(layoutBo***REMOVED***es, '***REMOVED***');
-    const centerVertical = filterDynamicPositionByA***REMOVED***is(layoutBo***REMOVED***es, 'y');
+function buildLayoutBoxes(boxes) {
+    const layoutBoxes = wrapBoxes(boxes);
+    const fullSize = sortByWeight(layoutBoxes.filter((wrap)=>wrap.box.fullSize), true);
+    const left = sortByWeight(filterByPosition(layoutBoxes, 'left'), true);
+    const right = sortByWeight(filterByPosition(layoutBoxes, 'right'));
+    const top = sortByWeight(filterByPosition(layoutBoxes, 'top'), true);
+    const bottom = sortByWeight(filterByPosition(layoutBoxes, 'bottom'));
+    const centerHorizontal = filterDynamicPositionByAxis(layoutBoxes, 'x');
+    const centerVertical = filterDynamicPositionByAxis(layoutBoxes, 'y');
     return {
         fullSize,
         leftAndTop: left.concat(top),
         rightAndBottom: right.concat(centerVertical).concat(bottom).concat(centerHorizontal),
-        chartArea: filterByPosition(layoutBo***REMOVED***es, 'chartArea'),
+        chartArea: filterByPosition(layoutBoxes, 'chartArea'),
         vertical: left.concat(right).concat(centerVertical),
         horizontal: top.concat(bottom).concat(centerHorizontal)
     };
 }
-function getCombinedMa***REMOVED***(ma***REMOVED***Padding, chartArea, a, b) {
-    return Math.ma***REMOVED***(ma***REMOVED***Padding[a], chartArea[a]) + Math.ma***REMOVED***(ma***REMOVED***Padding[b], chartArea[b]);
+function getCombinedMax(maxPadding, chartArea, a, b) {
+    return Math.max(maxPadding[a], chartArea[a]) + Math.max(maxPadding[b], chartArea[b]);
 }
-function updateMa***REMOVED***Padding(ma***REMOVED***Padding, bo***REMOVED***Padding) {
-    ma***REMOVED***Padding.top = Math.ma***REMOVED***(ma***REMOVED***Padding.top, bo***REMOVED***Padding.top);
-    ma***REMOVED***Padding.left = Math.ma***REMOVED***(ma***REMOVED***Padding.left, bo***REMOVED***Padding.left);
-    ma***REMOVED***Padding.bottom = Math.ma***REMOVED***(ma***REMOVED***Padding.bottom, bo***REMOVED***Padding.bottom);
-    ma***REMOVED***Padding.right = Math.ma***REMOVED***(ma***REMOVED***Padding.right, bo***REMOVED***Padding.right);
+function updateMaxPadding(maxPadding, boxPadding) {
+    maxPadding.top = Math.max(maxPadding.top, boxPadding.top);
+    maxPadding.left = Math.max(maxPadding.left, boxPadding.left);
+    maxPadding.bottom = Math.max(maxPadding.bottom, boxPadding.bottom);
+    maxPadding.right = Math.max(maxPadding.right, boxPadding.right);
 }
 function updateDims(chartArea, params, layout, stacks) {
-    const { pos , bo***REMOVED***  } = layout;
-    const ma***REMOVED***Padding = chartArea.ma***REMOVED***Padding;
+    const { pos , box  } = layout;
+    const maxPadding = chartArea.maxPadding;
     if (!helpers_segment.isObject(pos)) {
         if (layout.size) {
             chartArea[pos] -= layout.size;
@@ -2951,15 +2951,15 @@ function updateDims(chartArea, params, layout, stacks) {
             size: 0,
             count: 1
         };
-        stack.size = Math.ma***REMOVED***(stack.size, layout.horizontal ? bo***REMOVED***.height : bo***REMOVED***.width);
+        stack.size = Math.max(stack.size, layout.horizontal ? box.height : box.width);
         layout.size = stack.size / stack.count;
         chartArea[pos] += layout.size;
     }
-    if (bo***REMOVED***.getPadding) {
-        updateMa***REMOVED***Padding(ma***REMOVED***Padding, bo***REMOVED***.getPadding());
+    if (box.getPadding) {
+        updateMaxPadding(maxPadding, box.getPadding());
     }
-    const newWidth = Math.ma***REMOVED***(0, params.outerWidth - getCombinedMa***REMOVED***(ma***REMOVED***Padding, chartArea, 'left', 'right'));
-    const newHeight = Math.ma***REMOVED***(0, params.outerHeight - getCombinedMa***REMOVED***(ma***REMOVED***Padding, chartArea, 'top', 'bottom'));
+    const newWidth = Math.max(0, params.outerWidth - getCombinedMax(maxPadding, chartArea, 'left', 'right'));
+    const newHeight = Math.max(0, params.outerHeight - getCombinedMax(maxPadding, chartArea, 'top', 'bottom'));
     const widthChanged = newWidth !== chartArea.w;
     const heightChanged = newHeight !== chartArea.h;
     chartArea.w = newWidth;
@@ -2972,20 +2972,20 @@ function updateDims(chartArea, params, layout, stacks) {
         other: widthChanged
     };
 }
-function handleMa***REMOVED***Padding(chartArea) {
-    const ma***REMOVED***Padding = chartArea.ma***REMOVED***Padding;
+function handleMaxPadding(chartArea) {
+    const maxPadding = chartArea.maxPadding;
     function updatePos(pos) {
-        const change = Math.ma***REMOVED***(ma***REMOVED***Padding[pos] - chartArea[pos], 0);
+        const change = Math.max(maxPadding[pos] - chartArea[pos], 0);
         chartArea[pos] += change;
         return change;
     }
     chartArea.y += updatePos('top');
-    chartArea.***REMOVED*** += updatePos('left');
+    chartArea.x += updatePos('left');
     updatePos('right');
     updatePos('bottom');
 }
 function getMargins(horizontal, chartArea) {
-    const ma***REMOVED***Padding = chartArea.ma***REMOVED***Padding;
+    const maxPadding = chartArea.maxPadding;
     function marginForPositions(positions) {
         const margin = {
             left: 0,
@@ -2994,7 +2994,7 @@ function getMargins(horizontal, chartArea) {
             bottom: 0
         };
         positions.forEach((pos)=>{
-            margin[pos] = Math.ma***REMOVED***(chartArea[pos], ma***REMOVED***Padding[pos]);
+            margin[pos] = Math.max(chartArea[pos], maxPadding[pos]);
         });
         return margin;
     }
@@ -3006,35 +3006,35 @@ function getMargins(horizontal, chartArea) {
         'bottom'
     ]);
 }
-function fitBo***REMOVED***es(bo***REMOVED***es, chartArea, params, stacks) {
-    const refitBo***REMOVED***es = [];
-    let i, ilen, layout, bo***REMOVED***, refit, changed;
-    for(i = 0, ilen = bo***REMOVED***es.length, refit = 0; i < ilen; ++i){
-        layout = bo***REMOVED***es[i];
-        bo***REMOVED*** = layout.bo***REMOVED***;
-        bo***REMOVED***.update(layout.width || chartArea.w, layout.height || chartArea.h, getMargins(layout.horizontal, chartArea));
+function fitBoxes(boxes, chartArea, params, stacks) {
+    const refitBoxes = [];
+    let i, ilen, layout, box, refit, changed;
+    for(i = 0, ilen = boxes.length, refit = 0; i < ilen; ++i){
+        layout = boxes[i];
+        box = layout.box;
+        box.update(layout.width || chartArea.w, layout.height || chartArea.h, getMargins(layout.horizontal, chartArea));
         const { same , other  } = updateDims(chartArea, params, layout, stacks);
-        refit |= same && refitBo***REMOVED***es.length;
+        refit |= same && refitBoxes.length;
         changed = changed || other;
-        if (!bo***REMOVED***.fullSize) {
-            refitBo***REMOVED***es.push(layout);
+        if (!box.fullSize) {
+            refitBoxes.push(layout);
         }
     }
-    return refit && fitBo***REMOVED***es(refitBo***REMOVED***es, chartArea, params, stacks) || changed;
+    return refit && fitBoxes(refitBoxes, chartArea, params, stacks) || changed;
 }
-function setBo***REMOVED***Dims(bo***REMOVED***, left, top, width, height) {
-    bo***REMOVED***.top = top;
-    bo***REMOVED***.left = left;
-    bo***REMOVED***.right = left + width;
-    bo***REMOVED***.bottom = top + height;
-    bo***REMOVED***.width = width;
-    bo***REMOVED***.height = height;
+function setBoxDims(box, left, top, width, height) {
+    box.top = top;
+    box.left = left;
+    box.right = left + width;
+    box.bottom = top + height;
+    box.width = width;
+    box.height = height;
 }
-function placeBo***REMOVED***es(bo***REMOVED***es, chartArea, params, stacks) {
+function placeBoxes(boxes, chartArea, params, stacks) {
     const userPadding = params.padding;
-    let { ***REMOVED*** , y  } = chartArea;
-    for (const layout of bo***REMOVED***es){
-        const bo***REMOVED*** = layout.bo***REMOVED***;
+    let { x , y  } = chartArea;
+    for (const layout of boxes){
+        const box = layout.box;
         const stack = stacks[layout.stack] || {
             count: 1,
             placed: 0,
@@ -3043,41 +3043,41 @@ function placeBo***REMOVED***es(bo***REMOVED***es, chartArea, params, stacks) {
         const weight = layout.stackWeight / stack.weight || 1;
         if (layout.horizontal) {
             const width = chartArea.w * weight;
-            const height = stack.size || bo***REMOVED***.height;
+            const height = stack.size || box.height;
             if (helpers_segment.defined(stack.start)) {
                 y = stack.start;
             }
-            if (bo***REMOVED***.fullSize) {
-                setBo***REMOVED***Dims(bo***REMOVED***, userPadding.left, y, params.outerWidth - userPadding.right - userPadding.left, height);
+            if (box.fullSize) {
+                setBoxDims(box, userPadding.left, y, params.outerWidth - userPadding.right - userPadding.left, height);
             } else {
-                setBo***REMOVED***Dims(bo***REMOVED***, chartArea.left + stack.placed, y, width, height);
+                setBoxDims(box, chartArea.left + stack.placed, y, width, height);
             }
             stack.start = y;
             stack.placed += width;
-            y = bo***REMOVED***.bottom;
+            y = box.bottom;
         } else {
             const height = chartArea.h * weight;
-            const width = stack.size || bo***REMOVED***.width;
+            const width = stack.size || box.width;
             if (helpers_segment.defined(stack.start)) {
-                ***REMOVED*** = stack.start;
+                x = stack.start;
             }
-            if (bo***REMOVED***.fullSize) {
-                setBo***REMOVED***Dims(bo***REMOVED***, ***REMOVED***, userPadding.top, width, params.outerHeight - userPadding.bottom - userPadding.top);
+            if (box.fullSize) {
+                setBoxDims(box, x, userPadding.top, width, params.outerHeight - userPadding.bottom - userPadding.top);
             } else {
-                setBo***REMOVED***Dims(bo***REMOVED***, ***REMOVED***, chartArea.top + stack.placed, width, height);
+                setBoxDims(box, x, chartArea.top + stack.placed, width, height);
             }
-            stack.start = ***REMOVED***;
+            stack.start = x;
             stack.placed += height;
-            ***REMOVED*** = bo***REMOVED***.right;
+            x = box.right;
         }
     }
-    chartArea.***REMOVED*** = ***REMOVED***;
+    chartArea.x = x;
     chartArea.y = y;
 }
 var layouts = {
- addBo***REMOVED*** (chart, item) {
-        if (!chart.bo***REMOVED***es) {
-            chart.bo***REMOVED***es = [];
+ addBox (chart, item) {
+        if (!chart.boxes) {
+            chart.boxes = [];
         }
         item.fullSize = item.fullSize || false;
         item.position = item.position || 'top';
@@ -3092,12 +3092,12 @@ var layouts = {
                 }
             ];
         };
-        chart.bo***REMOVED***es.push(item);
+        chart.boxes.push(item);
     },
- removeBo***REMOVED*** (chart, layoutItem) {
-        const inde***REMOVED*** = chart.bo***REMOVED***es ? chart.bo***REMOVED***es.inde***REMOVED***Of(layoutItem) : -1;
-        if (inde***REMOVED*** !== -1) {
-            chart.bo***REMOVED***es.splice(inde***REMOVED***, 1);
+ removeBox (chart, layoutItem) {
+        const index = chart.boxes ? chart.boxes.indexOf(layoutItem) : -1;
+        if (index !== -1) {
+            chart.boxes.splice(index, 1);
         }
     },
  configure (chart, item, options) {
@@ -3110,46 +3110,46 @@ var layouts = {
             return;
         }
         const padding = helpers_segment.toPadding(chart.options.layout.padding);
-        const availableWidth = Math.ma***REMOVED***(width - padding.width, 0);
-        const availableHeight = Math.ma***REMOVED***(height - padding.height, 0);
-        const bo***REMOVED***es = buildLayoutBo***REMOVED***es(chart.bo***REMOVED***es);
-        const verticalBo***REMOVED***es = bo***REMOVED***es.vertical;
-        const horizontalBo***REMOVED***es = bo***REMOVED***es.horizontal;
-        helpers_segment.each(chart.bo***REMOVED***es, (bo***REMOVED***)=>{
-            if (typeof bo***REMOVED***.beforeLayout === 'function') {
-                bo***REMOVED***.beforeLayout();
+        const availableWidth = Math.max(width - padding.width, 0);
+        const availableHeight = Math.max(height - padding.height, 0);
+        const boxes = buildLayoutBoxes(chart.boxes);
+        const verticalBoxes = boxes.vertical;
+        const horizontalBoxes = boxes.horizontal;
+        helpers_segment.each(chart.boxes, (box)=>{
+            if (typeof box.beforeLayout === 'function') {
+                box.beforeLayout();
             }
         });
-        const visibleVerticalBo***REMOVED***Count = verticalBo***REMOVED***es.reduce((total, wrap)=>wrap.bo***REMOVED***.options && wrap.bo***REMOVED***.options.display === false ? total : total + 1, 0) || 1;
+        const visibleVerticalBoxCount = verticalBoxes.reduce((total, wrap)=>wrap.box.options && wrap.box.options.display === false ? total : total + 1, 0) || 1;
         const params = Object.freeze({
             outerWidth: width,
             outerHeight: height,
             padding,
             availableWidth,
             availableHeight,
-            vBo***REMOVED***Ma***REMOVED***Width: availableWidth / 2 / visibleVerticalBo***REMOVED***Count,
-            hBo***REMOVED***Ma***REMOVED***Height: availableHeight / 2
+            vBoxMaxWidth: availableWidth / 2 / visibleVerticalBoxCount,
+            hBoxMaxHeight: availableHeight / 2
         });
-        const ma***REMOVED***Padding = Object.assign({}, padding);
-        updateMa***REMOVED***Padding(ma***REMOVED***Padding, helpers_segment.toPadding(minPadding));
+        const maxPadding = Object.assign({}, padding);
+        updateMaxPadding(maxPadding, helpers_segment.toPadding(minPadding));
         const chartArea = Object.assign({
-            ma***REMOVED***Padding,
+            maxPadding,
             w: availableWidth,
             h: availableHeight,
-            ***REMOVED***: padding.left,
+            x: padding.left,
             y: padding.top
         }, padding);
-        const stacks = setLayoutDims(verticalBo***REMOVED***es.concat(horizontalBo***REMOVED***es), params);
-        fitBo***REMOVED***es(bo***REMOVED***es.fullSize, chartArea, params, stacks);
-        fitBo***REMOVED***es(verticalBo***REMOVED***es, chartArea, params, stacks);
-        if (fitBo***REMOVED***es(horizontalBo***REMOVED***es, chartArea, params, stacks)) {
-            fitBo***REMOVED***es(verticalBo***REMOVED***es, chartArea, params, stacks);
+        const stacks = setLayoutDims(verticalBoxes.concat(horizontalBoxes), params);
+        fitBoxes(boxes.fullSize, chartArea, params, stacks);
+        fitBoxes(verticalBoxes, chartArea, params, stacks);
+        if (fitBoxes(horizontalBoxes, chartArea, params, stacks)) {
+            fitBoxes(verticalBoxes, chartArea, params, stacks);
         }
-        handleMa***REMOVED***Padding(chartArea);
-        placeBo***REMOVED***es(bo***REMOVED***es.leftAndTop, chartArea, params, stacks);
-        chartArea.***REMOVED*** += chartArea.w;
+        handleMaxPadding(chartArea);
+        placeBoxes(boxes.leftAndTop, chartArea, params, stacks);
+        chartArea.x += chartArea.w;
         chartArea.y += chartArea.h;
-        placeBo***REMOVED***es(bo***REMOVED***es.rightAndBottom, chartArea, params, stacks);
+        placeBoxes(boxes.rightAndBottom, chartArea, params, stacks);
         chart.chartArea = {
             left: chartArea.left,
             top: chartArea.top,
@@ -3158,10 +3158,10 @@ var layouts = {
             height: chartArea.h,
             width: chartArea.w
         };
-        helpers_segment.each(bo***REMOVED***es.chartArea, (layout)=>{
-            const bo***REMOVED*** = layout.bo***REMOVED***;
-            Object.assign(bo***REMOVED***, chart.chartArea);
-            bo***REMOVED***.update(chartArea.w, chartArea.h, {
+        helpers_segment.each(boxes.chartArea, (layout)=>{
+            const box = layout.box;
+            Object.assign(box, chart.chartArea);
+            box.update(chartArea.w, chartArea.h, {
                 left: 0,
                 top: 0,
                 right: 0,
@@ -3172,21 +3172,21 @@ var layouts = {
 };
 
 class BasePlatform {
- acquireConte***REMOVED***t(canvas, aspectRatio) {}
- releaseConte***REMOVED***t(conte***REMOVED***t) {
+ acquireContext(canvas, aspectRatio) {}
+ releaseContext(context) {
         return false;
     }
  addEventListener(chart, type, listener) {}
  removeEventListener(chart, type, listener) {}
- getDevicePi***REMOVED***elRatio() {
+ getDevicePixelRatio() {
         return 1;
     }
- getMa***REMOVED***imumSize(element, width, height, aspectRatio) {
-        width = Math.ma***REMOVED***(0, width || element.width);
+ getMaximumSize(element, width, height, aspectRatio) {
+        width = Math.max(0, width || element.width);
         height = height || element.height;
         return {
             width,
-            height: Math.ma***REMOVED***(0, aspectRatio ? Math.floor(width / aspectRatio) : height)
+            height: Math.max(0, aspectRatio ? Math.floor(width / aspectRatio) : height)
         };
     }
  isAttached(canvas) {
@@ -3196,9 +3196,9 @@ class BasePlatform {
     }
 }
 
-class BasicPlatform e***REMOVED***tends BasePlatform {
-    acquireConte***REMOVED***t(item) {
-        return item && item.getConte***REMOVED***t && item.getConte***REMOVED***t('2d') || null;
+class BasicPlatform extends BasePlatform {
+    acquireContext(item) {
+        return item && item.getContext && item.getContext('2d') || null;
     }
     updateConfig(config) {
         config.options.animation = false;
@@ -3234,7 +3234,7 @@ const isNullOrEmpty = (value)=>value === null || value === '';
         }
     };
     style.display = style.display || 'block';
-    style.bo***REMOVED***Sizing = style.bo***REMOVED***Sizing || 'border-bo***REMOVED***';
+    style.boxSizing = style.boxSizing || 'border-box';
     if (isNullOrEmpty(renderWidth)) {
         const displayWidth = helpers_segment.readUsedSize(canvas, 'width');
         if (displayWidth !== undefined) {
@@ -3268,12 +3268,12 @@ function removeListener(chart, type, listener) {
 }
 function fromNativeEvent(event, chart) {
     const type = EVENT_TYPES[event.type] || event.type;
-    const { ***REMOVED*** , y  } = helpers_segment.getRelativePosition(event, chart);
+    const { x , y  } = helpers_segment.getRelativePosition(event, chart);
     return {
         type,
         chart,
         native: event,
-        ***REMOVED***: ***REMOVED*** !== undefined ? ***REMOVED*** : null,
+        x: x !== undefined ? x : null,
         y: y !== undefined ? y : null
     };
 }
@@ -3321,26 +3321,26 @@ function createDetachObserver(chart, type, listener) {
     return observer;
 }
 const drpListeningCharts = new Map();
-let oldDevicePi***REMOVED***elRatio = 0;
+let oldDevicePixelRatio = 0;
 function onWindowResize() {
-    const dpr = window.devicePi***REMOVED***elRatio;
-    if (dpr === oldDevicePi***REMOVED***elRatio) {
+    const dpr = window.devicePixelRatio;
+    if (dpr === oldDevicePixelRatio) {
         return;
     }
-    oldDevicePi***REMOVED***elRatio = dpr;
+    oldDevicePixelRatio = dpr;
     drpListeningCharts.forEach((resize, chart)=>{
-        if (chart.currentDevicePi***REMOVED***elRatio !== dpr) {
+        if (chart.currentDevicePixelRatio !== dpr) {
             resize();
         }
     });
 }
-function listenDevicePi***REMOVED***elRatioChanges(chart, resize) {
+function listenDevicePixelRatioChanges(chart, resize) {
     if (!drpListeningCharts.size) {
         window.addEventListener('resize', onWindowResize);
     }
     drpListeningCharts.set(chart, resize);
 }
-function unlistenDevicePi***REMOVED***elRatioChanges(chart) {
+function unlistenDevicePixelRatioChanges(chart) {
     drpListeningCharts.delete(chart);
     if (!drpListeningCharts.size) {
         window.removeEventListener('resize', onWindowResize);
@@ -3369,7 +3369,7 @@ function createResizeObserver(chart, type, listener) {
         resize(width, height);
     });
     observer.observe(container);
-    listenDevicePi***REMOVED***elRatioChanges(chart, resize);
+    listenDevicePixelRatioChanges(chart, resize);
     return observer;
 }
 function releaseObserver(chart, type, observer) {
@@ -3377,30 +3377,30 @@ function releaseObserver(chart, type, observer) {
         observer.disconnect();
     }
     if (type === 'resize') {
-        unlistenDevicePi***REMOVED***elRatioChanges(chart);
+        unlistenDevicePixelRatioChanges(chart);
     }
 }
-function createPro***REMOVED***yAndListen(chart, type, listener) {
+function createProxyAndListen(chart, type, listener) {
     const canvas = chart.canvas;
-    const pro***REMOVED***y = helpers_segment.throttled((event)=>{
-        if (chart.ct***REMOVED*** !== null) {
+    const proxy = helpers_segment.throttled((event)=>{
+        if (chart.ctx !== null) {
             listener(fromNativeEvent(event, chart));
         }
     }, chart);
-    addListener(canvas, type, pro***REMOVED***y);
-    return pro***REMOVED***y;
+    addListener(canvas, type, proxy);
+    return proxy;
 }
- class DomPlatform e***REMOVED***tends BasePlatform {
- acquireConte***REMOVED***t(canvas, aspectRatio) {
-        const conte***REMOVED***t = canvas && canvas.getConte***REMOVED***t && canvas.getConte***REMOVED***t('2d');
-        if (conte***REMOVED***t && conte***REMOVED***t.canvas === canvas) {
+ class DomPlatform extends BasePlatform {
+ acquireContext(canvas, aspectRatio) {
+        const context = canvas && canvas.getContext && canvas.getContext('2d');
+        if (context && context.canvas === canvas) {
             initCanvas(canvas, aspectRatio);
-            return conte***REMOVED***t;
+            return context;
         }
         return null;
     }
- releaseConte***REMOVED***t(conte***REMOVED***t) {
-        const canvas = conte***REMOVED***t.canvas;
+ releaseContext(context) {
+        const canvas = context.canvas;
         if (!canvas[EXPANDO_KEY]) {
             return false;
         }
@@ -3426,19 +3426,19 @@ function createPro***REMOVED***yAndListen(chart, type, listener) {
     }
  addEventListener(chart, type, listener) {
         this.removeEventListener(chart, type);
-        const pro***REMOVED***ies = chart.$pro***REMOVED***ies || (chart.$pro***REMOVED***ies = {});
+        const proxies = chart.$proxies || (chart.$proxies = {});
         const handlers = {
             attach: createAttachObserver,
             detach: createDetachObserver,
             resize: createResizeObserver
         };
-        const handler = handlers[type] || createPro***REMOVED***yAndListen;
-        pro***REMOVED***ies[type] = handler(chart, type, listener);
+        const handler = handlers[type] || createProxyAndListen;
+        proxies[type] = handler(chart, type, listener);
     }
  removeEventListener(chart, type) {
-        const pro***REMOVED***ies = chart.$pro***REMOVED***ies || (chart.$pro***REMOVED***ies = {});
-        const pro***REMOVED***y = pro***REMOVED***ies[type];
-        if (!pro***REMOVED***y) {
+        const proxies = chart.$proxies || (chart.$proxies = {});
+        const proxy = proxies[type];
+        if (!proxy) {
             return;
         }
         const handlers = {
@@ -3447,14 +3447,14 @@ function createPro***REMOVED***yAndListen(chart, type, listener) {
             resize: releaseObserver
         };
         const handler = handlers[type] || removeListener;
-        handler(chart, type, pro***REMOVED***y);
-        pro***REMOVED***ies[type] = undefined;
+        handler(chart, type, proxy);
+        proxies[type] = undefined;
     }
-    getDevicePi***REMOVED***elRatio() {
-        return window.devicePi***REMOVED***elRatio;
+    getDevicePixelRatio() {
+        return window.devicePixelRatio;
     }
- getMa***REMOVED***imumSize(canvas, width, height, aspectRatio) {
-        return helpers_segment.getMa***REMOVED***imumSize(canvas, width, height, aspectRatio);
+ getMaximumSize(canvas, width, height, aspectRatio) {
+        return helpers_segment.getMaximumSize(canvas, width, height, aspectRatio);
     }
  isAttached(canvas) {
         const container = canvas && helpers_segment._getParentNode(canvas);
@@ -3472,23 +3472,23 @@ function _detectPlatform(canvas) {
 class Element {
     static defaults = {};
     static defaultRoutes = undefined;
-    ***REMOVED***;
+    x;
     y;
     active = false;
     options;
     $animations;
     tooltipPosition(useFinalPosition) {
-        const { ***REMOVED*** , y  } = this.getProps([
-            '***REMOVED***',
+        const { x , y  } = this.getProps([
+            'x',
             'y'
         ], useFinalPosition);
         return {
-            ***REMOVED***,
+            x,
             y
         };
     }
     hasValue() {
-        return helpers_segment.isNumber(this.***REMOVED***) && helpers_segment.isNumber(this.y);
+        return helpers_segment.isNumber(this.x) && helpers_segment.isNumber(this.y);
     }
     getProps(props, final) {
         const anims = this.$animations;
@@ -3506,8 +3506,8 @@ class Element {
 
 function autoSkip(scale, ticks) {
     const tickOpts = scale.options.ticks;
-    const determinedMa***REMOVED***Ticks = determineMa***REMOVED***Ticks(scale);
-    const ticksLimit = Math.min(tickOpts.ma***REMOVED***TicksLimit || determinedMa***REMOVED***Ticks, determinedMa***REMOVED***Ticks);
+    const determinedMaxTicks = determineMaxTicks(scale);
+    const ticksLimit = Math.min(tickOpts.maxTicksLimit || determinedMaxTicks, determinedMaxTicks);
     const majorIndices = tickOpts.major.enabled ? getMajorIndices(ticks) : [];
     const numMajorIndices = majorIndices.length;
     const first = majorIndices[0];
@@ -3531,18 +3531,18 @@ function autoSkip(scale, ticks) {
     skip(ticks, newTicks, spacing);
     return newTicks;
 }
-function determineMa***REMOVED***Ticks(scale) {
+function determineMaxTicks(scale) {
     const offset = scale.options.offset;
     const tickLength = scale._tickSize();
-    const ma***REMOVED***Scale = scale._length / tickLength + (offset ? 0 : 1);
-    const ma***REMOVED***Chart = scale._ma***REMOVED***Length / tickLength;
-    return Math.floor(Math.min(ma***REMOVED***Scale, ma***REMOVED***Chart));
+    const maxScale = scale._length / tickLength + (offset ? 0 : 1);
+    const maxChart = scale._maxLength / tickLength;
+    return Math.floor(Math.min(maxScale, maxChart));
 }
  function calculateSpacing(majorIndices, ticks, ticksLimit) {
     const evenMajorSpacing = getEvenSpacing(majorIndices);
     const spacing = ticks.length / ticksLimit;
     if (!evenMajorSpacing) {
-        return Math.ma***REMOVED***(spacing, 1);
+        return Math.max(spacing, 1);
     }
     const factors = helpers_segment._factorize(evenMajorSpacing);
     for(let i = 0, ilen = factors.length - 1; i < ilen; i++){
@@ -3551,7 +3551,7 @@ function determineMa***REMOVED***Ticks(scale) {
             return factor;
         }
     }
-    return Math.ma***REMOVED***(spacing, 1);
+    return Math.max(spacing, 1);
 }
  function getMajorIndices(ticks) {
     const result = [];
@@ -3565,14 +3565,14 @@ function determineMa***REMOVED***Ticks(scale) {
 }
  function skipMajors(ticks, newTicks, majorIndices, spacing) {
     let count = 0;
-    let ne***REMOVED***t = majorIndices[0];
+    let next = majorIndices[0];
     let i;
     spacing = Math.ceil(spacing);
     for(i = 0; i < ticks.length; i++){
-        if (i === ne***REMOVED***t) {
+        if (i === next) {
             newTicks.push(ticks[i]);
             count++;
-            ne***REMOVED***t = majorIndices[count * spacing];
+            next = majorIndices[count * spacing];
         }
     }
 }
@@ -3580,22 +3580,22 @@ function determineMa***REMOVED***Ticks(scale) {
     const start = helpers_segment.valueOrDefault(majorStart, 0);
     const end = Math.min(helpers_segment.valueOrDefault(majorEnd, ticks.length), ticks.length);
     let count = 0;
-    let length, i, ne***REMOVED***t;
+    let length, i, next;
     spacing = Math.ceil(spacing);
     if (majorEnd) {
         length = majorEnd - majorStart;
         spacing = length / Math.floor(length / spacing);
     }
-    ne***REMOVED***t = start;
-    while(ne***REMOVED***t < 0){
+    next = start;
+    while(next < 0){
         count++;
-        ne***REMOVED***t = Math.round(start + count * spacing);
+        next = Math.round(start + count * spacing);
     }
-    for(i = Math.ma***REMOVED***(start, 0); i < end; i++){
-        if (i === ne***REMOVED***t) {
+    for(i = Math.max(start, 0); i < end; i++){
+        if (i === next) {
             newTicks.push(ticks[i]);
             count++;
-            ne***REMOVED***t = Math.round(start + count * spacing);
+            next = Math.round(start + count * spacing);
         }
     }
 }
@@ -3615,7 +3615,7 @@ function determineMa***REMOVED***Ticks(scale) {
 
 const reverseAlign = (align)=>align === 'left' ? 'right' : align === 'right' ? 'left' : align;
 const offsetFromEdge = (scale, edge, offset)=>edge === 'top' || edge === 'left' ? scale[edge] + offset : scale[edge] - offset;
-const getTicksLimit = (ticksLength, ma***REMOVED***TicksLimit)=>Math.min(ma***REMOVED***TicksLimit || ticksLength, ticksLength);
+const getTicksLimit = (ticksLength, maxTicksLimit)=>Math.min(maxTicksLimit || ticksLength, ticksLength);
  function sample(arr, numItems) {
     const result = [];
     const increment = arr.length / numItems;
@@ -3626,23 +3626,23 @@ const getTicksLimit = (ticksLength, ma***REMOVED***TicksLimit)=>Math.min(ma***RE
     }
     return result;
 }
- function getPi***REMOVED***elForGridLine(scale, inde***REMOVED***, offsetGridLines) {
+ function getPixelForGridLine(scale, index, offsetGridLines) {
     const length = scale.ticks.length;
-    const validInde***REMOVED*** = Math.min(inde***REMOVED***, length - 1);
-    const start = scale._startPi***REMOVED***el;
-    const end = scale._endPi***REMOVED***el;
+    const validIndex = Math.min(index, length - 1);
+    const start = scale._startPixel;
+    const end = scale._endPixel;
     const epsilon = 1e-6;
-    let lineValue = scale.getPi***REMOVED***elForTick(validInde***REMOVED***);
+    let lineValue = scale.getPixelForTick(validIndex);
     let offset;
     if (offsetGridLines) {
         if (length === 1) {
-            offset = Math.ma***REMOVED***(lineValue - start, end - lineValue);
-        } else if (inde***REMOVED*** === 0) {
-            offset = (scale.getPi***REMOVED***elForTick(1) - lineValue) / 2;
+            offset = Math.max(lineValue - start, end - lineValue);
+        } else if (index === 0) {
+            offset = (scale.getPixelForTick(1) - lineValue) / 2;
         } else {
-            offset = (lineValue - scale.getPi***REMOVED***elForTick(validInde***REMOVED*** - 1)) / 2;
+            offset = (lineValue - scale.getPixelForTick(validIndex - 1)) / 2;
         }
-        lineValue += validInde***REMOVED*** < inde***REMOVED*** ? offset : -offset;
+        lineValue += validIndex < index ? offset : -offset;
         if (lineValue < start - epsilon || lineValue > end + epsilon) {
             return;
         }
@@ -3671,19 +3671,19 @@ const getTicksLimit = (ticksLength, ma***REMOVED***TicksLimit)=>Math.min(ma***RE
     }
     const font = helpers_segment.toFont(options.font, fallback);
     const padding = helpers_segment.toPadding(options.padding);
-    const lines = helpers_segment.isArray(options.te***REMOVED***t) ? options.te***REMOVED***t.length : 1;
+    const lines = helpers_segment.isArray(options.text) ? options.text.length : 1;
     return lines * font.lineHeight + padding.height;
 }
-function createScaleConte***REMOVED***t(parent, scale) {
-    return helpers_segment.createConte***REMOVED***t(parent, {
+function createScaleContext(parent, scale) {
+    return helpers_segment.createContext(parent, {
         scale,
         type: 'scale'
     });
 }
-function createTickConte***REMOVED***t(parent, inde***REMOVED***, tick) {
-    return helpers_segment.createConte***REMOVED***t(parent, {
+function createTickContext(parent, index, tick) {
+    return helpers_segment.createContext(parent, {
         tick,
-        inde***REMOVED***,
+        index,
         type: 'tick'
     });
 }
@@ -3698,26 +3698,26 @@ function titleArgs(scale, offset, position, align) {
     const { top , left , bottom , right , chart  } = scale;
     const { chartArea , scales  } = chart;
     let rotation = 0;
-    let ma***REMOVED***Width, titleX, titleY;
+    let maxWidth, titleX, titleY;
     const height = bottom - top;
     const width = right - left;
     if (scale.isHorizontal()) {
         titleX = helpers_segment._alignStartEnd(align, left, right);
         if (helpers_segment.isObject(position)) {
-            const positionA***REMOVED***isID = Object.keys(position)[0];
-            const value = position[positionA***REMOVED***isID];
-            titleY = scales[positionA***REMOVED***isID].getPi***REMOVED***elForValue(value) + height - offset;
+            const positionAxisID = Object.keys(position)[0];
+            const value = position[positionAxisID];
+            titleY = scales[positionAxisID].getPixelForValue(value) + height - offset;
         } else if (position === 'center') {
             titleY = (chartArea.bottom + chartArea.top) / 2 + height - offset;
         } else {
             titleY = offsetFromEdge(scale, position, offset);
         }
-        ma***REMOVED***Width = right - left;
+        maxWidth = right - left;
     } else {
         if (helpers_segment.isObject(position)) {
-            const positionA***REMOVED***isID = Object.keys(position)[0];
-            const value = position[positionA***REMOVED***isID];
-            titleX = scales[positionA***REMOVED***isID].getPi***REMOVED***elForValue(value) - width + offset;
+            const positionAxisID = Object.keys(position)[0];
+            const value = position[positionAxisID];
+            titleX = scales[positionAxisID].getPixelForValue(value) - width + offset;
         } else if (position === 'center') {
             titleX = (chartArea.left + chartArea.right) / 2 - width + offset;
         } else {
@@ -3729,17 +3729,17 @@ function titleArgs(scale, offset, position, align) {
     return {
         titleX,
         titleY,
-        ma***REMOVED***Width,
+        maxWidth,
         rotation
     };
 }
-class Scale e***REMOVED***tends Element {
+class Scale extends Element {
     constructor(cfg){
         super();
          this.id = cfg.id;
          this.type = cfg.type;
          this.options = undefined;
-         this.ct***REMOVED*** = cfg.ct***REMOVED***;
+         this.ctx = cfg.ctx;
          this.chart = cfg.chart;
          this.top = undefined;
          this.bottom = undefined;
@@ -3753,85 +3753,85 @@ class Scale e***REMOVED***tends Element {
             top: 0,
             bottom: 0
         };
-         this.ma***REMOVED***Width = undefined;
-         this.ma***REMOVED***Height = undefined;
+         this.maxWidth = undefined;
+         this.maxHeight = undefined;
          this.paddingTop = undefined;
          this.paddingBottom = undefined;
          this.paddingLeft = undefined;
          this.paddingRight = undefined;
-         this.a***REMOVED***is = undefined;
+         this.axis = undefined;
          this.labelRotation = undefined;
         this.min = undefined;
-        this.ma***REMOVED*** = undefined;
+        this.max = undefined;
         this._range = undefined;
          this.ticks = [];
          this._gridLineItems = null;
          this._labelItems = null;
          this._labelSizes = null;
         this._length = 0;
-        this._ma***REMOVED***Length = 0;
-        this._longestTe***REMOVED***tCache = {};
-         this._startPi***REMOVED***el = undefined;
-         this._endPi***REMOVED***el = undefined;
-        this._reversePi***REMOVED***els = false;
-        this._userMa***REMOVED*** = undefined;
+        this._maxLength = 0;
+        this._longestTextCache = {};
+         this._startPixel = undefined;
+         this._endPixel = undefined;
+        this._reversePixels = false;
+        this._userMax = undefined;
         this._userMin = undefined;
-        this._suggestedMa***REMOVED*** = undefined;
+        this._suggestedMax = undefined;
         this._suggestedMin = undefined;
         this._ticksLength = 0;
         this._borderValue = 0;
         this._cache = {};
         this._dataLimitsCached = false;
-        this.$conte***REMOVED***t = undefined;
+        this.$context = undefined;
     }
  init(options) {
-        this.options = options.setConte***REMOVED***t(this.getConte***REMOVED***t());
-        this.a***REMOVED***is = options.a***REMOVED***is;
+        this.options = options.setContext(this.getContext());
+        this.axis = options.axis;
         this._userMin = this.parse(options.min);
-        this._userMa***REMOVED*** = this.parse(options.ma***REMOVED***);
+        this._userMax = this.parse(options.max);
         this._suggestedMin = this.parse(options.suggestedMin);
-        this._suggestedMa***REMOVED*** = this.parse(options.suggestedMa***REMOVED***);
+        this._suggestedMax = this.parse(options.suggestedMax);
     }
- parse(raw, inde***REMOVED***) {
+ parse(raw, index) {
         return raw;
     }
  getUserBounds() {
-        let { _userMin , _userMa***REMOVED*** , _suggestedMin , _suggestedMa***REMOVED***  } = this;
+        let { _userMin , _userMax , _suggestedMin , _suggestedMax  } = this;
         _userMin = helpers_segment.finiteOrDefault(_userMin, Number.POSITIVE_INFINITY);
-        _userMa***REMOVED*** = helpers_segment.finiteOrDefault(_userMa***REMOVED***, Number.NEGATIVE_INFINITY);
+        _userMax = helpers_segment.finiteOrDefault(_userMax, Number.NEGATIVE_INFINITY);
         _suggestedMin = helpers_segment.finiteOrDefault(_suggestedMin, Number.POSITIVE_INFINITY);
-        _suggestedMa***REMOVED*** = helpers_segment.finiteOrDefault(_suggestedMa***REMOVED***, Number.NEGATIVE_INFINITY);
+        _suggestedMax = helpers_segment.finiteOrDefault(_suggestedMax, Number.NEGATIVE_INFINITY);
         return {
             min: helpers_segment.finiteOrDefault(_userMin, _suggestedMin),
-            ma***REMOVED***: helpers_segment.finiteOrDefault(_userMa***REMOVED***, _suggestedMa***REMOVED***),
+            max: helpers_segment.finiteOrDefault(_userMax, _suggestedMax),
             minDefined: helpers_segment.isNumberFinite(_userMin),
-            ma***REMOVED***Defined: helpers_segment.isNumberFinite(_userMa***REMOVED***)
+            maxDefined: helpers_segment.isNumberFinite(_userMax)
         };
     }
- getMinMa***REMOVED***(canStack) {
-        let { min , ma***REMOVED*** , minDefined , ma***REMOVED***Defined  } = this.getUserBounds();
+ getMinMax(canStack) {
+        let { min , max , minDefined , maxDefined  } = this.getUserBounds();
         let range;
-        if (minDefined && ma***REMOVED***Defined) {
+        if (minDefined && maxDefined) {
             return {
                 min,
-                ma***REMOVED***
+                max
             };
         }
         const metas = this.getMatchingVisibleMetas();
         for(let i = 0, ilen = metas.length; i < ilen; ++i){
-            range = metas[i].controller.getMinMa***REMOVED***(this, canStack);
+            range = metas[i].controller.getMinMax(this, canStack);
             if (!minDefined) {
                 min = Math.min(min, range.min);
             }
-            if (!ma***REMOVED***Defined) {
-                ma***REMOVED*** = Math.ma***REMOVED***(ma***REMOVED***, range.ma***REMOVED***);
+            if (!maxDefined) {
+                max = Math.max(max, range.max);
             }
         }
-        min = ma***REMOVED***Defined && min > ma***REMOVED*** ? ma***REMOVED*** : min;
-        ma***REMOVED*** = minDefined && min > ma***REMOVED*** ? min : ma***REMOVED***;
+        min = maxDefined && min > max ? max : min;
+        max = minDefined && min > max ? min : max;
         return {
-            min: helpers_segment.finiteOrDefault(min, helpers_segment.finiteOrDefault(ma***REMOVED***, min)),
-            ma***REMOVED***: helpers_segment.finiteOrDefault(ma***REMOVED***, helpers_segment.finiteOrDefault(min, ma***REMOVED***))
+            min: helpers_segment.finiteOrDefault(min, helpers_segment.finiteOrDefault(max, min)),
+            max: helpers_segment.finiteOrDefault(max, helpers_segment.finiteOrDefault(min, max))
         };
     }
  getPadding() {
@@ -3847,7 +3847,7 @@ class Scale e***REMOVED***tends Element {
     }
  getLabels() {
         const data = this.chart.data;
-        return this.options.labels || (this.isHorizontal() ? data.***REMOVED***Labels : data.yLabels) || data.labels || [];
+        return this.options.labels || (this.isHorizontal() ? data.xLabels : data.yLabels) || data.labels || [];
     }
  getLabelItems(chartArea = this.chart.chartArea) {
         const items = this._labelItems || (this._labelItems = this._computeLabelItems(chartArea));
@@ -3862,12 +3862,12 @@ class Scale e***REMOVED***tends Element {
             this
         ]);
     }
- update(ma***REMOVED***Width, ma***REMOVED***Height, margins) {
+ update(maxWidth, maxHeight, margins) {
         const { beginAtZero , grace , ticks: tickOpts  } = this.options;
         const sampleSize = tickOpts.sampleSize;
         this.beforeUpdate();
-        this.ma***REMOVED***Width = ma***REMOVED***Width;
-        this.ma***REMOVED***Height = ma***REMOVED***Height;
+        this.maxWidth = maxWidth;
+        this.maxHeight = maxHeight;
         this._margins = margins = Object.assign({
             left: 0,
             right: 0,
@@ -3881,7 +3881,7 @@ class Scale e***REMOVED***tends Element {
         this.beforeSetDimensions();
         this.setDimensions();
         this.afterSetDimensions();
-        this._ma***REMOVED***Length = this.isHorizontal() ? this.width + margins.left + margins.right : this.height + margins.top + margins.bottom;
+        this._maxLength = this.isHorizontal() ? this.width + margins.left + margins.right : this.height + margins.top + margins.bottom;
         if (!this._dataLimitsCached) {
             this.beforeDataLimits();
             this.determineDataLimits();
@@ -3912,21 +3912,21 @@ class Scale e***REMOVED***tends Element {
         this.afterUpdate();
     }
  configure() {
-        let reversePi***REMOVED***els = this.options.reverse;
-        let startPi***REMOVED***el, endPi***REMOVED***el;
+        let reversePixels = this.options.reverse;
+        let startPixel, endPixel;
         if (this.isHorizontal()) {
-            startPi***REMOVED***el = this.left;
-            endPi***REMOVED***el = this.right;
+            startPixel = this.left;
+            endPixel = this.right;
         } else {
-            startPi***REMOVED***el = this.top;
-            endPi***REMOVED***el = this.bottom;
-            reversePi***REMOVED***els = !reversePi***REMOVED***els;
+            startPixel = this.top;
+            endPixel = this.bottom;
+            reversePixels = !reversePixels;
         }
-        this._startPi***REMOVED***el = startPi***REMOVED***el;
-        this._endPi***REMOVED***el = endPi***REMOVED***el;
-        this._reversePi***REMOVED***els = reversePi***REMOVED***els;
-        this._length = endPi***REMOVED***el - startPi***REMOVED***el;
-        this._alignToPi***REMOVED***els = this.options.alignToPi***REMOVED***els;
+        this._startPixel = startPixel;
+        this._endPixel = endPixel;
+        this._reversePixels = reversePixels;
+        this._length = endPixel - startPixel;
+        this._alignToPixels = this.options.alignToPixels;
     }
     afterUpdate() {
         helpers_segment.callback(this.options.afterUpdate, [
@@ -3940,11 +3940,11 @@ class Scale e***REMOVED***tends Element {
     }
     setDimensions() {
         if (this.isHorizontal()) {
-            this.width = this.ma***REMOVED***Width;
+            this.width = this.maxWidth;
             this.left = 0;
             this.right = this.width;
         } else {
-            this.height = this.ma***REMOVED***Height;
+            this.height = this.maxHeight;
             this.top = 0;
             this.bottom = this.height;
         }
@@ -3959,7 +3959,7 @@ class Scale e***REMOVED***tends Element {
         ]);
     }
     _callHooks(name) {
-        this.chart.notifyPlugins(name, this.getConte***REMOVED***t());
+        this.chart.notifyPlugins(name, this.getContext());
         helpers_segment.callback(this.options[name], [
             this
         ]);
@@ -4010,26 +4010,26 @@ class Scale e***REMOVED***tends Element {
     calculateLabelRotation() {
         const options = this.options;
         const tickOpts = options.ticks;
-        const numTicks = getTicksLimit(this.ticks.length, options.ticks.ma***REMOVED***TicksLimit);
+        const numTicks = getTicksLimit(this.ticks.length, options.ticks.maxTicksLimit);
         const minRotation = tickOpts.minRotation || 0;
-        const ma***REMOVED***Rotation = tickOpts.ma***REMOVED***Rotation;
+        const maxRotation = tickOpts.maxRotation;
         let labelRotation = minRotation;
-        let tickWidth, ma***REMOVED***Height, ma***REMOVED***LabelDiagonal;
-        if (!this._isVisible() || !tickOpts.display || minRotation >= ma***REMOVED***Rotation || numTicks <= 1 || !this.isHorizontal()) {
+        let tickWidth, maxHeight, maxLabelDiagonal;
+        if (!this._isVisible() || !tickOpts.display || minRotation >= maxRotation || numTicks <= 1 || !this.isHorizontal()) {
             this.labelRotation = minRotation;
             return;
         }
         const labelSizes = this._getLabelSizes();
-        const ma***REMOVED***LabelWidth = labelSizes.widest.width;
-        const ma***REMOVED***LabelHeight = labelSizes.highest.height;
-        const ma***REMOVED***Width = helpers_segment._limitValue(this.chart.width - ma***REMOVED***LabelWidth, 0, this.ma***REMOVED***Width);
-        tickWidth = options.offset ? this.ma***REMOVED***Width / numTicks : ma***REMOVED***Width / (numTicks - 1);
-        if (ma***REMOVED***LabelWidth + 6 > tickWidth) {
-            tickWidth = ma***REMOVED***Width / (numTicks - (options.offset ? 0.5 : 1));
-            ma***REMOVED***Height = this.ma***REMOVED***Height - getTickMarkLength(options.grid) - tickOpts.padding - getTitleHeight(options.title, this.chart.options.font);
-            ma***REMOVED***LabelDiagonal = Math.sqrt(ma***REMOVED***LabelWidth * ma***REMOVED***LabelWidth + ma***REMOVED***LabelHeight * ma***REMOVED***LabelHeight);
-            labelRotation = helpers_segment.toDegrees(Math.min(Math.asin(helpers_segment._limitValue((labelSizes.highest.height + 6) / tickWidth, -1, 1)), Math.asin(helpers_segment._limitValue(ma***REMOVED***Height / ma***REMOVED***LabelDiagonal, -1, 1)) - Math.asin(helpers_segment._limitValue(ma***REMOVED***LabelHeight / ma***REMOVED***LabelDiagonal, -1, 1))));
-            labelRotation = Math.ma***REMOVED***(minRotation, Math.min(ma***REMOVED***Rotation, labelRotation));
+        const maxLabelWidth = labelSizes.widest.width;
+        const maxLabelHeight = labelSizes.highest.height;
+        const maxWidth = helpers_segment._limitValue(this.chart.width - maxLabelWidth, 0, this.maxWidth);
+        tickWidth = options.offset ? this.maxWidth / numTicks : maxWidth / (numTicks - 1);
+        if (maxLabelWidth + 6 > tickWidth) {
+            tickWidth = maxWidth / (numTicks - (options.offset ? 0.5 : 1));
+            maxHeight = this.maxHeight - getTickMarkLength(options.grid) - tickOpts.padding - getTitleHeight(options.title, this.chart.options.font);
+            maxLabelDiagonal = Math.sqrt(maxLabelWidth * maxLabelWidth + maxLabelHeight * maxLabelHeight);
+            labelRotation = helpers_segment.toDegrees(Math.min(Math.asin(helpers_segment._limitValue((labelSizes.highest.height + 6) / tickWidth, -1, 1)), Math.asin(helpers_segment._limitValue(maxHeight / maxLabelDiagonal, -1, 1)) - Math.asin(helpers_segment._limitValue(maxLabelHeight / maxLabelDiagonal, -1, 1))));
+            labelRotation = Math.max(minRotation, Math.min(maxRotation, labelRotation));
         }
         this.labelRotation = labelRotation;
     }
@@ -4055,10 +4055,10 @@ class Scale e***REMOVED***tends Element {
         if (display) {
             const titleHeight = getTitleHeight(titleOpts, chart.options.font);
             if (isHorizontal) {
-                minSize.width = this.ma***REMOVED***Width;
+                minSize.width = this.maxWidth;
                 minSize.height = getTickMarkLength(gridOpts) + titleHeight;
             } else {
-                minSize.height = this.ma***REMOVED***Height;
+                minSize.height = this.maxHeight;
                 minSize.width = getTickMarkLength(gridOpts) + titleHeight;
             }
             if (tickOpts.display && this.ticks.length) {
@@ -4069,10 +4069,10 @@ class Scale e***REMOVED***tends Element {
                 const sin = Math.sin(angleRadians);
                 if (isHorizontal) {
                     const labelHeight = tickOpts.mirror ? 0 : sin * widest.width + cos * highest.height;
-                    minSize.height = Math.min(this.ma***REMOVED***Height, minSize.height + labelHeight + tickPadding);
+                    minSize.height = Math.min(this.maxHeight, minSize.height + labelHeight + tickPadding);
                 } else {
                     const labelWidth = tickOpts.mirror ? 0 : cos * widest.width + sin * highest.height;
-                    minSize.width = Math.min(this.ma***REMOVED***Width, minSize.width + labelWidth + tickPadding);
+                    minSize.width = Math.min(this.maxWidth, minSize.width + labelWidth + tickPadding);
                 }
                 this._calculatePadding(first, last, sin, cos);
             }
@@ -4089,10 +4089,10 @@ class Scale e***REMOVED***tends Element {
     _calculatePadding(first, last, sin, cos) {
         const { ticks: { align , padding  } , position  } = this.options;
         const isRotated = this.labelRotation !== 0;
-        const labelsBelowTicks = position !== 'top' && this.a***REMOVED***is === '***REMOVED***';
+        const labelsBelowTicks = position !== 'top' && this.axis === 'x';
         if (this.isHorizontal()) {
-            const offsetLeft = this.getPi***REMOVED***elForTick(0) - this.left;
-            const offsetRight = this.right - this.getPi***REMOVED***elForTick(this.ticks.length - 1);
+            const offsetLeft = this.getPixelForTick(0) - this.left;
+            const offsetRight = this.right - this.getPixelForTick(this.ticks.length - 1);
             let paddingLeft = 0;
             let paddingRight = 0;
             if (isRotated) {
@@ -4111,8 +4111,8 @@ class Scale e***REMOVED***tends Element {
                 paddingLeft = first.width / 2;
                 paddingRight = last.width / 2;
             }
-            this.paddingLeft = Math.ma***REMOVED***((paddingLeft - offsetLeft + padding) * this.width / (this.width - offsetLeft), 0);
-            this.paddingRight = Math.ma***REMOVED***((paddingRight - offsetRight + padding) * this.width / (this.width - offsetRight), 0);
+            this.paddingLeft = Math.max((paddingLeft - offsetLeft + padding) * this.width / (this.width - offsetLeft), 0);
+            this.paddingRight = Math.max((paddingRight - offsetRight + padding) * this.width / (this.width - offsetRight), 0);
         } else {
             let paddingTop = last.height / 2;
             let paddingBottom = first.height / 2;
@@ -4129,10 +4129,10 @@ class Scale e***REMOVED***tends Element {
     }
  _handleMargins() {
         if (this._margins) {
-            this._margins.left = Math.ma***REMOVED***(this.paddingLeft, this._margins.left);
-            this._margins.top = Math.ma***REMOVED***(this.paddingTop, this._margins.top);
-            this._margins.right = Math.ma***REMOVED***(this.paddingRight, this._margins.right);
-            this._margins.bottom = Math.ma***REMOVED***(this.paddingBottom, this._margins.bottom);
+            this._margins.left = Math.max(this.paddingLeft, this._margins.left);
+            this._margins.top = Math.max(this.paddingTop, this._margins.top);
+            this._margins.right = Math.max(this.paddingRight, this._margins.right);
+            this._margins.bottom = Math.max(this.paddingBottom, this._margins.bottom);
         }
     }
     afterFit() {
@@ -4141,8 +4141,8 @@ class Scale e***REMOVED***tends Element {
         ]);
     }
  isHorizontal() {
-        const { a***REMOVED***is , position  } = this.options;
-        return position === 'top' || position === 'bottom' || a***REMOVED***is === '***REMOVED***';
+        const { axis , position  } = this.options;
+        return position === 'top' || position === 'bottom' || axis === 'x';
     }
  isFullSize() {
         return this.options.fullSize;
@@ -4168,22 +4168,22 @@ class Scale e***REMOVED***tends Element {
             if (sampleSize < ticks.length) {
                 ticks = sample(ticks, sampleSize);
             }
-            this._labelSizes = labelSizes = this._computeLabelSizes(ticks, ticks.length, this.options.ticks.ma***REMOVED***TicksLimit);
+            this._labelSizes = labelSizes = this._computeLabelSizes(ticks, ticks.length, this.options.ticks.maxTicksLimit);
         }
         return labelSizes;
     }
- _computeLabelSizes(ticks, length, ma***REMOVED***TicksLimit) {
-        const { ct***REMOVED*** , _longestTe***REMOVED***tCache: caches  } = this;
+ _computeLabelSizes(ticks, length, maxTicksLimit) {
+        const { ctx , _longestTextCache: caches  } = this;
         const widths = [];
         const heights = [];
-        const increment = Math.floor(length / getTicksLimit(length, ma***REMOVED***TicksLimit));
+        const increment = Math.floor(length / getTicksLimit(length, maxTicksLimit));
         let widestLabelSize = 0;
         let highestLabelSize = 0;
         let i, j, jlen, label, tickFont, fontString, cache, lineHeight, width, height, nestedLabel;
         for(i = 0; i < length; i += increment){
             label = ticks[i].label;
             tickFont = this._resolveTickFontOptions(i);
-            ct***REMOVED***.font = fontString = tickFont.string;
+            ctx.font = fontString = tickFont.string;
             cache = caches[fontString] = caches[fontString] || {
                 data: {},
                 gc: []
@@ -4191,28 +4191,28 @@ class Scale e***REMOVED***tends Element {
             lineHeight = tickFont.lineHeight;
             width = height = 0;
             if (!helpers_segment.isNullOrUndef(label) && !helpers_segment.isArray(label)) {
-                width = helpers_segment._measureTe***REMOVED***t(ct***REMOVED***, cache.data, cache.gc, width, label);
+                width = helpers_segment._measureText(ctx, cache.data, cache.gc, width, label);
                 height = lineHeight;
             } else if (helpers_segment.isArray(label)) {
                 for(j = 0, jlen = label.length; j < jlen; ++j){
                     nestedLabel =  label[j];
                     if (!helpers_segment.isNullOrUndef(nestedLabel) && !helpers_segment.isArray(nestedLabel)) {
-                        width = helpers_segment._measureTe***REMOVED***t(ct***REMOVED***, cache.data, cache.gc, width, nestedLabel);
+                        width = helpers_segment._measureText(ctx, cache.data, cache.gc, width, nestedLabel);
                         height += lineHeight;
                     }
                 }
             }
             widths.push(width);
             heights.push(height);
-            widestLabelSize = Math.ma***REMOVED***(width, widestLabelSize);
-            highestLabelSize = Math.ma***REMOVED***(height, highestLabelSize);
+            widestLabelSize = Math.max(width, widestLabelSize);
+            highestLabelSize = Math.max(height, highestLabelSize);
         }
         garbageCollect(caches, length);
-        const widest = widths.inde***REMOVED***Of(widestLabelSize);
-        const highest = heights.inde***REMOVED***Of(highestLabelSize);
-        const valueAt = (id***REMOVED***)=>({
-                width: widths[id***REMOVED***] || 0,
-                height: heights[id***REMOVED***] || 0
+        const widest = widths.indexOf(widestLabelSize);
+        const highest = heights.indexOf(highestLabelSize);
+        const valueAt = (idx)=>({
+                width: widths[idx] || 0,
+                height: heights[idx] || 0
             });
         return {
             first: valueAt(0),
@@ -4226,42 +4226,42 @@ class Scale e***REMOVED***tends Element {
  getLabelForValue(value) {
         return value;
     }
- getPi***REMOVED***elForValue(value, inde***REMOVED***) {
+ getPixelForValue(value, index) {
         return NaN;
     }
- getValueForPi***REMOVED***el(pi***REMOVED***el) {}
- getPi***REMOVED***elForTick(inde***REMOVED***) {
+ getValueForPixel(pixel) {}
+ getPixelForTick(index) {
         const ticks = this.ticks;
-        if (inde***REMOVED*** < 0 || inde***REMOVED*** > ticks.length - 1) {
+        if (index < 0 || index > ticks.length - 1) {
             return null;
         }
-        return this.getPi***REMOVED***elForValue(ticks[inde***REMOVED***].value);
+        return this.getPixelForValue(ticks[index].value);
     }
- getPi***REMOVED***elForDecimal(decimal) {
-        if (this._reversePi***REMOVED***els) {
+ getPixelForDecimal(decimal) {
+        if (this._reversePixels) {
             decimal = 1 - decimal;
         }
-        const pi***REMOVED***el = this._startPi***REMOVED***el + decimal * this._length;
-        return helpers_segment._int16Range(this._alignToPi***REMOVED***els ? helpers_segment._alignPi***REMOVED***el(this.chart, pi***REMOVED***el, 0) : pi***REMOVED***el);
+        const pixel = this._startPixel + decimal * this._length;
+        return helpers_segment._int16Range(this._alignToPixels ? helpers_segment._alignPixel(this.chart, pixel, 0) : pixel);
     }
- getDecimalForPi***REMOVED***el(pi***REMOVED***el) {
-        const decimal = (pi***REMOVED***el - this._startPi***REMOVED***el) / this._length;
-        return this._reversePi***REMOVED***els ? 1 - decimal : decimal;
+ getDecimalForPixel(pixel) {
+        const decimal = (pixel - this._startPixel) / this._length;
+        return this._reversePixels ? 1 - decimal : decimal;
     }
- getBasePi***REMOVED***el() {
-        return this.getPi***REMOVED***elForValue(this.getBaseValue());
+ getBasePixel() {
+        return this.getPixelForValue(this.getBaseValue());
     }
  getBaseValue() {
-        const { min , ma***REMOVED***  } = this;
-        return min < 0 && ma***REMOVED*** < 0 ? ma***REMOVED*** : min > 0 && ma***REMOVED*** > 0 ? min : 0;
+        const { min , max  } = this;
+        return min < 0 && max < 0 ? max : min > 0 && max > 0 ? min : 0;
     }
- getConte***REMOVED***t(inde***REMOVED***) {
+ getContext(index) {
         const ticks = this.ticks || [];
-        if (inde***REMOVED*** >= 0 && inde***REMOVED*** < ticks.length) {
-            const tick = ticks[inde***REMOVED***];
-            return tick.$conte***REMOVED***t || (tick.$conte***REMOVED***t = createTickConte***REMOVED***t(this.getConte***REMOVED***t(), inde***REMOVED***, tick));
+        if (index >= 0 && index < ticks.length) {
+            const tick = ticks[index];
+            return tick.$context || (tick.$context = createTickContext(this.getContext(), index, tick));
         }
-        return this.$conte***REMOVED***t || (this.$conte***REMOVED***t = createScaleConte***REMOVED***t(this.chart.getConte***REMOVED***t(), this));
+        return this.$context || (this.$context = createScaleContext(this.chart.getContext(), this));
     }
  _tickSize() {
         const optionTicks = this.options.ticks;
@@ -4282,7 +4282,7 @@ class Scale e***REMOVED***tends Element {
         return this.getMatchingVisibleMetas().length > 0;
     }
  _computeGridLineItems(chartArea) {
-        const a***REMOVED***is = this.a***REMOVED***is;
+        const axis = this.axis;
         const chart = this.chart;
         const options = this.options;
         const { grid , position , border  } = options;
@@ -4292,95 +4292,95 @@ class Scale e***REMOVED***tends Element {
         const ticksLength = ticks.length + (offset ? 1 : 0);
         const tl = getTickMarkLength(grid);
         const items = [];
-        const borderOpts = border.setConte***REMOVED***t(this.getConte***REMOVED***t());
-        const a***REMOVED***isWidth = borderOpts.display ? borderOpts.width : 0;
-        const a***REMOVED***isHalfWidth = a***REMOVED***isWidth / 2;
-        const alignBorderValue = function(pi***REMOVED***el) {
-            return helpers_segment._alignPi***REMOVED***el(chart, pi***REMOVED***el, a***REMOVED***isWidth);
+        const borderOpts = border.setContext(this.getContext());
+        const axisWidth = borderOpts.display ? borderOpts.width : 0;
+        const axisHalfWidth = axisWidth / 2;
+        const alignBorderValue = function(pixel) {
+            return helpers_segment._alignPixel(chart, pixel, axisWidth);
         };
         let borderValue, i, lineValue, alignedLineValue;
-        let t***REMOVED***1, ty1, t***REMOVED***2, ty2, ***REMOVED***1, y1, ***REMOVED***2, y2;
+        let tx1, ty1, tx2, ty2, x1, y1, x2, y2;
         if (position === 'top') {
             borderValue = alignBorderValue(this.bottom);
             ty1 = this.bottom - tl;
-            ty2 = borderValue - a***REMOVED***isHalfWidth;
-            y1 = alignBorderValue(chartArea.top) + a***REMOVED***isHalfWidth;
+            ty2 = borderValue - axisHalfWidth;
+            y1 = alignBorderValue(chartArea.top) + axisHalfWidth;
             y2 = chartArea.bottom;
         } else if (position === 'bottom') {
             borderValue = alignBorderValue(this.top);
             y1 = chartArea.top;
-            y2 = alignBorderValue(chartArea.bottom) - a***REMOVED***isHalfWidth;
-            ty1 = borderValue + a***REMOVED***isHalfWidth;
+            y2 = alignBorderValue(chartArea.bottom) - axisHalfWidth;
+            ty1 = borderValue + axisHalfWidth;
             ty2 = this.top + tl;
         } else if (position === 'left') {
             borderValue = alignBorderValue(this.right);
-            t***REMOVED***1 = this.right - tl;
-            t***REMOVED***2 = borderValue - a***REMOVED***isHalfWidth;
-            ***REMOVED***1 = alignBorderValue(chartArea.left) + a***REMOVED***isHalfWidth;
-            ***REMOVED***2 = chartArea.right;
+            tx1 = this.right - tl;
+            tx2 = borderValue - axisHalfWidth;
+            x1 = alignBorderValue(chartArea.left) + axisHalfWidth;
+            x2 = chartArea.right;
         } else if (position === 'right') {
             borderValue = alignBorderValue(this.left);
-            ***REMOVED***1 = chartArea.left;
-            ***REMOVED***2 = alignBorderValue(chartArea.right) - a***REMOVED***isHalfWidth;
-            t***REMOVED***1 = borderValue + a***REMOVED***isHalfWidth;
-            t***REMOVED***2 = this.left + tl;
-        } else if (a***REMOVED***is === '***REMOVED***') {
+            x1 = chartArea.left;
+            x2 = alignBorderValue(chartArea.right) - axisHalfWidth;
+            tx1 = borderValue + axisHalfWidth;
+            tx2 = this.left + tl;
+        } else if (axis === 'x') {
             if (position === 'center') {
                 borderValue = alignBorderValue((chartArea.top + chartArea.bottom) / 2 + 0.5);
             } else if (helpers_segment.isObject(position)) {
-                const positionA***REMOVED***isID = Object.keys(position)[0];
-                const value = position[positionA***REMOVED***isID];
-                borderValue = alignBorderValue(this.chart.scales[positionA***REMOVED***isID].getPi***REMOVED***elForValue(value));
+                const positionAxisID = Object.keys(position)[0];
+                const value = position[positionAxisID];
+                borderValue = alignBorderValue(this.chart.scales[positionAxisID].getPixelForValue(value));
             }
             y1 = chartArea.top;
             y2 = chartArea.bottom;
-            ty1 = borderValue + a***REMOVED***isHalfWidth;
+            ty1 = borderValue + axisHalfWidth;
             ty2 = ty1 + tl;
-        } else if (a***REMOVED***is === 'y') {
+        } else if (axis === 'y') {
             if (position === 'center') {
                 borderValue = alignBorderValue((chartArea.left + chartArea.right) / 2);
             } else if (helpers_segment.isObject(position)) {
-                const positionA***REMOVED***isID = Object.keys(position)[0];
-                const value = position[positionA***REMOVED***isID];
-                borderValue = alignBorderValue(this.chart.scales[positionA***REMOVED***isID].getPi***REMOVED***elForValue(value));
+                const positionAxisID = Object.keys(position)[0];
+                const value = position[positionAxisID];
+                borderValue = alignBorderValue(this.chart.scales[positionAxisID].getPixelForValue(value));
             }
-            t***REMOVED***1 = borderValue - a***REMOVED***isHalfWidth;
-            t***REMOVED***2 = t***REMOVED***1 - tl;
-            ***REMOVED***1 = chartArea.left;
-            ***REMOVED***2 = chartArea.right;
+            tx1 = borderValue - axisHalfWidth;
+            tx2 = tx1 - tl;
+            x1 = chartArea.left;
+            x2 = chartArea.right;
         }
-        const limit = helpers_segment.valueOrDefault(options.ticks.ma***REMOVED***TicksLimit, ticksLength);
-        const step = Math.ma***REMOVED***(1, Math.ceil(ticksLength / limit));
+        const limit = helpers_segment.valueOrDefault(options.ticks.maxTicksLimit, ticksLength);
+        const step = Math.max(1, Math.ceil(ticksLength / limit));
         for(i = 0; i < ticksLength; i += step){
-            const conte***REMOVED***t = this.getConte***REMOVED***t(i);
-            const optsAtInde***REMOVED*** = grid.setConte***REMOVED***t(conte***REMOVED***t);
-            const optsAtInde***REMOVED***Border = border.setConte***REMOVED***t(conte***REMOVED***t);
-            const lineWidth = optsAtInde***REMOVED***.lineWidth;
-            const lineColor = optsAtInde***REMOVED***.color;
-            const borderDash = optsAtInde***REMOVED***Border.dash || [];
-            const borderDashOffset = optsAtInde***REMOVED***Border.dashOffset;
-            const tickWidth = optsAtInde***REMOVED***.tickWidth;
-            const tickColor = optsAtInde***REMOVED***.tickColor;
-            const tickBorderDash = optsAtInde***REMOVED***.tickBorderDash || [];
-            const tickBorderDashOffset = optsAtInde***REMOVED***.tickBorderDashOffset;
-            lineValue = getPi***REMOVED***elForGridLine(this, i, offset);
+            const context = this.getContext(i);
+            const optsAtIndex = grid.setContext(context);
+            const optsAtIndexBorder = border.setContext(context);
+            const lineWidth = optsAtIndex.lineWidth;
+            const lineColor = optsAtIndex.color;
+            const borderDash = optsAtIndexBorder.dash || [];
+            const borderDashOffset = optsAtIndexBorder.dashOffset;
+            const tickWidth = optsAtIndex.tickWidth;
+            const tickColor = optsAtIndex.tickColor;
+            const tickBorderDash = optsAtIndex.tickBorderDash || [];
+            const tickBorderDashOffset = optsAtIndex.tickBorderDashOffset;
+            lineValue = getPixelForGridLine(this, i, offset);
             if (lineValue === undefined) {
                 continue;
             }
-            alignedLineValue = helpers_segment._alignPi***REMOVED***el(chart, lineValue, lineWidth);
+            alignedLineValue = helpers_segment._alignPixel(chart, lineValue, lineWidth);
             if (isHorizontal) {
-                t***REMOVED***1 = t***REMOVED***2 = ***REMOVED***1 = ***REMOVED***2 = alignedLineValue;
+                tx1 = tx2 = x1 = x2 = alignedLineValue;
             } else {
                 ty1 = ty2 = y1 = y2 = alignedLineValue;
             }
             items.push({
-                t***REMOVED***1,
+                tx1,
                 ty1,
-                t***REMOVED***2,
+                tx2,
                 ty2,
-                ***REMOVED***1,
+                x1,
                 y1,
-                ***REMOVED***2,
+                x2,
                 y2,
                 width: lineWidth,
                 color: lineColor,
@@ -4397,7 +4397,7 @@ class Scale e***REMOVED***tends Element {
         return items;
     }
  _computeLabelItems(chartArea) {
-        const a***REMOVED***is = this.a***REMOVED***is;
+        const axis = this.axis;
         const options = this.options;
         const { position , ticks: optionTicks  } = options;
         const isHorizontal = this.isHorizontal();
@@ -4408,108 +4408,108 @@ class Scale e***REMOVED***tends Element {
         const hTickAndPadding = mirror ? -padding : tickAndPadding;
         const rotation = -helpers_segment.toRadians(this.labelRotation);
         const items = [];
-        let i, ilen, tick, label, ***REMOVED***, y, te***REMOVED***tAlign, pi***REMOVED***el, font, lineHeight, lineCount, te***REMOVED***tOffset;
-        let te***REMOVED***tBaseline = 'middle';
+        let i, ilen, tick, label, x, y, textAlign, pixel, font, lineHeight, lineCount, textOffset;
+        let textBaseline = 'middle';
         if (position === 'top') {
             y = this.bottom - hTickAndPadding;
-            te***REMOVED***tAlign = this._getXA***REMOVED***isLabelAlignment();
+            textAlign = this._getXAxisLabelAlignment();
         } else if (position === 'bottom') {
             y = this.top + hTickAndPadding;
-            te***REMOVED***tAlign = this._getXA***REMOVED***isLabelAlignment();
+            textAlign = this._getXAxisLabelAlignment();
         } else if (position === 'left') {
-            const ret = this._getYA***REMOVED***isLabelAlignment(tl);
-            te***REMOVED***tAlign = ret.te***REMOVED***tAlign;
-            ***REMOVED*** = ret.***REMOVED***;
+            const ret = this._getYAxisLabelAlignment(tl);
+            textAlign = ret.textAlign;
+            x = ret.x;
         } else if (position === 'right') {
-            const ret = this._getYA***REMOVED***isLabelAlignment(tl);
-            te***REMOVED***tAlign = ret.te***REMOVED***tAlign;
-            ***REMOVED*** = ret.***REMOVED***;
-        } else if (a***REMOVED***is === '***REMOVED***') {
+            const ret = this._getYAxisLabelAlignment(tl);
+            textAlign = ret.textAlign;
+            x = ret.x;
+        } else if (axis === 'x') {
             if (position === 'center') {
                 y = (chartArea.top + chartArea.bottom) / 2 + tickAndPadding;
             } else if (helpers_segment.isObject(position)) {
-                const positionA***REMOVED***isID = Object.keys(position)[0];
-                const value = position[positionA***REMOVED***isID];
-                y = this.chart.scales[positionA***REMOVED***isID].getPi***REMOVED***elForValue(value) + tickAndPadding;
+                const positionAxisID = Object.keys(position)[0];
+                const value = position[positionAxisID];
+                y = this.chart.scales[positionAxisID].getPixelForValue(value) + tickAndPadding;
             }
-            te***REMOVED***tAlign = this._getXA***REMOVED***isLabelAlignment();
-        } else if (a***REMOVED***is === 'y') {
+            textAlign = this._getXAxisLabelAlignment();
+        } else if (axis === 'y') {
             if (position === 'center') {
-                ***REMOVED*** = (chartArea.left + chartArea.right) / 2 - tickAndPadding;
+                x = (chartArea.left + chartArea.right) / 2 - tickAndPadding;
             } else if (helpers_segment.isObject(position)) {
-                const positionA***REMOVED***isID = Object.keys(position)[0];
-                const value = position[positionA***REMOVED***isID];
-                ***REMOVED*** = this.chart.scales[positionA***REMOVED***isID].getPi***REMOVED***elForValue(value);
+                const positionAxisID = Object.keys(position)[0];
+                const value = position[positionAxisID];
+                x = this.chart.scales[positionAxisID].getPixelForValue(value);
             }
-            te***REMOVED***tAlign = this._getYA***REMOVED***isLabelAlignment(tl).te***REMOVED***tAlign;
+            textAlign = this._getYAxisLabelAlignment(tl).textAlign;
         }
-        if (a***REMOVED***is === 'y') {
+        if (axis === 'y') {
             if (align === 'start') {
-                te***REMOVED***tBaseline = 'top';
+                textBaseline = 'top';
             } else if (align === 'end') {
-                te***REMOVED***tBaseline = 'bottom';
+                textBaseline = 'bottom';
             }
         }
         const labelSizes = this._getLabelSizes();
         for(i = 0, ilen = ticks.length; i < ilen; ++i){
             tick = ticks[i];
             label = tick.label;
-            const optsAtInde***REMOVED*** = optionTicks.setConte***REMOVED***t(this.getConte***REMOVED***t(i));
-            pi***REMOVED***el = this.getPi***REMOVED***elForTick(i) + optionTicks.labelOffset;
+            const optsAtIndex = optionTicks.setContext(this.getContext(i));
+            pixel = this.getPixelForTick(i) + optionTicks.labelOffset;
             font = this._resolveTickFontOptions(i);
             lineHeight = font.lineHeight;
             lineCount = helpers_segment.isArray(label) ? label.length : 1;
             const halfCount = lineCount / 2;
-            const color = optsAtInde***REMOVED***.color;
-            const strokeColor = optsAtInde***REMOVED***.te***REMOVED***tStrokeColor;
-            const strokeWidth = optsAtInde***REMOVED***.te***REMOVED***tStrokeWidth;
-            let tickTe***REMOVED***tAlign = te***REMOVED***tAlign;
+            const color = optsAtIndex.color;
+            const strokeColor = optsAtIndex.textStrokeColor;
+            const strokeWidth = optsAtIndex.textStrokeWidth;
+            let tickTextAlign = textAlign;
             if (isHorizontal) {
-                ***REMOVED*** = pi***REMOVED***el;
-                if (te***REMOVED***tAlign === 'inner') {
+                x = pixel;
+                if (textAlign === 'inner') {
                     if (i === ilen - 1) {
-                        tickTe***REMOVED***tAlign = !this.options.reverse ? 'right' : 'left';
+                        tickTextAlign = !this.options.reverse ? 'right' : 'left';
                     } else if (i === 0) {
-                        tickTe***REMOVED***tAlign = !this.options.reverse ? 'left' : 'right';
+                        tickTextAlign = !this.options.reverse ? 'left' : 'right';
                     } else {
-                        tickTe***REMOVED***tAlign = 'center';
+                        tickTextAlign = 'center';
                     }
                 }
                 if (position === 'top') {
                     if (crossAlign === 'near' || rotation !== 0) {
-                        te***REMOVED***tOffset = -lineCount * lineHeight + lineHeight / 2;
+                        textOffset = -lineCount * lineHeight + lineHeight / 2;
                     } else if (crossAlign === 'center') {
-                        te***REMOVED***tOffset = -labelSizes.highest.height / 2 - halfCount * lineHeight + lineHeight;
+                        textOffset = -labelSizes.highest.height / 2 - halfCount * lineHeight + lineHeight;
                     } else {
-                        te***REMOVED***tOffset = -labelSizes.highest.height + lineHeight / 2;
+                        textOffset = -labelSizes.highest.height + lineHeight / 2;
                     }
                 } else {
                     if (crossAlign === 'near' || rotation !== 0) {
-                        te***REMOVED***tOffset = lineHeight / 2;
+                        textOffset = lineHeight / 2;
                     } else if (crossAlign === 'center') {
-                        te***REMOVED***tOffset = labelSizes.highest.height / 2 - halfCount * lineHeight;
+                        textOffset = labelSizes.highest.height / 2 - halfCount * lineHeight;
                     } else {
-                        te***REMOVED***tOffset = labelSizes.highest.height - lineCount * lineHeight;
+                        textOffset = labelSizes.highest.height - lineCount * lineHeight;
                     }
                 }
                 if (mirror) {
-                    te***REMOVED***tOffset *= -1;
+                    textOffset *= -1;
                 }
-                if (rotation !== 0 && !optsAtInde***REMOVED***.showLabelBackdrop) {
-                    ***REMOVED*** += lineHeight / 2 * Math.sin(rotation);
+                if (rotation !== 0 && !optsAtIndex.showLabelBackdrop) {
+                    x += lineHeight / 2 * Math.sin(rotation);
                 }
             } else {
-                y = pi***REMOVED***el;
-                te***REMOVED***tOffset = (1 - lineCount) * lineHeight / 2;
+                y = pixel;
+                textOffset = (1 - lineCount) * lineHeight / 2;
             }
             let backdrop;
-            if (optsAtInde***REMOVED***.showLabelBackdrop) {
-                const labelPadding = helpers_segment.toPadding(optsAtInde***REMOVED***.backdropPadding);
+            if (optsAtIndex.showLabelBackdrop) {
+                const labelPadding = helpers_segment.toPadding(optsAtIndex.backdropPadding);
                 const height = labelSizes.heights[i];
                 const width = labelSizes.widths[i];
-                let top = te***REMOVED***tOffset - labelPadding.top;
+                let top = textOffset - labelPadding.top;
                 let left = 0 - labelPadding.left;
-                switch(te***REMOVED***tBaseline){
+                switch(textBaseline){
                     case 'middle':
                         top -= height / 2;
                         break;
@@ -4517,7 +4517,7 @@ class Scale e***REMOVED***tends Element {
                         top -= height;
                         break;
                 }
-                switch(te***REMOVED***tAlign){
+                switch(textAlign){
                     case 'center':
                         left -= width / 2;
                         break;
@@ -4537,22 +4537,22 @@ class Scale e***REMOVED***tends Element {
                     top,
                     width: width + labelPadding.width,
                     height: height + labelPadding.height,
-                    color: optsAtInde***REMOVED***.backdropColor
+                    color: optsAtIndex.backdropColor
                 };
             }
             items.push({
                 label,
                 font,
-                te***REMOVED***tOffset,
+                textOffset,
                 options: {
                     rotation,
                     color,
                     strokeColor,
                     strokeWidth,
-                    te***REMOVED***tAlign: tickTe***REMOVED***tAlign,
-                    te***REMOVED***tBaseline,
+                    textAlign: tickTextAlign,
+                    textBaseline,
                     translation: [
-                        ***REMOVED***,
+                        x,
                         y
                     ],
                     backdrop
@@ -4561,7 +4561,7 @@ class Scale e***REMOVED***tends Element {
         }
         return items;
     }
-    _getXA***REMOVED***isLabelAlignment() {
+    _getXAxisLabelAlignment() {
         const { position , ticks  } = this.options;
         const rotation = -helpers_segment.toRadians(this.labelRotation);
         if (rotation) {
@@ -4577,67 +4577,67 @@ class Scale e***REMOVED***tends Element {
         }
         return align;
     }
-    _getYA***REMOVED***isLabelAlignment(tl) {
+    _getYAxisLabelAlignment(tl) {
         const { position , ticks: { crossAlign , mirror , padding  }  } = this.options;
         const labelSizes = this._getLabelSizes();
         const tickAndPadding = tl + padding;
         const widest = labelSizes.widest.width;
-        let te***REMOVED***tAlign;
-        let ***REMOVED***;
+        let textAlign;
+        let x;
         if (position === 'left') {
             if (mirror) {
-                ***REMOVED*** = this.right + padding;
+                x = this.right + padding;
                 if (crossAlign === 'near') {
-                    te***REMOVED***tAlign = 'left';
+                    textAlign = 'left';
                 } else if (crossAlign === 'center') {
-                    te***REMOVED***tAlign = 'center';
-                    ***REMOVED*** += widest / 2;
+                    textAlign = 'center';
+                    x += widest / 2;
                 } else {
-                    te***REMOVED***tAlign = 'right';
-                    ***REMOVED*** += widest;
+                    textAlign = 'right';
+                    x += widest;
                 }
             } else {
-                ***REMOVED*** = this.right - tickAndPadding;
+                x = this.right - tickAndPadding;
                 if (crossAlign === 'near') {
-                    te***REMOVED***tAlign = 'right';
+                    textAlign = 'right';
                 } else if (crossAlign === 'center') {
-                    te***REMOVED***tAlign = 'center';
-                    ***REMOVED*** -= widest / 2;
+                    textAlign = 'center';
+                    x -= widest / 2;
                 } else {
-                    te***REMOVED***tAlign = 'left';
-                    ***REMOVED*** = this.left;
+                    textAlign = 'left';
+                    x = this.left;
                 }
             }
         } else if (position === 'right') {
             if (mirror) {
-                ***REMOVED*** = this.left + padding;
+                x = this.left + padding;
                 if (crossAlign === 'near') {
-                    te***REMOVED***tAlign = 'right';
+                    textAlign = 'right';
                 } else if (crossAlign === 'center') {
-                    te***REMOVED***tAlign = 'center';
-                    ***REMOVED*** -= widest / 2;
+                    textAlign = 'center';
+                    x -= widest / 2;
                 } else {
-                    te***REMOVED***tAlign = 'left';
-                    ***REMOVED*** -= widest;
+                    textAlign = 'left';
+                    x -= widest;
                 }
             } else {
-                ***REMOVED*** = this.left + tickAndPadding;
+                x = this.left + tickAndPadding;
                 if (crossAlign === 'near') {
-                    te***REMOVED***tAlign = 'left';
+                    textAlign = 'left';
                 } else if (crossAlign === 'center') {
-                    te***REMOVED***tAlign = 'center';
-                    ***REMOVED*** += widest / 2;
+                    textAlign = 'center';
+                    x += widest / 2;
                 } else {
-                    te***REMOVED***tAlign = 'right';
-                    ***REMOVED*** = this.right;
+                    textAlign = 'right';
+                    x = this.right;
                 }
             }
         } else {
-            te***REMOVED***tAlign = 'right';
+            textAlign = 'right';
         }
         return {
-            te***REMOVED***tAlign,
-            ***REMOVED***
+            textAlign,
+            x
         };
     }
  _computeLabelArea() {
@@ -4664,12 +4664,12 @@ class Scale e***REMOVED***tends Element {
         }
     }
  drawBackground() {
-        const { ct***REMOVED*** , options: { backgroundColor  } , left , top , width , height  } = this;
+        const { ctx , options: { backgroundColor  } , left , top , width , height  } = this;
         if (backgroundColor) {
-            ct***REMOVED***.save();
-            ct***REMOVED***.fillStyle = backgroundColor;
-            ct***REMOVED***.fillRect(left, top, width, height);
-            ct***REMOVED***.restore();
+            ctx.save();
+            ctx.fillStyle = backgroundColor;
+            ctx.fillRect(left, top, width, height);
+            ctx.restore();
         }
     }
     getLineWidthForValue(value) {
@@ -4678,51 +4678,51 @@ class Scale e***REMOVED***tends Element {
             return 0;
         }
         const ticks = this.ticks;
-        const inde***REMOVED*** = ticks.findInde***REMOVED***((t)=>t.value === value);
-        if (inde***REMOVED*** >= 0) {
-            const opts = grid.setConte***REMOVED***t(this.getConte***REMOVED***t(inde***REMOVED***));
+        const index = ticks.findIndex((t)=>t.value === value);
+        if (index >= 0) {
+            const opts = grid.setContext(this.getContext(index));
             return opts.lineWidth;
         }
         return 0;
     }
  drawGrid(chartArea) {
         const grid = this.options.grid;
-        const ct***REMOVED*** = this.ct***REMOVED***;
+        const ctx = this.ctx;
         const items = this._gridLineItems || (this._gridLineItems = this._computeGridLineItems(chartArea));
         let i, ilen;
         const drawLine = (p1, p2, style)=>{
             if (!style.width || !style.color) {
                 return;
             }
-            ct***REMOVED***.save();
-            ct***REMOVED***.lineWidth = style.width;
-            ct***REMOVED***.strokeStyle = style.color;
-            ct***REMOVED***.setLineDash(style.borderDash || []);
-            ct***REMOVED***.lineDashOffset = style.borderDashOffset;
-            ct***REMOVED***.beginPath();
-            ct***REMOVED***.moveTo(p1.***REMOVED***, p1.y);
-            ct***REMOVED***.lineTo(p2.***REMOVED***, p2.y);
-            ct***REMOVED***.stroke();
-            ct***REMOVED***.restore();
+            ctx.save();
+            ctx.lineWidth = style.width;
+            ctx.strokeStyle = style.color;
+            ctx.setLineDash(style.borderDash || []);
+            ctx.lineDashOffset = style.borderDashOffset;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+            ctx.restore();
         };
         if (grid.display) {
             for(i = 0, ilen = items.length; i < ilen; ++i){
                 const item = items[i];
                 if (grid.drawOnChartArea) {
                     drawLine({
-                        ***REMOVED***: item.***REMOVED***1,
+                        x: item.x1,
                         y: item.y1
                     }, {
-                        ***REMOVED***: item.***REMOVED***2,
+                        x: item.x2,
                         y: item.y2
                     }, item);
                 }
                 if (grid.drawTicks) {
                     drawLine({
-                        ***REMOVED***: item.t***REMOVED***1,
+                        x: item.tx1,
                         y: item.ty1
                     }, {
-                        ***REMOVED***: item.t***REMOVED***2,
+                        x: item.tx2,
                         y: item.ty2
                     }, {
                         color: item.tickColor,
@@ -4735,57 +4735,57 @@ class Scale e***REMOVED***tends Element {
         }
     }
  drawBorder() {
-        const { chart , ct***REMOVED*** , options: { border , grid  }  } = this;
-        const borderOpts = border.setConte***REMOVED***t(this.getConte***REMOVED***t());
-        const a***REMOVED***isWidth = border.display ? borderOpts.width : 0;
-        if (!a***REMOVED***isWidth) {
+        const { chart , ctx , options: { border , grid  }  } = this;
+        const borderOpts = border.setContext(this.getContext());
+        const axisWidth = border.display ? borderOpts.width : 0;
+        if (!axisWidth) {
             return;
         }
-        const lastLineWidth = grid.setConte***REMOVED***t(this.getConte***REMOVED***t(0)).lineWidth;
+        const lastLineWidth = grid.setContext(this.getContext(0)).lineWidth;
         const borderValue = this._borderValue;
-        let ***REMOVED***1, ***REMOVED***2, y1, y2;
+        let x1, x2, y1, y2;
         if (this.isHorizontal()) {
-            ***REMOVED***1 = helpers_segment._alignPi***REMOVED***el(chart, this.left, a***REMOVED***isWidth) - a***REMOVED***isWidth / 2;
-            ***REMOVED***2 = helpers_segment._alignPi***REMOVED***el(chart, this.right, lastLineWidth) + lastLineWidth / 2;
+            x1 = helpers_segment._alignPixel(chart, this.left, axisWidth) - axisWidth / 2;
+            x2 = helpers_segment._alignPixel(chart, this.right, lastLineWidth) + lastLineWidth / 2;
             y1 = y2 = borderValue;
         } else {
-            y1 = helpers_segment._alignPi***REMOVED***el(chart, this.top, a***REMOVED***isWidth) - a***REMOVED***isWidth / 2;
-            y2 = helpers_segment._alignPi***REMOVED***el(chart, this.bottom, lastLineWidth) + lastLineWidth / 2;
-            ***REMOVED***1 = ***REMOVED***2 = borderValue;
+            y1 = helpers_segment._alignPixel(chart, this.top, axisWidth) - axisWidth / 2;
+            y2 = helpers_segment._alignPixel(chart, this.bottom, lastLineWidth) + lastLineWidth / 2;
+            x1 = x2 = borderValue;
         }
-        ct***REMOVED***.save();
-        ct***REMOVED***.lineWidth = borderOpts.width;
-        ct***REMOVED***.strokeStyle = borderOpts.color;
-        ct***REMOVED***.beginPath();
-        ct***REMOVED***.moveTo(***REMOVED***1, y1);
-        ct***REMOVED***.lineTo(***REMOVED***2, y2);
-        ct***REMOVED***.stroke();
-        ct***REMOVED***.restore();
+        ctx.save();
+        ctx.lineWidth = borderOpts.width;
+        ctx.strokeStyle = borderOpts.color;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+        ctx.restore();
     }
  drawLabels(chartArea) {
         const optionTicks = this.options.ticks;
         if (!optionTicks.display) {
             return;
         }
-        const ct***REMOVED*** = this.ct***REMOVED***;
+        const ctx = this.ctx;
         const area = this._computeLabelArea();
         if (area) {
-            helpers_segment.clipArea(ct***REMOVED***, area);
+            helpers_segment.clipArea(ctx, area);
         }
         const items = this.getLabelItems(chartArea);
         for (const item of items){
-            const renderTe***REMOVED***tOptions = item.options;
+            const renderTextOptions = item.options;
             const tickFont = item.font;
             const label = item.label;
-            const y = item.te***REMOVED***tOffset;
-            helpers_segment.renderTe***REMOVED***t(ct***REMOVED***, label, 0, y, tickFont, renderTe***REMOVED***tOptions);
+            const y = item.textOffset;
+            helpers_segment.renderText(ctx, label, 0, y, tickFont, renderTextOptions);
         }
         if (area) {
-            helpers_segment.unclipArea(ct***REMOVED***);
+            helpers_segment.unclipArea(ctx);
         }
     }
  drawTitle() {
-        const { ct***REMOVED*** , options: { position , title , reverse  }  } = this;
+        const { ctx , options: { position , title , reverse  }  } = this;
         if (!title.display) {
             return;
         }
@@ -4795,19 +4795,19 @@ class Scale e***REMOVED***tends Element {
         let offset = font.lineHeight / 2;
         if (position === 'bottom' || position === 'center' || helpers_segment.isObject(position)) {
             offset += padding.bottom;
-            if (helpers_segment.isArray(title.te***REMOVED***t)) {
-                offset += font.lineHeight * (title.te***REMOVED***t.length - 1);
+            if (helpers_segment.isArray(title.text)) {
+                offset += font.lineHeight * (title.text.length - 1);
             }
         } else {
             offset += padding.top;
         }
-        const { titleX , titleY , ma***REMOVED***Width , rotation  } = titleArgs(this, offset, position, align);
-        helpers_segment.renderTe***REMOVED***t(ct***REMOVED***, title.te***REMOVED***t, 0, 0, font, {
+        const { titleX , titleY , maxWidth , rotation  } = titleArgs(this, offset, position, align);
+        helpers_segment.renderText(ctx, title.text, 0, 0, font, {
             color: title.color,
-            ma***REMOVED***Width,
+            maxWidth,
             rotation,
-            te***REMOVED***tAlign: titleAlign(align, position, reverse),
-            te***REMOVED***tBaseline: 'middle',
+            textAlign: titleAlign(align, position, reverse),
+            textBaseline: 'middle',
             translation: [
                 titleX,
                 titleY
@@ -4864,22 +4864,22 @@ class Scale e***REMOVED***tends Element {
     }
  getMatchingVisibleMetas(type) {
         const metas = this.chart.getSortedVisibleDatasetMetas();
-        const a***REMOVED***isID = this.a***REMOVED***is + 'A***REMOVED***isID';
+        const axisID = this.axis + 'AxisID';
         const result = [];
         let i, ilen;
         for(i = 0, ilen = metas.length; i < ilen; ++i){
             const meta = metas[i];
-            if (meta[a***REMOVED***isID] === this.id && (!type || meta.type === type)) {
+            if (meta[axisID] === this.id && (!type || meta.type === type)) {
                 result.push(meta);
             }
         }
         return result;
     }
- _resolveTickFontOptions(inde***REMOVED***) {
-        const opts = this.options.ticks.setConte***REMOVED***t(this.getConte***REMOVED***t(inde***REMOVED***));
+ _resolveTickFontOptions(index) {
+        const opts = this.options.ticks.setContext(this.getContext(index));
         return helpers_segment.toFont(opts.font);
     }
- _ma***REMOVED***Digits() {
+ _maxDigits() {
         const fontSize = this._resolveTickFontOptions(0).lineHeight;
         return (this.isHorizontal() ? this.width : this.height) / fontSize;
     }
@@ -5026,16 +5026,16 @@ class Registry {
         ].forEach((arg)=>{
             const reg = typedRegistry || this._getRegistryForType(arg);
             if (typedRegistry || reg.isForType(arg) || reg === this.plugins && arg.id) {
-                this._e***REMOVED***ec(method, reg, arg);
+                this._exec(method, reg, arg);
             } else {
                 helpers_segment.each(arg, (item)=>{
                     const itemReg = typedRegistry || this._getRegistryForType(item);
-                    this._e***REMOVED***ec(method, itemReg, item);
+                    this._exec(method, itemReg, item);
                 });
             }
         });
     }
- _e***REMOVED***ec(method, registry, component) {
+ _exec(method, registry, component) {
         const camelMethod = helpers_segment._capitalize(method);
         helpers_segment.callback(component['before' + camelMethod], [], component);
         registry[method](component);
@@ -5116,7 +5116,7 @@ class PluginService {
  _notifyStateChanges(chart) {
         const previousDescriptors = this._oldCache || [];
         const descriptors = this._cache;
-        const diff = (a, b)=>a.filter((***REMOVED***)=>!b.some((y)=>***REMOVED***.plugin.id === y.plugin.id));
+        const diff = (a, b)=>a.filter((x)=>!b.some((y)=>x.plugin.id === y.plugin.id));
         this._notify(diff(previousDescriptors, descriptors), chart, 'stop');
         this._notify(diff(descriptors, previousDescriptors), chart, 'start');
     }
@@ -5131,7 +5131,7 @@ class PluginService {
     const local = config.plugins || [];
     for(let i = 0; i < local.length; i++){
         const plugin = local[i];
-        if (plugins.inde***REMOVED***Of(plugin) === -1) {
+        if (plugins.indexOf(plugin) === -1) {
             plugins.push(plugin);
             localIds[plugin.id] = true;
         }
@@ -5152,7 +5152,7 @@ function getOpts(options, all) {
 }
 function createDescriptors(chart, { plugins , localIds  }, options, all) {
     const result = [];
-    const conte***REMOVED***t = chart.getConte***REMOVED***t();
+    const context = chart.getContext();
     for (const plugin of plugins){
         const id = plugin.id;
         const opts = getOpts(options[id], all);
@@ -5164,80 +5164,80 @@ function createDescriptors(chart, { plugins , localIds  }, options, all) {
             options: pluginOpts(chart.config, {
                 plugin,
                 local: localIds[id]
-            }, opts, conte***REMOVED***t)
+            }, opts, context)
         });
     }
     return result;
 }
-function pluginOpts(config, { plugin , local  }, opts, conte***REMOVED***t) {
+function pluginOpts(config, { plugin , local  }, opts, context) {
     const keys = config.pluginScopeKeys(plugin);
     const scopes = config.getOptionScopes(opts, keys);
     if (local && plugin.defaults) {
         scopes.push(plugin.defaults);
     }
-    return config.createResolver(scopes, conte***REMOVED***t, [
+    return config.createResolver(scopes, context, [
         ''
     ], {
         scriptable: false,
-        inde***REMOVED***able: false,
+        indexable: false,
         allKeys: true
     });
 }
 
-function getInde***REMOVED***A***REMOVED***is(type, options) {
+function getIndexAxis(type, options) {
     const datasetDefaults = helpers_segment.defaults.datasets[type] || {};
     const datasetOptions = (options.datasets || {})[type] || {};
-    return datasetOptions.inde***REMOVED***A***REMOVED***is || options.inde***REMOVED***A***REMOVED***is || datasetDefaults.inde***REMOVED***A***REMOVED***is || '***REMOVED***';
+    return datasetOptions.indexAxis || options.indexAxis || datasetDefaults.indexAxis || 'x';
 }
-function getA***REMOVED***isFromDefaultScaleID(id, inde***REMOVED***A***REMOVED***is) {
-    let a***REMOVED***is = id;
-    if (id === '_inde***REMOVED***_') {
-        a***REMOVED***is = inde***REMOVED***A***REMOVED***is;
+function getAxisFromDefaultScaleID(id, indexAxis) {
+    let axis = id;
+    if (id === '_index_') {
+        axis = indexAxis;
     } else if (id === '_value_') {
-        a***REMOVED***is = inde***REMOVED***A***REMOVED***is === '***REMOVED***' ? 'y' : '***REMOVED***';
+        axis = indexAxis === 'x' ? 'y' : 'x';
     }
-    return a***REMOVED***is;
+    return axis;
 }
-function getDefaultScaleIDFromA***REMOVED***is(a***REMOVED***is, inde***REMOVED***A***REMOVED***is) {
-    return a***REMOVED***is === inde***REMOVED***A***REMOVED***is ? '_inde***REMOVED***_' : '_value_';
+function getDefaultScaleIDFromAxis(axis, indexAxis) {
+    return axis === indexAxis ? '_index_' : '_value_';
 }
-function idMatchesA***REMOVED***is(id) {
-    if (id === '***REMOVED***' || id === 'y' || id === 'r') {
+function idMatchesAxis(id) {
+    if (id === 'x' || id === 'y' || id === 'r') {
         return id;
     }
 }
-function a***REMOVED***isFromPosition(position) {
+function axisFromPosition(position) {
     if (position === 'top' || position === 'bottom') {
-        return '***REMOVED***';
+        return 'x';
     }
     if (position === 'left' || position === 'right') {
         return 'y';
     }
 }
-function determineA***REMOVED***is(id, ...scaleOptions) {
-    if (idMatchesA***REMOVED***is(id)) {
+function determineAxis(id, ...scaleOptions) {
+    if (idMatchesAxis(id)) {
         return id;
     }
     for (const opts of scaleOptions){
-        const a***REMOVED***is = opts.a***REMOVED***is || a***REMOVED***isFromPosition(opts.position) || id.length > 1 && idMatchesA***REMOVED***is(id[0].toLowerCase());
-        if (a***REMOVED***is) {
-            return a***REMOVED***is;
+        const axis = opts.axis || axisFromPosition(opts.position) || id.length > 1 && idMatchesAxis(id[0].toLowerCase());
+        if (axis) {
+            return axis;
         }
     }
-    throw new Error(`Cannot determine type of '${id}' a***REMOVED***is. Please provide 'a***REMOVED***is' or 'position' option.`);
+    throw new Error(`Cannot determine type of '${id}' axis. Please provide 'axis' or 'position' option.`);
 }
-function getA***REMOVED***isFromDataset(id, a***REMOVED***is, dataset) {
-    if (dataset[a***REMOVED***is + 'A***REMOVED***isID'] === id) {
+function getAxisFromDataset(id, axis, dataset) {
+    if (dataset[axis + 'AxisID'] === id) {
         return {
-            a***REMOVED***is
+            axis
         };
     }
 }
-function retrieveA***REMOVED***isFromDatasets(id, config) {
+function retrieveAxisFromDatasets(id, config) {
     if (config.data && config.data.datasets) {
-        const boundDs = config.data.datasets.filter((d)=>d.***REMOVED***A***REMOVED***isID === id || d.yA***REMOVED***isID === id);
+        const boundDs = config.data.datasets.filter((d)=>d.xAxisID === id || d.yAxisID === id);
         if (boundDs.length) {
-            return getA***REMOVED***isFromDataset(id, '***REMOVED***', boundDs[0]) || getA***REMOVED***isFromDataset(id, 'y', boundDs[0]);
+            return getAxisFromDataset(id, 'x', boundDs[0]) || getAxisFromDataset(id, 'y', boundDs[0]);
         }
     }
     return {};
@@ -5247,40 +5247,40 @@ function mergeScaleConfig(config, options) {
         scales: {}
     };
     const configScales = options.scales || {};
-    const chartInde***REMOVED***A***REMOVED***is = getInde***REMOVED***A***REMOVED***is(config.type, options);
+    const chartIndexAxis = getIndexAxis(config.type, options);
     const scales = Object.create(null);
     Object.keys(configScales).forEach((id)=>{
         const scaleConf = configScales[id];
         if (!helpers_segment.isObject(scaleConf)) {
             return console.error(`Invalid scale configuration for scale: ${id}`);
         }
-        if (scaleConf._pro***REMOVED***y) {
+        if (scaleConf._proxy) {
             return console.warn(`Ignoring resolver passed as options for scale: ${id}`);
         }
-        const a***REMOVED***is = determineA***REMOVED***is(id, scaleConf, retrieveA***REMOVED***isFromDatasets(id, config), helpers_segment.defaults.scales[scaleConf.type]);
-        const defaultId = getDefaultScaleIDFromA***REMOVED***is(a***REMOVED***is, chartInde***REMOVED***A***REMOVED***is);
+        const axis = determineAxis(id, scaleConf, retrieveAxisFromDatasets(id, config), helpers_segment.defaults.scales[scaleConf.type]);
+        const defaultId = getDefaultScaleIDFromAxis(axis, chartIndexAxis);
         const defaultScaleOptions = chartDefaults.scales || {};
         scales[id] = helpers_segment.mergeIf(Object.create(null), [
             {
-                a***REMOVED***is
+                axis
             },
             scaleConf,
-            defaultScaleOptions[a***REMOVED***is],
+            defaultScaleOptions[axis],
             defaultScaleOptions[defaultId]
         ]);
     });
     config.data.datasets.forEach((dataset)=>{
         const type = dataset.type || config.type;
-        const inde***REMOVED***A***REMOVED***is = dataset.inde***REMOVED***A***REMOVED***is || getInde***REMOVED***A***REMOVED***is(type, options);
+        const indexAxis = dataset.indexAxis || getIndexAxis(type, options);
         const datasetDefaults = helpers_segment.overrides[type] || {};
         const defaultScaleOptions = datasetDefaults.scales || {};
         Object.keys(defaultScaleOptions).forEach((defaultID)=>{
-            const a***REMOVED***is = getA***REMOVED***isFromDefaultScaleID(defaultID, inde***REMOVED***A***REMOVED***is);
-            const id = dataset[a***REMOVED***is + 'A***REMOVED***isID'] || a***REMOVED***is;
+            const axis = getAxisFromDefaultScaleID(defaultID, indexAxis);
+            const id = dataset[axis + 'AxisID'] || axis;
             scales[id] = scales[id] || Object.create(null);
             helpers_segment.mergeIf(scales[id], [
                 {
-                    a***REMOVED***is
+                    axis
                 },
                 configScales[id],
                 defaultScaleOptions[defaultID]
@@ -5458,58 +5458,58 @@ class Config {
             helpers_segment.descriptors
         ];
     }
- resolveNamedOptions(scopes, names, conte***REMOVED***t, prefi***REMOVED***es = [
+ resolveNamedOptions(scopes, names, context, prefixes = [
         ''
     ]) {
         const result = {
             $shared: true
         };
-        const { resolver , subPrefi***REMOVED***es  } = getResolver(this._resolverCache, scopes, prefi***REMOVED***es);
+        const { resolver , subPrefixes  } = getResolver(this._resolverCache, scopes, prefixes);
         let options = resolver;
-        if (needConte***REMOVED***t(resolver, names)) {
+        if (needContext(resolver, names)) {
             result.$shared = false;
-            conte***REMOVED***t = helpers_segment.isFunction(conte***REMOVED***t) ? conte***REMOVED***t() : conte***REMOVED***t;
-            const subResolver = this.createResolver(scopes, conte***REMOVED***t, subPrefi***REMOVED***es);
-            options = helpers_segment._attachConte***REMOVED***t(resolver, conte***REMOVED***t, subResolver);
+            context = helpers_segment.isFunction(context) ? context() : context;
+            const subResolver = this.createResolver(scopes, context, subPrefixes);
+            options = helpers_segment._attachContext(resolver, context, subResolver);
         }
         for (const prop of names){
             result[prop] = options[prop];
         }
         return result;
     }
- createResolver(scopes, conte***REMOVED***t, prefi***REMOVED***es = [
+ createResolver(scopes, context, prefixes = [
         ''
     ], descriptorDefaults) {
-        const { resolver  } = getResolver(this._resolverCache, scopes, prefi***REMOVED***es);
-        return helpers_segment.isObject(conte***REMOVED***t) ? helpers_segment._attachConte***REMOVED***t(resolver, conte***REMOVED***t, undefined, descriptorDefaults) : resolver;
+        const { resolver  } = getResolver(this._resolverCache, scopes, prefixes);
+        return helpers_segment.isObject(context) ? helpers_segment._attachContext(resolver, context, undefined, descriptorDefaults) : resolver;
     }
 }
-function getResolver(resolverCache, scopes, prefi***REMOVED***es) {
+function getResolver(resolverCache, scopes, prefixes) {
     let cache = resolverCache.get(scopes);
     if (!cache) {
         cache = new Map();
         resolverCache.set(scopes, cache);
     }
-    const cacheKey = prefi***REMOVED***es.join();
+    const cacheKey = prefixes.join();
     let cached = cache.get(cacheKey);
     if (!cached) {
-        const resolver = helpers_segment._createResolver(scopes, prefi***REMOVED***es);
+        const resolver = helpers_segment._createResolver(scopes, prefixes);
         cached = {
             resolver,
-            subPrefi***REMOVED***es: prefi***REMOVED***es.filter((p)=>!p.toLowerCase().includes('hover'))
+            subPrefixes: prefixes.filter((p)=>!p.toLowerCase().includes('hover'))
         };
         cache.set(cacheKey, cached);
     }
     return cached;
 }
 const hasFunction = (value)=>helpers_segment.isObject(value) && Object.getOwnPropertyNames(value).some((key)=>helpers_segment.isFunction(value[key]));
-function needConte***REMOVED***t(pro***REMOVED***y, names) {
-    const { isScriptable , isInde***REMOVED***able  } = helpers_segment._descriptors(pro***REMOVED***y);
+function needContext(proxy, names) {
+    const { isScriptable , isIndexable  } = helpers_segment._descriptors(proxy);
     for (const prop of names){
         const scriptable = isScriptable(prop);
-        const inde***REMOVED***able = isInde***REMOVED***able(prop);
-        const value = (inde***REMOVED***able || scriptable) && pro***REMOVED***y[prop];
-        if (scriptable && (helpers_segment.isFunction(value) || hasFunction(value)) || inde***REMOVED***able && helpers_segment.isArray(value)) {
+        const indexable = isIndexable(prop);
+        const value = (indexable || scriptable) && proxy[prop];
+        if (scriptable && (helpers_segment.isFunction(value) || hasFunction(value)) || indexable && helpers_segment.isArray(value)) {
             return true;
         }
     }
@@ -5525,27 +5525,27 @@ const KNOWN_POSITIONS = [
     'right',
     'chartArea'
 ];
-function positionIsHorizontal(position, a***REMOVED***is) {
-    return position === 'top' || position === 'bottom' || KNOWN_POSITIONS.inde***REMOVED***Of(position) === -1 && a***REMOVED***is === '***REMOVED***';
+function positionIsHorizontal(position, axis) {
+    return position === 'top' || position === 'bottom' || KNOWN_POSITIONS.indexOf(position) === -1 && axis === 'x';
 }
 function compare2Level(l1, l2) {
     return function(a, b) {
         return a[l1] === b[l1] ? a[l2] - b[l2] : a[l1] - b[l1];
     };
 }
-function onAnimationsComplete(conte***REMOVED***t) {
-    const chart = conte***REMOVED***t.chart;
+function onAnimationsComplete(context) {
+    const chart = context.chart;
     const animationOptions = chart.options.animation;
     chart.notifyPlugins('afterRender');
     helpers_segment.callback(animationOptions && animationOptions.onComplete, [
-        conte***REMOVED***t
+        context
     ], chart);
 }
-function onAnimationProgress(conte***REMOVED***t) {
-    const chart = conte***REMOVED***t.chart;
+function onAnimationProgress(context) {
+    const chart = context.chart;
     const animationOptions = chart.options.animation;
     helpers_segment.callback(animationOptions && animationOptions.onProgress, [
-        conte***REMOVED***t
+        context
     ], chart);
 }
  function getCanvas(item) {
@@ -5590,11 +5590,11 @@ function getSizeForArea(scale, chartArea, field) {
     return scale.options.clip ? scale[field] : chartArea[field];
 }
 function getDatasetArea(meta, chartArea) {
-    const { ***REMOVED***Scale , yScale  } = meta;
-    if (***REMOVED***Scale && yScale) {
+    const { xScale , yScale  } = meta;
+    if (xScale && yScale) {
         return {
-            left: getSizeForArea(***REMOVED***Scale, chartArea, 'left'),
-            right: getSizeForArea(***REMOVED***Scale, chartArea, 'right'),
+            left: getSizeForArea(xScale, chartArea, 'left'),
+            right: getSizeForArea(xScale, chartArea, 'right'),
             top: getSizeForArea(yScale, chartArea, 'top'),
             bottom: getSizeForArea(yScale, chartArea, 'bottom')
         };
@@ -5619,19 +5619,19 @@ class Chart {
     constructor(item, userConfig){
         const config = this.config = new Config(userConfig);
         const initialCanvas = getCanvas(item);
-        const e***REMOVED***istingChart = getChart(initialCanvas);
-        if (e***REMOVED***istingChart) {
-            throw new Error('Canvas is already in use. Chart with ID \'' + e***REMOVED***istingChart.id + '\'' + ' must be destroyed before the canvas with ID \'' + e***REMOVED***istingChart.canvas.id + '\' can be reused.');
+        const existingChart = getChart(initialCanvas);
+        if (existingChart) {
+            throw new Error('Canvas is already in use. Chart with ID \'' + existingChart.id + '\'' + ' must be destroyed before the canvas with ID \'' + existingChart.canvas.id + '\' can be reused.');
         }
-        const options = config.createResolver(config.chartOptionScopes(), this.getConte***REMOVED***t());
+        const options = config.createResolver(config.chartOptionScopes(), this.getContext());
         this.platform = new (config.platform || _detectPlatform(initialCanvas))();
         this.platform.updateConfig(config);
-        const conte***REMOVED***t = this.platform.acquireConte***REMOVED***t(initialCanvas, options.aspectRatio);
-        const canvas = conte***REMOVED***t && conte***REMOVED***t.canvas;
+        const context = this.platform.acquireContext(initialCanvas, options.aspectRatio);
+        const canvas = context && context.canvas;
         const height = canvas && canvas.height;
         const width = canvas && canvas.width;
         this.id = helpers_segment.uid();
-        this.ct***REMOVED*** = conte***REMOVED***t;
+        this.ctx = context;
         this.canvas = canvas;
         this.width = width;
         this.height = height;
@@ -5640,8 +5640,8 @@ class Chart {
         this._layers = [];
         this._metasets = [];
         this._stacks = undefined;
-        this.bo***REMOVED***es = [];
-        this.currentDevicePi***REMOVED***elRatio = undefined;
+        this.boxes = [];
+        this.currentDevicePixelRatio = undefined;
         this.chartArea = undefined;
         this._active = [];
         this._lastEvent = undefined;
@@ -5650,16 +5650,16 @@ class Chart {
         this._sortedMetasets = [];
         this.scales = {};
         this._plugins = new PluginService();
-        this.$pro***REMOVED***ies = {};
+        this.$proxies = {};
         this._hiddenIndices = {};
         this.attached = false;
         this._animationsDisabled = undefined;
-        this.$conte***REMOVED***t = undefined;
+        this.$context = undefined;
         this._doResize = helpers_segment.debounce((mode)=>this.update(mode), options.resizeDelay || 0);
         this._dataChanges = [];
         instances[this.id] = this;
-        if (!conte***REMOVED***t || !canvas) {
-            console.error("Failed to create chart: can't acquire conte***REMOVED***t from the given item");
+        if (!context || !canvas) {
+            console.error("Failed to create chart: can't acquire context from the given item");
             return;
         }
         animator.listen(this, 'complete', onAnimationsComplete);
@@ -5699,14 +5699,14 @@ class Chart {
         if (this.options.responsive) {
             this.resize();
         } else {
-            helpers_segment.retinaScale(this, this.options.devicePi***REMOVED***elRatio);
+            helpers_segment.retinaScale(this, this.options.devicePixelRatio);
         }
         this.bindEvents();
         this.notifyPlugins('afterInit');
         return this;
     }
     clear() {
-        helpers_segment.clearCanvas(this.canvas, this.ct***REMOVED***);
+        helpers_segment.clearCanvas(this.canvas, this.ctx);
         return this;
     }
     stop() {
@@ -5727,8 +5727,8 @@ class Chart {
         const options = this.options;
         const canvas = this.canvas;
         const aspectRatio = options.maintainAspectRatio && this.aspectRatio;
-        const newSize = this.platform.getMa***REMOVED***imumSize(canvas, width, height, aspectRatio);
-        const newRatio = options.devicePi***REMOVED***elRatio || this.platform.getDevicePi***REMOVED***elRatio();
+        const newSize = this.platform.getMaximumSize(canvas, width, height, aspectRatio);
+        const newRatio = options.devicePixelRatio || this.platform.getDevicePixelRatio();
         const mode = this.width ? 'resize' : 'attach';
         this.width = newSize.width;
         this.height = newSize.height;
@@ -5752,8 +5752,8 @@ class Chart {
     ensureScalesHaveIDs() {
         const options = this.options;
         const scalesOptions = options.scales || {};
-        helpers_segment.each(scalesOptions, (a***REMOVED***isOptions, a***REMOVED***isID)=>{
-            a***REMOVED***isOptions.id = a***REMOVED***isID;
+        helpers_segment.each(scalesOptions, (axisOptions, axisID)=>{
+            axisOptions.id = axisID;
         });
     }
  buildOrUpdateScales() {
@@ -5768,9 +5768,9 @@ class Chart {
         if (scaleOpts) {
             items = items.concat(Object.keys(scaleOpts).map((id)=>{
                 const scaleOptions = scaleOpts[id];
-                const a***REMOVED***is = determineA***REMOVED***is(id, scaleOptions);
-                const isRadial = a***REMOVED***is === 'r';
-                const isHorizontal = a***REMOVED***is === '***REMOVED***';
+                const axis = determineAxis(id, scaleOptions);
+                const isRadial = axis === 'r';
+                const isHorizontal = axis === 'x';
                 return {
                     options: scaleOptions,
                     dposition: isRadial ? 'chartArea' : isHorizontal ? 'bottom' : 'left',
@@ -5781,9 +5781,9 @@ class Chart {
         helpers_segment.each(items, (item)=>{
             const scaleOptions = item.options;
             const id = scaleOptions.id;
-            const a***REMOVED***is = determineA***REMOVED***is(id, scaleOptions);
+            const axis = determineAxis(id, scaleOptions);
             const scaleType = helpers_segment.valueOrDefault(scaleOptions.type, item.dtype);
-            if (scaleOptions.position === undefined || positionIsHorizontal(scaleOptions.position, a***REMOVED***is) !== positionIsHorizontal(item.dposition)) {
+            if (scaleOptions.position === undefined || positionIsHorizontal(scaleOptions.position, axis) !== positionIsHorizontal(item.dposition)) {
                 scaleOptions.position = item.dposition;
             }
             updated[id] = true;
@@ -5795,7 +5795,7 @@ class Chart {
                 scale = new scaleClass({
                     id,
                     type: scaleType,
-                    ct***REMOVED***: this.ct***REMOVED***,
+                    ctx: this.ctx,
                     chart: this
                 });
                 scales[scale.id] = scale;
@@ -5809,30 +5809,30 @@ class Chart {
         });
         helpers_segment.each(scales, (scale)=>{
             layouts.configure(this, scale, scale.options);
-            layouts.addBo***REMOVED***(this, scale);
+            layouts.addBox(this, scale);
         });
     }
  _updateMetasets() {
         const metasets = this._metasets;
         const numData = this.data.datasets.length;
         const numMeta = metasets.length;
-        metasets.sort((a, b)=>a.inde***REMOVED*** - b.inde***REMOVED***);
+        metasets.sort((a, b)=>a.index - b.index);
         if (numMeta > numData) {
             for(let i = numData; i < numMeta; ++i){
                 this._destroyDatasetMeta(i);
             }
             metasets.splice(numData, numMeta - numData);
         }
-        this._sortedMetasets = metasets.slice(0).sort(compare2Level('order', 'inde***REMOVED***'));
+        this._sortedMetasets = metasets.slice(0).sort(compare2Level('order', 'index'));
     }
  _removeUnreferencedMetasets() {
         const { _metasets: metasets , data: { datasets  }  } = this;
         if (metasets.length > datasets.length) {
             delete this._stacks;
         }
-        metasets.forEach((meta, inde***REMOVED***)=>{
-            if (datasets.filter((***REMOVED***)=>***REMOVED*** === meta._dataset).length === 0) {
-                this._destroyDatasetMeta(inde***REMOVED***);
+        metasets.forEach((meta, index)=>{
+            if (datasets.filter((x)=>x === meta._dataset).length === 0) {
+                this._destroyDatasetMeta(index);
             }
         });
     }
@@ -5850,13 +5850,13 @@ class Chart {
                 meta = this.getDatasetMeta(i);
             }
             meta.type = type;
-            meta.inde***REMOVED***A***REMOVED***is = dataset.inde***REMOVED***A***REMOVED***is || getInde***REMOVED***A***REMOVED***is(type, this.options);
+            meta.indexAxis = dataset.indexAxis || getIndexAxis(type, this.options);
             meta.order = dataset.order || 0;
-            meta.inde***REMOVED*** = i;
+            meta.index = i;
             meta.label = '' + dataset.label;
             meta.visible = this.isDatasetVisible(i);
             if (meta.controller) {
-                meta.controller.updateInde***REMOVED***(i);
+                meta.controller.updateIndex(i);
                 meta.controller.linkScales();
             } else {
                 const ControllerClass = registry.getController(type);
@@ -5873,8 +5873,8 @@ class Chart {
         return newControllers;
     }
  _resetElements() {
-        helpers_segment.each(this.data.datasets, (dataset, datasetInde***REMOVED***)=>{
-            this.getDatasetMeta(datasetInde***REMOVED***).controller.reset();
+        helpers_segment.each(this.data.datasets, (dataset, datasetIndex)=>{
+            this.getDatasetMeta(datasetIndex).controller.reset();
         }, this);
     }
  reset() {
@@ -5884,7 +5884,7 @@ class Chart {
     update(mode) {
         const config = this.config;
         config.update();
-        const options = this._options = config.createResolver(config.chartOptionScopes(), this.getConte***REMOVED***t());
+        const options = this._options = config.createResolver(config.chartOptionScopes(), this.getContext());
         const animsDisabled = this._animationsDisabled = !options.animation;
         this._updateScales();
         this._checkEventBindings();
@@ -5901,9 +5901,9 @@ class Chart {
         let minPadding = 0;
         for(let i = 0, ilen = this.data.datasets.length; i < ilen; i++){
             const { controller  } = this.getDatasetMeta(i);
-            const reset = !animsDisabled && newControllers.inde***REMOVED***Of(controller) === -1;
+            const reset = !animsDisabled && newControllers.indexOf(controller) === -1;
             controller.buildOrUpdateElements(reset);
-            minPadding = Math.ma***REMOVED***(+controller.getMa***REMOVED***Overflow(), minPadding);
+            minPadding = Math.max(+controller.getMaxOverflow(), minPadding);
         }
         minPadding = this._minPadding = options.layout.autoPadding ? minPadding : 0;
         this._updateLayout(minPadding);
@@ -5916,7 +5916,7 @@ class Chart {
         this.notifyPlugins('afterUpdate', {
             mode
         });
-        this._layers.sort(compare2Level('z', '_id***REMOVED***'));
+        this._layers.sort(compare2Level('z', '_idx'));
         const { _active , _lastEvent  } = this;
         if (_lastEvent) {
             this._eventHandler(_lastEvent, true);
@@ -5927,16 +5927,16 @@ class Chart {
     }
  _updateScales() {
         helpers_segment.each(this.scales, (scale)=>{
-            layouts.removeBo***REMOVED***(this, scale);
+            layouts.removeBox(this, scale);
         });
         this.ensureScalesHaveIDs();
         this.buildOrUpdateScales();
     }
  _checkEventBindings() {
         const options = this.options;
-        const e***REMOVED***istingEvents = new Set(Object.keys(this._listeners));
+        const existingEvents = new Set(Object.keys(this._listeners));
         const newEvents = new Set(options.events);
-        if (!helpers_segment.setsEqual(e***REMOVED***istingEvents, newEvents) || !!this._responsiveListeners !== options.responsive) {
+        if (!helpers_segment.setsEqual(existingEvents, newEvents) || !!this._responsiveListeners !== options.responsive) {
             this.unbindEvents();
             this.bindEvents();
         }
@@ -5956,7 +5956,7 @@ class Chart {
         }
         this._dataChanges = [];
         const datasetCount = this.data.datasets.length;
-        const makeSet = (id***REMOVED***)=>new Set(_dataChanges.filter((c)=>c[0] === id***REMOVED***).map((c, i)=>i + ',' + c.splice(1).join(',')));
+        const makeSet = (idx)=>new Set(_dataChanges.filter((c)=>c[0] === idx).map((c, i)=>i + ',' + c.splice(1).join(',')));
         const changeSet = makeSet(0);
         for(let i = 1; i < datasetCount; i++){
             if (!helpers_segment.setsEqual(changeSet, makeSet(i))) {
@@ -5979,17 +5979,17 @@ class Chart {
         const area = this.chartArea;
         const noArea = area.width <= 0 || area.height <= 0;
         this._layers = [];
-        helpers_segment.each(this.bo***REMOVED***es, (bo***REMOVED***)=>{
-            if (noArea && bo***REMOVED***.position === 'chartArea') {
+        helpers_segment.each(this.boxes, (box)=>{
+            if (noArea && box.position === 'chartArea') {
                 return;
             }
-            if (bo***REMOVED***.configure) {
-                bo***REMOVED***.configure();
+            if (box.configure) {
+                box.configure();
             }
-            this._layers.push(...bo***REMOVED***._layers());
+            this._layers.push(...box._layers());
         }, this);
-        this._layers.forEach((item, inde***REMOVED***)=>{
-            item._id***REMOVED*** = inde***REMOVED***;
+        this._layers.forEach((item, index)=>{
+            item._idx = index;
         });
         this.notifyPlugins('afterLayout');
     }
@@ -6005,18 +6005,18 @@ class Chart {
         }
         for(let i = 0, ilen = this.data.datasets.length; i < ilen; ++i){
             this._updateDataset(i, helpers_segment.isFunction(mode) ? mode({
-                datasetInde***REMOVED***: i
+                datasetIndex: i
             }) : mode);
         }
         this.notifyPlugins('afterDatasetsUpdate', {
             mode
         });
     }
- _updateDataset(inde***REMOVED***, mode) {
-        const meta = this.getDatasetMeta(inde***REMOVED***);
+ _updateDataset(index, mode) {
+        const meta = this.getDatasetMeta(index);
         const args = {
             meta,
-            inde***REMOVED***,
+            index,
             mode,
             cancelable: true
         };
@@ -6098,20 +6098,20 @@ class Chart {
         this.notifyPlugins('afterDatasetsDraw');
     }
  _drawDataset(meta) {
-        const ct***REMOVED*** = this.ct***REMOVED***;
+        const ctx = this.ctx;
         const clip = meta._clip;
         const useClip = !clip.disabled;
         const area = getDatasetArea(meta, this.chartArea);
         const args = {
             meta,
-            inde***REMOVED***: meta.inde***REMOVED***,
+            index: meta.index,
             cancelable: true
         };
         if (this.notifyPlugins('beforeDatasetDraw', args) === false) {
             return;
         }
         if (useClip) {
-            helpers_segment.clipArea(ct***REMOVED***, {
+            helpers_segment.clipArea(ctx, {
                 left: clip.left === false ? 0 : area.left - clip.left,
                 right: clip.right === false ? this.width : area.right + clip.right,
                 top: clip.top === false ? 0 : area.top - clip.top,
@@ -6120,7 +6120,7 @@ class Chart {
         }
         meta.controller.draw();
         if (useClip) {
-            helpers_segment.unclipArea(ct***REMOVED***);
+            helpers_segment.unclipArea(ctx);
         }
         args.cancelable = false;
         this.notifyPlugins('afterDatasetDraw', args);
@@ -6135,10 +6135,10 @@ class Chart {
         }
         return [];
     }
-    getDatasetMeta(datasetInde***REMOVED***) {
-        const dataset = this.data.datasets[datasetInde***REMOVED***];
+    getDatasetMeta(datasetIndex) {
+        const dataset = this.data.datasets[datasetIndex];
         const metasets = this._metasets;
-        let meta = metasets.filter((***REMOVED***)=>***REMOVED*** && ***REMOVED***._dataset === dataset).pop();
+        let meta = metasets.filter((x)=>x && x._dataset === dataset).pop();
         if (!meta) {
             meta = {
                 type: null,
@@ -6146,10 +6146,10 @@ class Chart {
                 dataset: null,
                 controller: null,
                 hidden: null,
-                ***REMOVED***A***REMOVED***isID: null,
-                yA***REMOVED***isID: null,
+                xAxisID: null,
+                yAxisID: null,
                 order: dataset && dataset.order || 0,
-                inde***REMOVED***: datasetInde***REMOVED***,
+                index: datasetIndex,
                 _dataset: dataset,
                 _parsed: [],
                 _sorted: false
@@ -6158,8 +6158,8 @@ class Chart {
         }
         return meta;
     }
-    getConte***REMOVED***t() {
-        return this.$conte***REMOVED***t || (this.$conte***REMOVED***t = helpers_segment.createConte***REMOVED***t(null, {
+    getContext() {
+        return this.$context || (this.$context = helpers_segment.createContext(null, {
             chart: this,
             type: 'chart'
         }));
@@ -6167,51 +6167,51 @@ class Chart {
     getVisibleDatasetCount() {
         return this.getSortedVisibleDatasetMetas().length;
     }
-    isDatasetVisible(datasetInde***REMOVED***) {
-        const dataset = this.data.datasets[datasetInde***REMOVED***];
+    isDatasetVisible(datasetIndex) {
+        const dataset = this.data.datasets[datasetIndex];
         if (!dataset) {
             return false;
         }
-        const meta = this.getDatasetMeta(datasetInde***REMOVED***);
+        const meta = this.getDatasetMeta(datasetIndex);
         return typeof meta.hidden === 'boolean' ? !meta.hidden : !dataset.hidden;
     }
-    setDatasetVisibility(datasetInde***REMOVED***, visible) {
-        const meta = this.getDatasetMeta(datasetInde***REMOVED***);
+    setDatasetVisibility(datasetIndex, visible) {
+        const meta = this.getDatasetMeta(datasetIndex);
         meta.hidden = !visible;
     }
-    toggleDataVisibility(inde***REMOVED***) {
-        this._hiddenIndices[inde***REMOVED***] = !this._hiddenIndices[inde***REMOVED***];
+    toggleDataVisibility(index) {
+        this._hiddenIndices[index] = !this._hiddenIndices[index];
     }
-    getDataVisibility(inde***REMOVED***) {
-        return !this._hiddenIndices[inde***REMOVED***];
+    getDataVisibility(index) {
+        return !this._hiddenIndices[index];
     }
- _updateVisibility(datasetInde***REMOVED***, dataInde***REMOVED***, visible) {
+ _updateVisibility(datasetIndex, dataIndex, visible) {
         const mode = visible ? 'show' : 'hide';
-        const meta = this.getDatasetMeta(datasetInde***REMOVED***);
+        const meta = this.getDatasetMeta(datasetIndex);
         const anims = meta.controller._resolveAnimations(undefined, mode);
-        if (helpers_segment.defined(dataInde***REMOVED***)) {
-            meta.data[dataInde***REMOVED***].hidden = !visible;
+        if (helpers_segment.defined(dataIndex)) {
+            meta.data[dataIndex].hidden = !visible;
             this.update();
         } else {
-            this.setDatasetVisibility(datasetInde***REMOVED***, visible);
+            this.setDatasetVisibility(datasetIndex, visible);
             anims.update(meta, {
                 visible
             });
-            this.update((ct***REMOVED***)=>ct***REMOVED***.datasetInde***REMOVED*** === datasetInde***REMOVED*** ? mode : undefined);
+            this.update((ctx)=>ctx.datasetIndex === datasetIndex ? mode : undefined);
         }
     }
-    hide(datasetInde***REMOVED***, dataInde***REMOVED***) {
-        this._updateVisibility(datasetInde***REMOVED***, dataInde***REMOVED***, false);
+    hide(datasetIndex, dataIndex) {
+        this._updateVisibility(datasetIndex, dataIndex, false);
     }
-    show(datasetInde***REMOVED***, dataInde***REMOVED***) {
-        this._updateVisibility(datasetInde***REMOVED***, dataInde***REMOVED***, true);
+    show(datasetIndex, dataIndex) {
+        this._updateVisibility(datasetIndex, dataIndex, true);
     }
- _destroyDatasetMeta(datasetInde***REMOVED***) {
-        const meta = this._metasets[datasetInde***REMOVED***];
+ _destroyDatasetMeta(datasetIndex) {
+        const meta = this._metasets[datasetIndex];
         if (meta && meta.controller) {
             meta.controller._destroy();
         }
-        delete this._metasets[datasetInde***REMOVED***];
+        delete this._metasets[datasetIndex];
     }
     _stop() {
         let i, ilen;
@@ -6223,15 +6223,15 @@ class Chart {
     }
     destroy() {
         this.notifyPlugins('beforeDestroy');
-        const { canvas , ct***REMOVED***  } = this;
+        const { canvas , ctx  } = this;
         this._stop();
         this.config.clearCache();
         if (canvas) {
             this.unbindEvents();
-            helpers_segment.clearCanvas(canvas, ct***REMOVED***);
-            this.platform.releaseConte***REMOVED***t(ct***REMOVED***);
+            helpers_segment.clearCanvas(canvas, ctx);
+            this.platform.releaseContext(ctx);
             this.canvas = null;
-            this.ct***REMOVED*** = null;
+            this.ctx = null;
         }
         delete instances[this.id];
         this.notifyPlugins('afterDestroy');
@@ -6254,8 +6254,8 @@ class Chart {
             platform.addEventListener(this, type, listener);
             listeners[type] = listener;
         };
-        const listener = (e, ***REMOVED***, y)=>{
-            e.offsetX = ***REMOVED***;
+        const listener = (e, x, y)=>{
+            e.offsetX = x;
             e.offsetY = y;
             this._eventHandler(e);
         };
@@ -6314,17 +6314,17 @@ class Chart {
         this._responsiveListeners = undefined;
     }
     updateHoverStyle(items, mode, enabled) {
-        const prefi***REMOVED*** = enabled ? 'set' : 'remove';
+        const prefix = enabled ? 'set' : 'remove';
         let meta, item, i, ilen;
         if (mode === 'dataset') {
-            meta = this.getDatasetMeta(items[0].datasetInde***REMOVED***);
-            meta.controller['_' + prefi***REMOVED*** + 'DatasetHoverStyle']();
+            meta = this.getDatasetMeta(items[0].datasetIndex);
+            meta.controller['_' + prefix + 'DatasetHoverStyle']();
         }
         for(i = 0, ilen = items.length; i < ilen; ++i){
             item = items[i];
-            const controller = item && this.getDatasetMeta(item.datasetInde***REMOVED***).controller;
+            const controller = item && this.getDatasetMeta(item.datasetIndex).controller;
             if (controller) {
-                controller[prefi***REMOVED*** + 'HoverStyle'](item.element, item.datasetInde***REMOVED***, item.inde***REMOVED***);
+                controller[prefix + 'HoverStyle'](item.element, item.datasetIndex, item.index);
             }
         }
     }
@@ -6333,15 +6333,15 @@ class Chart {
     }
  setActiveElements(activeElements) {
         const lastActive = this._active || [];
-        const active = activeElements.map(({ datasetInde***REMOVED*** , inde***REMOVED***  })=>{
-            const meta = this.getDatasetMeta(datasetInde***REMOVED***);
+        const active = activeElements.map(({ datasetIndex , index  })=>{
+            const meta = this.getDatasetMeta(datasetIndex);
             if (!meta) {
-                throw new Error('No dataset found at inde***REMOVED*** ' + datasetInde***REMOVED***);
+                throw new Error('No dataset found at index ' + datasetIndex);
             }
             return {
-                datasetInde***REMOVED***,
-                element: meta.data[inde***REMOVED***],
-                inde***REMOVED***
+                datasetIndex,
+                element: meta.data[index],
+                index
             };
         });
         const changed = !helpers_segment._elementsEqual(active, lastActive);
@@ -6359,7 +6359,7 @@ class Chart {
     }
  _updateHoverStyles(active, lastActive, replay) {
         const hoverOptions = this.options.hover;
-        const diff = (a, b)=>a.filter((***REMOVED***)=>!b.some((y)=>***REMOVED***.datasetInde***REMOVED*** === y.datasetInde***REMOVED*** && ***REMOVED***.inde***REMOVED*** === y.inde***REMOVED***));
+        const diff = (a, b)=>a.filter((x)=>!b.some((y)=>x.datasetIndex === y.datasetIndex && x.index === y.index));
         const deactivated = diff(lastActive, active);
         const activated = replay ? active : diff(active, lastActive);
         if (deactivated.length) {
@@ -6432,21 +6432,21 @@ function invalidatePlugins() {
     return helpers_segment.each(Chart.instances, (chart)=>chart._plugins.invalidate());
 }
 
-function clipArc(ct***REMOVED***, element, endAngle) {
-    const { startAngle , pi***REMOVED***elMargin , ***REMOVED*** , y , outerRadius , innerRadius  } = element;
-    let angleMargin = pi***REMOVED***elMargin / outerRadius;
+function clipArc(ctx, element, endAngle) {
+    const { startAngle , pixelMargin , x , y , outerRadius , innerRadius  } = element;
+    let angleMargin = pixelMargin / outerRadius;
     // Draw an inner border by clipping the arc and drawing a double-width border
-    // Enlarge the clipping arc by 0.33 pi***REMOVED***els to eliminate glitches between borders
-    ct***REMOVED***.beginPath();
-    ct***REMOVED***.arc(***REMOVED***, y, outerRadius, startAngle - angleMargin, endAngle + angleMargin);
-    if (innerRadius > pi***REMOVED***elMargin) {
-        angleMargin = pi***REMOVED***elMargin / innerRadius;
-        ct***REMOVED***.arc(***REMOVED***, y, innerRadius, endAngle + angleMargin, startAngle - angleMargin, true);
+    // Enlarge the clipping arc by 0.33 pixels to eliminate glitches between borders
+    ctx.beginPath();
+    ctx.arc(x, y, outerRadius, startAngle - angleMargin, endAngle + angleMargin);
+    if (innerRadius > pixelMargin) {
+        angleMargin = pixelMargin / innerRadius;
+        ctx.arc(x, y, innerRadius, endAngle + angleMargin, startAngle - angleMargin, true);
     } else {
-        ct***REMOVED***.arc(***REMOVED***, y, pi***REMOVED***elMargin, endAngle + helpers_segment.HALF_PI, startAngle - helpers_segment.HALF_PI);
+        ctx.arc(x, y, pixelMargin, endAngle + helpers_segment.HALF_PI, startAngle - helpers_segment.HALF_PI);
     }
-    ct***REMOVED***.closePath();
-    ct***REMOVED***.clip();
+    ctx.closePath();
+    ctx.clip();
 }
 function toRadiusCorners(value) {
     return helpers_segment._readValueToProps(value, [
@@ -6467,7 +6467,7 @@ function toRadiusCorners(value) {
     // We compute at r = outerRadius - borderRadius because this circle defines the center of the border corners.
     //
     // If the borderRadius is large, that value can become negative.
-    // This causes the outer borders to lose their radius entirely, which is rather une***REMOVED***pected. To solve that, if borderRadius > outerRadius
+    // This causes the outer borders to lose their radius entirely, which is rather unexpected. To solve that, if borderRadius > outerRadius
     // we know that the thickness term will dominate and compute the limits at that point
     const computeOuterLimit = (val)=>{
         const outerArcLimit = (outerRadius - Math.min(halfThickness, val)) * angleDelta / 2;
@@ -6481,10 +6481,10 @@ function toRadiusCorners(value) {
     };
 }
 /**
- * Convert (r, 𝜃) to (***REMOVED***, y)
- */ function rThetaToXY(r, theta, ***REMOVED***, y) {
+ * Convert (r, 𝜃) to (x, y)
+ */ function rThetaToXY(r, theta, x, y) {
     return {
-        ***REMOVED***: ***REMOVED*** + r * Math.cos(theta),
+        x: x + r * Math.cos(theta),
         y: y + r * Math.sin(theta)
     };
 }
@@ -6501,10 +6501,10 @@ function toRadiusCorners(value) {
  *   7           4
  *   \           /
  *    6<---b<---5    Inner
- */ function pathArc(ct***REMOVED***, element, offset, spacing, end, circular) {
-    const { ***REMOVED*** , y , startAngle: start , pi***REMOVED***elMargin , innerRadius: innerR  } = element;
-    const outerRadius = Math.ma***REMOVED***(element.outerRadius + spacing + offset - pi***REMOVED***elMargin, 0);
-    const innerRadius = innerR > 0 ? innerR + spacing + offset + pi***REMOVED***elMargin : 0;
+ */ function pathArc(ctx, element, offset, spacing, end, circular) {
+    const { x , y , startAngle: start , pixelMargin , innerRadius: innerR  } = element;
+    const outerRadius = Math.max(element.outerRadius + spacing + offset - pixelMargin, 0);
+    const innerRadius = innerR > 0 ? innerR + spacing + offset + pixelMargin : 0;
     let spacingOffset = 0;
     const alpha = end - start;
     if (spacing) {
@@ -6517,7 +6517,7 @@ function toRadiusCorners(value) {
         const adjustedAngle = avNogSpacingRadius !== 0 ? alpha * avNogSpacingRadius / (avNogSpacingRadius + spacing) : alpha;
         spacingOffset = (alpha - adjustedAngle) / 2;
     }
-    const beta = Math.ma***REMOVED***(0.001, alpha * outerRadius - offset / helpers_segment.PI) / outerRadius;
+    const beta = Math.max(0.001, alpha * outerRadius - offset / helpers_segment.PI) / outerRadius;
     const angleOffset = (alpha - beta) / 2;
     const startAngle = start + angleOffset + spacingOffset;
     const endAngle = end - angleOffset - spacingOffset;
@@ -6530,104 +6530,104 @@ function toRadiusCorners(value) {
     const innerEndAdjustedRadius = innerRadius + innerEnd;
     const innerStartAdjustedAngle = startAngle + innerStart / innerStartAdjustedRadius;
     const innerEndAdjustedAngle = endAngle - innerEnd / innerEndAdjustedRadius;
-    ct***REMOVED***.beginPath();
+    ctx.beginPath();
     if (circular) {
         // The first arc segments from point 1 to point a to point 2
         const outerMidAdjustedAngle = (outerStartAdjustedAngle + outerEndAdjustedAngle) / 2;
-        ct***REMOVED***.arc(***REMOVED***, y, outerRadius, outerStartAdjustedAngle, outerMidAdjustedAngle);
-        ct***REMOVED***.arc(***REMOVED***, y, outerRadius, outerMidAdjustedAngle, outerEndAdjustedAngle);
+        ctx.arc(x, y, outerRadius, outerStartAdjustedAngle, outerMidAdjustedAngle);
+        ctx.arc(x, y, outerRadius, outerMidAdjustedAngle, outerEndAdjustedAngle);
         // The corner segment from point 2 to point 3
         if (outerEnd > 0) {
-            const pCenter = rThetaToXY(outerEndAdjustedRadius, outerEndAdjustedAngle, ***REMOVED***, y);
-            ct***REMOVED***.arc(pCenter.***REMOVED***, pCenter.y, outerEnd, outerEndAdjustedAngle, endAngle + helpers_segment.HALF_PI);
+            const pCenter = rThetaToXY(outerEndAdjustedRadius, outerEndAdjustedAngle, x, y);
+            ctx.arc(pCenter.x, pCenter.y, outerEnd, outerEndAdjustedAngle, endAngle + helpers_segment.HALF_PI);
         }
         // The line from point 3 to point 4
-        const p4 = rThetaToXY(innerEndAdjustedRadius, endAngle, ***REMOVED***, y);
-        ct***REMOVED***.lineTo(p4.***REMOVED***, p4.y);
+        const p4 = rThetaToXY(innerEndAdjustedRadius, endAngle, x, y);
+        ctx.lineTo(p4.x, p4.y);
         // The corner segment from point 4 to point 5
         if (innerEnd > 0) {
-            const pCenter = rThetaToXY(innerEndAdjustedRadius, innerEndAdjustedAngle, ***REMOVED***, y);
-            ct***REMOVED***.arc(pCenter.***REMOVED***, pCenter.y, innerEnd, endAngle + helpers_segment.HALF_PI, innerEndAdjustedAngle + Math.PI);
+            const pCenter = rThetaToXY(innerEndAdjustedRadius, innerEndAdjustedAngle, x, y);
+            ctx.arc(pCenter.x, pCenter.y, innerEnd, endAngle + helpers_segment.HALF_PI, innerEndAdjustedAngle + Math.PI);
         }
         // The inner arc from point 5 to point b to point 6
         const innerMidAdjustedAngle = (endAngle - innerEnd / innerRadius + (startAngle + innerStart / innerRadius)) / 2;
-        ct***REMOVED***.arc(***REMOVED***, y, innerRadius, endAngle - innerEnd / innerRadius, innerMidAdjustedAngle, true);
-        ct***REMOVED***.arc(***REMOVED***, y, innerRadius, innerMidAdjustedAngle, startAngle + innerStart / innerRadius, true);
+        ctx.arc(x, y, innerRadius, endAngle - innerEnd / innerRadius, innerMidAdjustedAngle, true);
+        ctx.arc(x, y, innerRadius, innerMidAdjustedAngle, startAngle + innerStart / innerRadius, true);
         // The corner segment from point 6 to point 7
         if (innerStart > 0) {
-            const pCenter = rThetaToXY(innerStartAdjustedRadius, innerStartAdjustedAngle, ***REMOVED***, y);
-            ct***REMOVED***.arc(pCenter.***REMOVED***, pCenter.y, innerStart, innerStartAdjustedAngle + Math.PI, startAngle - helpers_segment.HALF_PI);
+            const pCenter = rThetaToXY(innerStartAdjustedRadius, innerStartAdjustedAngle, x, y);
+            ctx.arc(pCenter.x, pCenter.y, innerStart, innerStartAdjustedAngle + Math.PI, startAngle - helpers_segment.HALF_PI);
         }
         // The line from point 7 to point 8
-        const p8 = rThetaToXY(outerStartAdjustedRadius, startAngle, ***REMOVED***, y);
-        ct***REMOVED***.lineTo(p8.***REMOVED***, p8.y);
+        const p8 = rThetaToXY(outerStartAdjustedRadius, startAngle, x, y);
+        ctx.lineTo(p8.x, p8.y);
         // The corner segment from point 8 to point 1
         if (outerStart > 0) {
-            const pCenter = rThetaToXY(outerStartAdjustedRadius, outerStartAdjustedAngle, ***REMOVED***, y);
-            ct***REMOVED***.arc(pCenter.***REMOVED***, pCenter.y, outerStart, startAngle - helpers_segment.HALF_PI, outerStartAdjustedAngle);
+            const pCenter = rThetaToXY(outerStartAdjustedRadius, outerStartAdjustedAngle, x, y);
+            ctx.arc(pCenter.x, pCenter.y, outerStart, startAngle - helpers_segment.HALF_PI, outerStartAdjustedAngle);
         }
     } else {
-        ct***REMOVED***.moveTo(***REMOVED***, y);
-        const outerStartX = Math.cos(outerStartAdjustedAngle) * outerRadius + ***REMOVED***;
+        ctx.moveTo(x, y);
+        const outerStartX = Math.cos(outerStartAdjustedAngle) * outerRadius + x;
         const outerStartY = Math.sin(outerStartAdjustedAngle) * outerRadius + y;
-        ct***REMOVED***.lineTo(outerStartX, outerStartY);
-        const outerEndX = Math.cos(outerEndAdjustedAngle) * outerRadius + ***REMOVED***;
+        ctx.lineTo(outerStartX, outerStartY);
+        const outerEndX = Math.cos(outerEndAdjustedAngle) * outerRadius + x;
         const outerEndY = Math.sin(outerEndAdjustedAngle) * outerRadius + y;
-        ct***REMOVED***.lineTo(outerEndX, outerEndY);
+        ctx.lineTo(outerEndX, outerEndY);
     }
-    ct***REMOVED***.closePath();
+    ctx.closePath();
 }
-function drawArc(ct***REMOVED***, element, offset, spacing, circular) {
+function drawArc(ctx, element, offset, spacing, circular) {
     const { fullCircles , startAngle , circumference  } = element;
     let endAngle = element.endAngle;
     if (fullCircles) {
-        pathArc(ct***REMOVED***, element, offset, spacing, endAngle, circular);
+        pathArc(ctx, element, offset, spacing, endAngle, circular);
         for(let i = 0; i < fullCircles; ++i){
-            ct***REMOVED***.fill();
+            ctx.fill();
         }
         if (!isNaN(circumference)) {
             endAngle = startAngle + (circumference % helpers_segment.TAU || helpers_segment.TAU);
         }
     }
-    pathArc(ct***REMOVED***, element, offset, spacing, endAngle, circular);
-    ct***REMOVED***.fill();
+    pathArc(ctx, element, offset, spacing, endAngle, circular);
+    ctx.fill();
     return endAngle;
 }
-function drawBorder(ct***REMOVED***, element, offset, spacing, circular) {
+function drawBorder(ctx, element, offset, spacing, circular) {
     const { fullCircles , startAngle , circumference , options  } = element;
     const { borderWidth , borderJoinStyle , borderDash , borderDashOffset  } = options;
     const inner = options.borderAlign === 'inner';
     if (!borderWidth) {
         return;
     }
-    ct***REMOVED***.setLineDash(borderDash || []);
-    ct***REMOVED***.lineDashOffset = borderDashOffset;
+    ctx.setLineDash(borderDash || []);
+    ctx.lineDashOffset = borderDashOffset;
     if (inner) {
-        ct***REMOVED***.lineWidth = borderWidth * 2;
-        ct***REMOVED***.lineJoin = borderJoinStyle || 'round';
+        ctx.lineWidth = borderWidth * 2;
+        ctx.lineJoin = borderJoinStyle || 'round';
     } else {
-        ct***REMOVED***.lineWidth = borderWidth;
-        ct***REMOVED***.lineJoin = borderJoinStyle || 'bevel';
+        ctx.lineWidth = borderWidth;
+        ctx.lineJoin = borderJoinStyle || 'bevel';
     }
     let endAngle = element.endAngle;
     if (fullCircles) {
-        pathArc(ct***REMOVED***, element, offset, spacing, endAngle, circular);
+        pathArc(ctx, element, offset, spacing, endAngle, circular);
         for(let i = 0; i < fullCircles; ++i){
-            ct***REMOVED***.stroke();
+            ctx.stroke();
         }
         if (!isNaN(circumference)) {
             endAngle = startAngle + (circumference % helpers_segment.TAU || helpers_segment.TAU);
         }
     }
     if (inner) {
-        clipArc(ct***REMOVED***, element, endAngle);
+        clipArc(ctx, element, endAngle);
     }
     if (!fullCircles) {
-        pathArc(ct***REMOVED***, element, offset, spacing, endAngle, circular);
-        ct***REMOVED***.stroke();
+        pathArc(ctx, element, offset, spacing, endAngle, circular);
+        ctx.stroke();
     }
 }
-class ArcElement e***REMOVED***tends Element {
+class ArcElement extends Element {
     static id = 'arc';
     static defaults = {
         borderAlign: 'center',
@@ -6647,14 +6647,14 @@ class ArcElement e***REMOVED***tends Element {
     };
     static descriptors = {
         _scriptable: true,
-        _inde***REMOVED***able: (name)=>name !== 'borderDash'
+        _indexable: (name)=>name !== 'borderDash'
     };
     circumference;
     endAngle;
     fullCircles;
     innerRadius;
     outerRadius;
-    pi***REMOVED***elMargin;
+    pixelMargin;
     startAngle;
     constructor(cfg){
         super();
@@ -6664,7 +6664,7 @@ class ArcElement e***REMOVED***tends Element {
         this.endAngle = undefined;
         this.innerRadius = undefined;
         this.outerRadius = undefined;
-        this.pi***REMOVED***elMargin = 0;
+        this.pixelMargin = 0;
         this.fullCircles = 0;
         if (cfg) {
             Object.assign(this, cfg);
@@ -6672,11 +6672,11 @@ class ArcElement e***REMOVED***tends Element {
     }
     inRange(chartX, chartY, useFinalPosition) {
         const point = this.getProps([
-            '***REMOVED***',
+            'x',
             'y'
         ], useFinalPosition);
         const { angle , distance  } = helpers_segment.getAngleFromPoint(point, {
-            ***REMOVED***: chartX,
+            x: chartX,
             y: chartY
         });
         const { startAngle , endAngle , innerRadius , outerRadius , circumference  } = this.getProps([
@@ -6693,8 +6693,8 @@ class ArcElement e***REMOVED***tends Element {
         return betweenAngles && withinRadius;
     }
     getCenterPoint(useFinalPosition) {
-        const { ***REMOVED*** , y , startAngle , endAngle , innerRadius , outerRadius  } = this.getProps([
-            '***REMOVED***',
+        const { x , y , startAngle , endAngle , innerRadius , outerRadius  } = this.getProps([
+            'x',
             'y',
             'startAngle',
             'endAngle',
@@ -6705,46 +6705,46 @@ class ArcElement e***REMOVED***tends Element {
         const halfAngle = (startAngle + endAngle) / 2;
         const halfRadius = (innerRadius + outerRadius + spacing + offset) / 2;
         return {
-            ***REMOVED***: ***REMOVED*** + Math.cos(halfAngle) * halfRadius,
+            x: x + Math.cos(halfAngle) * halfRadius,
             y: y + Math.sin(halfAngle) * halfRadius
         };
     }
     tooltipPosition(useFinalPosition) {
         return this.getCenterPoint(useFinalPosition);
     }
-    draw(ct***REMOVED***) {
+    draw(ctx) {
         const { options , circumference  } = this;
         const offset = (options.offset || 0) / 4;
         const spacing = (options.spacing || 0) / 2;
         const circular = options.circular;
-        this.pi***REMOVED***elMargin = options.borderAlign === 'inner' ? 0.33 : 0;
+        this.pixelMargin = options.borderAlign === 'inner' ? 0.33 : 0;
         this.fullCircles = circumference > helpers_segment.TAU ? Math.floor(circumference / helpers_segment.TAU) : 0;
         if (circumference === 0 || this.innerRadius < 0 || this.outerRadius < 0) {
             return;
         }
-        ct***REMOVED***.save();
+        ctx.save();
         const halfAngle = (this.startAngle + this.endAngle) / 2;
-        ct***REMOVED***.translate(Math.cos(halfAngle) * offset, Math.sin(halfAngle) * offset);
-        const fi***REMOVED*** = 1 - Math.sin(Math.min(helpers_segment.PI, circumference || 0));
-        const radiusOffset = offset * fi***REMOVED***;
-        ct***REMOVED***.fillStyle = options.backgroundColor;
-        ct***REMOVED***.strokeStyle = options.borderColor;
-        drawArc(ct***REMOVED***, this, radiusOffset, spacing, circular);
-        drawBorder(ct***REMOVED***, this, radiusOffset, spacing, circular);
-        ct***REMOVED***.restore();
+        ctx.translate(Math.cos(halfAngle) * offset, Math.sin(halfAngle) * offset);
+        const fix = 1 - Math.sin(Math.min(helpers_segment.PI, circumference || 0));
+        const radiusOffset = offset * fix;
+        ctx.fillStyle = options.backgroundColor;
+        ctx.strokeStyle = options.borderColor;
+        drawArc(ctx, this, radiusOffset, spacing, circular);
+        drawBorder(ctx, this, radiusOffset, spacing, circular);
+        ctx.restore();
     }
 }
 
-function setStyle(ct***REMOVED***, options, style = options) {
-    ct***REMOVED***.lineCap = helpers_segment.valueOrDefault(style.borderCapStyle, options.borderCapStyle);
-    ct***REMOVED***.setLineDash(helpers_segment.valueOrDefault(style.borderDash, options.borderDash));
-    ct***REMOVED***.lineDashOffset = helpers_segment.valueOrDefault(style.borderDashOffset, options.borderDashOffset);
-    ct***REMOVED***.lineJoin = helpers_segment.valueOrDefault(style.borderJoinStyle, options.borderJoinStyle);
-    ct***REMOVED***.lineWidth = helpers_segment.valueOrDefault(style.borderWidth, options.borderWidth);
-    ct***REMOVED***.strokeStyle = helpers_segment.valueOrDefault(style.borderColor, options.borderColor);
+function setStyle(ctx, options, style = options) {
+    ctx.lineCap = helpers_segment.valueOrDefault(style.borderCapStyle, options.borderCapStyle);
+    ctx.setLineDash(helpers_segment.valueOrDefault(style.borderDash, options.borderDash));
+    ctx.lineDashOffset = helpers_segment.valueOrDefault(style.borderDashOffset, options.borderDashOffset);
+    ctx.lineJoin = helpers_segment.valueOrDefault(style.borderJoinStyle, options.borderJoinStyle);
+    ctx.lineWidth = helpers_segment.valueOrDefault(style.borderWidth, options.borderWidth);
+    ctx.strokeStyle = helpers_segment.valueOrDefault(style.borderColor, options.borderColor);
 }
-function lineTo(ct***REMOVED***, previous, target) {
-    ct***REMOVED***.lineTo(target.***REMOVED***, target.y);
+function lineTo(ctx, previous, target) {
+    ctx.lineTo(target.x, target.y);
 }
  function getLineMethod(options) {
     if (options.stepped) {
@@ -6759,7 +6759,7 @@ function pathVars(points, segment, params = {}) {
     const count = points.length;
     const { start: paramsStart = 0 , end: paramsEnd = count - 1  } = params;
     const { start: segmentStart , end: segmentEnd  } = segment;
-    const start = Math.ma***REMOVED***(paramsStart, segmentStart);
+    const start = Math.max(paramsStart, segmentStart);
     const end = Math.min(paramsEnd, segmentEnd);
     const outside = paramsStart < segmentStart && paramsEnd < segmentStart || paramsStart > segmentEnd && paramsEnd > segmentEnd;
     return {
@@ -6769,7 +6769,7 @@ function pathVars(points, segment, params = {}) {
         ilen: end < start && !outside ? count + end - start : end - start
     };
 }
- function pathSegment(ct***REMOVED***, line, segment, params) {
+ function pathSegment(ctx, line, segment, params) {
     const { points , options  } = line;
     const { count , start , loop , ilen  } = pathVars(points, segment, params);
     const lineMethod = getLineMethod(options);
@@ -6780,59 +6780,59 @@ function pathVars(points, segment, params = {}) {
         if (point.skip) {
             continue;
         } else if (move) {
-            ct***REMOVED***.moveTo(point.***REMOVED***, point.y);
+            ctx.moveTo(point.x, point.y);
             move = false;
         } else {
-            lineMethod(ct***REMOVED***, prev, point, reverse, options.stepped);
+            lineMethod(ctx, prev, point, reverse, options.stepped);
         }
         prev = point;
     }
     if (loop) {
         point = points[(start + (reverse ? ilen : 0)) % count];
-        lineMethod(ct***REMOVED***, prev, point, reverse, options.stepped);
+        lineMethod(ctx, prev, point, reverse, options.stepped);
     }
     return !!loop;
 }
- function fastPathSegment(ct***REMOVED***, line, segment, params) {
+ function fastPathSegment(ctx, line, segment, params) {
     const points = line.points;
     const { count , start , ilen  } = pathVars(points, segment, params);
     const { move =true , reverse  } = params || {};
     let avgX = 0;
     let countX = 0;
-    let i, point, prevX, minY, ma***REMOVED***Y, lastY;
-    const pointInde***REMOVED*** = (inde***REMOVED***)=>(start + (reverse ? ilen - inde***REMOVED*** : inde***REMOVED***)) % count;
+    let i, point, prevX, minY, maxY, lastY;
+    const pointIndex = (index)=>(start + (reverse ? ilen - index : index)) % count;
     const drawX = ()=>{
-        if (minY !== ma***REMOVED***Y) {
-            ct***REMOVED***.lineTo(avgX, ma***REMOVED***Y);
-            ct***REMOVED***.lineTo(avgX, minY);
-            ct***REMOVED***.lineTo(avgX, lastY);
+        if (minY !== maxY) {
+            ctx.lineTo(avgX, maxY);
+            ctx.lineTo(avgX, minY);
+            ctx.lineTo(avgX, lastY);
         }
     };
     if (move) {
-        point = points[pointInde***REMOVED***(0)];
-        ct***REMOVED***.moveTo(point.***REMOVED***, point.y);
+        point = points[pointIndex(0)];
+        ctx.moveTo(point.x, point.y);
     }
     for(i = 0; i <= ilen; ++i){
-        point = points[pointInde***REMOVED***(i)];
+        point = points[pointIndex(i)];
         if (point.skip) {
             continue;
         }
-        const ***REMOVED*** = point.***REMOVED***;
+        const x = point.x;
         const y = point.y;
-        const truncX = ***REMOVED*** | 0;
+        const truncX = x | 0;
         if (truncX === prevX) {
             if (y < minY) {
                 minY = y;
-            } else if (y > ma***REMOVED***Y) {
-                ma***REMOVED***Y = y;
+            } else if (y > maxY) {
+                maxY = y;
             }
-            avgX = (countX * avgX + ***REMOVED***) / ++countX;
+            avgX = (countX * avgX + x) / ++countX;
         } else {
             drawX();
-            ct***REMOVED***.lineTo(***REMOVED***, y);
+            ctx.lineTo(x, y);
             prevX = truncX;
             countX = 0;
-            minY = ma***REMOVED***Y = y;
+            minY = maxY = y;
         }
         lastY = y;
     }
@@ -6853,7 +6853,7 @@ function pathVars(points, segment, params = {}) {
     }
     return helpers_segment._pointInLine;
 }
-function strokePathWithCache(ct***REMOVED***, line, start, count) {
+function strokePathWithCache(ctx, line, start, count) {
     let path = line._path;
     if (!path) {
         path = line._path = new Path2D();
@@ -6861,33 +6861,33 @@ function strokePathWithCache(ct***REMOVED***, line, start, count) {
             path.closePath();
         }
     }
-    setStyle(ct***REMOVED***, line.options);
-    ct***REMOVED***.stroke(path);
+    setStyle(ctx, line.options);
+    ctx.stroke(path);
 }
-function strokePathDirect(ct***REMOVED***, line, start, count) {
+function strokePathDirect(ctx, line, start, count) {
     const { segments , options  } = line;
     const segmentMethod = _getSegmentMethod(line);
     for (const segment of segments){
-        setStyle(ct***REMOVED***, options, segment.style);
-        ct***REMOVED***.beginPath();
-        if (segmentMethod(ct***REMOVED***, line, segment, {
+        setStyle(ctx, options, segment.style);
+        ctx.beginPath();
+        if (segmentMethod(ctx, line, segment, {
             start,
             end: start + count - 1
         })) {
-            ct***REMOVED***.closePath();
+            ctx.closePath();
         }
-        ct***REMOVED***.stroke();
+        ctx.stroke();
     }
 }
 const usePath2D = typeof Path2D === 'function';
-function draw(ct***REMOVED***, line, start, count) {
+function draw(ctx, line, start, count) {
     if (usePath2D && !line.options.segment) {
-        strokePathWithCache(ct***REMOVED***, line, start, count);
+        strokePathWithCache(ctx, line, start, count);
     } else {
-        strokePathDirect(ct***REMOVED***, line, start, count);
+        strokePathDirect(ctx, line, start, count);
     }
 }
-class LineElement e***REMOVED***tends Element {
+class LineElement extends Element {
     static id = 'line';
  static defaults = {
         borderCapStyle: 'butt',
@@ -6908,7 +6908,7 @@ class LineElement e***REMOVED***tends Element {
     };
     static descriptors = {
         _scriptable: true,
-        _inde***REMOVED***able: (name)=>name !== 'borderDash' && name !== 'fill'
+        _indexable: (name)=>name !== 'borderDash' && name !== 'fill'
     };
     constructor(cfg){
         super();
@@ -6922,16 +6922,16 @@ class LineElement e***REMOVED***tends Element {
         this._segments = undefined;
         this._decimated = false;
         this._pointsUpdated = false;
-        this._datasetInde***REMOVED*** = undefined;
+        this._datasetIndex = undefined;
         if (cfg) {
             Object.assign(this, cfg);
         }
     }
-    updateControlPoints(chartArea, inde***REMOVED***A***REMOVED***is) {
+    updateControlPoints(chartArea, indexAxis) {
         const options = this.options;
         if ((options.tension || options.cubicInterpolationMode === 'monotone') && !options.stepped && !this._pointsUpdated) {
             const loop = options.spanGaps ? this._loop : this._fullLoop;
-            helpers_segment._updateBezierControlPoints(this._points, options, chartArea, loop, inde***REMOVED***A***REMOVED***is);
+            helpers_segment._updateBezierControlPoints(this._points, options, chartArea, loop, indexAxis);
             this._pointsUpdated = true;
         }
     }
@@ -6988,31 +6988,31 @@ class LineElement e***REMOVED***tends Element {
         }
         return result.length === 1 ? result[0] : result;
     }
- pathSegment(ct***REMOVED***, segment, params) {
+ pathSegment(ctx, segment, params) {
         const segmentMethod = _getSegmentMethod(this);
-        return segmentMethod(ct***REMOVED***, this, segment, params);
+        return segmentMethod(ctx, this, segment, params);
     }
- path(ct***REMOVED***, start, count) {
+ path(ctx, start, count) {
         const segments = this.segments;
         const segmentMethod = _getSegmentMethod(this);
         let loop = this._loop;
         start = start || 0;
         count = count || this.points.length - start;
         for (const segment of segments){
-            loop &= segmentMethod(ct***REMOVED***, this, segment, {
+            loop &= segmentMethod(ctx, this, segment, {
                 start,
                 end: start + count - 1
             });
         }
         return !!loop;
     }
- draw(ct***REMOVED***, chartArea, start, count) {
+ draw(ctx, chartArea, start, count) {
         const options = this.options || {};
         const points = this.points || [];
         if (points.length && options.borderWidth) {
-            ct***REMOVED***.save();
-            draw(ct***REMOVED***, this, start, count);
-            ct***REMOVED***.restore();
+            ctx.save();
+            draw(ctx, this, start, count);
+            ctx.restore();
         }
         if (this.animated) {
             this._pointsUpdated = false;
@@ -7021,14 +7021,14 @@ class LineElement e***REMOVED***tends Element {
     }
 }
 
-function inRange$1(el, pos, a***REMOVED***is, useFinalPosition) {
+function inRange$1(el, pos, axis, useFinalPosition) {
     const options = el.options;
-    const { [a***REMOVED***is]: value  } = el.getProps([
-        a***REMOVED***is
+    const { [axis]: value  } = el.getProps([
+        axis
     ], useFinalPosition);
     return Math.abs(pos - value) < options.radius + options.hitRadius;
 }
-class PointElement e***REMOVED***tends Element {
+class PointElement extends Element {
     static id = 'point';
     parsed;
     skip;
@@ -7062,55 +7062,55 @@ class PointElement e***REMOVED***tends Element {
     }
     inRange(mouseX, mouseY, useFinalPosition) {
         const options = this.options;
-        const { ***REMOVED*** , y  } = this.getProps([
-            '***REMOVED***',
+        const { x , y  } = this.getProps([
+            'x',
             'y'
         ], useFinalPosition);
-        return Math.pow(mouseX - ***REMOVED***, 2) + Math.pow(mouseY - y, 2) < Math.pow(options.hitRadius + options.radius, 2);
+        return Math.pow(mouseX - x, 2) + Math.pow(mouseY - y, 2) < Math.pow(options.hitRadius + options.radius, 2);
     }
     inXRange(mouseX, useFinalPosition) {
-        return inRange$1(this, mouseX, '***REMOVED***', useFinalPosition);
+        return inRange$1(this, mouseX, 'x', useFinalPosition);
     }
     inYRange(mouseY, useFinalPosition) {
         return inRange$1(this, mouseY, 'y', useFinalPosition);
     }
     getCenterPoint(useFinalPosition) {
-        const { ***REMOVED*** , y  } = this.getProps([
-            '***REMOVED***',
+        const { x , y  } = this.getProps([
+            'x',
             'y'
         ], useFinalPosition);
         return {
-            ***REMOVED***,
+            x,
             y
         };
     }
     size(options) {
         options = options || this.options || {};
         let radius = options.radius || 0;
-        radius = Math.ma***REMOVED***(radius, radius && options.hoverRadius || 0);
+        radius = Math.max(radius, radius && options.hoverRadius || 0);
         const borderWidth = radius && options.borderWidth || 0;
         return (radius + borderWidth) * 2;
     }
-    draw(ct***REMOVED***, area) {
+    draw(ctx, area) {
         const options = this.options;
         if (this.skip || options.radius < 0.1 || !helpers_segment._isPointInArea(this, area, this.size(options) / 2)) {
             return;
         }
-        ct***REMOVED***.strokeStyle = options.borderColor;
-        ct***REMOVED***.lineWidth = options.borderWidth;
-        ct***REMOVED***.fillStyle = options.backgroundColor;
-        helpers_segment.drawPoint(ct***REMOVED***, options, this.***REMOVED***, this.y);
+        ctx.strokeStyle = options.borderColor;
+        ctx.lineWidth = options.borderWidth;
+        ctx.fillStyle = options.backgroundColor;
+        helpers_segment.drawPoint(ctx, options, this.x, this.y);
     }
     getRange() {
         const options = this.options || {};
-        // @ts-e***REMOVED***pect-error Fallbacks should never be hit in practice
+        // @ts-expect-error Fallbacks should never be hit in practice
         return options.radius + options.hitRadius;
     }
 }
 
 function getBarBounds(bar, useFinalPosition) {
-    const { ***REMOVED*** , y , base , width , height  } =  bar.getProps([
-        '***REMOVED***',
+    const { x , y , base , width , height  } =  bar.getProps([
+        'x',
         'y',
         'base',
         'width',
@@ -7119,16 +7119,16 @@ function getBarBounds(bar, useFinalPosition) {
     let left, right, top, bottom, half;
     if (bar.horizontal) {
         half = height / 2;
-        left = Math.min(***REMOVED***, base);
-        right = Math.ma***REMOVED***(***REMOVED***, base);
+        left = Math.min(x, base);
+        right = Math.max(x, base);
         top = y - half;
         bottom = y + half;
     } else {
         half = width / 2;
-        left = ***REMOVED*** - half;
-        right = ***REMOVED*** + half;
+        left = x - half;
+        right = x + half;
         top = Math.min(y, base);
-        bottom = Math.ma***REMOVED***(y, base);
+        bottom = Math.max(y, base);
     }
     return {
         left,
@@ -7137,34 +7137,34 @@ function getBarBounds(bar, useFinalPosition) {
         bottom
     };
 }
-function skipOrLimit(skip, value, min, ma***REMOVED***) {
-    return skip ? 0 : helpers_segment._limitValue(value, min, ma***REMOVED***);
+function skipOrLimit(skip, value, min, max) {
+    return skip ? 0 : helpers_segment._limitValue(value, min, max);
 }
-function parseBorderWidth(bar, ma***REMOVED***W, ma***REMOVED***H) {
+function parseBorderWidth(bar, maxW, maxH) {
     const value = bar.options.borderWidth;
     const skip = bar.borderSkipped;
     const o = helpers_segment.toTRBL(value);
     return {
-        t: skipOrLimit(skip.top, o.top, 0, ma***REMOVED***H),
-        r: skipOrLimit(skip.right, o.right, 0, ma***REMOVED***W),
-        b: skipOrLimit(skip.bottom, o.bottom, 0, ma***REMOVED***H),
-        l: skipOrLimit(skip.left, o.left, 0, ma***REMOVED***W)
+        t: skipOrLimit(skip.top, o.top, 0, maxH),
+        r: skipOrLimit(skip.right, o.right, 0, maxW),
+        b: skipOrLimit(skip.bottom, o.bottom, 0, maxH),
+        l: skipOrLimit(skip.left, o.left, 0, maxW)
     };
 }
-function parseBorderRadius(bar, ma***REMOVED***W, ma***REMOVED***H) {
+function parseBorderRadius(bar, maxW, maxH) {
     const { enableBorderRadius  } = bar.getProps([
         'enableBorderRadius'
     ]);
     const value = bar.options.borderRadius;
     const o = helpers_segment.toTRBLCorners(value);
-    const ma***REMOVED***R = Math.min(ma***REMOVED***W, ma***REMOVED***H);
+    const maxR = Math.min(maxW, maxH);
     const skip = bar.borderSkipped;
     const enableBorder = enableBorderRadius || helpers_segment.isObject(value);
     return {
-        topLeft: skipOrLimit(!enableBorder || skip.top || skip.left, o.topLeft, 0, ma***REMOVED***R),
-        topRight: skipOrLimit(!enableBorder || skip.top || skip.right, o.topRight, 0, ma***REMOVED***R),
-        bottomLeft: skipOrLimit(!enableBorder || skip.bottom || skip.left, o.bottomLeft, 0, ma***REMOVED***R),
-        bottomRight: skipOrLimit(!enableBorder || skip.bottom || skip.right, o.bottomRight, 0, ma***REMOVED***R)
+        topLeft: skipOrLimit(!enableBorder || skip.top || skip.left, o.topLeft, 0, maxR),
+        topRight: skipOrLimit(!enableBorder || skip.top || skip.right, o.topRight, 0, maxR),
+        bottomLeft: skipOrLimit(!enableBorder || skip.bottom || skip.left, o.bottomLeft, 0, maxR),
+        bottomRight: skipOrLimit(!enableBorder || skip.bottom || skip.right, o.bottomRight, 0, maxR)
     };
 }
 function boundingRects(bar) {
@@ -7175,53 +7175,53 @@ function boundingRects(bar) {
     const radius = parseBorderRadius(bar, width / 2, height / 2);
     return {
         outer: {
-            ***REMOVED***: bounds.left,
+            x: bounds.left,
             y: bounds.top,
             w: width,
             h: height,
             radius
         },
         inner: {
-            ***REMOVED***: bounds.left + border.l,
+            x: bounds.left + border.l,
             y: bounds.top + border.t,
             w: width - border.l - border.r,
             h: height - border.t - border.b,
             radius: {
-                topLeft: Math.ma***REMOVED***(0, radius.topLeft - Math.ma***REMOVED***(border.t, border.l)),
-                topRight: Math.ma***REMOVED***(0, radius.topRight - Math.ma***REMOVED***(border.t, border.r)),
-                bottomLeft: Math.ma***REMOVED***(0, radius.bottomLeft - Math.ma***REMOVED***(border.b, border.l)),
-                bottomRight: Math.ma***REMOVED***(0, radius.bottomRight - Math.ma***REMOVED***(border.b, border.r))
+                topLeft: Math.max(0, radius.topLeft - Math.max(border.t, border.l)),
+                topRight: Math.max(0, radius.topRight - Math.max(border.t, border.r)),
+                bottomLeft: Math.max(0, radius.bottomLeft - Math.max(border.b, border.l)),
+                bottomRight: Math.max(0, radius.bottomRight - Math.max(border.b, border.r))
             }
         }
     };
 }
-function inRange(bar, ***REMOVED***, y, useFinalPosition) {
-    const skipX = ***REMOVED*** === null;
+function inRange(bar, x, y, useFinalPosition) {
+    const skipX = x === null;
     const skipY = y === null;
     const skipBoth = skipX && skipY;
     const bounds = bar && !skipBoth && getBarBounds(bar, useFinalPosition);
-    return bounds && (skipX || helpers_segment._isBetween(***REMOVED***, bounds.left, bounds.right)) && (skipY || helpers_segment._isBetween(y, bounds.top, bounds.bottom));
+    return bounds && (skipX || helpers_segment._isBetween(x, bounds.left, bounds.right)) && (skipY || helpers_segment._isBetween(y, bounds.top, bounds.bottom));
 }
 function hasRadius(radius) {
     return radius.topLeft || radius.topRight || radius.bottomLeft || radius.bottomRight;
 }
- function addNormalRectPath(ct***REMOVED***, rect) {
-    ct***REMOVED***.rect(rect.***REMOVED***, rect.y, rect.w, rect.h);
+ function addNormalRectPath(ctx, rect) {
+    ctx.rect(rect.x, rect.y, rect.w, rect.h);
 }
 function inflateRect(rect, amount, refRect = {}) {
-    const ***REMOVED*** = rect.***REMOVED*** !== refRect.***REMOVED*** ? -amount : 0;
+    const x = rect.x !== refRect.x ? -amount : 0;
     const y = rect.y !== refRect.y ? -amount : 0;
-    const w = (rect.***REMOVED*** + rect.w !== refRect.***REMOVED*** + refRect.w ? amount : 0) - ***REMOVED***;
+    const w = (rect.x + rect.w !== refRect.x + refRect.w ? amount : 0) - x;
     const h = (rect.y + rect.h !== refRect.y + refRect.h ? amount : 0) - y;
     return {
-        ***REMOVED***: rect.***REMOVED*** + ***REMOVED***,
+        x: rect.x + x,
         y: rect.y + y,
         w: rect.w + w,
         h: rect.h + h,
         radius: rect.radius
     };
 }
-class BarElement e***REMOVED***tends Element {
+class BarElement extends Element {
     static id = 'bar';
  static defaults = {
         borderSkipped: 'start',
@@ -7246,24 +7246,24 @@ class BarElement e***REMOVED***tends Element {
             Object.assign(this, cfg);
         }
     }
-    draw(ct***REMOVED***) {
+    draw(ctx) {
         const { inflateAmount , options: { borderColor , backgroundColor  }  } = this;
         const { inner , outer  } = boundingRects(this);
         const addRectPath = hasRadius(outer.radius) ? helpers_segment.addRoundedRectPath : addNormalRectPath;
-        ct***REMOVED***.save();
+        ctx.save();
         if (outer.w !== inner.w || outer.h !== inner.h) {
-            ct***REMOVED***.beginPath();
-            addRectPath(ct***REMOVED***, inflateRect(outer, inflateAmount, inner));
-            ct***REMOVED***.clip();
-            addRectPath(ct***REMOVED***, inflateRect(inner, -inflateAmount, outer));
-            ct***REMOVED***.fillStyle = borderColor;
-            ct***REMOVED***.fill('evenodd');
+            ctx.beginPath();
+            addRectPath(ctx, inflateRect(outer, inflateAmount, inner));
+            ctx.clip();
+            addRectPath(ctx, inflateRect(inner, -inflateAmount, outer));
+            ctx.fillStyle = borderColor;
+            ctx.fill('evenodd');
         }
-        ct***REMOVED***.beginPath();
-        addRectPath(ct***REMOVED***, inflateRect(inner, inflateAmount));
-        ct***REMOVED***.fillStyle = backgroundColor;
-        ct***REMOVED***.fill();
-        ct***REMOVED***.restore();
+        ctx.beginPath();
+        addRectPath(ctx, inflateRect(inner, inflateAmount));
+        ctx.fillStyle = backgroundColor;
+        ctx.fill();
+        ctx.restore();
     }
     inRange(mouseX, mouseY, useFinalPosition) {
         return inRange(this, mouseX, mouseY, useFinalPosition);
@@ -7275,19 +7275,19 @@ class BarElement e***REMOVED***tends Element {
         return inRange(this, null, mouseY, useFinalPosition);
     }
     getCenterPoint(useFinalPosition) {
-        const { ***REMOVED*** , y , base , horizontal  } =  this.getProps([
-            '***REMOVED***',
+        const { x , y , base , horizontal  } =  this.getProps([
+            'x',
             'y',
             'base',
             'horizontal'
         ], useFinalPosition);
         return {
-            ***REMOVED***: horizontal ? (***REMOVED*** + base) / 2 : ***REMOVED***,
+            x: horizontal ? (x + base) / 2 : x,
             y: horizontal ? y : (y + base) / 2
         };
     }
-    getRange(a***REMOVED***is) {
-        return a***REMOVED***is === '***REMOVED***' ? this.width / 2 : this.height / 2;
+    getRange(axis) {
+        return axis === 'x' ? this.width / 2 : this.height / 2;
     }
 }
 
@@ -7331,8 +7331,8 @@ function colorizePolarAreaDataset(dataset, i) {
 }
 function getColorizer(chart) {
     let i = 0;
-    return (dataset, datasetInde***REMOVED***)=>{
-        const controller = chart.getDatasetMeta(datasetInde***REMOVED***).controller;
+    return (dataset, datasetIndex)=>{
+        const controller = chart.getDatasetMeta(datasetIndex).controller;
         if (controller instanceof DoughnutController) {
             i = colorizeDoughnutDataset(dataset, i);
         } else if (controller instanceof PolarAreaController) {
@@ -7381,11 +7381,11 @@ function lttbDecimation(data, start, count, availableWidth, options) {
     }
     const decimated = [];
     const bucketWidth = (count - 2) / (samples - 2);
-    let sampledInde***REMOVED*** = 0;
-    const endInde***REMOVED*** = start + count - 1;
+    let sampledIndex = 0;
+    const endIndex = start + count - 1;
     let a = start;
-    let i, ma***REMOVED***AreaPoint, ma***REMOVED***Area, area, ne***REMOVED***tA;
-    decimated[sampledInde***REMOVED***++] = data[a];
+    let i, maxAreaPoint, maxArea, area, nextA;
+    decimated[sampledIndex++] = data[a];
     for(i = 0; i < samples - 2; i++){
         let avgX = 0;
         let avgY = 0;
@@ -7394,78 +7394,78 @@ function lttbDecimation(data, start, count, availableWidth, options) {
         const avgRangeEnd = Math.min(Math.floor((i + 2) * bucketWidth) + 1, count) + start;
         const avgRangeLength = avgRangeEnd - avgRangeStart;
         for(j = avgRangeStart; j < avgRangeEnd; j++){
-            avgX += data[j].***REMOVED***;
+            avgX += data[j].x;
             avgY += data[j].y;
         }
         avgX /= avgRangeLength;
         avgY /= avgRangeLength;
         const rangeOffs = Math.floor(i * bucketWidth) + 1 + start;
         const rangeTo = Math.min(Math.floor((i + 1) * bucketWidth) + 1, count) + start;
-        const { ***REMOVED***: pointA***REMOVED*** , y: pointAy  } = data[a];
-        ma***REMOVED***Area = area = -1;
+        const { x: pointAx , y: pointAy  } = data[a];
+        maxArea = area = -1;
         for(j = rangeOffs; j < rangeTo; j++){
-            area = 0.5 * Math.abs((pointA***REMOVED*** - avgX) * (data[j].y - pointAy) - (pointA***REMOVED*** - data[j].***REMOVED***) * (avgY - pointAy));
-            if (area > ma***REMOVED***Area) {
-                ma***REMOVED***Area = area;
-                ma***REMOVED***AreaPoint = data[j];
-                ne***REMOVED***tA = j;
+            area = 0.5 * Math.abs((pointAx - avgX) * (data[j].y - pointAy) - (pointAx - data[j].x) * (avgY - pointAy));
+            if (area > maxArea) {
+                maxArea = area;
+                maxAreaPoint = data[j];
+                nextA = j;
             }
         }
-        decimated[sampledInde***REMOVED***++] = ma***REMOVED***AreaPoint;
-        a = ne***REMOVED***tA;
+        decimated[sampledIndex++] = maxAreaPoint;
+        a = nextA;
     }
-    decimated[sampledInde***REMOVED***++] = data[endInde***REMOVED***];
+    decimated[sampledIndex++] = data[endIndex];
     return decimated;
 }
-function minMa***REMOVED***Decimation(data, start, count, availableWidth) {
+function minMaxDecimation(data, start, count, availableWidth) {
     let avgX = 0;
     let countX = 0;
-    let i, point, ***REMOVED***, y, prevX, minInde***REMOVED***, ma***REMOVED***Inde***REMOVED***, startInde***REMOVED***, minY, ma***REMOVED***Y;
+    let i, point, x, y, prevX, minIndex, maxIndex, startIndex, minY, maxY;
     const decimated = [];
-    const endInde***REMOVED*** = start + count - 1;
-    const ***REMOVED***Min = data[start].***REMOVED***;
-    const ***REMOVED***Ma***REMOVED*** = data[endInde***REMOVED***].***REMOVED***;
-    const d***REMOVED*** = ***REMOVED***Ma***REMOVED*** - ***REMOVED***Min;
+    const endIndex = start + count - 1;
+    const xMin = data[start].x;
+    const xMax = data[endIndex].x;
+    const dx = xMax - xMin;
     for(i = start; i < start + count; ++i){
         point = data[i];
-        ***REMOVED*** = (point.***REMOVED*** - ***REMOVED***Min) / d***REMOVED*** * availableWidth;
+        x = (point.x - xMin) / dx * availableWidth;
         y = point.y;
-        const truncX = ***REMOVED*** | 0;
+        const truncX = x | 0;
         if (truncX === prevX) {
             if (y < minY) {
                 minY = y;
-                minInde***REMOVED*** = i;
-            } else if (y > ma***REMOVED***Y) {
-                ma***REMOVED***Y = y;
-                ma***REMOVED***Inde***REMOVED*** = i;
+                minIndex = i;
+            } else if (y > maxY) {
+                maxY = y;
+                maxIndex = i;
             }
-            avgX = (countX * avgX + point.***REMOVED***) / ++countX;
+            avgX = (countX * avgX + point.x) / ++countX;
         } else {
-            const lastInde***REMOVED*** = i - 1;
-            if (!helpers_segment.isNullOrUndef(minInde***REMOVED***) && !helpers_segment.isNullOrUndef(ma***REMOVED***Inde***REMOVED***)) {
-                const intermediateInde***REMOVED***1 = Math.min(minInde***REMOVED***, ma***REMOVED***Inde***REMOVED***);
-                const intermediateInde***REMOVED***2 = Math.ma***REMOVED***(minInde***REMOVED***, ma***REMOVED***Inde***REMOVED***);
-                if (intermediateInde***REMOVED***1 !== startInde***REMOVED*** && intermediateInde***REMOVED***1 !== lastInde***REMOVED***) {
+            const lastIndex = i - 1;
+            if (!helpers_segment.isNullOrUndef(minIndex) && !helpers_segment.isNullOrUndef(maxIndex)) {
+                const intermediateIndex1 = Math.min(minIndex, maxIndex);
+                const intermediateIndex2 = Math.max(minIndex, maxIndex);
+                if (intermediateIndex1 !== startIndex && intermediateIndex1 !== lastIndex) {
                     decimated.push({
-                        ...data[intermediateInde***REMOVED***1],
-                        ***REMOVED***: avgX
+                        ...data[intermediateIndex1],
+                        x: avgX
                     });
                 }
-                if (intermediateInde***REMOVED***2 !== startInde***REMOVED*** && intermediateInde***REMOVED***2 !== lastInde***REMOVED***) {
+                if (intermediateIndex2 !== startIndex && intermediateIndex2 !== lastIndex) {
                     decimated.push({
-                        ...data[intermediateInde***REMOVED***2],
-                        ***REMOVED***: avgX
+                        ...data[intermediateIndex2],
+                        x: avgX
                     });
                 }
             }
-            if (i > 0 && lastInde***REMOVED*** !== startInde***REMOVED***) {
-                decimated.push(data[lastInde***REMOVED***]);
+            if (i > 0 && lastIndex !== startIndex) {
+                decimated.push(data[lastIndex]);
             }
             decimated.push(point);
             prevX = truncX;
             countX = 0;
-            minY = ma***REMOVED***Y = y;
-            minInde***REMOVED*** = ma***REMOVED***Inde***REMOVED*** = startInde***REMOVED*** = i;
+            minY = maxY = y;
+            minIndex = maxIndex = startIndex = i;
         }
     }
     return decimated;
@@ -7493,12 +7493,12 @@ function getStartAndCountOfVisiblePointsSimplified(meta, points) {
     let start = 0;
     let count;
     const { iScale  } = meta;
-    const { min , ma***REMOVED*** , minDefined , ma***REMOVED***Defined  } = iScale.getUserBounds();
+    const { min , max , minDefined , maxDefined  } = iScale.getUserBounds();
     if (minDefined) {
-        start = helpers_segment._limitValue(helpers_segment._lookupByKey(points, iScale.a***REMOVED***is, min).lo, 0, pointCount - 1);
+        start = helpers_segment._limitValue(helpers_segment._lookupByKey(points, iScale.axis, min).lo, 0, pointCount - 1);
     }
-    if (ma***REMOVED***Defined) {
-        count = helpers_segment._limitValue(helpers_segment._lookupByKey(points, iScale.a***REMOVED***is, ma***REMOVED***).hi + 1, start, pointCount) - start;
+    if (maxDefined) {
+        count = helpers_segment._limitValue(helpers_segment._lookupByKey(points, iScale.axis, max).hi + 1, start, pointCount) - start;
     } else {
         count = pointCount - start;
     }
@@ -7510,7 +7510,7 @@ function getStartAndCountOfVisiblePointsSimplified(meta, points) {
 var plugin_decimation = {
     id: 'decimation',
     defaults: {
-        algorithm: 'min-ma***REMOVED***',
+        algorithm: 'min-max',
         enabled: false
     },
     beforeElementsUpdate: (chart, args, options)=>{
@@ -7519,21 +7519,21 @@ var plugin_decimation = {
             return;
         }
         const availableWidth = chart.width;
-        chart.data.datasets.forEach((dataset, datasetInde***REMOVED***)=>{
-            const { _data , inde***REMOVED***A***REMOVED***is  } = dataset;
-            const meta = chart.getDatasetMeta(datasetInde***REMOVED***);
+        chart.data.datasets.forEach((dataset, datasetIndex)=>{
+            const { _data , indexAxis  } = dataset;
+            const meta = chart.getDatasetMeta(datasetIndex);
             const data = _data || dataset.data;
             if (helpers_segment.resolve([
-                inde***REMOVED***A***REMOVED***is,
-                chart.options.inde***REMOVED***A***REMOVED***is
+                indexAxis,
+                chart.options.indexAxis
             ]) === 'y') {
                 return;
             }
             if (!meta.controller.supportsDecimation) {
                 return;
             }
-            const ***REMOVED***A***REMOVED***is = chart.scales[meta.***REMOVED***A***REMOVED***isID];
-            if (***REMOVED***A***REMOVED***is.type !== 'linear' && ***REMOVED***A***REMOVED***is.type !== 'time') {
+            const xAxis = chart.scales[meta.xAxisID];
+            if (xAxis.type !== 'linear' && xAxis.type !== 'time') {
                 return;
             }
             if (chart.options.parsing) {
@@ -7564,8 +7564,8 @@ var plugin_decimation = {
                 case 'lttb':
                     decimated = lttbDecimation(data, start, count, availableWidth, options);
                     break;
-                case 'min-ma***REMOVED***':
-                    decimated = minMa***REMOVED***Decimation(data, start, count, availableWidth);
+                case 'min-max':
+                    decimated = minMaxDecimation(data, start, count, availableWidth);
                     break;
                 default:
                     throw new Error(`Unsupported decimation algorithm '${options.algorithm}'`);
@@ -7605,7 +7605,7 @@ function _segments(line, target, property) {
                     source: fillSource,
                     target: tgt,
                     start: {
-                        [property]: _getEdge(bounds, subBounds, 'start', Math.ma***REMOVED***)
+                        [property]: _getEdge(bounds, subBounds, 'start', Math.max)
                     },
                     end: {
                         [property]: _getEdge(bounds, subBounds, 'end', Math.min)
@@ -7633,7 +7633,7 @@ function _getBounds(property, first, last, loop) {
     };
 }
 function _pointsFromSegments(boundary, line) {
-    const { ***REMOVED*** =null , y =null  } = boundary || {};
+    const { x =null , y =null  } = boundary || {};
     const linePoints = line.points;
     const points = [];
     line.segments.forEach(({ start , end  })=>{
@@ -7642,20 +7642,20 @@ function _pointsFromSegments(boundary, line) {
         const last = linePoints[end];
         if (y !== null) {
             points.push({
-                ***REMOVED***: first.***REMOVED***,
+                x: first.x,
                 y
             });
             points.push({
-                ***REMOVED***: last.***REMOVED***,
+                x: last.x,
                 y
             });
-        } else if (***REMOVED*** !== null) {
+        } else if (x !== null) {
             points.push({
-                ***REMOVED***,
+                x,
                 y: first.y
             });
             points.push({
-                ***REMOVED***,
+                x,
                 y: last.y
             });
         }
@@ -7665,7 +7665,7 @@ function _pointsFromSegments(boundary, line) {
 function _findSegmentEnd(start, end, points) {
     for(; end > start; end--){
         const point = points[end];
-        if (!isNaN(point.***REMOVED***) && !isNaN(point.y)) {
+        if (!isNaN(point.x) && !isNaN(point.y)) {
             break;
         }
     }
@@ -7700,17 +7700,17 @@ function _shouldApplyFill(source) {
     return source && source.fill !== false;
 }
 
-function _resolveTarget(sources, inde***REMOVED***, propagate) {
-    const source = sources[inde***REMOVED***];
+function _resolveTarget(sources, index, propagate) {
+    const source = sources[index];
     let fill = source.fill;
     const visited = [
-        inde***REMOVED***
+        index
     ];
     let target;
     if (!propagate) {
         return fill;
     }
-    while(fill !== false && visited.inde***REMOVED***Of(fill) === -1){
+    while(fill !== false && visited.indexOf(fill) === -1){
         if (!helpers_segment.isNumberFinite(fill)) {
             return fill;
         }
@@ -7726,14 +7726,14 @@ function _resolveTarget(sources, inde***REMOVED***, propagate) {
     }
     return false;
 }
- function _decodeFill(line, inde***REMOVED***, count) {
+ function _decodeFill(line, index, count) {
      const fill = parseFillOption(line);
     if (helpers_segment.isObject(fill)) {
         return isNaN(fill.value) ? false : fill;
     }
     let target = parseFloat(fill);
     if (helpers_segment.isNumberFinite(target) && Math.floor(target) === target) {
-        return decodeTargetInde***REMOVED***(fill[0], inde***REMOVED***, target, count);
+        return decodeTargetIndex(fill[0], index, target, count);
     }
     return [
         'origin',
@@ -7741,36 +7741,36 @@ function _resolveTarget(sources, inde***REMOVED***, propagate) {
         'end',
         'stack',
         'shape'
-    ].inde***REMOVED***Of(fill) >= 0 && fill;
+    ].indexOf(fill) >= 0 && fill;
 }
-function decodeTargetInde***REMOVED***(firstCh, inde***REMOVED***, target, count) {
+function decodeTargetIndex(firstCh, index, target, count) {
     if (firstCh === '-' || firstCh === '+') {
-        target = inde***REMOVED*** + target;
+        target = index + target;
     }
-    if (target === inde***REMOVED*** || target < 0 || target >= count) {
+    if (target === index || target < 0 || target >= count) {
         return false;
     }
     return target;
 }
- function _getTargetPi***REMOVED***el(fill, scale) {
-    let pi***REMOVED***el = null;
+ function _getTargetPixel(fill, scale) {
+    let pixel = null;
     if (fill === 'start') {
-        pi***REMOVED***el = scale.bottom;
+        pixel = scale.bottom;
     } else if (fill === 'end') {
-        pi***REMOVED***el = scale.top;
+        pixel = scale.top;
     } else if (helpers_segment.isObject(fill)) {
-        pi***REMOVED***el = scale.getPi***REMOVED***elForValue(fill.value);
-    } else if (scale.getBasePi***REMOVED***el) {
-        pi***REMOVED***el = scale.getBasePi***REMOVED***el();
+        pixel = scale.getPixelForValue(fill.value);
+    } else if (scale.getBasePixel) {
+        pixel = scale.getBasePixel();
     }
-    return pi***REMOVED***el;
+    return pixel;
 }
  function _getTargetValue(fill, scale, startValue) {
     let value;
     if (fill === 'start') {
         value = startValue;
     } else if (fill === 'end') {
-        value = scale.options.reverse ? scale.min : scale.ma***REMOVED***;
+        value = scale.options.reverse ? scale.min : scale.max;
     } else if (helpers_segment.isObject(fill)) {
         value = fill.value;
     } else {
@@ -7795,13 +7795,13 @@ function decodeTargetInde***REMOVED***(firstCh, inde***REMOVED***, target, count
 }
 
 function _buildStackLine(source) {
-    const { scale , inde***REMOVED*** , line  } = source;
+    const { scale , index , line  } = source;
     const points = [];
     const segments = line.segments;
     const sourcePoints = line.points;
-    const linesBelow = getLinesBelow(scale, inde***REMOVED***);
+    const linesBelow = getLinesBelow(scale, index);
     linesBelow.push(_createBoundaryLine({
-        ***REMOVED***: null,
+        x: null,
         y: scale.bottom
     }, line));
     for(let i = 0; i < segments.length; i++){
@@ -7815,12 +7815,12 @@ function _buildStackLine(source) {
         options: {}
     });
 }
- function getLinesBelow(scale, inde***REMOVED***) {
+ function getLinesBelow(scale, index) {
     const below = [];
     const metas = scale.getMatchingVisibleMetas('line');
     for(let i = 0; i < metas.length; i++){
         const meta = metas[i];
-        if (meta.inde***REMOVED*** === inde***REMOVED***) {
+        if (meta.index === index) {
             break;
         }
         if (!meta.hidden) {
@@ -7833,7 +7833,7 @@ function _buildStackLine(source) {
     const postponed = [];
     for(let j = 0; j < linesBelow.length; j++){
         const line = linesBelow[j];
-        const { first , last , point  } = findPoint(line, sourcePoint, '***REMOVED***');
+        const { first , last , point  } = findPoint(line, sourcePoint, 'x');
         if (!point || first && last) {
             continue;
         }
@@ -7877,24 +7877,24 @@ function _buildStackLine(source) {
 
 class simpleArc {
     constructor(opts){
-        this.***REMOVED*** = opts.***REMOVED***;
+        this.x = opts.x;
         this.y = opts.y;
         this.radius = opts.radius;
     }
-    pathSegment(ct***REMOVED***, bounds, opts) {
-        const { ***REMOVED*** , y , radius  } = this;
+    pathSegment(ctx, bounds, opts) {
+        const { x , y , radius  } = this;
         bounds = bounds || {
             start: 0,
             end: helpers_segment.TAU
         };
-        ct***REMOVED***.arc(***REMOVED***, y, radius, bounds.end, bounds.start, true);
+        ctx.arc(x, y, radius, bounds.end, bounds.start, true);
         return !opts.bounds;
     }
     interpolate(point) {
-        const { ***REMOVED*** , y , radius  } = this;
+        const { x , y , radius  } = this;
         const angle = point.angle;
         return {
-            ***REMOVED***: ***REMOVED*** + Math.cos(angle) * radius,
+            x: x + Math.cos(angle) * radius,
             y: y + Math.sin(angle) * radius,
             angle
         };
@@ -7904,7 +7904,7 @@ class simpleArc {
 function _getTarget(source) {
     const { chart , fill , line  } = source;
     if (helpers_segment.isNumberFinite(fill)) {
-        return getLineByInde***REMOVED***(chart, fill);
+        return getLineByIndex(chart, fill);
     }
     if (fill === 'stack') {
         return _buildStackLine(source);
@@ -7918,9 +7918,9 @@ function _getTarget(source) {
     }
     return _createBoundaryLine(boundary, line);
 }
- function getLineByInde***REMOVED***(chart, inde***REMOVED***) {
-    const meta = chart.getDatasetMeta(inde***REMOVED***);
-    const visible = meta && chart.isDatasetVisible(inde***REMOVED***);
+ function getLineByIndex(chart, index) {
+    const meta = chart.getDatasetMeta(index);
+    const visible = meta && chart.isDatasetVisible(index);
     return visible ? meta.dataset : null;
 }
 function computeBoundary(source) {
@@ -7932,12 +7932,12 @@ function computeBoundary(source) {
 }
 function computeLinearBoundary(source) {
     const { scale ={} , fill  } = source;
-    const pi***REMOVED***el = _getTargetPi***REMOVED***el(fill, scale);
-    if (helpers_segment.isNumberFinite(pi***REMOVED***el)) {
+    const pixel = _getTargetPixel(fill, scale);
+    if (helpers_segment.isNumberFinite(pixel)) {
         const horizontal = scale.isHorizontal();
         return {
-            ***REMOVED***: horizontal ? pi***REMOVED***el : null,
-            y: horizontal ? null : pi***REMOVED***el
+            x: horizontal ? pixel : null,
+            y: horizontal ? null : pixel
         };
     }
     return null;
@@ -7946,13 +7946,13 @@ function computeCircularBoundary(source) {
     const { scale , fill  } = source;
     const options = scale.options;
     const length = scale.getLabels().length;
-    const start = options.reverse ? scale.ma***REMOVED*** : scale.min;
+    const start = options.reverse ? scale.max : scale.min;
     const value = _getTargetValue(fill, scale, start);
     const target = [];
     if (options.grid.circular) {
         const center = scale.getPointPositionForValue(0, start);
         return new simpleArc({
-            ***REMOVED***: center.***REMOVED***,
+            x: center.x,
             y: center.y,
             radius: scale.getDistanceFromCenterForValue(value)
         });
@@ -7963,131 +7963,131 @@ function computeCircularBoundary(source) {
     return target;
 }
 
-function _drawfill(ct***REMOVED***, source, area) {
+function _drawfill(ctx, source, area) {
     const target = _getTarget(source);
-    const { line , scale , a***REMOVED***is  } = source;
+    const { line , scale , axis  } = source;
     const lineOpts = line.options;
     const fillOption = lineOpts.fill;
     const color = lineOpts.backgroundColor;
     const { above =color , below =color  } = fillOption || {};
     if (target && line.points.length) {
-        helpers_segment.clipArea(ct***REMOVED***, area);
-        doFill(ct***REMOVED***, {
+        helpers_segment.clipArea(ctx, area);
+        doFill(ctx, {
             line,
             target,
             above,
             below,
             area,
             scale,
-            a***REMOVED***is
+            axis
         });
-        helpers_segment.unclipArea(ct***REMOVED***);
+        helpers_segment.unclipArea(ctx);
     }
 }
-function doFill(ct***REMOVED***, cfg) {
+function doFill(ctx, cfg) {
     const { line , target , above , below , area , scale  } = cfg;
-    const property = line._loop ? 'angle' : cfg.a***REMOVED***is;
-    ct***REMOVED***.save();
-    if (property === '***REMOVED***' && below !== above) {
-        clipVertical(ct***REMOVED***, target, area.top);
-        fill(ct***REMOVED***, {
+    const property = line._loop ? 'angle' : cfg.axis;
+    ctx.save();
+    if (property === 'x' && below !== above) {
+        clipVertical(ctx, target, area.top);
+        fill(ctx, {
             line,
             target,
             color: above,
             scale,
             property
         });
-        ct***REMOVED***.restore();
-        ct***REMOVED***.save();
-        clipVertical(ct***REMOVED***, target, area.bottom);
+        ctx.restore();
+        ctx.save();
+        clipVertical(ctx, target, area.bottom);
     }
-    fill(ct***REMOVED***, {
+    fill(ctx, {
         line,
         target,
         color: below,
         scale,
         property
     });
-    ct***REMOVED***.restore();
+    ctx.restore();
 }
-function clipVertical(ct***REMOVED***, target, clipY) {
+function clipVertical(ctx, target, clipY) {
     const { segments , points  } = target;
     let first = true;
     let lineLoop = false;
-    ct***REMOVED***.beginPath();
+    ctx.beginPath();
     for (const segment of segments){
         const { start , end  } = segment;
         const firstPoint = points[start];
         const lastPoint = points[_findSegmentEnd(start, end, points)];
         if (first) {
-            ct***REMOVED***.moveTo(firstPoint.***REMOVED***, firstPoint.y);
+            ctx.moveTo(firstPoint.x, firstPoint.y);
             first = false;
         } else {
-            ct***REMOVED***.lineTo(firstPoint.***REMOVED***, clipY);
-            ct***REMOVED***.lineTo(firstPoint.***REMOVED***, firstPoint.y);
+            ctx.lineTo(firstPoint.x, clipY);
+            ctx.lineTo(firstPoint.x, firstPoint.y);
         }
-        lineLoop = !!target.pathSegment(ct***REMOVED***, segment, {
+        lineLoop = !!target.pathSegment(ctx, segment, {
             move: lineLoop
         });
         if (lineLoop) {
-            ct***REMOVED***.closePath();
+            ctx.closePath();
         } else {
-            ct***REMOVED***.lineTo(lastPoint.***REMOVED***, clipY);
+            ctx.lineTo(lastPoint.x, clipY);
         }
     }
-    ct***REMOVED***.lineTo(target.first().***REMOVED***, clipY);
-    ct***REMOVED***.closePath();
-    ct***REMOVED***.clip();
+    ctx.lineTo(target.first().x, clipY);
+    ctx.closePath();
+    ctx.clip();
 }
-function fill(ct***REMOVED***, cfg) {
+function fill(ctx, cfg) {
     const { line , target , property , color , scale  } = cfg;
     const segments = _segments(line, target, property);
     for (const { source: src , target: tgt , start , end  } of segments){
         const { style: { backgroundColor =color  } = {}  } = src;
         const notShape = target !== true;
-        ct***REMOVED***.save();
-        ct***REMOVED***.fillStyle = backgroundColor;
-        clipBounds(ct***REMOVED***, scale, notShape && _getBounds(property, start, end));
-        ct***REMOVED***.beginPath();
-        const lineLoop = !!line.pathSegment(ct***REMOVED***, src);
+        ctx.save();
+        ctx.fillStyle = backgroundColor;
+        clipBounds(ctx, scale, notShape && _getBounds(property, start, end));
+        ctx.beginPath();
+        const lineLoop = !!line.pathSegment(ctx, src);
         let loop;
         if (notShape) {
             if (lineLoop) {
-                ct***REMOVED***.closePath();
+                ctx.closePath();
             } else {
-                interpolatedLineTo(ct***REMOVED***, target, end, property);
+                interpolatedLineTo(ctx, target, end, property);
             }
-            const targetLoop = !!target.pathSegment(ct***REMOVED***, tgt, {
+            const targetLoop = !!target.pathSegment(ctx, tgt, {
                 move: lineLoop,
                 reverse: true
             });
             loop = lineLoop && targetLoop;
             if (!loop) {
-                interpolatedLineTo(ct***REMOVED***, target, start, property);
+                interpolatedLineTo(ctx, target, start, property);
             }
         }
-        ct***REMOVED***.closePath();
-        ct***REMOVED***.fill(loop ? 'evenodd' : 'nonzero');
-        ct***REMOVED***.restore();
+        ctx.closePath();
+        ctx.fill(loop ? 'evenodd' : 'nonzero');
+        ctx.restore();
     }
 }
-function clipBounds(ct***REMOVED***, scale, bounds) {
+function clipBounds(ctx, scale, bounds) {
     const { top , bottom  } = scale.chart.chartArea;
     const { property , start , end  } = bounds || {};
-    if (property === '***REMOVED***') {
-        ct***REMOVED***.beginPath();
-        ct***REMOVED***.rect(start, top, end - start, bottom - top);
-        ct***REMOVED***.clip();
+    if (property === 'x') {
+        ctx.beginPath();
+        ctx.rect(start, top, end - start, bottom - top);
+        ctx.clip();
     }
 }
-function interpolatedLineTo(ct***REMOVED***, target, point, property) {
+function interpolatedLineTo(ctx, target, point, property) {
     const interpolatedPoint = target.interpolate(point, property);
     if (interpolatedPoint) {
-        ct***REMOVED***.lineTo(interpolatedPoint.***REMOVED***, interpolatedPoint.y);
+        ctx.lineTo(interpolatedPoint.x, interpolatedPoint.y);
     }
 }
 
-var inde***REMOVED*** = {
+var index = {
     id: 'filler',
     afterDatasetsUpdate (chart, _args, options) {
         const count = (chart.data.datasets || []).length;
@@ -8100,10 +8100,10 @@ var inde***REMOVED*** = {
             if (line && line.options && line instanceof LineElement) {
                 source = {
                     visible: chart.isDatasetVisible(i),
-                    inde***REMOVED***: i,
+                    index: i,
                     fill: _decodeFill(line, i, count),
                     chart,
-                    a***REMOVED***is: meta.controller.options.inde***REMOVED***A***REMOVED***is,
+                    axis: meta.controller.options.indexAxis,
                     scale: meta.vScale,
                     line
                 };
@@ -8128,9 +8128,9 @@ var inde***REMOVED*** = {
             if (!source) {
                 continue;
             }
-            source.line.updateControlPoints(area, source.a***REMOVED***is);
+            source.line.updateControlPoints(area, source.axis);
             if (draw && source.fill) {
-                _drawfill(chart.ct***REMOVED***, source, area);
+                _drawfill(chart.ctx, source, area);
             }
         }
     },
@@ -8142,7 +8142,7 @@ var inde***REMOVED*** = {
         for(let i = metasets.length - 1; i >= 0; --i){
             const source = metasets[i].$filler;
             if (_shouldApplyFill(source)) {
-                _drawfill(chart.ct***REMOVED***, source, chart.chartArea);
+                _drawfill(chart.ctx, source, chart.chartArea);
             }
         }
     },
@@ -8151,7 +8151,7 @@ var inde***REMOVED*** = {
         if (!_shouldApplyFill(source) || options.drawTime !== 'beforeDatasetDraw') {
             return;
         }
-        _drawfill(chart.ct***REMOVED***, source, chart.chartArea);
+        _drawfill(chart.ctx, source, chart.chartArea);
     },
     defaults: {
         propagate: true,
@@ -8159,34 +8159,34 @@ var inde***REMOVED*** = {
     }
 };
 
-const getBo***REMOVED***Size = (labelOpts, fontSize)=>{
-    let { bo***REMOVED***Height =fontSize , bo***REMOVED***Width =fontSize  } = labelOpts;
+const getBoxSize = (labelOpts, fontSize)=>{
+    let { boxHeight =fontSize , boxWidth =fontSize  } = labelOpts;
     if (labelOpts.usePointStyle) {
-        bo***REMOVED***Height = Math.min(bo***REMOVED***Height, fontSize);
-        bo***REMOVED***Width = labelOpts.pointStyleWidth || Math.min(bo***REMOVED***Width, fontSize);
+        boxHeight = Math.min(boxHeight, fontSize);
+        boxWidth = labelOpts.pointStyleWidth || Math.min(boxWidth, fontSize);
     }
     return {
-        bo***REMOVED***Width,
-        bo***REMOVED***Height,
-        itemHeight: Math.ma***REMOVED***(fontSize, bo***REMOVED***Height)
+        boxWidth,
+        boxHeight,
+        itemHeight: Math.max(fontSize, boxHeight)
     };
 };
-const itemsEqual = (a, b)=>a !== null && b !== null && a.datasetInde***REMOVED*** === b.datasetInde***REMOVED*** && a.inde***REMOVED*** === b.inde***REMOVED***;
-class Legend e***REMOVED***tends Element {
+const itemsEqual = (a, b)=>a !== null && b !== null && a.datasetIndex === b.datasetIndex && a.index === b.index;
+class Legend extends Element {
  constructor(config){
         super();
         this._added = false;
-        this.legendHitBo***REMOVED***es = [];
+        this.legendHitBoxes = [];
  this._hoveredItem = null;
         this.doughnutMode = false;
         this.chart = config.chart;
         this.options = config.options;
-        this.ct***REMOVED*** = config.ct***REMOVED***;
+        this.ctx = config.ctx;
         this.legendItems = undefined;
         this.columnSizes = undefined;
         this.lineWidths = undefined;
-        this.ma***REMOVED***Height = undefined;
-        this.ma***REMOVED***Width = undefined;
+        this.maxHeight = undefined;
+        this.maxWidth = undefined;
         this.top = undefined;
         this.bottom = undefined;
         this.left = undefined;
@@ -8198,9 +8198,9 @@ class Legend e***REMOVED***tends Element {
         this.weight = undefined;
         this.fullSize = undefined;
     }
-    update(ma***REMOVED***Width, ma***REMOVED***Height, margins) {
-        this.ma***REMOVED***Width = ma***REMOVED***Width;
-        this.ma***REMOVED***Height = ma***REMOVED***Height;
+    update(maxWidth, maxHeight, margins) {
+        this.maxWidth = maxWidth;
+        this.maxHeight = maxHeight;
         this._margins = margins;
         this.setDimensions();
         this.buildLabels();
@@ -8208,11 +8208,11 @@ class Legend e***REMOVED***tends Element {
     }
     setDimensions() {
         if (this.isHorizontal()) {
-            this.width = this.ma***REMOVED***Width;
+            this.width = this.maxWidth;
             this.left = this._margins.left;
             this.right = this.width;
         } else {
-            this.height = this.ma***REMOVED***Height;
+            this.height = this.maxHeight;
             this.top = this._margins.top;
             this.bottom = this.height;
         }
@@ -8234,7 +8234,7 @@ class Legend e***REMOVED***tends Element {
         this.legendItems = legendItems;
     }
     fit() {
-        const { options , ct***REMOVED***  } = this;
+        const { options , ctx  } = this;
         if (!options.display) {
             this.width = this.height = 0;
             return;
@@ -8243,40 +8243,40 @@ class Legend e***REMOVED***tends Element {
         const labelFont = helpers_segment.toFont(labelOpts.font);
         const fontSize = labelFont.size;
         const titleHeight = this._computeTitleHeight();
-        const { bo***REMOVED***Width , itemHeight  } = getBo***REMOVED***Size(labelOpts, fontSize);
+        const { boxWidth , itemHeight  } = getBoxSize(labelOpts, fontSize);
         let width, height;
-        ct***REMOVED***.font = labelFont.string;
+        ctx.font = labelFont.string;
         if (this.isHorizontal()) {
-            width = this.ma***REMOVED***Width;
-            height = this._fitRows(titleHeight, fontSize, bo***REMOVED***Width, itemHeight) + 10;
+            width = this.maxWidth;
+            height = this._fitRows(titleHeight, fontSize, boxWidth, itemHeight) + 10;
         } else {
-            height = this.ma***REMOVED***Height;
-            width = this._fitCols(titleHeight, labelFont, bo***REMOVED***Width, itemHeight) + 10;
+            height = this.maxHeight;
+            width = this._fitCols(titleHeight, labelFont, boxWidth, itemHeight) + 10;
         }
-        this.width = Math.min(width, options.ma***REMOVED***Width || this.ma***REMOVED***Width);
-        this.height = Math.min(height, options.ma***REMOVED***Height || this.ma***REMOVED***Height);
+        this.width = Math.min(width, options.maxWidth || this.maxWidth);
+        this.height = Math.min(height, options.maxHeight || this.maxHeight);
     }
- _fitRows(titleHeight, fontSize, bo***REMOVED***Width, itemHeight) {
-        const { ct***REMOVED*** , ma***REMOVED***Width , options: { labels: { padding  }  }  } = this;
-        const hitbo***REMOVED***es = this.legendHitBo***REMOVED***es = [];
+ _fitRows(titleHeight, fontSize, boxWidth, itemHeight) {
+        const { ctx , maxWidth , options: { labels: { padding  }  }  } = this;
+        const hitboxes = this.legendHitBoxes = [];
         const lineWidths = this.lineWidths = [
             0
         ];
         const lineHeight = itemHeight + padding;
         let totalHeight = titleHeight;
-        ct***REMOVED***.te***REMOVED***tAlign = 'left';
-        ct***REMOVED***.te***REMOVED***tBaseline = 'middle';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
         let row = -1;
         let top = -lineHeight;
         this.legendItems.forEach((legendItem, i)=>{
-            const itemWidth = bo***REMOVED***Width + fontSize / 2 + ct***REMOVED***.measureTe***REMOVED***t(legendItem.te***REMOVED***t).width;
-            if (i === 0 || lineWidths[lineWidths.length - 1] + itemWidth + 2 * padding > ma***REMOVED***Width) {
+            const itemWidth = boxWidth + fontSize / 2 + ctx.measureText(legendItem.text).width;
+            if (i === 0 || lineWidths[lineWidths.length - 1] + itemWidth + 2 * padding > maxWidth) {
                 totalHeight += lineHeight;
                 lineWidths[lineWidths.length - (i > 0 ? 0 : 1)] = 0;
                 top += lineHeight;
                 row++;
             }
-            hitbo***REMOVED***es[i] = {
+            hitboxes[i] = {
                 left: 0,
                 top,
                 row,
@@ -8287,18 +8287,18 @@ class Legend e***REMOVED***tends Element {
         });
         return totalHeight;
     }
-    _fitCols(titleHeight, labelFont, bo***REMOVED***Width, _itemHeight) {
-        const { ct***REMOVED*** , ma***REMOVED***Height , options: { labels: { padding  }  }  } = this;
-        const hitbo***REMOVED***es = this.legendHitBo***REMOVED***es = [];
+    _fitCols(titleHeight, labelFont, boxWidth, _itemHeight) {
+        const { ctx , maxHeight , options: { labels: { padding  }  }  } = this;
+        const hitboxes = this.legendHitBoxes = [];
         const columnSizes = this.columnSizes = [];
-        const heightLimit = ma***REMOVED***Height - titleHeight;
+        const heightLimit = maxHeight - titleHeight;
         let totalWidth = padding;
         let currentColWidth = 0;
         let currentColHeight = 0;
         let left = 0;
         let col = 0;
         this.legendItems.forEach((legendItem, i)=>{
-            const { itemWidth , itemHeight  } = calculateItemSize(bo***REMOVED***Width, labelFont, ct***REMOVED***, legendItem, _itemHeight);
+            const { itemWidth , itemHeight  } = calculateItemSize(boxWidth, labelFont, ctx, legendItem, _itemHeight);
             if (i > 0 && currentColHeight + itemHeight + 2 * padding > heightLimit) {
                 totalWidth += currentColWidth + padding;
                 columnSizes.push({
@@ -8309,14 +8309,14 @@ class Legend e***REMOVED***tends Element {
                 col++;
                 currentColWidth = currentColHeight = 0;
             }
-            hitbo***REMOVED***es[i] = {
+            hitboxes[i] = {
                 left,
                 top: currentColHeight,
                 col,
                 width: itemWidth,
                 height: itemHeight
             };
-            currentColWidth = Math.ma***REMOVED***(currentColWidth, itemWidth);
+            currentColWidth = Math.max(currentColWidth, itemWidth);
             currentColHeight += itemHeight + padding;
         });
         totalWidth += currentColWidth;
@@ -8326,37 +8326,37 @@ class Legend e***REMOVED***tends Element {
         });
         return totalWidth;
     }
-    adjustHitBo***REMOVED***es() {
+    adjustHitBoxes() {
         if (!this.options.display) {
             return;
         }
         const titleHeight = this._computeTitleHeight();
-        const { legendHitBo***REMOVED***es: hitbo***REMOVED***es , options: { align , labels: { padding  } , rtl  }  } = this;
+        const { legendHitBoxes: hitboxes , options: { align , labels: { padding  } , rtl  }  } = this;
         const rtlHelper = helpers_segment.getRtlAdapter(rtl, this.left, this.width);
         if (this.isHorizontal()) {
             let row = 0;
             let left = helpers_segment._alignStartEnd(align, this.left + padding, this.right - this.lineWidths[row]);
-            for (const hitbo***REMOVED*** of hitbo***REMOVED***es){
-                if (row !== hitbo***REMOVED***.row) {
-                    row = hitbo***REMOVED***.row;
+            for (const hitbox of hitboxes){
+                if (row !== hitbox.row) {
+                    row = hitbox.row;
                     left = helpers_segment._alignStartEnd(align, this.left + padding, this.right - this.lineWidths[row]);
                 }
-                hitbo***REMOVED***.top += this.top + titleHeight + padding;
-                hitbo***REMOVED***.left = rtlHelper.leftForLtr(rtlHelper.***REMOVED***(left), hitbo***REMOVED***.width);
-                left += hitbo***REMOVED***.width + padding;
+                hitbox.top += this.top + titleHeight + padding;
+                hitbox.left = rtlHelper.leftForLtr(rtlHelper.x(left), hitbox.width);
+                left += hitbox.width + padding;
             }
         } else {
             let col = 0;
             let top = helpers_segment._alignStartEnd(align, this.top + titleHeight + padding, this.bottom - this.columnSizes[col].height);
-            for (const hitbo***REMOVED*** of hitbo***REMOVED***es){
-                if (hitbo***REMOVED***.col !== col) {
-                    col = hitbo***REMOVED***.col;
+            for (const hitbox of hitboxes){
+                if (hitbox.col !== col) {
+                    col = hitbox.col;
                     top = helpers_segment._alignStartEnd(align, this.top + titleHeight + padding, this.bottom - this.columnSizes[col].height);
                 }
-                hitbo***REMOVED***.top = top;
-                hitbo***REMOVED***.left += this.left + padding;
-                hitbo***REMOVED***.left = rtlHelper.leftForLtr(rtlHelper.***REMOVED***(hitbo***REMOVED***.left), hitbo***REMOVED***.width);
-                top += hitbo***REMOVED***.height + padding;
+                hitbox.top = top;
+                hitbox.left += this.left + padding;
+                hitbox.left = rtlHelper.leftForLtr(rtlHelper.x(hitbox.left), hitbox.width);
+                top += hitbox.height + padding;
             }
         }
     }
@@ -8365,14 +8365,14 @@ class Legend e***REMOVED***tends Element {
     }
     draw() {
         if (this.options.display) {
-            const ct***REMOVED*** = this.ct***REMOVED***;
-            helpers_segment.clipArea(ct***REMOVED***, this);
+            const ctx = this.ctx;
+            helpers_segment.clipArea(ctx, this);
             this._draw();
-            helpers_segment.unclipArea(ct***REMOVED***);
+            helpers_segment.unclipArea(ctx);
         }
     }
  _draw() {
-        const { options: opts , columnSizes , lineWidths , ct***REMOVED***  } = this;
+        const { options: opts , columnSizes , lineWidths , ctx  } = this;
         const { align , labels: labelOpts  } = opts;
         const defaultColor = helpers_segment.defaults.color;
         const rtlHelper = helpers_segment.getRtlAdapter(opts.rtl, this.left, this.width);
@@ -8382,114 +8382,114 @@ class Legend e***REMOVED***tends Element {
         const halfFontSize = fontSize / 2;
         let cursor;
         this.drawTitle();
-        ct***REMOVED***.te***REMOVED***tAlign = rtlHelper.te***REMOVED***tAlign('left');
-        ct***REMOVED***.te***REMOVED***tBaseline = 'middle';
-        ct***REMOVED***.lineWidth = 0.5;
-        ct***REMOVED***.font = labelFont.string;
-        const { bo***REMOVED***Width , bo***REMOVED***Height , itemHeight  } = getBo***REMOVED***Size(labelOpts, fontSize);
-        const drawLegendBo***REMOVED*** = function(***REMOVED***, y, legendItem) {
-            if (isNaN(bo***REMOVED***Width) || bo***REMOVED***Width <= 0 || isNaN(bo***REMOVED***Height) || bo***REMOVED***Height < 0) {
+        ctx.textAlign = rtlHelper.textAlign('left');
+        ctx.textBaseline = 'middle';
+        ctx.lineWidth = 0.5;
+        ctx.font = labelFont.string;
+        const { boxWidth , boxHeight , itemHeight  } = getBoxSize(labelOpts, fontSize);
+        const drawLegendBox = function(x, y, legendItem) {
+            if (isNaN(boxWidth) || boxWidth <= 0 || isNaN(boxHeight) || boxHeight < 0) {
                 return;
             }
-            ct***REMOVED***.save();
+            ctx.save();
             const lineWidth = helpers_segment.valueOrDefault(legendItem.lineWidth, 1);
-            ct***REMOVED***.fillStyle = helpers_segment.valueOrDefault(legendItem.fillStyle, defaultColor);
-            ct***REMOVED***.lineCap = helpers_segment.valueOrDefault(legendItem.lineCap, 'butt');
-            ct***REMOVED***.lineDashOffset = helpers_segment.valueOrDefault(legendItem.lineDashOffset, 0);
-            ct***REMOVED***.lineJoin = helpers_segment.valueOrDefault(legendItem.lineJoin, 'miter');
-            ct***REMOVED***.lineWidth = lineWidth;
-            ct***REMOVED***.strokeStyle = helpers_segment.valueOrDefault(legendItem.strokeStyle, defaultColor);
-            ct***REMOVED***.setLineDash(helpers_segment.valueOrDefault(legendItem.lineDash, []));
+            ctx.fillStyle = helpers_segment.valueOrDefault(legendItem.fillStyle, defaultColor);
+            ctx.lineCap = helpers_segment.valueOrDefault(legendItem.lineCap, 'butt');
+            ctx.lineDashOffset = helpers_segment.valueOrDefault(legendItem.lineDashOffset, 0);
+            ctx.lineJoin = helpers_segment.valueOrDefault(legendItem.lineJoin, 'miter');
+            ctx.lineWidth = lineWidth;
+            ctx.strokeStyle = helpers_segment.valueOrDefault(legendItem.strokeStyle, defaultColor);
+            ctx.setLineDash(helpers_segment.valueOrDefault(legendItem.lineDash, []));
             if (labelOpts.usePointStyle) {
                 const drawOptions = {
-                    radius: bo***REMOVED***Height * Math.SQRT2 / 2,
+                    radius: boxHeight * Math.SQRT2 / 2,
                     pointStyle: legendItem.pointStyle,
                     rotation: legendItem.rotation,
                     borderWidth: lineWidth
                 };
-                const centerX = rtlHelper.***REMOVED***Plus(***REMOVED***, bo***REMOVED***Width / 2);
+                const centerX = rtlHelper.xPlus(x, boxWidth / 2);
                 const centerY = y + halfFontSize;
-                helpers_segment.drawPointLegend(ct***REMOVED***, drawOptions, centerX, centerY, labelOpts.pointStyleWidth && bo***REMOVED***Width);
+                helpers_segment.drawPointLegend(ctx, drawOptions, centerX, centerY, labelOpts.pointStyleWidth && boxWidth);
             } else {
-                const yBo***REMOVED***Top = y + Math.ma***REMOVED***((fontSize - bo***REMOVED***Height) / 2, 0);
-                const ***REMOVED***Bo***REMOVED***Left = rtlHelper.leftForLtr(***REMOVED***, bo***REMOVED***Width);
+                const yBoxTop = y + Math.max((fontSize - boxHeight) / 2, 0);
+                const xBoxLeft = rtlHelper.leftForLtr(x, boxWidth);
                 const borderRadius = helpers_segment.toTRBLCorners(legendItem.borderRadius);
-                ct***REMOVED***.beginPath();
+                ctx.beginPath();
                 if (Object.values(borderRadius).some((v)=>v !== 0)) {
-                    helpers_segment.addRoundedRectPath(ct***REMOVED***, {
-                        ***REMOVED***: ***REMOVED***Bo***REMOVED***Left,
-                        y: yBo***REMOVED***Top,
-                        w: bo***REMOVED***Width,
-                        h: bo***REMOVED***Height,
+                    helpers_segment.addRoundedRectPath(ctx, {
+                        x: xBoxLeft,
+                        y: yBoxTop,
+                        w: boxWidth,
+                        h: boxHeight,
                         radius: borderRadius
                     });
                 } else {
-                    ct***REMOVED***.rect(***REMOVED***Bo***REMOVED***Left, yBo***REMOVED***Top, bo***REMOVED***Width, bo***REMOVED***Height);
+                    ctx.rect(xBoxLeft, yBoxTop, boxWidth, boxHeight);
                 }
-                ct***REMOVED***.fill();
+                ctx.fill();
                 if (lineWidth !== 0) {
-                    ct***REMOVED***.stroke();
+                    ctx.stroke();
                 }
             }
-            ct***REMOVED***.restore();
+            ctx.restore();
         };
-        const fillTe***REMOVED***t = function(***REMOVED***, y, legendItem) {
-            helpers_segment.renderTe***REMOVED***t(ct***REMOVED***, legendItem.te***REMOVED***t, ***REMOVED***, y + itemHeight / 2, labelFont, {
+        const fillText = function(x, y, legendItem) {
+            helpers_segment.renderText(ctx, legendItem.text, x, y + itemHeight / 2, labelFont, {
                 strikethrough: legendItem.hidden,
-                te***REMOVED***tAlign: rtlHelper.te***REMOVED***tAlign(legendItem.te***REMOVED***tAlign)
+                textAlign: rtlHelper.textAlign(legendItem.textAlign)
             });
         };
         const isHorizontal = this.isHorizontal();
         const titleHeight = this._computeTitleHeight();
         if (isHorizontal) {
             cursor = {
-                ***REMOVED***: helpers_segment._alignStartEnd(align, this.left + padding, this.right - lineWidths[0]),
+                x: helpers_segment._alignStartEnd(align, this.left + padding, this.right - lineWidths[0]),
                 y: this.top + padding + titleHeight,
                 line: 0
             };
         } else {
             cursor = {
-                ***REMOVED***: this.left + padding,
+                x: this.left + padding,
                 y: helpers_segment._alignStartEnd(align, this.top + titleHeight + padding, this.bottom - columnSizes[0].height),
                 line: 0
             };
         }
-        helpers_segment.overrideTe***REMOVED***tDirection(this.ct***REMOVED***, opts.te***REMOVED***tDirection);
+        helpers_segment.overrideTextDirection(this.ctx, opts.textDirection);
         const lineHeight = itemHeight + padding;
         this.legendItems.forEach((legendItem, i)=>{
-            ct***REMOVED***.strokeStyle = legendItem.fontColor;
-            ct***REMOVED***.fillStyle = legendItem.fontColor;
-            const te***REMOVED***tWidth = ct***REMOVED***.measureTe***REMOVED***t(legendItem.te***REMOVED***t).width;
-            const te***REMOVED***tAlign = rtlHelper.te***REMOVED***tAlign(legendItem.te***REMOVED***tAlign || (legendItem.te***REMOVED***tAlign = labelOpts.te***REMOVED***tAlign));
-            const width = bo***REMOVED***Width + halfFontSize + te***REMOVED***tWidth;
-            let ***REMOVED*** = cursor.***REMOVED***;
+            ctx.strokeStyle = legendItem.fontColor;
+            ctx.fillStyle = legendItem.fontColor;
+            const textWidth = ctx.measureText(legendItem.text).width;
+            const textAlign = rtlHelper.textAlign(legendItem.textAlign || (legendItem.textAlign = labelOpts.textAlign));
+            const width = boxWidth + halfFontSize + textWidth;
+            let x = cursor.x;
             let y = cursor.y;
             rtlHelper.setWidth(this.width);
             if (isHorizontal) {
-                if (i > 0 && ***REMOVED*** + width + padding > this.right) {
+                if (i > 0 && x + width + padding > this.right) {
                     y = cursor.y += lineHeight;
                     cursor.line++;
-                    ***REMOVED*** = cursor.***REMOVED*** = helpers_segment._alignStartEnd(align, this.left + padding, this.right - lineWidths[cursor.line]);
+                    x = cursor.x = helpers_segment._alignStartEnd(align, this.left + padding, this.right - lineWidths[cursor.line]);
                 }
             } else if (i > 0 && y + lineHeight > this.bottom) {
-                ***REMOVED*** = cursor.***REMOVED*** = ***REMOVED*** + columnSizes[cursor.line].width + padding;
+                x = cursor.x = x + columnSizes[cursor.line].width + padding;
                 cursor.line++;
                 y = cursor.y = helpers_segment._alignStartEnd(align, this.top + titleHeight + padding, this.bottom - columnSizes[cursor.line].height);
             }
-            const realX = rtlHelper.***REMOVED***(***REMOVED***);
-            drawLegendBo***REMOVED***(realX, y, legendItem);
-            ***REMOVED*** = helpers_segment._te***REMOVED***tX(te***REMOVED***tAlign, ***REMOVED*** + bo***REMOVED***Width + halfFontSize, isHorizontal ? ***REMOVED*** + width : this.right, opts.rtl);
-            fillTe***REMOVED***t(rtlHelper.***REMOVED***(***REMOVED***), y, legendItem);
+            const realX = rtlHelper.x(x);
+            drawLegendBox(realX, y, legendItem);
+            x = helpers_segment._textX(textAlign, x + boxWidth + halfFontSize, isHorizontal ? x + width : this.right, opts.rtl);
+            fillText(rtlHelper.x(x), y, legendItem);
             if (isHorizontal) {
-                cursor.***REMOVED*** += width + padding;
-            } else if (typeof legendItem.te***REMOVED***t !== 'string') {
+                cursor.x += width + padding;
+            } else if (typeof legendItem.text !== 'string') {
                 const fontLineHeight = labelFont.lineHeight;
                 cursor.y += calculateLegendItemHeight(legendItem, fontLineHeight) + padding;
             } else {
                 cursor.y += lineHeight;
             }
         });
-        helpers_segment.restoreTe***REMOVED***tDirection(this.ct***REMOVED***, opts.te***REMOVED***tDirection);
+        helpers_segment.restoreTextDirection(this.ctx, opts.textDirection);
     }
  drawTitle() {
         const opts = this.options;
@@ -8500,28 +8500,28 @@ class Legend e***REMOVED***tends Element {
             return;
         }
         const rtlHelper = helpers_segment.getRtlAdapter(opts.rtl, this.left, this.width);
-        const ct***REMOVED*** = this.ct***REMOVED***;
+        const ctx = this.ctx;
         const position = titleOpts.position;
         const halfFontSize = titleFont.size / 2;
         const topPaddingPlusHalfFontSize = titlePadding.top + halfFontSize;
         let y;
         let left = this.left;
-        let ma***REMOVED***Width = this.width;
+        let maxWidth = this.width;
         if (this.isHorizontal()) {
-            ma***REMOVED***Width = Math.ma***REMOVED***(...this.lineWidths);
+            maxWidth = Math.max(...this.lineWidths);
             y = this.top + topPaddingPlusHalfFontSize;
-            left = helpers_segment._alignStartEnd(opts.align, left, this.right - ma***REMOVED***Width);
+            left = helpers_segment._alignStartEnd(opts.align, left, this.right - maxWidth);
         } else {
-            const ma***REMOVED***Height = this.columnSizes.reduce((acc, size)=>Math.ma***REMOVED***(acc, size.height), 0);
-            y = topPaddingPlusHalfFontSize + helpers_segment._alignStartEnd(opts.align, this.top, this.bottom - ma***REMOVED***Height - opts.labels.padding - this._computeTitleHeight());
+            const maxHeight = this.columnSizes.reduce((acc, size)=>Math.max(acc, size.height), 0);
+            y = topPaddingPlusHalfFontSize + helpers_segment._alignStartEnd(opts.align, this.top, this.bottom - maxHeight - opts.labels.padding - this._computeTitleHeight());
         }
-        const ***REMOVED*** = helpers_segment._alignStartEnd(position, left, left + ma***REMOVED***Width);
-        ct***REMOVED***.te***REMOVED***tAlign = rtlHelper.te***REMOVED***tAlign(helpers_segment._toLeftRightCenter(position));
-        ct***REMOVED***.te***REMOVED***tBaseline = 'middle';
-        ct***REMOVED***.strokeStyle = titleOpts.color;
-        ct***REMOVED***.fillStyle = titleOpts.color;
-        ct***REMOVED***.font = titleFont.string;
-        helpers_segment.renderTe***REMOVED***t(ct***REMOVED***, titleOpts.te***REMOVED***t, ***REMOVED***, y, titleFont);
+        const x = helpers_segment._alignStartEnd(position, left, left + maxWidth);
+        ctx.textAlign = rtlHelper.textAlign(helpers_segment._toLeftRightCenter(position));
+        ctx.textBaseline = 'middle';
+        ctx.strokeStyle = titleOpts.color;
+        ctx.fillStyle = titleOpts.color;
+        ctx.font = titleFont.string;
+        helpers_segment.renderText(ctx, titleOpts.text, x, y, titleFont);
     }
  _computeTitleHeight() {
         const titleOpts = this.options.title;
@@ -8529,13 +8529,13 @@ class Legend e***REMOVED***tends Element {
         const titlePadding = helpers_segment.toPadding(titleOpts.padding);
         return titleOpts.display ? titleFont.lineHeight + titlePadding.height : 0;
     }
- _getLegendItemAt(***REMOVED***, y) {
-        let i, hitBo***REMOVED***, lh;
-        if (helpers_segment._isBetween(***REMOVED***, this.left, this.right) && helpers_segment._isBetween(y, this.top, this.bottom)) {
-            lh = this.legendHitBo***REMOVED***es;
+ _getLegendItemAt(x, y) {
+        let i, hitBox, lh;
+        if (helpers_segment._isBetween(x, this.left, this.right) && helpers_segment._isBetween(y, this.top, this.bottom)) {
+            lh = this.legendHitBoxes;
             for(i = 0; i < lh.length; ++i){
-                hitBo***REMOVED*** = lh[i];
-                if (helpers_segment._isBetween(***REMOVED***, hitBo***REMOVED***.left, hitBo***REMOVED***.left + hitBo***REMOVED***.width) && helpers_segment._isBetween(y, hitBo***REMOVED***.top, hitBo***REMOVED***.top + hitBo***REMOVED***.height)) {
+                hitBox = lh[i];
+                if (helpers_segment._isBetween(x, hitBox.left, hitBox.left + hitBox.width) && helpers_segment._isBetween(y, hitBox.top, hitBox.top + hitBox.height)) {
                     return this.legendItems[i];
                 }
             }
@@ -8547,7 +8547,7 @@ class Legend e***REMOVED***tends Element {
         if (!isListened(e.type, opts)) {
             return;
         }
-        const hoveredItem = this._getLegendItemAt(e.***REMOVED***, e.y);
+        const hoveredItem = this._getLegendItemAt(e.x, e.y);
         if (e.type === 'mousemove' || e.type === 'mouseout') {
             const previous = this._hoveredItem;
             const sameItem = itemsEqual(previous, hoveredItem);
@@ -8575,30 +8575,30 @@ class Legend e***REMOVED***tends Element {
         }
     }
 }
-function calculateItemSize(bo***REMOVED***Width, labelFont, ct***REMOVED***, legendItem, _itemHeight) {
-    const itemWidth = calculateItemWidth(legendItem, bo***REMOVED***Width, labelFont, ct***REMOVED***);
+function calculateItemSize(boxWidth, labelFont, ctx, legendItem, _itemHeight) {
+    const itemWidth = calculateItemWidth(legendItem, boxWidth, labelFont, ctx);
     const itemHeight = calculateItemHeight(_itemHeight, legendItem, labelFont.lineHeight);
     return {
         itemWidth,
         itemHeight
     };
 }
-function calculateItemWidth(legendItem, bo***REMOVED***Width, labelFont, ct***REMOVED***) {
-    let legendItemTe***REMOVED***t = legendItem.te***REMOVED***t;
-    if (legendItemTe***REMOVED***t && typeof legendItemTe***REMOVED***t !== 'string') {
-        legendItemTe***REMOVED***t = legendItemTe***REMOVED***t.reduce((a, b)=>a.length > b.length ? a : b);
+function calculateItemWidth(legendItem, boxWidth, labelFont, ctx) {
+    let legendItemText = legendItem.text;
+    if (legendItemText && typeof legendItemText !== 'string') {
+        legendItemText = legendItemText.reduce((a, b)=>a.length > b.length ? a : b);
     }
-    return bo***REMOVED***Width + labelFont.size / 2 + ct***REMOVED***.measureTe***REMOVED***t(legendItemTe***REMOVED***t).width;
+    return boxWidth + labelFont.size / 2 + ctx.measureText(legendItemText).width;
 }
 function calculateItemHeight(_itemHeight, legendItem, fontLineHeight) {
     let itemHeight = _itemHeight;
-    if (typeof legendItem.te***REMOVED***t !== 'string') {
+    if (typeof legendItem.text !== 'string') {
         itemHeight = calculateLegendItemHeight(legendItem, fontLineHeight);
     }
     return itemHeight;
 }
 function calculateLegendItemHeight(legendItem, fontLineHeight) {
-    const labelHeight = legendItem.te***REMOVED***t ? legendItem.te***REMOVED***t.length : 0;
+    const labelHeight = legendItem.text ? legendItem.text.length : 0;
     return fontLineHeight * labelHeight;
 }
 function isListened(type, opts) {
@@ -8615,15 +8615,15 @@ var plugin_legend = {
  _element: Legend,
     start (chart, _args, options) {
         const legend = chart.legend = new Legend({
-            ct***REMOVED***: chart.ct***REMOVED***,
+            ctx: chart.ctx,
             options,
             chart
         });
         layouts.configure(chart, legend, options);
-        layouts.addBo***REMOVED***(chart, legend);
+        layouts.addBox(chart, legend);
     },
     stop (chart) {
-        layouts.removeBo***REMOVED***(chart, chart.legend);
+        layouts.removeBox(chart, chart.legend);
         delete chart.legend;
     },
     beforeUpdate (chart, _args, options) {
@@ -8634,7 +8634,7 @@ var plugin_legend = {
     afterUpdate (chart) {
         const legend = chart.legend;
         legend.buildLabels();
-        legend.adjustHitBo***REMOVED***es();
+        legend.adjustHitBoxes();
     },
     afterEvent (chart, args) {
         if (!args.replay) {
@@ -8649,30 +8649,30 @@ var plugin_legend = {
         reverse: false,
         weight: 1000,
         onClick (e, legendItem, legend) {
-            const inde***REMOVED*** = legendItem.datasetInde***REMOVED***;
+            const index = legendItem.datasetIndex;
             const ci = legend.chart;
-            if (ci.isDatasetVisible(inde***REMOVED***)) {
-                ci.hide(inde***REMOVED***);
+            if (ci.isDatasetVisible(index)) {
+                ci.hide(index);
                 legendItem.hidden = true;
             } else {
-                ci.show(inde***REMOVED***);
+                ci.show(index);
                 legendItem.hidden = false;
             }
         },
         onHover: null,
         onLeave: null,
         labels: {
-            color: (ct***REMOVED***)=>ct***REMOVED***.chart.options.color,
-            bo***REMOVED***Width: 40,
+            color: (ctx)=>ctx.chart.options.color,
+            boxWidth: 40,
             padding: 10,
             generateLabels (chart) {
                 const datasets = chart.data.datasets;
-                const { labels: { usePointStyle , pointStyle , te***REMOVED***tAlign , color , useBorderRadius , borderRadius  }  } = chart.legend.options;
+                const { labels: { usePointStyle , pointStyle , textAlign , color , useBorderRadius , borderRadius  }  } = chart.legend.options;
                 return chart._getSortedDatasetMetas().map((meta)=>{
                     const style = meta.controller.getStyle(usePointStyle ? 0 : undefined);
                     const borderWidth = helpers_segment.toPadding(style.borderWidth);
                     return {
-                        te***REMOVED***t: datasets[meta.inde***REMOVED***].label,
+                        text: datasets[meta.index].label,
                         fillStyle: style.backgroundColor,
                         fontColor: color,
                         hidden: !meta.visible,
@@ -8684,18 +8684,18 @@ var plugin_legend = {
                         strokeStyle: style.borderColor,
                         pointStyle: pointStyle || style.pointStyle,
                         rotation: style.rotation,
-                        te***REMOVED***tAlign: te***REMOVED***tAlign || style.te***REMOVED***tAlign,
+                        textAlign: textAlign || style.textAlign,
                         borderRadius: useBorderRadius && (borderRadius || style.borderRadius),
-                        datasetInde***REMOVED***: meta.inde***REMOVED***
+                        datasetIndex: meta.index
                     };
                 }, this);
             }
         },
         title: {
-            color: (ct***REMOVED***)=>ct***REMOVED***.chart.options.color,
+            color: (ctx)=>ctx.chart.options.color,
             display: false,
             position: 'center',
-            te***REMOVED***t: ''
+            text: ''
         }
     },
     descriptors: {
@@ -8710,12 +8710,12 @@ var plugin_legend = {
     }
 };
 
-class Title e***REMOVED***tends Element {
+class Title extends Element {
  constructor(config){
         super();
         this.chart = config.chart;
         this.options = config.options;
-        this.ct***REMOVED*** = config.ct***REMOVED***;
+        this.ctx = config.ctx;
         this._padding = undefined;
         this.top = undefined;
         this.bottom = undefined;
@@ -8727,7 +8727,7 @@ class Title e***REMOVED***tends Element {
         this.weight = undefined;
         this.fullSize = undefined;
     }
-    update(ma***REMOVED***Width, ma***REMOVED***Height) {
+    update(maxWidth, maxHeight) {
         const opts = this.options;
         this.left = 0;
         this.top = 0;
@@ -8735,15 +8735,15 @@ class Title e***REMOVED***tends Element {
             this.width = this.height = this.right = this.bottom = 0;
             return;
         }
-        this.width = this.right = ma***REMOVED***Width;
-        this.height = this.bottom = ma***REMOVED***Height;
-        const lineCount = helpers_segment.isArray(opts.te***REMOVED***t) ? opts.te***REMOVED***t.length : 1;
+        this.width = this.right = maxWidth;
+        this.height = this.bottom = maxHeight;
+        const lineCount = helpers_segment.isArray(opts.text) ? opts.text.length : 1;
         this._padding = helpers_segment.toPadding(opts.padding);
-        const te***REMOVED***tSize = lineCount * helpers_segment.toFont(opts.font).lineHeight + this._padding.height;
+        const textSize = lineCount * helpers_segment.toFont(opts.font).lineHeight + this._padding.height;
         if (this.isHorizontal()) {
-            this.height = te***REMOVED***tSize;
+            this.height = textSize;
         } else {
-            this.width = te***REMOVED***tSize;
+            this.width = textSize;
         }
     }
     isHorizontal() {
@@ -8754,11 +8754,11 @@ class Title e***REMOVED***tends Element {
         const { top , left , bottom , right , options  } = this;
         const align = options.align;
         let rotation = 0;
-        let ma***REMOVED***Width, titleX, titleY;
+        let maxWidth, titleX, titleY;
         if (this.isHorizontal()) {
             titleX = helpers_segment._alignStartEnd(align, left, right);
             titleY = top + offset;
-            ma***REMOVED***Width = right - left;
+            maxWidth = right - left;
         } else {
             if (options.position === 'left') {
                 titleX = left + offset;
@@ -8769,17 +8769,17 @@ class Title e***REMOVED***tends Element {
                 titleY = helpers_segment._alignStartEnd(align, top, bottom);
                 rotation = helpers_segment.PI * 0.5;
             }
-            ma***REMOVED***Width = bottom - top;
+            maxWidth = bottom - top;
         }
         return {
             titleX,
             titleY,
-            ma***REMOVED***Width,
+            maxWidth,
             rotation
         };
     }
     draw() {
-        const ct***REMOVED*** = this.ct***REMOVED***;
+        const ctx = this.ctx;
         const opts = this.options;
         if (!opts.display) {
             return;
@@ -8787,13 +8787,13 @@ class Title e***REMOVED***tends Element {
         const fontOpts = helpers_segment.toFont(opts.font);
         const lineHeight = fontOpts.lineHeight;
         const offset = lineHeight / 2 + this._padding.top;
-        const { titleX , titleY , ma***REMOVED***Width , rotation  } = this._drawArgs(offset);
-        helpers_segment.renderTe***REMOVED***t(ct***REMOVED***, opts.te***REMOVED***t, 0, 0, fontOpts, {
+        const { titleX , titleY , maxWidth , rotation  } = this._drawArgs(offset);
+        helpers_segment.renderText(ctx, opts.text, 0, 0, fontOpts, {
             color: opts.color,
-            ma***REMOVED***Width,
+            maxWidth,
             rotation,
-            te***REMOVED***tAlign: helpers_segment._toLeftRightCenter(opts.align),
-            te***REMOVED***tBaseline: 'middle',
+            textAlign: helpers_segment._toLeftRightCenter(opts.align),
+            textBaseline: 'middle',
             translation: [
                 titleX,
                 titleY
@@ -8803,12 +8803,12 @@ class Title e***REMOVED***tends Element {
 }
 function createTitle(chart, titleOpts) {
     const title = new Title({
-        ct***REMOVED***: chart.ct***REMOVED***,
+        ctx: chart.ctx,
         options: titleOpts,
         chart
     });
     layouts.configure(chart, title, titleOpts);
-    layouts.addBo***REMOVED***(chart, title);
+    layouts.addBox(chart, title);
     chart.titleBlock = title;
 }
 var plugin_title = {
@@ -8819,7 +8819,7 @@ var plugin_title = {
     },
     stop (chart) {
         const titleBlock = chart.titleBlock;
-        layouts.removeBo***REMOVED***(chart, titleBlock);
+        layouts.removeBox(chart, titleBlock);
         delete chart.titleBlock;
     },
     beforeUpdate (chart, _args, options) {
@@ -8836,7 +8836,7 @@ var plugin_title = {
         fullSize: true,
         padding: 10,
         position: 'top',
-        te***REMOVED***t: '',
+        text: '',
         weight: 2000
     },
     defaultRoutes: {
@@ -8844,7 +8844,7 @@ var plugin_title = {
     },
     descriptors: {
         _scriptable: true,
-        _inde***REMOVED***able: false
+        _indexable: false
     }
 };
 
@@ -8853,16 +8853,16 @@ var plugin_subtitle = {
     id: 'subtitle',
     start (chart, _args, options) {
         const title = new Title({
-            ct***REMOVED***: chart.ct***REMOVED***,
+            ctx: chart.ctx,
             options,
             chart
         });
         layouts.configure(chart, title, options);
-        layouts.addBo***REMOVED***(chart, title);
+        layouts.addBox(chart, title);
         map.set(chart, title);
     },
     stop (chart) {
-        layouts.removeBo***REMOVED***(chart, map.get(chart));
+        layouts.removeBox(chart, map.get(chart));
         map.delete(chart);
     },
     beforeUpdate (chart, _args, options) {
@@ -8879,7 +8879,7 @@ var plugin_subtitle = {
         fullSize: true,
         padding: 0,
         position: 'top',
-        te***REMOVED***t: '',
+        text: '',
         weight: 1500
     },
     defaultRoutes: {
@@ -8887,7 +8887,7 @@ var plugin_subtitle = {
     },
     descriptors: {
         _scriptable: true,
-        _inde***REMOVED***able: false
+        _indexable: false
     }
 };
 
@@ -8897,23 +8897,23 @@ const positioners = {
             return false;
         }
         let i, len;
-        let ***REMOVED***Set = new Set();
+        let xSet = new Set();
         let y = 0;
         let count = 0;
         for(i = 0, len = items.length; i < len; ++i){
             const el = items[i].element;
             if (el && el.hasValue()) {
                 const pos = el.tooltipPosition();
-                ***REMOVED***Set.add(pos.***REMOVED***);
+                xSet.add(pos.x);
                 y += pos.y;
                 ++count;
             }
         }
-        const ***REMOVED***Average = [
-            ...***REMOVED***Set
-        ].reduce((a, b)=>a + b) / ***REMOVED***Set.size;
+        const xAverage = [
+            ...xSet
+        ].reduce((a, b)=>a + b) / xSet.size;
         return {
-            ***REMOVED***: ***REMOVED***Average,
+            x: xAverage,
             y: y / count
         };
     },
@@ -8921,7 +8921,7 @@ const positioners = {
         if (!items.length) {
             return false;
         }
-        let ***REMOVED*** = eventPosition.***REMOVED***;
+        let x = eventPosition.x;
         let y = eventPosition.y;
         let minDistance = Number.POSITIVE_INFINITY;
         let i, len, nearestElement;
@@ -8938,11 +8938,11 @@ const positioners = {
         }
         if (nearestElement) {
             const tp = nearestElement.tooltipPosition();
-            ***REMOVED*** = tp.***REMOVED***;
+            x = tp.x;
             y = tp.y;
         }
         return {
-            ***REMOVED***,
+            x,
             y
         };
     }
@@ -8958,31 +8958,31 @@ function pushOrConcat(base, toPush) {
     return base;
 }
  function splitNewlines(str) {
-    if ((typeof str === 'string' || str instanceof String) && str.inde***REMOVED***Of('\n') > -1) {
+    if ((typeof str === 'string' || str instanceof String) && str.indexOf('\n') > -1) {
         return str.split('\n');
     }
     return str;
 }
  function createTooltipItem(chart, item) {
-    const { element , datasetInde***REMOVED*** , inde***REMOVED***  } = item;
-    const controller = chart.getDatasetMeta(datasetInde***REMOVED***).controller;
-    const { label , value  } = controller.getLabelAndValue(inde***REMOVED***);
+    const { element , datasetIndex , index  } = item;
+    const controller = chart.getDatasetMeta(datasetIndex).controller;
+    const { label , value  } = controller.getLabelAndValue(index);
     return {
         chart,
         label,
-        parsed: controller.getParsed(inde***REMOVED***),
-        raw: chart.data.datasets[datasetInde***REMOVED***].data[inde***REMOVED***],
+        parsed: controller.getParsed(index),
+        raw: chart.data.datasets[datasetIndex].data[index],
         formattedValue: value,
         dataset: controller.getDataset(),
-        dataInde***REMOVED***: inde***REMOVED***,
-        datasetInde***REMOVED***,
+        dataIndex: index,
+        datasetIndex,
         element
     };
 }
  function getTooltipSize(tooltip, options) {
-    const ct***REMOVED*** = tooltip.chart.ct***REMOVED***;
+    const ctx = tooltip.chart.ctx;
     const { body , footer , title  } = tooltip;
-    const { bo***REMOVED***Width , bo***REMOVED***Height  } = options;
+    const { boxWidth , boxHeight  } = options;
     const bodyFont = helpers_segment.toFont(options.bodyFont);
     const titleFont = helpers_segment.toFont(options.titleFont);
     const footerFont = helpers_segment.toFont(options.footerFont);
@@ -8998,31 +8998,31 @@ function pushOrConcat(base, toPush) {
         height += titleLineCount * titleFont.lineHeight + (titleLineCount - 1) * options.titleSpacing + options.titleMarginBottom;
     }
     if (combinedBodyLength) {
-        const bodyLineHeight = options.displayColors ? Math.ma***REMOVED***(bo***REMOVED***Height, bodyFont.lineHeight) : bodyFont.lineHeight;
+        const bodyLineHeight = options.displayColors ? Math.max(boxHeight, bodyFont.lineHeight) : bodyFont.lineHeight;
         height += bodyLineItemCount * bodyLineHeight + (combinedBodyLength - bodyLineItemCount) * bodyFont.lineHeight + (combinedBodyLength - 1) * options.bodySpacing;
     }
     if (footerLineCount) {
         height += options.footerMarginTop + footerLineCount * footerFont.lineHeight + (footerLineCount - 1) * options.footerSpacing;
     }
     let widthPadding = 0;
-    const ma***REMOVED***LineWidth = function(line) {
-        width = Math.ma***REMOVED***(width, ct***REMOVED***.measureTe***REMOVED***t(line).width + widthPadding);
+    const maxLineWidth = function(line) {
+        width = Math.max(width, ctx.measureText(line).width + widthPadding);
     };
-    ct***REMOVED***.save();
-    ct***REMOVED***.font = titleFont.string;
-    helpers_segment.each(tooltip.title, ma***REMOVED***LineWidth);
-    ct***REMOVED***.font = bodyFont.string;
-    helpers_segment.each(tooltip.beforeBody.concat(tooltip.afterBody), ma***REMOVED***LineWidth);
-    widthPadding = options.displayColors ? bo***REMOVED***Width + 2 + options.bo***REMOVED***Padding : 0;
+    ctx.save();
+    ctx.font = titleFont.string;
+    helpers_segment.each(tooltip.title, maxLineWidth);
+    ctx.font = bodyFont.string;
+    helpers_segment.each(tooltip.beforeBody.concat(tooltip.afterBody), maxLineWidth);
+    widthPadding = options.displayColors ? boxWidth + 2 + options.boxPadding : 0;
     helpers_segment.each(body, (bodyItem)=>{
-        helpers_segment.each(bodyItem.before, ma***REMOVED***LineWidth);
-        helpers_segment.each(bodyItem.lines, ma***REMOVED***LineWidth);
-        helpers_segment.each(bodyItem.after, ma***REMOVED***LineWidth);
+        helpers_segment.each(bodyItem.before, maxLineWidth);
+        helpers_segment.each(bodyItem.lines, maxLineWidth);
+        helpers_segment.each(bodyItem.after, maxLineWidth);
     });
     widthPadding = 0;
-    ct***REMOVED***.font = footerFont.string;
-    helpers_segment.each(tooltip.footer, ma***REMOVED***LineWidth);
-    ct***REMOVED***.restore();
+    ctx.font = footerFont.string;
+    helpers_segment.each(tooltip.footer, maxLineWidth);
+    ctx.restore();
     width += padding.width;
     return {
         width,
@@ -9038,47 +9038,47 @@ function determineYAlign(chart, size) {
     }
     return 'center';
 }
-function doesNotFitWithAlign(***REMOVED***Align, chart, options, size) {
-    const { ***REMOVED*** , width  } = size;
+function doesNotFitWithAlign(xAlign, chart, options, size) {
+    const { x , width  } = size;
     const caret = options.caretSize + options.caretPadding;
-    if (***REMOVED***Align === 'left' && ***REMOVED*** + width + caret > chart.width) {
+    if (xAlign === 'left' && x + width + caret > chart.width) {
         return true;
     }
-    if (***REMOVED***Align === 'right' && ***REMOVED*** - width - caret < 0) {
+    if (xAlign === 'right' && x - width - caret < 0) {
         return true;
     }
 }
 function determineXAlign(chart, options, size, yAlign) {
-    const { ***REMOVED*** , width  } = size;
+    const { x , width  } = size;
     const { width: chartWidth , chartArea: { left , right  }  } = chart;
-    let ***REMOVED***Align = 'center';
+    let xAlign = 'center';
     if (yAlign === 'center') {
-        ***REMOVED***Align = ***REMOVED*** <= (left + right) / 2 ? 'left' : 'right';
-    } else if (***REMOVED*** <= width / 2) {
-        ***REMOVED***Align = 'left';
-    } else if (***REMOVED*** >= chartWidth - width / 2) {
-        ***REMOVED***Align = 'right';
+        xAlign = x <= (left + right) / 2 ? 'left' : 'right';
+    } else if (x <= width / 2) {
+        xAlign = 'left';
+    } else if (x >= chartWidth - width / 2) {
+        xAlign = 'right';
     }
-    if (doesNotFitWithAlign(***REMOVED***Align, chart, options, size)) {
-        ***REMOVED***Align = 'center';
+    if (doesNotFitWithAlign(xAlign, chart, options, size)) {
+        xAlign = 'center';
     }
-    return ***REMOVED***Align;
+    return xAlign;
 }
  function determineAlignment(chart, options, size) {
     const yAlign = size.yAlign || options.yAlign || determineYAlign(chart, size);
     return {
-        ***REMOVED***Align: size.***REMOVED***Align || options.***REMOVED***Align || determineXAlign(chart, options, size, yAlign),
+        xAlign: size.xAlign || options.xAlign || determineXAlign(chart, options, size, yAlign),
         yAlign
     };
 }
-function alignX(size, ***REMOVED***Align) {
-    let { ***REMOVED*** , width  } = size;
-    if (***REMOVED***Align === 'right') {
-        ***REMOVED*** -= width;
-    } else if (***REMOVED***Align === 'center') {
-        ***REMOVED*** -= width / 2;
+function alignX(size, xAlign) {
+    let { x , width  } = size;
+    if (xAlign === 'right') {
+        x -= width;
+    } else if (xAlign === 'center') {
+        x -= width / 2;
     }
-    return ***REMOVED***;
+    return x;
 }
 function alignY(size, yAlign, paddingAndSize) {
     let { y , height  } = size;
@@ -9093,43 +9093,43 @@ function alignY(size, yAlign, paddingAndSize) {
 }
  function getBackgroundPoint(options, size, alignment, chart) {
     const { caretSize , caretPadding , cornerRadius  } = options;
-    const { ***REMOVED***Align , yAlign  } = alignment;
+    const { xAlign , yAlign  } = alignment;
     const paddingAndSize = caretSize + caretPadding;
     const { topLeft , topRight , bottomLeft , bottomRight  } = helpers_segment.toTRBLCorners(cornerRadius);
-    let ***REMOVED*** = alignX(size, ***REMOVED***Align);
+    let x = alignX(size, xAlign);
     const y = alignY(size, yAlign, paddingAndSize);
     if (yAlign === 'center') {
-        if (***REMOVED***Align === 'left') {
-            ***REMOVED*** += paddingAndSize;
-        } else if (***REMOVED***Align === 'right') {
-            ***REMOVED*** -= paddingAndSize;
+        if (xAlign === 'left') {
+            x += paddingAndSize;
+        } else if (xAlign === 'right') {
+            x -= paddingAndSize;
         }
-    } else if (***REMOVED***Align === 'left') {
-        ***REMOVED*** -= Math.ma***REMOVED***(topLeft, bottomLeft) + caretSize;
-    } else if (***REMOVED***Align === 'right') {
-        ***REMOVED*** += Math.ma***REMOVED***(topRight, bottomRight) + caretSize;
+    } else if (xAlign === 'left') {
+        x -= Math.max(topLeft, bottomLeft) + caretSize;
+    } else if (xAlign === 'right') {
+        x += Math.max(topRight, bottomRight) + caretSize;
     }
     return {
-        ***REMOVED***: helpers_segment._limitValue(***REMOVED***, 0, chart.width - size.width),
+        x: helpers_segment._limitValue(x, 0, chart.width - size.width),
         y: helpers_segment._limitValue(y, 0, chart.height - size.height)
     };
 }
 function getAlignedX(tooltip, align, options) {
     const padding = helpers_segment.toPadding(options.padding);
-    return align === 'center' ? tooltip.***REMOVED*** + tooltip.width / 2 : align === 'right' ? tooltip.***REMOVED*** + tooltip.width - padding.right : tooltip.***REMOVED*** + padding.left;
+    return align === 'center' ? tooltip.x + tooltip.width / 2 : align === 'right' ? tooltip.x + tooltip.width - padding.right : tooltip.x + padding.left;
 }
  function getBeforeAfterBodyLines(callback) {
     return pushOrConcat([], splitNewlines(callback));
 }
-function createTooltipConte***REMOVED***t(parent, tooltip, tooltipItems) {
-    return helpers_segment.createConte***REMOVED***t(parent, {
+function createTooltipContext(parent, tooltip, tooltipItems) {
+    return helpers_segment.createContext(parent, {
         tooltip,
         tooltipItems,
         type: 'tooltip'
     });
 }
-function overrideCallbacks(callbacks, conte***REMOVED***t) {
-    const override = conte***REMOVED***t && conte***REMOVED***t.dataset && conte***REMOVED***t.dataset.tooltip && conte***REMOVED***t.dataset.tooltip.callbacks;
+function overrideCallbacks(callbacks, context) {
+    const override = context && context.dataset && context.dataset.tooltip && context.dataset.tooltip.callbacks;
     return override ? callbacks.override(override) : callbacks;
 }
 const defaultCallbacks = {
@@ -9143,8 +9143,8 @@ const defaultCallbacks = {
                 return item.dataset.label || '';
             } else if (item.label) {
                 return item.label;
-            } else if (labelCount > 0 && item.dataInde***REMOVED*** < labelCount) {
-                return labels[item.dataInde***REMOVED***];
+            } else if (labelCount > 0 && item.dataIndex < labelCount) {
+                return labels[item.dataIndex];
             }
         }
         return '';
@@ -9167,8 +9167,8 @@ const defaultCallbacks = {
         return label;
     },
     labelColor (tooltipItem) {
-        const meta = tooltipItem.chart.getDatasetMeta(tooltipItem.datasetInde***REMOVED***);
-        const options = meta.controller.getStyle(tooltipItem.dataInde***REMOVED***);
+        const meta = tooltipItem.chart.getDatasetMeta(tooltipItem.datasetIndex);
+        const options = meta.controller.getStyle(tooltipItem.dataIndex);
         return {
             borderColor: options.borderColor,
             backgroundColor: options.backgroundColor,
@@ -9178,12 +9178,12 @@ const defaultCallbacks = {
             borderRadius: 0
         };
     },
-    labelTe***REMOVED***tColor () {
+    labelTextColor () {
         return this.options.bodyColor;
     },
     labelPointStyle (tooltipItem) {
-        const meta = tooltipItem.chart.getDatasetMeta(tooltipItem.datasetInde***REMOVED***);
-        const options = meta.controller.getStyle(tooltipItem.dataInde***REMOVED***);
+        const meta = tooltipItem.chart.getDatasetMeta(tooltipItem.datasetIndex);
+        const options = meta.controller.getStyle(tooltipItem.dataIndex);
         return {
             pointStyle: options.pointStyle,
             rotation: options.rotation
@@ -9195,14 +9195,14 @@ const defaultCallbacks = {
     footer: helpers_segment.noop,
     afterFooter: helpers_segment.noop
 };
- function invokeCallbackWithFallback(callbacks, name, ct***REMOVED***, arg) {
-    const result = callbacks[name].call(ct***REMOVED***, arg);
+ function invokeCallbackWithFallback(callbacks, name, ctx, arg) {
+    const result = callbacks[name].call(ctx, arg);
     if (typeof result === 'undefined') {
-        return defaultCallbacks[name].call(ct***REMOVED***, arg);
+        return defaultCallbacks[name].call(ctx, arg);
     }
     return result;
 }
-class Tooltip e***REMOVED***tends Element {
+class Tooltip extends Element {
  static positioners = positioners;
     constructor(config){
         super();
@@ -9213,7 +9213,7 @@ class Tooltip e***REMOVED***tends Element {
         this._cachedAnimations = undefined;
         this._tooltipItems = [];
         this.$animations = undefined;
-        this.$conte***REMOVED***t = undefined;
+        this.$context = undefined;
         this.chart = config.chart;
         this.options = config.options;
         this.dataPoints = undefined;
@@ -9222,9 +9222,9 @@ class Tooltip e***REMOVED***tends Element {
         this.body = undefined;
         this.afterBody = undefined;
         this.footer = undefined;
-        this.***REMOVED***Align = undefined;
+        this.xAlign = undefined;
         this.yAlign = undefined;
-        this.***REMOVED*** = undefined;
+        this.x = undefined;
         this.y = undefined;
         this.height = undefined;
         this.width = undefined;
@@ -9232,12 +9232,12 @@ class Tooltip e***REMOVED***tends Element {
         this.caretY = undefined;
         this.labelColors = undefined;
         this.labelPointStyles = undefined;
-        this.labelTe***REMOVED***tColors = undefined;
+        this.labelTextColors = undefined;
     }
     initialize(options) {
         this.options = options;
         this._cachedAnimations = undefined;
-        this.$conte***REMOVED***t = undefined;
+        this.$context = undefined;
     }
  _resolveAnimations() {
         const cached = this._cachedAnimations;
@@ -9245,7 +9245,7 @@ class Tooltip e***REMOVED***tends Element {
             return cached;
         }
         const chart = this.chart;
-        const options = this.options.setConte***REMOVED***t(this.getConte***REMOVED***t());
+        const options = this.options.setContext(this.getContext());
         const opts = options.enabled && chart.options.animation && options.animations;
         const animations = new Animations(this.chart, opts);
         if (opts._cacheable) {
@@ -9253,14 +9253,14 @@ class Tooltip e***REMOVED***tends Element {
         }
         return animations;
     }
- getConte***REMOVED***t() {
-        return this.$conte***REMOVED***t || (this.$conte***REMOVED***t = createTooltipConte***REMOVED***t(this.chart.getConte***REMOVED***t(), this, this._tooltipItems));
+ getContext() {
+        return this.$context || (this.$context = createTooltipContext(this.chart.getContext(), this, this._tooltipItems));
     }
-    getTitle(conte***REMOVED***t, options) {
+    getTitle(context, options) {
         const { callbacks  } = options;
-        const beforeTitle = invokeCallbackWithFallback(callbacks, 'beforeTitle', this, conte***REMOVED***t);
-        const title = invokeCallbackWithFallback(callbacks, 'title', this, conte***REMOVED***t);
-        const afterTitle = invokeCallbackWithFallback(callbacks, 'afterTitle', this, conte***REMOVED***t);
+        const beforeTitle = invokeCallbackWithFallback(callbacks, 'beforeTitle', this, context);
+        const title = invokeCallbackWithFallback(callbacks, 'title', this, context);
+        const afterTitle = invokeCallbackWithFallback(callbacks, 'afterTitle', this, context);
         let lines = [];
         lines = pushOrConcat(lines, splitNewlines(beforeTitle));
         lines = pushOrConcat(lines, splitNewlines(title));
@@ -9273,16 +9273,16 @@ class Tooltip e***REMOVED***tends Element {
     getBody(tooltipItems, options) {
         const { callbacks  } = options;
         const bodyItems = [];
-        helpers_segment.each(tooltipItems, (conte***REMOVED***t)=>{
+        helpers_segment.each(tooltipItems, (context)=>{
             const bodyItem = {
                 before: [],
                 lines: [],
                 after: []
             };
-            const scoped = overrideCallbacks(callbacks, conte***REMOVED***t);
-            pushOrConcat(bodyItem.before, splitNewlines(invokeCallbackWithFallback(scoped, 'beforeLabel', this, conte***REMOVED***t)));
-            pushOrConcat(bodyItem.lines, invokeCallbackWithFallback(scoped, 'label', this, conte***REMOVED***t));
-            pushOrConcat(bodyItem.after, splitNewlines(invokeCallbackWithFallback(scoped, 'afterLabel', this, conte***REMOVED***t)));
+            const scoped = overrideCallbacks(callbacks, context);
+            pushOrConcat(bodyItem.before, splitNewlines(invokeCallbackWithFallback(scoped, 'beforeLabel', this, context)));
+            pushOrConcat(bodyItem.lines, invokeCallbackWithFallback(scoped, 'label', this, context));
+            pushOrConcat(bodyItem.after, splitNewlines(invokeCallbackWithFallback(scoped, 'afterLabel', this, context)));
             bodyItems.push(bodyItem);
         });
         return bodyItems;
@@ -9306,32 +9306,32 @@ class Tooltip e***REMOVED***tends Element {
         const data = this.chart.data;
         const labelColors = [];
         const labelPointStyles = [];
-        const labelTe***REMOVED***tColors = [];
+        const labelTextColors = [];
         let tooltipItems = [];
         let i, len;
         for(i = 0, len = active.length; i < len; ++i){
             tooltipItems.push(createTooltipItem(this.chart, active[i]));
         }
         if (options.filter) {
-            tooltipItems = tooltipItems.filter((element, inde***REMOVED***, array)=>options.filter(element, inde***REMOVED***, array, data));
+            tooltipItems = tooltipItems.filter((element, index, array)=>options.filter(element, index, array, data));
         }
         if (options.itemSort) {
             tooltipItems = tooltipItems.sort((a, b)=>options.itemSort(a, b, data));
         }
-        helpers_segment.each(tooltipItems, (conte***REMOVED***t)=>{
-            const scoped = overrideCallbacks(options.callbacks, conte***REMOVED***t);
-            labelColors.push(invokeCallbackWithFallback(scoped, 'labelColor', this, conte***REMOVED***t));
-            labelPointStyles.push(invokeCallbackWithFallback(scoped, 'labelPointStyle', this, conte***REMOVED***t));
-            labelTe***REMOVED***tColors.push(invokeCallbackWithFallback(scoped, 'labelTe***REMOVED***tColor', this, conte***REMOVED***t));
+        helpers_segment.each(tooltipItems, (context)=>{
+            const scoped = overrideCallbacks(options.callbacks, context);
+            labelColors.push(invokeCallbackWithFallback(scoped, 'labelColor', this, context));
+            labelPointStyles.push(invokeCallbackWithFallback(scoped, 'labelPointStyle', this, context));
+            labelTextColors.push(invokeCallbackWithFallback(scoped, 'labelTextColor', this, context));
         });
         this.labelColors = labelColors;
         this.labelPointStyles = labelPointStyles;
-        this.labelTe***REMOVED***tColors = labelTe***REMOVED***tColors;
+        this.labelTextColors = labelTextColors;
         this.dataPoints = tooltipItems;
         return tooltipItems;
     }
     update(changed, replay) {
-        const options = this.options.setConte***REMOVED***t(this.getConte***REMOVED***t());
+        const options = this.options.setContext(this.getContext());
         const active = this._active;
         let properties;
         let tooltipItems = [];
@@ -9353,103 +9353,103 @@ class Tooltip e***REMOVED***tends Element {
             const positionAndSize = Object.assign({}, position, size);
             const alignment = determineAlignment(this.chart, options, positionAndSize);
             const backgroundPoint = getBackgroundPoint(options, positionAndSize, alignment, this.chart);
-            this.***REMOVED***Align = alignment.***REMOVED***Align;
+            this.xAlign = alignment.xAlign;
             this.yAlign = alignment.yAlign;
             properties = {
                 opacity: 1,
-                ***REMOVED***: backgroundPoint.***REMOVED***,
+                x: backgroundPoint.x,
                 y: backgroundPoint.y,
                 width: size.width,
                 height: size.height,
-                caretX: position.***REMOVED***,
+                caretX: position.x,
                 caretY: position.y
             };
         }
         this._tooltipItems = tooltipItems;
-        this.$conte***REMOVED***t = undefined;
+        this.$context = undefined;
         if (properties) {
             this._resolveAnimations().update(this, properties);
         }
-        if (changed && options.e***REMOVED***ternal) {
-            options.e***REMOVED***ternal.call(this, {
+        if (changed && options.external) {
+            options.external.call(this, {
                 chart: this.chart,
                 tooltip: this,
                 replay
             });
         }
     }
-    drawCaret(tooltipPoint, ct***REMOVED***, size, options) {
+    drawCaret(tooltipPoint, ctx, size, options) {
         const caretPosition = this.getCaretPosition(tooltipPoint, size, options);
-        ct***REMOVED***.lineTo(caretPosition.***REMOVED***1, caretPosition.y1);
-        ct***REMOVED***.lineTo(caretPosition.***REMOVED***2, caretPosition.y2);
-        ct***REMOVED***.lineTo(caretPosition.***REMOVED***3, caretPosition.y3);
+        ctx.lineTo(caretPosition.x1, caretPosition.y1);
+        ctx.lineTo(caretPosition.x2, caretPosition.y2);
+        ctx.lineTo(caretPosition.x3, caretPosition.y3);
     }
     getCaretPosition(tooltipPoint, size, options) {
-        const { ***REMOVED***Align , yAlign  } = this;
+        const { xAlign , yAlign  } = this;
         const { caretSize , cornerRadius  } = options;
         const { topLeft , topRight , bottomLeft , bottomRight  } = helpers_segment.toTRBLCorners(cornerRadius);
-        const { ***REMOVED***: ptX , y: ptY  } = tooltipPoint;
+        const { x: ptX , y: ptY  } = tooltipPoint;
         const { width , height  } = size;
-        let ***REMOVED***1, ***REMOVED***2, ***REMOVED***3, y1, y2, y3;
+        let x1, x2, x3, y1, y2, y3;
         if (yAlign === 'center') {
             y2 = ptY + height / 2;
-            if (***REMOVED***Align === 'left') {
-                ***REMOVED***1 = ptX;
-                ***REMOVED***2 = ***REMOVED***1 - caretSize;
+            if (xAlign === 'left') {
+                x1 = ptX;
+                x2 = x1 - caretSize;
                 y1 = y2 + caretSize;
                 y3 = y2 - caretSize;
             } else {
-                ***REMOVED***1 = ptX + width;
-                ***REMOVED***2 = ***REMOVED***1 + caretSize;
+                x1 = ptX + width;
+                x2 = x1 + caretSize;
                 y1 = y2 - caretSize;
                 y3 = y2 + caretSize;
             }
-            ***REMOVED***3 = ***REMOVED***1;
+            x3 = x1;
         } else {
-            if (***REMOVED***Align === 'left') {
-                ***REMOVED***2 = ptX + Math.ma***REMOVED***(topLeft, bottomLeft) + caretSize;
-            } else if (***REMOVED***Align === 'right') {
-                ***REMOVED***2 = ptX + width - Math.ma***REMOVED***(topRight, bottomRight) - caretSize;
+            if (xAlign === 'left') {
+                x2 = ptX + Math.max(topLeft, bottomLeft) + caretSize;
+            } else if (xAlign === 'right') {
+                x2 = ptX + width - Math.max(topRight, bottomRight) - caretSize;
             } else {
-                ***REMOVED***2 = this.caretX;
+                x2 = this.caretX;
             }
             if (yAlign === 'top') {
                 y1 = ptY;
                 y2 = y1 - caretSize;
-                ***REMOVED***1 = ***REMOVED***2 - caretSize;
-                ***REMOVED***3 = ***REMOVED***2 + caretSize;
+                x1 = x2 - caretSize;
+                x3 = x2 + caretSize;
             } else {
                 y1 = ptY + height;
                 y2 = y1 + caretSize;
-                ***REMOVED***1 = ***REMOVED***2 + caretSize;
-                ***REMOVED***3 = ***REMOVED***2 - caretSize;
+                x1 = x2 + caretSize;
+                x3 = x2 - caretSize;
             }
             y3 = y1;
         }
         return {
-            ***REMOVED***1,
-            ***REMOVED***2,
-            ***REMOVED***3,
+            x1,
+            x2,
+            x3,
             y1,
             y2,
             y3
         };
     }
-    drawTitle(pt, ct***REMOVED***, options) {
+    drawTitle(pt, ctx, options) {
         const title = this.title;
         const length = title.length;
         let titleFont, titleSpacing, i;
         if (length) {
-            const rtlHelper = helpers_segment.getRtlAdapter(options.rtl, this.***REMOVED***, this.width);
-            pt.***REMOVED*** = getAlignedX(this, options.titleAlign, options);
-            ct***REMOVED***.te***REMOVED***tAlign = rtlHelper.te***REMOVED***tAlign(options.titleAlign);
-            ct***REMOVED***.te***REMOVED***tBaseline = 'middle';
+            const rtlHelper = helpers_segment.getRtlAdapter(options.rtl, this.x, this.width);
+            pt.x = getAlignedX(this, options.titleAlign, options);
+            ctx.textAlign = rtlHelper.textAlign(options.titleAlign);
+            ctx.textBaseline = 'middle';
             titleFont = helpers_segment.toFont(options.titleFont);
             titleSpacing = options.titleSpacing;
-            ct***REMOVED***.fillStyle = options.titleColor;
-            ct***REMOVED***.font = titleFont.string;
+            ctx.fillStyle = options.titleColor;
+            ctx.font = titleFont.string;
             for(i = 0; i < length; ++i){
-                ct***REMOVED***.fillTe***REMOVED***t(title[i], rtlHelper.***REMOVED***(pt.***REMOVED***), pt.y + titleFont.lineHeight / 2);
+                ctx.fillText(title[i], rtlHelper.x(pt.x), pt.y + titleFont.lineHeight / 2);
                 pt.y += titleFont.lineHeight + titleSpacing;
                 if (i + 1 === length) {
                     pt.y += options.titleMarginBottom - titleSpacing;
@@ -9457,170 +9457,170 @@ class Tooltip e***REMOVED***tends Element {
             }
         }
     }
- _drawColorBo***REMOVED***(ct***REMOVED***, pt, i, rtlHelper, options) {
+ _drawColorBox(ctx, pt, i, rtlHelper, options) {
         const labelColor = this.labelColors[i];
         const labelPointStyle = this.labelPointStyles[i];
-        const { bo***REMOVED***Height , bo***REMOVED***Width  } = options;
+        const { boxHeight , boxWidth  } = options;
         const bodyFont = helpers_segment.toFont(options.bodyFont);
         const colorX = getAlignedX(this, 'left', options);
-        const rtlColorX = rtlHelper.***REMOVED***(colorX);
-        const yOffSet = bo***REMOVED***Height < bodyFont.lineHeight ? (bodyFont.lineHeight - bo***REMOVED***Height) / 2 : 0;
+        const rtlColorX = rtlHelper.x(colorX);
+        const yOffSet = boxHeight < bodyFont.lineHeight ? (bodyFont.lineHeight - boxHeight) / 2 : 0;
         const colorY = pt.y + yOffSet;
         if (options.usePointStyle) {
             const drawOptions = {
-                radius: Math.min(bo***REMOVED***Width, bo***REMOVED***Height) / 2,
+                radius: Math.min(boxWidth, boxHeight) / 2,
                 pointStyle: labelPointStyle.pointStyle,
                 rotation: labelPointStyle.rotation,
                 borderWidth: 1
             };
-            const centerX = rtlHelper.leftForLtr(rtlColorX, bo***REMOVED***Width) + bo***REMOVED***Width / 2;
-            const centerY = colorY + bo***REMOVED***Height / 2;
-            ct***REMOVED***.strokeStyle = options.multiKeyBackground;
-            ct***REMOVED***.fillStyle = options.multiKeyBackground;
-            helpers_segment.drawPoint(ct***REMOVED***, drawOptions, centerX, centerY);
-            ct***REMOVED***.strokeStyle = labelColor.borderColor;
-            ct***REMOVED***.fillStyle = labelColor.backgroundColor;
-            helpers_segment.drawPoint(ct***REMOVED***, drawOptions, centerX, centerY);
+            const centerX = rtlHelper.leftForLtr(rtlColorX, boxWidth) + boxWidth / 2;
+            const centerY = colorY + boxHeight / 2;
+            ctx.strokeStyle = options.multiKeyBackground;
+            ctx.fillStyle = options.multiKeyBackground;
+            helpers_segment.drawPoint(ctx, drawOptions, centerX, centerY);
+            ctx.strokeStyle = labelColor.borderColor;
+            ctx.fillStyle = labelColor.backgroundColor;
+            helpers_segment.drawPoint(ctx, drawOptions, centerX, centerY);
         } else {
-            ct***REMOVED***.lineWidth = helpers_segment.isObject(labelColor.borderWidth) ? Math.ma***REMOVED***(...Object.values(labelColor.borderWidth)) : labelColor.borderWidth || 1;
-            ct***REMOVED***.strokeStyle = labelColor.borderColor;
-            ct***REMOVED***.setLineDash(labelColor.borderDash || []);
-            ct***REMOVED***.lineDashOffset = labelColor.borderDashOffset || 0;
-            const outerX = rtlHelper.leftForLtr(rtlColorX, bo***REMOVED***Width);
-            const innerX = rtlHelper.leftForLtr(rtlHelper.***REMOVED***Plus(rtlColorX, 1), bo***REMOVED***Width - 2);
+            ctx.lineWidth = helpers_segment.isObject(labelColor.borderWidth) ? Math.max(...Object.values(labelColor.borderWidth)) : labelColor.borderWidth || 1;
+            ctx.strokeStyle = labelColor.borderColor;
+            ctx.setLineDash(labelColor.borderDash || []);
+            ctx.lineDashOffset = labelColor.borderDashOffset || 0;
+            const outerX = rtlHelper.leftForLtr(rtlColorX, boxWidth);
+            const innerX = rtlHelper.leftForLtr(rtlHelper.xPlus(rtlColorX, 1), boxWidth - 2);
             const borderRadius = helpers_segment.toTRBLCorners(labelColor.borderRadius);
             if (Object.values(borderRadius).some((v)=>v !== 0)) {
-                ct***REMOVED***.beginPath();
-                ct***REMOVED***.fillStyle = options.multiKeyBackground;
-                helpers_segment.addRoundedRectPath(ct***REMOVED***, {
-                    ***REMOVED***: outerX,
+                ctx.beginPath();
+                ctx.fillStyle = options.multiKeyBackground;
+                helpers_segment.addRoundedRectPath(ctx, {
+                    x: outerX,
                     y: colorY,
-                    w: bo***REMOVED***Width,
-                    h: bo***REMOVED***Height,
+                    w: boxWidth,
+                    h: boxHeight,
                     radius: borderRadius
                 });
-                ct***REMOVED***.fill();
-                ct***REMOVED***.stroke();
-                ct***REMOVED***.fillStyle = labelColor.backgroundColor;
-                ct***REMOVED***.beginPath();
-                helpers_segment.addRoundedRectPath(ct***REMOVED***, {
-                    ***REMOVED***: innerX,
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillStyle = labelColor.backgroundColor;
+                ctx.beginPath();
+                helpers_segment.addRoundedRectPath(ctx, {
+                    x: innerX,
                     y: colorY + 1,
-                    w: bo***REMOVED***Width - 2,
-                    h: bo***REMOVED***Height - 2,
+                    w: boxWidth - 2,
+                    h: boxHeight - 2,
                     radius: borderRadius
                 });
-                ct***REMOVED***.fill();
+                ctx.fill();
             } else {
-                ct***REMOVED***.fillStyle = options.multiKeyBackground;
-                ct***REMOVED***.fillRect(outerX, colorY, bo***REMOVED***Width, bo***REMOVED***Height);
-                ct***REMOVED***.strokeRect(outerX, colorY, bo***REMOVED***Width, bo***REMOVED***Height);
-                ct***REMOVED***.fillStyle = labelColor.backgroundColor;
-                ct***REMOVED***.fillRect(innerX, colorY + 1, bo***REMOVED***Width - 2, bo***REMOVED***Height - 2);
+                ctx.fillStyle = options.multiKeyBackground;
+                ctx.fillRect(outerX, colorY, boxWidth, boxHeight);
+                ctx.strokeRect(outerX, colorY, boxWidth, boxHeight);
+                ctx.fillStyle = labelColor.backgroundColor;
+                ctx.fillRect(innerX, colorY + 1, boxWidth - 2, boxHeight - 2);
             }
         }
-        ct***REMOVED***.fillStyle = this.labelTe***REMOVED***tColors[i];
+        ctx.fillStyle = this.labelTextColors[i];
     }
-    drawBody(pt, ct***REMOVED***, options) {
+    drawBody(pt, ctx, options) {
         const { body  } = this;
-        const { bodySpacing , bodyAlign , displayColors , bo***REMOVED***Height , bo***REMOVED***Width , bo***REMOVED***Padding  } = options;
+        const { bodySpacing , bodyAlign , displayColors , boxHeight , boxWidth , boxPadding  } = options;
         const bodyFont = helpers_segment.toFont(options.bodyFont);
         let bodyLineHeight = bodyFont.lineHeight;
-        let ***REMOVED***LinePadding = 0;
-        const rtlHelper = helpers_segment.getRtlAdapter(options.rtl, this.***REMOVED***, this.width);
-        const fillLineOfTe***REMOVED***t = function(line) {
-            ct***REMOVED***.fillTe***REMOVED***t(line, rtlHelper.***REMOVED***(pt.***REMOVED*** + ***REMOVED***LinePadding), pt.y + bodyLineHeight / 2);
+        let xLinePadding = 0;
+        const rtlHelper = helpers_segment.getRtlAdapter(options.rtl, this.x, this.width);
+        const fillLineOfText = function(line) {
+            ctx.fillText(line, rtlHelper.x(pt.x + xLinePadding), pt.y + bodyLineHeight / 2);
             pt.y += bodyLineHeight + bodySpacing;
         };
-        const bodyAlignForCalculation = rtlHelper.te***REMOVED***tAlign(bodyAlign);
-        let bodyItem, te***REMOVED***tColor, lines, i, j, ilen, jlen;
-        ct***REMOVED***.te***REMOVED***tAlign = bodyAlign;
-        ct***REMOVED***.te***REMOVED***tBaseline = 'middle';
-        ct***REMOVED***.font = bodyFont.string;
-        pt.***REMOVED*** = getAlignedX(this, bodyAlignForCalculation, options);
-        ct***REMOVED***.fillStyle = options.bodyColor;
-        helpers_segment.each(this.beforeBody, fillLineOfTe***REMOVED***t);
-        ***REMOVED***LinePadding = displayColors && bodyAlignForCalculation !== 'right' ? bodyAlign === 'center' ? bo***REMOVED***Width / 2 + bo***REMOVED***Padding : bo***REMOVED***Width + 2 + bo***REMOVED***Padding : 0;
+        const bodyAlignForCalculation = rtlHelper.textAlign(bodyAlign);
+        let bodyItem, textColor, lines, i, j, ilen, jlen;
+        ctx.textAlign = bodyAlign;
+        ctx.textBaseline = 'middle';
+        ctx.font = bodyFont.string;
+        pt.x = getAlignedX(this, bodyAlignForCalculation, options);
+        ctx.fillStyle = options.bodyColor;
+        helpers_segment.each(this.beforeBody, fillLineOfText);
+        xLinePadding = displayColors && bodyAlignForCalculation !== 'right' ? bodyAlign === 'center' ? boxWidth / 2 + boxPadding : boxWidth + 2 + boxPadding : 0;
         for(i = 0, ilen = body.length; i < ilen; ++i){
             bodyItem = body[i];
-            te***REMOVED***tColor = this.labelTe***REMOVED***tColors[i];
-            ct***REMOVED***.fillStyle = te***REMOVED***tColor;
-            helpers_segment.each(bodyItem.before, fillLineOfTe***REMOVED***t);
+            textColor = this.labelTextColors[i];
+            ctx.fillStyle = textColor;
+            helpers_segment.each(bodyItem.before, fillLineOfText);
             lines = bodyItem.lines;
             if (displayColors && lines.length) {
-                this._drawColorBo***REMOVED***(ct***REMOVED***, pt, i, rtlHelper, options);
-                bodyLineHeight = Math.ma***REMOVED***(bodyFont.lineHeight, bo***REMOVED***Height);
+                this._drawColorBox(ctx, pt, i, rtlHelper, options);
+                bodyLineHeight = Math.max(bodyFont.lineHeight, boxHeight);
             }
             for(j = 0, jlen = lines.length; j < jlen; ++j){
-                fillLineOfTe***REMOVED***t(lines[j]);
+                fillLineOfText(lines[j]);
                 bodyLineHeight = bodyFont.lineHeight;
             }
-            helpers_segment.each(bodyItem.after, fillLineOfTe***REMOVED***t);
+            helpers_segment.each(bodyItem.after, fillLineOfText);
         }
-        ***REMOVED***LinePadding = 0;
+        xLinePadding = 0;
         bodyLineHeight = bodyFont.lineHeight;
-        helpers_segment.each(this.afterBody, fillLineOfTe***REMOVED***t);
+        helpers_segment.each(this.afterBody, fillLineOfText);
         pt.y -= bodySpacing;
     }
-    drawFooter(pt, ct***REMOVED***, options) {
+    drawFooter(pt, ctx, options) {
         const footer = this.footer;
         const length = footer.length;
         let footerFont, i;
         if (length) {
-            const rtlHelper = helpers_segment.getRtlAdapter(options.rtl, this.***REMOVED***, this.width);
-            pt.***REMOVED*** = getAlignedX(this, options.footerAlign, options);
+            const rtlHelper = helpers_segment.getRtlAdapter(options.rtl, this.x, this.width);
+            pt.x = getAlignedX(this, options.footerAlign, options);
             pt.y += options.footerMarginTop;
-            ct***REMOVED***.te***REMOVED***tAlign = rtlHelper.te***REMOVED***tAlign(options.footerAlign);
-            ct***REMOVED***.te***REMOVED***tBaseline = 'middle';
+            ctx.textAlign = rtlHelper.textAlign(options.footerAlign);
+            ctx.textBaseline = 'middle';
             footerFont = helpers_segment.toFont(options.footerFont);
-            ct***REMOVED***.fillStyle = options.footerColor;
-            ct***REMOVED***.font = footerFont.string;
+            ctx.fillStyle = options.footerColor;
+            ctx.font = footerFont.string;
             for(i = 0; i < length; ++i){
-                ct***REMOVED***.fillTe***REMOVED***t(footer[i], rtlHelper.***REMOVED***(pt.***REMOVED***), pt.y + footerFont.lineHeight / 2);
+                ctx.fillText(footer[i], rtlHelper.x(pt.x), pt.y + footerFont.lineHeight / 2);
                 pt.y += footerFont.lineHeight + options.footerSpacing;
             }
         }
     }
-    drawBackground(pt, ct***REMOVED***, tooltipSize, options) {
-        const { ***REMOVED***Align , yAlign  } = this;
-        const { ***REMOVED*** , y  } = pt;
+    drawBackground(pt, ctx, tooltipSize, options) {
+        const { xAlign , yAlign  } = this;
+        const { x , y  } = pt;
         const { width , height  } = tooltipSize;
         const { topLeft , topRight , bottomLeft , bottomRight  } = helpers_segment.toTRBLCorners(options.cornerRadius);
-        ct***REMOVED***.fillStyle = options.backgroundColor;
-        ct***REMOVED***.strokeStyle = options.borderColor;
-        ct***REMOVED***.lineWidth = options.borderWidth;
-        ct***REMOVED***.beginPath();
-        ct***REMOVED***.moveTo(***REMOVED*** + topLeft, y);
+        ctx.fillStyle = options.backgroundColor;
+        ctx.strokeStyle = options.borderColor;
+        ctx.lineWidth = options.borderWidth;
+        ctx.beginPath();
+        ctx.moveTo(x + topLeft, y);
         if (yAlign === 'top') {
-            this.drawCaret(pt, ct***REMOVED***, tooltipSize, options);
+            this.drawCaret(pt, ctx, tooltipSize, options);
         }
-        ct***REMOVED***.lineTo(***REMOVED*** + width - topRight, y);
-        ct***REMOVED***.quadraticCurveTo(***REMOVED*** + width, y, ***REMOVED*** + width, y + topRight);
-        if (yAlign === 'center' && ***REMOVED***Align === 'right') {
-            this.drawCaret(pt, ct***REMOVED***, tooltipSize, options);
+        ctx.lineTo(x + width - topRight, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + topRight);
+        if (yAlign === 'center' && xAlign === 'right') {
+            this.drawCaret(pt, ctx, tooltipSize, options);
         }
-        ct***REMOVED***.lineTo(***REMOVED*** + width, y + height - bottomRight);
-        ct***REMOVED***.quadraticCurveTo(***REMOVED*** + width, y + height, ***REMOVED*** + width - bottomRight, y + height);
+        ctx.lineTo(x + width, y + height - bottomRight);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - bottomRight, y + height);
         if (yAlign === 'bottom') {
-            this.drawCaret(pt, ct***REMOVED***, tooltipSize, options);
+            this.drawCaret(pt, ctx, tooltipSize, options);
         }
-        ct***REMOVED***.lineTo(***REMOVED*** + bottomLeft, y + height);
-        ct***REMOVED***.quadraticCurveTo(***REMOVED***, y + height, ***REMOVED***, y + height - bottomLeft);
-        if (yAlign === 'center' && ***REMOVED***Align === 'left') {
-            this.drawCaret(pt, ct***REMOVED***, tooltipSize, options);
+        ctx.lineTo(x + bottomLeft, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - bottomLeft);
+        if (yAlign === 'center' && xAlign === 'left') {
+            this.drawCaret(pt, ctx, tooltipSize, options);
         }
-        ct***REMOVED***.lineTo(***REMOVED***, y + topLeft);
-        ct***REMOVED***.quadraticCurveTo(***REMOVED***, y, ***REMOVED*** + topLeft, y);
-        ct***REMOVED***.closePath();
-        ct***REMOVED***.fill();
+        ctx.lineTo(x, y + topLeft);
+        ctx.quadraticCurveTo(x, y, x + topLeft, y);
+        ctx.closePath();
+        ctx.fill();
         if (options.borderWidth > 0) {
-            ct***REMOVED***.stroke();
+            ctx.stroke();
         }
     }
  _updateAnimationTarget(options) {
         const chart = this.chart;
         const anims = this.$animations;
-        const animX = anims && anims.***REMOVED***;
+        const animX = anims && anims.x;
         const animY = anims && anims.y;
         if (animX || animY) {
             const position = positioners[options.position].call(this, this._active, this._eventPosition);
@@ -9631,12 +9631,12 @@ class Tooltip e***REMOVED***tends Element {
             const positionAndSize = Object.assign({}, position, this._size);
             const alignment = determineAlignment(chart, options, positionAndSize);
             const point = getBackgroundPoint(options, positionAndSize, alignment, chart);
-            if (animX._to !== point.***REMOVED*** || animY._to !== point.y) {
-                this.***REMOVED***Align = alignment.***REMOVED***Align;
+            if (animX._to !== point.x || animY._to !== point.y) {
+                this.xAlign = alignment.xAlign;
                 this.yAlign = alignment.yAlign;
                 this.width = size.width;
                 this.height = size.height;
-                this.caretX = position.***REMOVED***;
+                this.caretX = position.x;
                 this.caretY = position.y;
                 this._resolveAnimations().update(this, point);
             }
@@ -9645,8 +9645,8 @@ class Tooltip e***REMOVED***tends Element {
  _willRender() {
         return !!this.opacity;
     }
-    draw(ct***REMOVED***) {
-        const options = this.options.setConte***REMOVED***t(this.getConte***REMOVED***t());
+    draw(ctx) {
+        const options = this.options.setContext(this.getContext());
         let opacity = this.opacity;
         if (!opacity) {
             return;
@@ -9657,23 +9657,23 @@ class Tooltip e***REMOVED***tends Element {
             height: this.height
         };
         const pt = {
-            ***REMOVED***: this.***REMOVED***,
+            x: this.x,
             y: this.y
         };
         opacity = Math.abs(opacity) < 1e-3 ? 0 : opacity;
         const padding = helpers_segment.toPadding(options.padding);
         const hasTooltipContent = this.title.length || this.beforeBody.length || this.body.length || this.afterBody.length || this.footer.length;
         if (options.enabled && hasTooltipContent) {
-            ct***REMOVED***.save();
-            ct***REMOVED***.globalAlpha = opacity;
-            this.drawBackground(pt, ct***REMOVED***, tooltipSize, options);
-            helpers_segment.overrideTe***REMOVED***tDirection(ct***REMOVED***, options.te***REMOVED***tDirection);
+            ctx.save();
+            ctx.globalAlpha = opacity;
+            this.drawBackground(pt, ctx, tooltipSize, options);
+            helpers_segment.overrideTextDirection(ctx, options.textDirection);
             pt.y += padding.top;
-            this.drawTitle(pt, ct***REMOVED***, options);
-            this.drawBody(pt, ct***REMOVED***, options);
-            this.drawFooter(pt, ct***REMOVED***, options);
-            helpers_segment.restoreTe***REMOVED***tDirection(ct***REMOVED***, options.te***REMOVED***tDirection);
-            ct***REMOVED***.restore();
+            this.drawTitle(pt, ctx, options);
+            this.drawBody(pt, ctx, options);
+            this.drawFooter(pt, ctx, options);
+            helpers_segment.restoreTextDirection(ctx, options.textDirection);
+            ctx.restore();
         }
     }
  getActiveElements() {
@@ -9681,15 +9681,15 @@ class Tooltip e***REMOVED***tends Element {
     }
  setActiveElements(activeElements, eventPosition) {
         const lastActive = this._active;
-        const active = activeElements.map(({ datasetInde***REMOVED*** , inde***REMOVED***  })=>{
-            const meta = this.chart.getDatasetMeta(datasetInde***REMOVED***);
+        const active = activeElements.map(({ datasetIndex , index  })=>{
+            const meta = this.chart.getDatasetMeta(datasetIndex);
             if (!meta) {
-                throw new Error('Cannot find a dataset at inde***REMOVED*** ' + datasetInde***REMOVED***);
+                throw new Error('Cannot find a dataset at index ' + datasetIndex);
             }
             return {
-                datasetInde***REMOVED***,
-                element: meta.data[inde***REMOVED***],
-                inde***REMOVED***
+                datasetIndex,
+                element: meta.data[index],
+                index
             };
         });
         const changed = !helpers_segment._elementsEqual(lastActive, active);
@@ -9713,9 +9713,9 @@ class Tooltip e***REMOVED***tends Element {
         const changed = replay || !helpers_segment._elementsEqual(active, lastActive) || positionChanged;
         if (changed) {
             this._active = active;
-            if (options.enabled || options.e***REMOVED***ternal) {
+            if (options.enabled || options.external) {
                 this._eventPosition = {
-                    ***REMOVED***: e.***REMOVED***,
+                    x: e.x,
                     y: e.y
                 };
                 this.update(true, replay);
@@ -9729,7 +9729,7 @@ class Tooltip e***REMOVED***tends Element {
             return [];
         }
         if (!inChartArea) {
-            return lastActive.filter((i)=>this.chart.data.datasets[i.datasetInde***REMOVED***] && this.chart.getDatasetMeta(i.datasetInde***REMOVED***).controller.getParsed(i.inde***REMOVED***) !== undefined);
+            return lastActive.filter((i)=>this.chart.data.datasets[i.datasetIndex] && this.chart.getDatasetMeta(i.datasetIndex).controller.getParsed(i.index) !== undefined);
         }
         const active = this.chart.getElementsAtEventForMode(e, options.mode, options, replay);
         if (options.reverse) {
@@ -9740,7 +9740,7 @@ class Tooltip e***REMOVED***tends Element {
  _positionChanged(active, e) {
         const { caretX , caretY , options  } = this;
         const position = positioners[options.position].call(this, active, e);
-        return position !== false && (caretX !== position.***REMOVED*** || caretY !== position.y);
+        return position !== false && (caretX !== position.x || caretY !== position.y);
     }
 }
 var plugin_tooltip = {
@@ -9777,7 +9777,7 @@ var plugin_tooltip = {
             }) === false) {
                 return;
             }
-            tooltip.draw(chart.ct***REMOVED***);
+            tooltip.draw(chart.ctx);
             chart.notifyPlugins('afterTooltipDraw', args);
         }
     },
@@ -9791,7 +9791,7 @@ var plugin_tooltip = {
     },
     defaults: {
         enabled: true,
-        e***REMOVED***ternal: null,
+        external: null,
         position: 'average',
         backgroundColor: 'rgba(0,0,0,0.8)',
         titleColor: '#fff',
@@ -9816,11 +9816,11 @@ var plugin_tooltip = {
         caretPadding: 2,
         caretSize: 5,
         cornerRadius: 6,
-        bo***REMOVED***Height: (ct***REMOVED***, opts)=>opts.bodyFont.size,
-        bo***REMOVED***Width: (ct***REMOVED***, opts)=>opts.bodyFont.size,
+        boxHeight: (ctx, opts)=>opts.bodyFont.size,
+        boxWidth: (ctx, opts)=>opts.bodyFont.size,
         multiKeyBackground: '#fff',
         displayColors: true,
-        bo***REMOVED***Padding: 0,
+        boxPadding: 0,
         borderColor: 'rgba(0,0,0,0)',
         borderWidth: 0,
         animation: {
@@ -9831,7 +9831,7 @@ var plugin_tooltip = {
             numbers: {
                 type: 'number',
                 properties: [
-                    '***REMOVED***',
+                    'x',
                     'y',
                     'width',
                     'height',
@@ -9852,11 +9852,11 @@ var plugin_tooltip = {
         titleFont: 'font'
     },
     descriptors: {
-        _scriptable: (name)=>name !== 'filter' && name !== 'itemSort' && name !== 'e***REMOVED***ternal',
-        _inde***REMOVED***able: false,
+        _scriptable: (name)=>name !== 'filter' && name !== 'itemSort' && name !== 'external',
+        _indexable: false,
         callbacks: {
             _scriptable: false,
-            _inde***REMOVED***able: false
+            _indexable: false
         },
         animation: {
             _fallback: false
@@ -9874,34 +9874,34 @@ var plugins = /*#__PURE__*/Object.freeze({
 __proto__: null,
 Colors: plugin_colors,
 Decimation: plugin_decimation,
-Filler: inde***REMOVED***,
+Filler: index,
 Legend: plugin_legend,
 SubTitle: plugin_subtitle,
 Title: plugin_title,
 Tooltip: plugin_tooltip
 });
 
-const addIfString = (labels, raw, inde***REMOVED***, addedLabels)=>{
+const addIfString = (labels, raw, index, addedLabels)=>{
     if (typeof raw === 'string') {
-        inde***REMOVED*** = labels.push(raw) - 1;
+        index = labels.push(raw) - 1;
         addedLabels.unshift({
-            inde***REMOVED***,
+            index,
             label: raw
         });
     } else if (isNaN(raw)) {
-        inde***REMOVED*** = null;
+        index = null;
     }
-    return inde***REMOVED***;
+    return index;
 };
-function findOrAddLabel(labels, raw, inde***REMOVED***, addedLabels) {
-    const first = labels.inde***REMOVED***Of(raw);
+function findOrAddLabel(labels, raw, index, addedLabels) {
+    const first = labels.indexOf(raw);
     if (first === -1) {
-        return addIfString(labels, raw, inde***REMOVED***, addedLabels);
+        return addIfString(labels, raw, index, addedLabels);
     }
-    const last = labels.lastInde***REMOVED***Of(raw);
-    return first !== last ? inde***REMOVED*** : first;
+    const last = labels.lastIndexOf(raw);
+    return first !== last ? index : first;
 }
-const validInde***REMOVED*** = (inde***REMOVED***, ma***REMOVED***)=>inde***REMOVED*** === null ? null : helpers_segment._limitValue(Math.round(inde***REMOVED***), 0, ma***REMOVED***);
+const validIndex = (index, max)=>index === null ? null : helpers_segment._limitValue(Math.round(index), 0, max);
 function _getLabelForValue(value) {
     const labels = this.getLabels();
     if (value >= 0 && value < labels.length) {
@@ -9909,7 +9909,7 @@ function _getLabelForValue(value) {
     }
     return value;
 }
-class CategoryScale e***REMOVED***tends Scale {
+class CategoryScale extends Scale {
     static id = 'category';
  static defaults = {
         ticks: {
@@ -9926,47 +9926,47 @@ class CategoryScale e***REMOVED***tends Scale {
         const added = this._addedLabels;
         if (added.length) {
             const labels = this.getLabels();
-            for (const { inde***REMOVED*** , label  } of added){
-                if (labels[inde***REMOVED***] === label) {
-                    labels.splice(inde***REMOVED***, 1);
+            for (const { index , label  } of added){
+                if (labels[index] === label) {
+                    labels.splice(index, 1);
                 }
             }
             this._addedLabels = [];
         }
         super.init(scaleOptions);
     }
-    parse(raw, inde***REMOVED***) {
+    parse(raw, index) {
         if (helpers_segment.isNullOrUndef(raw)) {
             return null;
         }
         const labels = this.getLabels();
-        inde***REMOVED*** = isFinite(inde***REMOVED***) && labels[inde***REMOVED***] === raw ? inde***REMOVED*** : findOrAddLabel(labels, raw, helpers_segment.valueOrDefault(inde***REMOVED***, raw), this._addedLabels);
-        return validInde***REMOVED***(inde***REMOVED***, labels.length - 1);
+        index = isFinite(index) && labels[index] === raw ? index : findOrAddLabel(labels, raw, helpers_segment.valueOrDefault(index, raw), this._addedLabels);
+        return validIndex(index, labels.length - 1);
     }
     determineDataLimits() {
-        const { minDefined , ma***REMOVED***Defined  } = this.getUserBounds();
-        let { min , ma***REMOVED***  } = this.getMinMa***REMOVED***(true);
+        const { minDefined , maxDefined  } = this.getUserBounds();
+        let { min , max  } = this.getMinMax(true);
         if (this.options.bounds === 'ticks') {
             if (!minDefined) {
                 min = 0;
             }
-            if (!ma***REMOVED***Defined) {
-                ma***REMOVED*** = this.getLabels().length - 1;
+            if (!maxDefined) {
+                max = this.getLabels().length - 1;
             }
         }
         this.min = min;
-        this.ma***REMOVED*** = ma***REMOVED***;
+        this.max = max;
     }
     buildTicks() {
         const min = this.min;
-        const ma***REMOVED*** = this.ma***REMOVED***;
+        const max = this.max;
         const offset = this.options.offset;
         const ticks = [];
         let labels = this.getLabels();
-        labels = min === 0 && ma***REMOVED*** === labels.length - 1 ? labels : labels.slice(min, ma***REMOVED*** + 1);
-        this._valueRange = Math.ma***REMOVED***(labels.length - (offset ? 0 : 1), 1);
+        labels = min === 0 && max === labels.length - 1 ? labels : labels.slice(min, max + 1);
+        this._valueRange = Math.max(labels.length - (offset ? 0 : 1), 1);
         this._startValue = this.min - (offset ? 0.5 : 0);
-        for(let value = min; value <= ma***REMOVED***; value++){
+        for(let value = min; value <= max; value++){
             ticks.push({
                 value
             });
@@ -9979,26 +9979,26 @@ class CategoryScale e***REMOVED***tends Scale {
  configure() {
         super.configure();
         if (!this.isHorizontal()) {
-            this._reversePi***REMOVED***els = !this._reversePi***REMOVED***els;
+            this._reversePixels = !this._reversePixels;
         }
     }
-    getPi***REMOVED***elForValue(value) {
+    getPixelForValue(value) {
         if (typeof value !== 'number') {
             value = this.parse(value);
         }
-        return value === null ? NaN : this.getPi***REMOVED***elForDecimal((value - this._startValue) / this._valueRange);
+        return value === null ? NaN : this.getPixelForDecimal((value - this._startValue) / this._valueRange);
     }
-    getPi***REMOVED***elForTick(inde***REMOVED***) {
+    getPixelForTick(index) {
         const ticks = this.ticks;
-        if (inde***REMOVED*** < 0 || inde***REMOVED*** > ticks.length - 1) {
+        if (index < 0 || index > ticks.length - 1) {
             return null;
         }
-        return this.getPi***REMOVED***elForValue(ticks[inde***REMOVED***].value);
+        return this.getPixelForValue(ticks[index].value);
     }
-    getValueForPi***REMOVED***el(pi***REMOVED***el) {
-        return Math.round(this._startValue + this.getDecimalForPi***REMOVED***el(pi***REMOVED***el) * this._valueRange);
+    getValueForPixel(pixel) {
+        return Math.round(this._startValue + this.getDecimalForPixel(pixel) * this._valueRange);
     }
-    getBasePi***REMOVED***el() {
+    getBasePixel() {
         return this.bottom;
     }
 }
@@ -10006,29 +10006,29 @@ class CategoryScale e***REMOVED***tends Scale {
 function generateTicks$1(generationOptions, dataRange) {
     const ticks = [];
     const MIN_SPACING = 1e-14;
-    const { bounds , step , min , ma***REMOVED*** , precision , count , ma***REMOVED***Ticks , ma***REMOVED***Digits , includeBounds  } = generationOptions;
+    const { bounds , step , min , max , precision , count , maxTicks , maxDigits , includeBounds  } = generationOptions;
     const unit = step || 1;
-    const ma***REMOVED***Spaces = ma***REMOVED***Ticks - 1;
-    const { min: rmin , ma***REMOVED***: rma***REMOVED***  } = dataRange;
+    const maxSpaces = maxTicks - 1;
+    const { min: rmin , max: rmax  } = dataRange;
     const minDefined = !helpers_segment.isNullOrUndef(min);
-    const ma***REMOVED***Defined = !helpers_segment.isNullOrUndef(ma***REMOVED***);
+    const maxDefined = !helpers_segment.isNullOrUndef(max);
     const countDefined = !helpers_segment.isNullOrUndef(count);
-    const minSpacing = (rma***REMOVED*** - rmin) / (ma***REMOVED***Digits + 1);
-    let spacing = helpers_segment.niceNum((rma***REMOVED*** - rmin) / ma***REMOVED***Spaces / unit) * unit;
-    let factor, niceMin, niceMa***REMOVED***, numSpaces;
-    if (spacing < MIN_SPACING && !minDefined && !ma***REMOVED***Defined) {
+    const minSpacing = (rmax - rmin) / (maxDigits + 1);
+    let spacing = helpers_segment.niceNum((rmax - rmin) / maxSpaces / unit) * unit;
+    let factor, niceMin, niceMax, numSpaces;
+    if (spacing < MIN_SPACING && !minDefined && !maxDefined) {
         return [
             {
                 value: rmin
             },
             {
-                value: rma***REMOVED***
+                value: rmax
             }
         ];
     }
-    numSpaces = Math.ceil(rma***REMOVED*** / spacing) - Math.floor(rmin / spacing);
-    if (numSpaces > ma***REMOVED***Spaces) {
-        spacing = helpers_segment.niceNum(numSpaces * spacing / ma***REMOVED***Spaces / unit) * unit;
+    numSpaces = Math.ceil(rmax / spacing) - Math.floor(rmin / spacing);
+    if (numSpaces > maxSpaces) {
+        spacing = helpers_segment.niceNum(numSpaces * spacing / maxSpaces / unit) * unit;
     }
     if (!helpers_segment.isNullOrUndef(precision)) {
         factor = Math.pow(10, precision);
@@ -10036,33 +10036,33 @@ function generateTicks$1(generationOptions, dataRange) {
     }
     if (bounds === 'ticks') {
         niceMin = Math.floor(rmin / spacing) * spacing;
-        niceMa***REMOVED*** = Math.ceil(rma***REMOVED*** / spacing) * spacing;
+        niceMax = Math.ceil(rmax / spacing) * spacing;
     } else {
         niceMin = rmin;
-        niceMa***REMOVED*** = rma***REMOVED***;
+        niceMax = rmax;
     }
-    if (minDefined && ma***REMOVED***Defined && step && helpers_segment.almostWhole((ma***REMOVED*** - min) / step, spacing / 1000)) {
-        numSpaces = Math.round(Math.min((ma***REMOVED*** - min) / spacing, ma***REMOVED***Ticks));
-        spacing = (ma***REMOVED*** - min) / numSpaces;
+    if (minDefined && maxDefined && step && helpers_segment.almostWhole((max - min) / step, spacing / 1000)) {
+        numSpaces = Math.round(Math.min((max - min) / spacing, maxTicks));
+        spacing = (max - min) / numSpaces;
         niceMin = min;
-        niceMa***REMOVED*** = ma***REMOVED***;
+        niceMax = max;
     } else if (countDefined) {
         niceMin = minDefined ? min : niceMin;
-        niceMa***REMOVED*** = ma***REMOVED***Defined ? ma***REMOVED*** : niceMa***REMOVED***;
+        niceMax = maxDefined ? max : niceMax;
         numSpaces = count - 1;
-        spacing = (niceMa***REMOVED*** - niceMin) / numSpaces;
+        spacing = (niceMax - niceMin) / numSpaces;
     } else {
-        numSpaces = (niceMa***REMOVED*** - niceMin) / spacing;
+        numSpaces = (niceMax - niceMin) / spacing;
         if (helpers_segment.almostEquals(numSpaces, Math.round(numSpaces), spacing / 1000)) {
             numSpaces = Math.round(numSpaces);
         } else {
             numSpaces = Math.ceil(numSpaces);
         }
     }
-    const decimalPlaces = Math.ma***REMOVED***(helpers_segment._decimalPlaces(spacing), helpers_segment._decimalPlaces(niceMin));
+    const decimalPlaces = Math.max(helpers_segment._decimalPlaces(spacing), helpers_segment._decimalPlaces(niceMin));
     factor = Math.pow(10, helpers_segment.isNullOrUndef(precision) ? decimalPlaces : precision);
     niceMin = Math.round(niceMin * factor) / factor;
-    niceMa***REMOVED*** = Math.round(niceMa***REMOVED*** * factor) / factor;
+    niceMax = Math.round(niceMax * factor) / factor;
     let j = 0;
     if (minDefined) {
         if (includeBounds && niceMin !== min) {
@@ -10081,24 +10081,24 @@ function generateTicks$1(generationOptions, dataRange) {
     }
     for(; j < numSpaces; ++j){
         const tickValue = Math.round((niceMin + j * spacing) * factor) / factor;
-        if (ma***REMOVED***Defined && tickValue > ma***REMOVED***) {
+        if (maxDefined && tickValue > max) {
             break;
         }
         ticks.push({
             value: tickValue
         });
     }
-    if (ma***REMOVED***Defined && includeBounds && niceMa***REMOVED*** !== ma***REMOVED***) {
-        if (ticks.length && helpers_segment.almostEquals(ticks[ticks.length - 1].value, ma***REMOVED***, relativeLabelSize(ma***REMOVED***, minSpacing, generationOptions))) {
-            ticks[ticks.length - 1].value = ma***REMOVED***;
+    if (maxDefined && includeBounds && niceMax !== max) {
+        if (ticks.length && helpers_segment.almostEquals(ticks[ticks.length - 1].value, max, relativeLabelSize(max, minSpacing, generationOptions))) {
+            ticks[ticks.length - 1].value = max;
         } else {
             ticks.push({
-                value: ma***REMOVED***
+                value: max
             });
         }
-    } else if (!ma***REMOVED***Defined || niceMa***REMOVED*** === ma***REMOVED***) {
+    } else if (!maxDefined || niceMax === max) {
         ticks.push({
-            value: niceMa***REMOVED***
+            value: niceMax
         });
     }
     return ticks;
@@ -10109,7 +10109,7 @@ function relativeLabelSize(value, minSpacing, { horizontal , minRotation  }) {
     const length = 0.75 * minSpacing * ('' + value).length;
     return Math.min(minSpacing / ratio, length);
 }
-class LinearScaleBase e***REMOVED***tends Scale {
+class LinearScaleBase extends Scale {
     constructor(cfg){
         super(cfg);
          this.start = undefined;
@@ -10118,7 +10118,7 @@ class LinearScaleBase e***REMOVED***tends Scale {
          this._endValue = undefined;
         this._valueRange = 0;
     }
-    parse(raw, inde***REMOVED***) {
+    parse(raw, index) {
         if (helpers_segment.isNullOrUndef(raw)) {
             return null;
         }
@@ -10129,47 +10129,47 @@ class LinearScaleBase e***REMOVED***tends Scale {
     }
     handleTickRangeOptions() {
         const { beginAtZero  } = this.options;
-        const { minDefined , ma***REMOVED***Defined  } = this.getUserBounds();
-        let { min , ma***REMOVED***  } = this;
+        const { minDefined , maxDefined  } = this.getUserBounds();
+        let { min , max  } = this;
         const setMin = (v)=>min = minDefined ? min : v;
-        const setMa***REMOVED*** = (v)=>ma***REMOVED*** = ma***REMOVED***Defined ? ma***REMOVED*** : v;
+        const setMax = (v)=>max = maxDefined ? max : v;
         if (beginAtZero) {
             const minSign = helpers_segment.sign(min);
-            const ma***REMOVED***Sign = helpers_segment.sign(ma***REMOVED***);
-            if (minSign < 0 && ma***REMOVED***Sign < 0) {
-                setMa***REMOVED***(0);
-            } else if (minSign > 0 && ma***REMOVED***Sign > 0) {
+            const maxSign = helpers_segment.sign(max);
+            if (minSign < 0 && maxSign < 0) {
+                setMax(0);
+            } else if (minSign > 0 && maxSign > 0) {
                 setMin(0);
             }
         }
-        if (min === ma***REMOVED***) {
-            let offset = ma***REMOVED*** === 0 ? 1 : Math.abs(ma***REMOVED*** * 0.05);
-            setMa***REMOVED***(ma***REMOVED*** + offset);
+        if (min === max) {
+            let offset = max === 0 ? 1 : Math.abs(max * 0.05);
+            setMax(max + offset);
             if (!beginAtZero) {
                 setMin(min - offset);
             }
         }
         this.min = min;
-        this.ma***REMOVED*** = ma***REMOVED***;
+        this.max = max;
     }
     getTickLimit() {
         const tickOpts = this.options.ticks;
-        let { ma***REMOVED***TicksLimit , stepSize  } = tickOpts;
-        let ma***REMOVED***Ticks;
+        let { maxTicksLimit , stepSize  } = tickOpts;
+        let maxTicks;
         if (stepSize) {
-            ma***REMOVED***Ticks = Math.ceil(this.ma***REMOVED*** / stepSize) - Math.floor(this.min / stepSize) + 1;
-            if (ma***REMOVED***Ticks > 1000) {
-                console.warn(`scales.${this.id}.ticks.stepSize: ${stepSize} would result generating up to ${ma***REMOVED***Ticks} ticks. Limiting to 1000.`);
-                ma***REMOVED***Ticks = 1000;
+            maxTicks = Math.ceil(this.max / stepSize) - Math.floor(this.min / stepSize) + 1;
+            if (maxTicks > 1000) {
+                console.warn(`scales.${this.id}.ticks.stepSize: ${stepSize} would result generating up to ${maxTicks} ticks. Limiting to 1000.`);
+                maxTicks = 1000;
             }
         } else {
-            ma***REMOVED***Ticks = this.computeTickLimit();
-            ma***REMOVED***TicksLimit = ma***REMOVED***TicksLimit || 11;
+            maxTicks = this.computeTickLimit();
+            maxTicksLimit = maxTicksLimit || 11;
         }
-        if (ma***REMOVED***TicksLimit) {
-            ma***REMOVED***Ticks = Math.min(ma***REMOVED***TicksLimit, ma***REMOVED***Ticks);
+        if (maxTicksLimit) {
+            maxTicks = Math.min(maxTicksLimit, maxTicks);
         }
-        return ma***REMOVED***Ticks;
+        return maxTicks;
     }
  computeTickLimit() {
         return Number.POSITIVE_INFINITY;
@@ -10177,17 +10177,17 @@ class LinearScaleBase e***REMOVED***tends Scale {
     buildTicks() {
         const opts = this.options;
         const tickOpts = opts.ticks;
-        let ma***REMOVED***Ticks = this.getTickLimit();
-        ma***REMOVED***Ticks = Math.ma***REMOVED***(2, ma***REMOVED***Ticks);
+        let maxTicks = this.getTickLimit();
+        maxTicks = Math.max(2, maxTicks);
         const numericGeneratorOptions = {
-            ma***REMOVED***Ticks,
+            maxTicks,
             bounds: opts.bounds,
             min: opts.min,
-            ma***REMOVED***: opts.ma***REMOVED***,
+            max: opts.max,
             precision: tickOpts.precision,
             step: tickOpts.stepSize,
             count: tickOpts.count,
-            ma***REMOVED***Digits: this._ma***REMOVED***Digits(),
+            maxDigits: this._maxDigits(),
             horizontal: this.isHorizontal(),
             minRotation: tickOpts.minRotation || 0,
             includeBounds: tickOpts.includeBounds !== false
@@ -10195,25 +10195,25 @@ class LinearScaleBase e***REMOVED***tends Scale {
         const dataRange = this._range || this;
         const ticks = generateTicks$1(numericGeneratorOptions, dataRange);
         if (opts.bounds === 'ticks') {
-            helpers_segment._setMinAndMa***REMOVED***ByKey(ticks, this, 'value');
+            helpers_segment._setMinAndMaxByKey(ticks, this, 'value');
         }
         if (opts.reverse) {
             ticks.reverse();
-            this.start = this.ma***REMOVED***;
+            this.start = this.max;
             this.end = this.min;
         } else {
             this.start = this.min;
-            this.end = this.ma***REMOVED***;
+            this.end = this.max;
         }
         return ticks;
     }
  configure() {
         const ticks = this.ticks;
         let start = this.min;
-        let end = this.ma***REMOVED***;
+        let end = this.max;
         super.configure();
         if (this.options.offset && ticks.length) {
-            const offset = (end - start) / Math.ma***REMOVED***(ticks.length - 1, 1) / 2;
+            const offset = (end - start) / Math.max(ticks.length - 1, 1) / 2;
             start -= offset;
             end += offset;
         }
@@ -10226,7 +10226,7 @@ class LinearScaleBase e***REMOVED***tends Scale {
     }
 }
 
-class LinearScale e***REMOVED***tends LinearScaleBase {
+class LinearScale extends LinearScaleBase {
     static id = 'linear';
  static defaults = {
         ticks: {
@@ -10234,9 +10234,9 @@ class LinearScale e***REMOVED***tends LinearScaleBase {
         }
     };
     determineDataLimits() {
-        const { min , ma***REMOVED***  } = this.getMinMa***REMOVED***(true);
+        const { min , max  } = this.getMinMax(true);
         this.min = helpers_segment.isNumberFinite(min) ? min : 0;
-        this.ma***REMOVED*** = helpers_segment.isNumberFinite(ma***REMOVED***) ? ma***REMOVED*** : 1;
+        this.max = helpers_segment.isNumberFinite(max) ? max : 1;
         this.handleTickRangeOptions();
     }
  computeTickLimit() {
@@ -10247,50 +10247,50 @@ class LinearScale e***REMOVED***tends LinearScaleBase {
         const tickFont = this._resolveTickFontOptions(0);
         return Math.ceil(length / Math.min(40, tickFont.lineHeight / ratio));
     }
-    getPi***REMOVED***elForValue(value) {
-        return value === null ? NaN : this.getPi***REMOVED***elForDecimal((value - this._startValue) / this._valueRange);
+    getPixelForValue(value) {
+        return value === null ? NaN : this.getPixelForDecimal((value - this._startValue) / this._valueRange);
     }
-    getValueForPi***REMOVED***el(pi***REMOVED***el) {
-        return this._startValue + this.getDecimalForPi***REMOVED***el(pi***REMOVED***el) * this._valueRange;
+    getValueForPixel(pixel) {
+        return this._startValue + this.getDecimalForPixel(pixel) * this._valueRange;
     }
 }
 
 const log10Floor = (v)=>Math.floor(helpers_segment.log10(v));
-const changeE***REMOVED***ponent = (v, m)=>Math.pow(10, log10Floor(v) + m);
+const changeExponent = (v, m)=>Math.pow(10, log10Floor(v) + m);
 function isMajor(tickVal) {
     const remain = tickVal / Math.pow(10, log10Floor(tickVal));
     return remain === 1;
 }
-function steps(min, ma***REMOVED***, rangeE***REMOVED***p) {
-    const rangeStep = Math.pow(10, rangeE***REMOVED***p);
+function steps(min, max, rangeExp) {
+    const rangeStep = Math.pow(10, rangeExp);
     const start = Math.floor(min / rangeStep);
-    const end = Math.ceil(ma***REMOVED*** / rangeStep);
+    const end = Math.ceil(max / rangeStep);
     return end - start;
 }
-function startE***REMOVED***p(min, ma***REMOVED***) {
-    const range = ma***REMOVED*** - min;
-    let rangeE***REMOVED***p = log10Floor(range);
-    while(steps(min, ma***REMOVED***, rangeE***REMOVED***p) > 10){
-        rangeE***REMOVED***p++;
+function startExp(min, max) {
+    const range = max - min;
+    let rangeExp = log10Floor(range);
+    while(steps(min, max, rangeExp) > 10){
+        rangeExp++;
     }
-    while(steps(min, ma***REMOVED***, rangeE***REMOVED***p) < 10){
-        rangeE***REMOVED***p--;
+    while(steps(min, max, rangeExp) < 10){
+        rangeExp--;
     }
-    return Math.min(rangeE***REMOVED***p, log10Floor(min));
+    return Math.min(rangeExp, log10Floor(min));
 }
- function generateTicks(generationOptions, { min , ma***REMOVED***  }) {
+ function generateTicks(generationOptions, { min , max  }) {
     min = helpers_segment.finiteOrDefault(generationOptions.min, min);
     const ticks = [];
-    const minE***REMOVED***p = log10Floor(min);
-    let e***REMOVED***p = startE***REMOVED***p(min, ma***REMOVED***);
-    let precision = e***REMOVED***p < 0 ? Math.pow(10, Math.abs(e***REMOVED***p)) : 1;
-    const stepSize = Math.pow(10, e***REMOVED***p);
-    const base = minE***REMOVED***p > e***REMOVED***p ? Math.pow(10, minE***REMOVED***p) : 0;
+    const minExp = log10Floor(min);
+    let exp = startExp(min, max);
+    let precision = exp < 0 ? Math.pow(10, Math.abs(exp)) : 1;
+    const stepSize = Math.pow(10, exp);
+    const base = minExp > exp ? Math.pow(10, minExp) : 0;
     const start = Math.round((min - base) * precision) / precision;
     const offset = Math.floor((min - base) / stepSize / 10) * stepSize * 10;
-    let significand = Math.floor((start - offset) / Math.pow(10, e***REMOVED***p));
-    let value = helpers_segment.finiteOrDefault(generationOptions.min, Math.round((base + offset + significand * Math.pow(10, e***REMOVED***p)) * precision) / precision);
-    while(value < ma***REMOVED***){
+    let significand = Math.floor((start - offset) / Math.pow(10, exp));
+    let value = helpers_segment.finiteOrDefault(generationOptions.min, Math.round((base + offset + significand * Math.pow(10, exp)) * precision) / precision);
+    while(value < max){
         ticks.push({
             value,
             major: isMajor(value),
@@ -10302,13 +10302,13 @@ function startE***REMOVED***p(min, ma***REMOVED***) {
             significand++;
         }
         if (significand >= 20) {
-            e***REMOVED***p++;
+            exp++;
             significand = 2;
-            precision = e***REMOVED***p >= 0 ? 1 : precision;
+            precision = exp >= 0 ? 1 : precision;
         }
-        value = Math.round((base + offset + significand * Math.pow(10, e***REMOVED***p)) * precision) / precision;
+        value = Math.round((base + offset + significand * Math.pow(10, exp)) * precision) / precision;
     }
-    const lastTick = helpers_segment.finiteOrDefault(generationOptions.ma***REMOVED***, value);
+    const lastTick = helpers_segment.finiteOrDefault(generationOptions.max, value);
     ticks.push({
         value: lastTick,
         major: isMajor(lastTick),
@@ -10316,7 +10316,7 @@ function startE***REMOVED***p(min, ma***REMOVED***) {
     });
     return ticks;
 }
-class LogarithmicScale e***REMOVED***tends Scale {
+class LogarithmicScale extends Scale {
     static id = 'logarithmic';
  static defaults = {
         ticks: {
@@ -10333,10 +10333,10 @@ class LogarithmicScale e***REMOVED***tends Scale {
          this._startValue = undefined;
         this._valueRange = 0;
     }
-    parse(raw, inde***REMOVED***) {
+    parse(raw, index) {
         const value = LinearScaleBase.prototype.parse.apply(this, [
             raw,
-            inde***REMOVED***
+            index
         ]);
         if (value === 0) {
             this._zero = true;
@@ -10345,58 +10345,58 @@ class LogarithmicScale e***REMOVED***tends Scale {
         return helpers_segment.isNumberFinite(value) && value > 0 ? value : null;
     }
     determineDataLimits() {
-        const { min , ma***REMOVED***  } = this.getMinMa***REMOVED***(true);
-        this.min = helpers_segment.isNumberFinite(min) ? Math.ma***REMOVED***(0, min) : null;
-        this.ma***REMOVED*** = helpers_segment.isNumberFinite(ma***REMOVED***) ? Math.ma***REMOVED***(0, ma***REMOVED***) : null;
+        const { min , max  } = this.getMinMax(true);
+        this.min = helpers_segment.isNumberFinite(min) ? Math.max(0, min) : null;
+        this.max = helpers_segment.isNumberFinite(max) ? Math.max(0, max) : null;
         if (this.options.beginAtZero) {
             this._zero = true;
         }
         if (this._zero && this.min !== this._suggestedMin && !helpers_segment.isNumberFinite(this._userMin)) {
-            this.min = min === changeE***REMOVED***ponent(this.min, 0) ? changeE***REMOVED***ponent(this.min, -1) : changeE***REMOVED***ponent(this.min, 0);
+            this.min = min === changeExponent(this.min, 0) ? changeExponent(this.min, -1) : changeExponent(this.min, 0);
         }
         this.handleTickRangeOptions();
     }
     handleTickRangeOptions() {
-        const { minDefined , ma***REMOVED***Defined  } = this.getUserBounds();
+        const { minDefined , maxDefined  } = this.getUserBounds();
         let min = this.min;
-        let ma***REMOVED*** = this.ma***REMOVED***;
+        let max = this.max;
         const setMin = (v)=>min = minDefined ? min : v;
-        const setMa***REMOVED*** = (v)=>ma***REMOVED*** = ma***REMOVED***Defined ? ma***REMOVED*** : v;
-        if (min === ma***REMOVED***) {
+        const setMax = (v)=>max = maxDefined ? max : v;
+        if (min === max) {
             if (min <= 0) {
                 setMin(1);
-                setMa***REMOVED***(10);
+                setMax(10);
             } else {
-                setMin(changeE***REMOVED***ponent(min, -1));
-                setMa***REMOVED***(changeE***REMOVED***ponent(ma***REMOVED***, +1));
+                setMin(changeExponent(min, -1));
+                setMax(changeExponent(max, +1));
             }
         }
         if (min <= 0) {
-            setMin(changeE***REMOVED***ponent(ma***REMOVED***, -1));
+            setMin(changeExponent(max, -1));
         }
-        if (ma***REMOVED*** <= 0) {
-            setMa***REMOVED***(changeE***REMOVED***ponent(min, +1));
+        if (max <= 0) {
+            setMax(changeExponent(min, +1));
         }
         this.min = min;
-        this.ma***REMOVED*** = ma***REMOVED***;
+        this.max = max;
     }
     buildTicks() {
         const opts = this.options;
         const generationOptions = {
             min: this._userMin,
-            ma***REMOVED***: this._userMa***REMOVED***
+            max: this._userMax
         };
         const ticks = generateTicks(generationOptions, this);
         if (opts.bounds === 'ticks') {
-            helpers_segment._setMinAndMa***REMOVED***ByKey(ticks, this, 'value');
+            helpers_segment._setMinAndMaxByKey(ticks, this, 'value');
         }
         if (opts.reverse) {
             ticks.reverse();
-            this.start = this.ma***REMOVED***;
+            this.start = this.max;
             this.end = this.min;
         } else {
             this.start = this.min;
-            this.end = this.ma***REMOVED***;
+            this.end = this.max;
         }
         return ticks;
     }
@@ -10407,19 +10407,19 @@ class LogarithmicScale e***REMOVED***tends Scale {
         const start = this.min;
         super.configure();
         this._startValue = helpers_segment.log10(start);
-        this._valueRange = helpers_segment.log10(this.ma***REMOVED***) - helpers_segment.log10(start);
+        this._valueRange = helpers_segment.log10(this.max) - helpers_segment.log10(start);
     }
-    getPi***REMOVED***elForValue(value) {
+    getPixelForValue(value) {
         if (value === undefined || value === 0) {
             value = this.min;
         }
         if (value === null || isNaN(value)) {
             return NaN;
         }
-        return this.getPi***REMOVED***elForDecimal(value === this.min ? 0 : (helpers_segment.log10(value) - this._startValue) / this._valueRange);
+        return this.getPixelForDecimal(value === this.min ? 0 : (helpers_segment.log10(value) - this._startValue) / this._valueRange);
     }
-    getValueForPi***REMOVED***el(pi***REMOVED***el) {
-        const decimal = this.getDecimalForPi***REMOVED***el(pi***REMOVED***el);
+    getValueForPixel(pixel) {
+        const decimal = this.getDecimalForPixel(pixel);
         return Math.pow(10, this._startValue + decimal * this._valueRange);
     }
 }
@@ -10432,22 +10432,22 @@ function getTickBackdropHeight(opts) {
     }
     return 0;
 }
-function measureLabelSize(ct***REMOVED***, font, label) {
+function measureLabelSize(ctx, font, label) {
     label = helpers_segment.isArray(label) ? label : [
         label
     ];
     return {
-        w: helpers_segment._longestTe***REMOVED***t(ct***REMOVED***, font.string, label),
+        w: helpers_segment._longestText(ctx, font.string, label),
         h: label.length * font.lineHeight
     };
 }
-function determineLimits(angle, pos, size, min, ma***REMOVED***) {
-    if (angle === min || angle === ma***REMOVED***) {
+function determineLimits(angle, pos, size, min, max) {
+    if (angle === min || angle === max) {
         return {
             start: pos - size / 2,
             end: pos + size / 2
         };
-    } else if (angle < min || angle > ma***REMOVED***) {
+    } else if (angle < min || angle > max) {
         return {
             start: pos - size,
             end: pos
@@ -10472,16 +10472,16 @@ function determineLimits(angle, pos, size, min, ma***REMOVED***) {
     const pointLabelOpts = scale.options.pointLabels;
     const additionalAngle = pointLabelOpts.centerPointLabels ? helpers_segment.PI / valueCount : 0;
     for(let i = 0; i < valueCount; i++){
-        const opts = pointLabelOpts.setConte***REMOVED***t(scale.getPointLabelConte***REMOVED***t(i));
+        const opts = pointLabelOpts.setContext(scale.getPointLabelContext(i));
         padding[i] = opts.padding;
         const pointPosition = scale.getPointPosition(i, scale.drawingArea + padding[i], additionalAngle);
         const plFont = helpers_segment.toFont(opts.font);
-        const te***REMOVED***tSize = measureLabelSize(scale.ct***REMOVED***, plFont, scale._pointLabels[i]);
-        labelSizes[i] = te***REMOVED***tSize;
-        const angleRadians = helpers_segment._normalizeAngle(scale.getInde***REMOVED***Angle(i) + additionalAngle);
+        const textSize = measureLabelSize(scale.ctx, plFont, scale._pointLabels[i]);
+        labelSizes[i] = textSize;
+        const angleRadians = helpers_segment._normalizeAngle(scale.getIndexAngle(i) + additionalAngle);
         const angle = Math.round(helpers_segment.toDegrees(angleRadians));
-        const hLimits = determineLimits(angle, pointPosition.***REMOVED***, te***REMOVED***tSize.w, 0, 180);
-        const vLimits = determineLimits(angle, pointPosition.y, te***REMOVED***tSize.h, 90, 270);
+        const hLimits = determineLimits(angle, pointPosition.x, textSize.w, 0, 180);
+        const vLimits = determineLimits(angle, pointPosition.y, textSize.h, 90, 270);
         updateLimits(limits, orig, angleRadians, hLimits, vLimits);
     }
     scale.setCenterPoint(orig.l - limits.l, limits.r - orig.r, orig.t - limits.t, limits.b - orig.b);
@@ -10490,36 +10490,36 @@ function determineLimits(angle, pos, size, min, ma***REMOVED***) {
 function updateLimits(limits, orig, angle, hLimits, vLimits) {
     const sin = Math.abs(Math.sin(angle));
     const cos = Math.abs(Math.cos(angle));
-    let ***REMOVED*** = 0;
+    let x = 0;
     let y = 0;
     if (hLimits.start < orig.l) {
-        ***REMOVED*** = (orig.l - hLimits.start) / sin;
-        limits.l = Math.min(limits.l, orig.l - ***REMOVED***);
+        x = (orig.l - hLimits.start) / sin;
+        limits.l = Math.min(limits.l, orig.l - x);
     } else if (hLimits.end > orig.r) {
-        ***REMOVED*** = (hLimits.end - orig.r) / sin;
-        limits.r = Math.ma***REMOVED***(limits.r, orig.r + ***REMOVED***);
+        x = (hLimits.end - orig.r) / sin;
+        limits.r = Math.max(limits.r, orig.r + x);
     }
     if (vLimits.start < orig.t) {
         y = (orig.t - vLimits.start) / cos;
         limits.t = Math.min(limits.t, orig.t - y);
     } else if (vLimits.end > orig.b) {
         y = (vLimits.end - orig.b) / cos;
-        limits.b = Math.ma***REMOVED***(limits.b, orig.b + y);
+        limits.b = Math.max(limits.b, orig.b + y);
     }
 }
-function createPointLabelItem(scale, inde***REMOVED***, itemOpts) {
+function createPointLabelItem(scale, index, itemOpts) {
     const outerDistance = scale.drawingArea;
-    const { e***REMOVED***tra , additionalAngle , padding , size  } = itemOpts;
-    const pointLabelPosition = scale.getPointPosition(inde***REMOVED***, outerDistance + e***REMOVED***tra + padding, additionalAngle);
+    const { extra , additionalAngle , padding , size  } = itemOpts;
+    const pointLabelPosition = scale.getPointPosition(index, outerDistance + extra + padding, additionalAngle);
     const angle = Math.round(helpers_segment.toDegrees(helpers_segment._normalizeAngle(pointLabelPosition.angle + helpers_segment.HALF_PI)));
     const y = yForAngle(pointLabelPosition.y, size.h, angle);
-    const te***REMOVED***tAlign = getTe***REMOVED***tAlignForAngle(angle);
-    const left = leftForTe***REMOVED***tAlign(pointLabelPosition.***REMOVED***, size.w, te***REMOVED***tAlign);
+    const textAlign = getTextAlignForAngle(angle);
+    const left = leftForTextAlign(pointLabelPosition.x, size.w, textAlign);
     return {
         visible: true,
-        ***REMOVED***: pointLabelPosition.***REMOVED***,
+        x: pointLabelPosition.x,
         y,
-        te***REMOVED***tAlign,
+        textAlign,
         left,
         top: y,
         right: left + size.w,
@@ -10531,20 +10531,20 @@ function isNotOverlapped(item, area) {
         return true;
     }
     const { left , top , right , bottom  } = item;
-    const ape***REMOVED***esInArea = helpers_segment._isPointInArea({
-        ***REMOVED***: left,
+    const apexesInArea = helpers_segment._isPointInArea({
+        x: left,
         y: top
     }, area) || helpers_segment._isPointInArea({
-        ***REMOVED***: left,
+        x: left,
         y: bottom
     }, area) || helpers_segment._isPointInArea({
-        ***REMOVED***: right,
+        x: right,
         y: top
     }, area) || helpers_segment._isPointInArea({
-        ***REMOVED***: right,
+        x: right,
         y: bottom
     }, area);
-    return !ape***REMOVED***esInArea;
+    return !apexesInArea;
 }
 function buildPointLabelItems(scale, labelSizes, padding) {
     const items = [];
@@ -10552,7 +10552,7 @@ function buildPointLabelItems(scale, labelSizes, padding) {
     const opts = scale.options;
     const { centerPointLabels , display  } = opts.pointLabels;
     const itemOpts = {
-        e***REMOVED***tra: getTickBackdropHeight(opts) / 2,
+        extra: getTickBackdropHeight(opts) / 2,
         additionalAngle: centerPointLabels ? helpers_segment.PI / valueCount : 0
     };
     let area;
@@ -10570,7 +10570,7 @@ function buildPointLabelItems(scale, labelSizes, padding) {
     }
     return items;
 }
-function getTe***REMOVED***tAlignForAngle(angle) {
+function getTextAlignForAngle(angle) {
     if (angle === 0 || angle === 180) {
         return 'center';
     } else if (angle < 180) {
@@ -10578,13 +10578,13 @@ function getTe***REMOVED***tAlignForAngle(angle) {
     }
     return 'right';
 }
-function leftForTe***REMOVED***tAlign(***REMOVED***, w, align) {
+function leftForTextAlign(x, w, align) {
     if (align === 'right') {
-        ***REMOVED*** -= w;
+        x -= w;
     } else if (align === 'center') {
-        ***REMOVED*** -= w / 2;
+        x -= w / 2;
     }
-    return ***REMOVED***;
+    return x;
 }
 function yForAngle(y, h, angle) {
     if (angle === 90 || angle === 270) {
@@ -10594,89 +10594,89 @@ function yForAngle(y, h, angle) {
     }
     return y;
 }
-function drawPointLabelBo***REMOVED***(ct***REMOVED***, opts, item) {
+function drawPointLabelBox(ctx, opts, item) {
     const { left , top , right , bottom  } = item;
     const { backdropColor  } = opts;
     if (!helpers_segment.isNullOrUndef(backdropColor)) {
         const borderRadius = helpers_segment.toTRBLCorners(opts.borderRadius);
         const padding = helpers_segment.toPadding(opts.backdropPadding);
-        ct***REMOVED***.fillStyle = backdropColor;
+        ctx.fillStyle = backdropColor;
         const backdropLeft = left - padding.left;
         const backdropTop = top - padding.top;
         const backdropWidth = right - left + padding.width;
         const backdropHeight = bottom - top + padding.height;
         if (Object.values(borderRadius).some((v)=>v !== 0)) {
-            ct***REMOVED***.beginPath();
-            helpers_segment.addRoundedRectPath(ct***REMOVED***, {
-                ***REMOVED***: backdropLeft,
+            ctx.beginPath();
+            helpers_segment.addRoundedRectPath(ctx, {
+                x: backdropLeft,
                 y: backdropTop,
                 w: backdropWidth,
                 h: backdropHeight,
                 radius: borderRadius
             });
-            ct***REMOVED***.fill();
+            ctx.fill();
         } else {
-            ct***REMOVED***.fillRect(backdropLeft, backdropTop, backdropWidth, backdropHeight);
+            ctx.fillRect(backdropLeft, backdropTop, backdropWidth, backdropHeight);
         }
     }
 }
 function drawPointLabels(scale, labelCount) {
-    const { ct***REMOVED*** , options: { pointLabels  }  } = scale;
+    const { ctx , options: { pointLabels  }  } = scale;
     for(let i = labelCount - 1; i >= 0; i--){
         const item = scale._pointLabelItems[i];
         if (!item.visible) {
             continue;
         }
-        const optsAtInde***REMOVED*** = pointLabels.setConte***REMOVED***t(scale.getPointLabelConte***REMOVED***t(i));
-        drawPointLabelBo***REMOVED***(ct***REMOVED***, optsAtInde***REMOVED***, item);
-        const plFont = helpers_segment.toFont(optsAtInde***REMOVED***.font);
-        const { ***REMOVED*** , y , te***REMOVED***tAlign  } = item;
-        helpers_segment.renderTe***REMOVED***t(ct***REMOVED***, scale._pointLabels[i], ***REMOVED***, y + plFont.lineHeight / 2, plFont, {
-            color: optsAtInde***REMOVED***.color,
-            te***REMOVED***tAlign: te***REMOVED***tAlign,
-            te***REMOVED***tBaseline: 'middle'
+        const optsAtIndex = pointLabels.setContext(scale.getPointLabelContext(i));
+        drawPointLabelBox(ctx, optsAtIndex, item);
+        const plFont = helpers_segment.toFont(optsAtIndex.font);
+        const { x , y , textAlign  } = item;
+        helpers_segment.renderText(ctx, scale._pointLabels[i], x, y + plFont.lineHeight / 2, plFont, {
+            color: optsAtIndex.color,
+            textAlign: textAlign,
+            textBaseline: 'middle'
         });
     }
 }
 function pathRadiusLine(scale, radius, circular, labelCount) {
-    const { ct***REMOVED***  } = scale;
+    const { ctx  } = scale;
     if (circular) {
-        ct***REMOVED***.arc(scale.***REMOVED***Center, scale.yCenter, radius, 0, helpers_segment.TAU);
+        ctx.arc(scale.xCenter, scale.yCenter, radius, 0, helpers_segment.TAU);
     } else {
         let pointPosition = scale.getPointPosition(0, radius);
-        ct***REMOVED***.moveTo(pointPosition.***REMOVED***, pointPosition.y);
+        ctx.moveTo(pointPosition.x, pointPosition.y);
         for(let i = 1; i < labelCount; i++){
             pointPosition = scale.getPointPosition(i, radius);
-            ct***REMOVED***.lineTo(pointPosition.***REMOVED***, pointPosition.y);
+            ctx.lineTo(pointPosition.x, pointPosition.y);
         }
     }
 }
 function drawRadiusLine(scale, gridLineOpts, radius, labelCount, borderOpts) {
-    const ct***REMOVED*** = scale.ct***REMOVED***;
+    const ctx = scale.ctx;
     const circular = gridLineOpts.circular;
     const { color , lineWidth  } = gridLineOpts;
     if (!circular && !labelCount || !color || !lineWidth || radius < 0) {
         return;
     }
-    ct***REMOVED***.save();
-    ct***REMOVED***.strokeStyle = color;
-    ct***REMOVED***.lineWidth = lineWidth;
-    ct***REMOVED***.setLineDash(borderOpts.dash);
-    ct***REMOVED***.lineDashOffset = borderOpts.dashOffset;
-    ct***REMOVED***.beginPath();
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
+    ctx.setLineDash(borderOpts.dash);
+    ctx.lineDashOffset = borderOpts.dashOffset;
+    ctx.beginPath();
     pathRadiusLine(scale, radius, circular, labelCount);
-    ct***REMOVED***.closePath();
-    ct***REMOVED***.stroke();
-    ct***REMOVED***.restore();
+    ctx.closePath();
+    ctx.stroke();
+    ctx.restore();
 }
-function createPointLabelConte***REMOVED***t(parent, inde***REMOVED***, label) {
-    return helpers_segment.createConte***REMOVED***t(parent, {
+function createPointLabelContext(parent, index, label) {
+    return helpers_segment.createContext(parent, {
         label,
-        inde***REMOVED***,
+        index,
         type: 'pointLabel'
     });
 }
-class RadialLinearScale e***REMOVED***tends LinearScaleBase {
+class RadialLinearScale extends LinearScaleBase {
     static id = 'radialLinear';
  static defaults = {
         display: true,
@@ -10722,7 +10722,7 @@ class RadialLinearScale e***REMOVED***tends LinearScaleBase {
     };
     constructor(cfg){
         super(cfg);
-         this.***REMOVED***Center = undefined;
+         this.xCenter = undefined;
          this.yCenter = undefined;
          this.drawingArea = undefined;
          this._pointLabels = [];
@@ -10730,16 +10730,16 @@ class RadialLinearScale e***REMOVED***tends LinearScaleBase {
     }
     setDimensions() {
         const padding = this._padding = helpers_segment.toPadding(getTickBackdropHeight(this.options) / 2);
-        const w = this.width = this.ma***REMOVED***Width - padding.width;
-        const h = this.height = this.ma***REMOVED***Height - padding.height;
-        this.***REMOVED***Center = Math.floor(this.left + w / 2 + padding.left);
+        const w = this.width = this.maxWidth - padding.width;
+        const h = this.height = this.maxHeight - padding.height;
+        this.xCenter = Math.floor(this.left + w / 2 + padding.left);
         this.yCenter = Math.floor(this.top + h / 2 + padding.top);
         this.drawingArea = Math.floor(Math.min(w, h) / 2);
     }
     determineDataLimits() {
-        const { min , ma***REMOVED***  } = this.getMinMa***REMOVED***(false);
+        const { min , max  } = this.getMinMax(false);
         this.min = helpers_segment.isNumberFinite(min) && !isNaN(min) ? min : 0;
-        this.ma***REMOVED*** = helpers_segment.isNumberFinite(ma***REMOVED***) && !isNaN(ma***REMOVED***) ? ma***REMOVED*** : 0;
+        this.max = helpers_segment.isNumberFinite(max) && !isNaN(max) ? max : 0;
         this.handleTickRangeOptions();
     }
  computeTickLimit() {
@@ -10747,10 +10747,10 @@ class RadialLinearScale e***REMOVED***tends LinearScaleBase {
     }
     generateTickLabels(ticks) {
         LinearScaleBase.prototype.generateTickLabels.call(this, ticks);
-        this._pointLabels = this.getLabels().map((value, inde***REMOVED***)=>{
+        this._pointLabels = this.getLabels().map((value, index)=>{
             const label = helpers_segment.callback(this.options.pointLabels.callback, [
                 value,
-                inde***REMOVED***
+                index
             ], this);
             return label || label === 0 ? label : '';
         }).filter((v, i)=>this.chart.getDataVisibility(i));
@@ -10764,22 +10764,22 @@ class RadialLinearScale e***REMOVED***tends LinearScaleBase {
         }
     }
     setCenterPoint(leftMovement, rightMovement, topMovement, bottomMovement) {
-        this.***REMOVED***Center += Math.floor((leftMovement - rightMovement) / 2);
+        this.xCenter += Math.floor((leftMovement - rightMovement) / 2);
         this.yCenter += Math.floor((topMovement - bottomMovement) / 2);
-        this.drawingArea -= Math.min(this.drawingArea / 2, Math.ma***REMOVED***(leftMovement, rightMovement, topMovement, bottomMovement));
+        this.drawingArea -= Math.min(this.drawingArea / 2, Math.max(leftMovement, rightMovement, topMovement, bottomMovement));
     }
-    getInde***REMOVED***Angle(inde***REMOVED***) {
+    getIndexAngle(index) {
         const angleMultiplier = helpers_segment.TAU / (this._pointLabels.length || 1);
         const startAngle = this.options.startAngle || 0;
-        return helpers_segment._normalizeAngle(inde***REMOVED*** * angleMultiplier + helpers_segment.toRadians(startAngle));
+        return helpers_segment._normalizeAngle(index * angleMultiplier + helpers_segment.toRadians(startAngle));
     }
     getDistanceFromCenterForValue(value) {
         if (helpers_segment.isNullOrUndef(value)) {
             return NaN;
         }
-        const scalingFactor = this.drawingArea / (this.ma***REMOVED*** - this.min);
+        const scalingFactor = this.drawingArea / (this.max - this.min);
         if (this.options.reverse) {
-            return (this.ma***REMOVED*** - value) * scalingFactor;
+            return (this.max - value) * scalingFactor;
         }
         return (value - this.min) * scalingFactor;
     }
@@ -10787,32 +10787,32 @@ class RadialLinearScale e***REMOVED***tends LinearScaleBase {
         if (helpers_segment.isNullOrUndef(distance)) {
             return NaN;
         }
-        const scaledDistance = distance / (this.drawingArea / (this.ma***REMOVED*** - this.min));
-        return this.options.reverse ? this.ma***REMOVED*** - scaledDistance : this.min + scaledDistance;
+        const scaledDistance = distance / (this.drawingArea / (this.max - this.min));
+        return this.options.reverse ? this.max - scaledDistance : this.min + scaledDistance;
     }
-    getPointLabelConte***REMOVED***t(inde***REMOVED***) {
+    getPointLabelContext(index) {
         const pointLabels = this._pointLabels || [];
-        if (inde***REMOVED*** >= 0 && inde***REMOVED*** < pointLabels.length) {
-            const pointLabel = pointLabels[inde***REMOVED***];
-            return createPointLabelConte***REMOVED***t(this.getConte***REMOVED***t(), inde***REMOVED***, pointLabel);
+        if (index >= 0 && index < pointLabels.length) {
+            const pointLabel = pointLabels[index];
+            return createPointLabelContext(this.getContext(), index, pointLabel);
         }
     }
-    getPointPosition(inde***REMOVED***, distanceFromCenter, additionalAngle = 0) {
-        const angle = this.getInde***REMOVED***Angle(inde***REMOVED***) - helpers_segment.HALF_PI + additionalAngle;
+    getPointPosition(index, distanceFromCenter, additionalAngle = 0) {
+        const angle = this.getIndexAngle(index) - helpers_segment.HALF_PI + additionalAngle;
         return {
-            ***REMOVED***: Math.cos(angle) * distanceFromCenter + this.***REMOVED***Center,
+            x: Math.cos(angle) * distanceFromCenter + this.xCenter,
             y: Math.sin(angle) * distanceFromCenter + this.yCenter,
             angle
         };
     }
-    getPointPositionForValue(inde***REMOVED***, value) {
-        return this.getPointPosition(inde***REMOVED***, this.getDistanceFromCenterForValue(value));
+    getPointPositionForValue(index, value) {
+        return this.getPointPosition(index, this.getDistanceFromCenterForValue(value));
     }
-    getBasePosition(inde***REMOVED***) {
-        return this.getPointPositionForValue(inde***REMOVED*** || 0, this.getBaseValue());
+    getBasePosition(index) {
+        return this.getPointPositionForValue(index || 0, this.getBaseValue());
     }
-    getPointLabelPosition(inde***REMOVED***) {
-        const { left , top , right , bottom  } = this._pointLabelItems[inde***REMOVED***];
+    getPointLabelPosition(index) {
+        const { left , top , right , bottom  } = this._pointLabelItems[index];
         return {
             left,
             top,
@@ -10823,18 +10823,18 @@ class RadialLinearScale e***REMOVED***tends LinearScaleBase {
  drawBackground() {
         const { backgroundColor , grid: { circular  }  } = this.options;
         if (backgroundColor) {
-            const ct***REMOVED*** = this.ct***REMOVED***;
-            ct***REMOVED***.save();
-            ct***REMOVED***.beginPath();
+            const ctx = this.ctx;
+            ctx.save();
+            ctx.beginPath();
             pathRadiusLine(this, this.getDistanceFromCenterForValue(this._endValue), circular, this._pointLabels.length);
-            ct***REMOVED***.closePath();
-            ct***REMOVED***.fillStyle = backgroundColor;
-            ct***REMOVED***.fill();
-            ct***REMOVED***.restore();
+            ctx.closePath();
+            ctx.fillStyle = backgroundColor;
+            ctx.fill();
+            ctx.restore();
         }
     }
  drawGrid() {
-        const ct***REMOVED*** = this.ct***REMOVED***;
+        const ctx = this.ctx;
         const opts = this.options;
         const { angleLines , grid , border  } = opts;
         const labelCount = this._pointLabels.length;
@@ -10843,74 +10843,74 @@ class RadialLinearScale e***REMOVED***tends LinearScaleBase {
             drawPointLabels(this, labelCount);
         }
         if (grid.display) {
-            this.ticks.forEach((tick, inde***REMOVED***)=>{
-                if (inde***REMOVED*** !== 0 || inde***REMOVED*** === 0 && this.min < 0) {
+            this.ticks.forEach((tick, index)=>{
+                if (index !== 0 || index === 0 && this.min < 0) {
                     offset = this.getDistanceFromCenterForValue(tick.value);
-                    const conte***REMOVED***t = this.getConte***REMOVED***t(inde***REMOVED***);
-                    const optsAtInde***REMOVED*** = grid.setConte***REMOVED***t(conte***REMOVED***t);
-                    const optsAtInde***REMOVED***Border = border.setConte***REMOVED***t(conte***REMOVED***t);
-                    drawRadiusLine(this, optsAtInde***REMOVED***, offset, labelCount, optsAtInde***REMOVED***Border);
+                    const context = this.getContext(index);
+                    const optsAtIndex = grid.setContext(context);
+                    const optsAtIndexBorder = border.setContext(context);
+                    drawRadiusLine(this, optsAtIndex, offset, labelCount, optsAtIndexBorder);
                 }
             });
         }
         if (angleLines.display) {
-            ct***REMOVED***.save();
+            ctx.save();
             for(i = labelCount - 1; i >= 0; i--){
-                const optsAtInde***REMOVED*** = angleLines.setConte***REMOVED***t(this.getPointLabelConte***REMOVED***t(i));
-                const { color , lineWidth  } = optsAtInde***REMOVED***;
+                const optsAtIndex = angleLines.setContext(this.getPointLabelContext(i));
+                const { color , lineWidth  } = optsAtIndex;
                 if (!lineWidth || !color) {
                     continue;
                 }
-                ct***REMOVED***.lineWidth = lineWidth;
-                ct***REMOVED***.strokeStyle = color;
-                ct***REMOVED***.setLineDash(optsAtInde***REMOVED***.borderDash);
-                ct***REMOVED***.lineDashOffset = optsAtInde***REMOVED***.borderDashOffset;
-                offset = this.getDistanceFromCenterForValue(opts.ticks.reverse ? this.min : this.ma***REMOVED***);
+                ctx.lineWidth = lineWidth;
+                ctx.strokeStyle = color;
+                ctx.setLineDash(optsAtIndex.borderDash);
+                ctx.lineDashOffset = optsAtIndex.borderDashOffset;
+                offset = this.getDistanceFromCenterForValue(opts.ticks.reverse ? this.min : this.max);
                 position = this.getPointPosition(i, offset);
-                ct***REMOVED***.beginPath();
-                ct***REMOVED***.moveTo(this.***REMOVED***Center, this.yCenter);
-                ct***REMOVED***.lineTo(position.***REMOVED***, position.y);
-                ct***REMOVED***.stroke();
+                ctx.beginPath();
+                ctx.moveTo(this.xCenter, this.yCenter);
+                ctx.lineTo(position.x, position.y);
+                ctx.stroke();
             }
-            ct***REMOVED***.restore();
+            ctx.restore();
         }
     }
  drawBorder() {}
  drawLabels() {
-        const ct***REMOVED*** = this.ct***REMOVED***;
+        const ctx = this.ctx;
         const opts = this.options;
         const tickOpts = opts.ticks;
         if (!tickOpts.display) {
             return;
         }
-        const startAngle = this.getInde***REMOVED***Angle(0);
+        const startAngle = this.getIndexAngle(0);
         let offset, width;
-        ct***REMOVED***.save();
-        ct***REMOVED***.translate(this.***REMOVED***Center, this.yCenter);
-        ct***REMOVED***.rotate(startAngle);
-        ct***REMOVED***.te***REMOVED***tAlign = 'center';
-        ct***REMOVED***.te***REMOVED***tBaseline = 'middle';
-        this.ticks.forEach((tick, inde***REMOVED***)=>{
-            if (inde***REMOVED*** === 0 && this.min >= 0 && !opts.reverse) {
+        ctx.save();
+        ctx.translate(this.xCenter, this.yCenter);
+        ctx.rotate(startAngle);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        this.ticks.forEach((tick, index)=>{
+            if (index === 0 && this.min >= 0 && !opts.reverse) {
                 return;
             }
-            const optsAtInde***REMOVED*** = tickOpts.setConte***REMOVED***t(this.getConte***REMOVED***t(inde***REMOVED***));
-            const tickFont = helpers_segment.toFont(optsAtInde***REMOVED***.font);
-            offset = this.getDistanceFromCenterForValue(this.ticks[inde***REMOVED***].value);
-            if (optsAtInde***REMOVED***.showLabelBackdrop) {
-                ct***REMOVED***.font = tickFont.string;
-                width = ct***REMOVED***.measureTe***REMOVED***t(tick.label).width;
-                ct***REMOVED***.fillStyle = optsAtInde***REMOVED***.backdropColor;
-                const padding = helpers_segment.toPadding(optsAtInde***REMOVED***.backdropPadding);
-                ct***REMOVED***.fillRect(-width / 2 - padding.left, -offset - tickFont.size / 2 - padding.top, width + padding.width, tickFont.size + padding.height);
+            const optsAtIndex = tickOpts.setContext(this.getContext(index));
+            const tickFont = helpers_segment.toFont(optsAtIndex.font);
+            offset = this.getDistanceFromCenterForValue(this.ticks[index].value);
+            if (optsAtIndex.showLabelBackdrop) {
+                ctx.font = tickFont.string;
+                width = ctx.measureText(tick.label).width;
+                ctx.fillStyle = optsAtIndex.backdropColor;
+                const padding = helpers_segment.toPadding(optsAtIndex.backdropPadding);
+                ctx.fillRect(-width / 2 - padding.left, -offset - tickFont.size / 2 - padding.top, width + padding.width, tickFont.size + padding.height);
             }
-            helpers_segment.renderTe***REMOVED***t(ct***REMOVED***, tick.label, 0, -offset, tickFont, {
-                color: optsAtInde***REMOVED***.color,
-                strokeColor: optsAtInde***REMOVED***.te***REMOVED***tStrokeColor,
-                strokeWidth: optsAtInde***REMOVED***.te***REMOVED***tStrokeWidth
+            helpers_segment.renderText(ctx, tick.label, 0, -offset, tickFont, {
+                color: optsAtIndex.color,
+                strokeColor: optsAtIndex.textStrokeColor,
+                strokeWidth: optsAtIndex.textStrokeWidth
             });
         });
-        ct***REMOVED***.restore();
+        ctx.restore();
     }
  drawTitle() {}
 }
@@ -10986,28 +10986,28 @@ const INTERVALS = {
     }
     return +value;
 }
- function determineUnitForAutoTicks(minUnit, min, ma***REMOVED***, capacity) {
+ function determineUnitForAutoTicks(minUnit, min, max, capacity) {
     const ilen = UNITS.length;
-    for(let i = UNITS.inde***REMOVED***Of(minUnit); i < ilen - 1; ++i){
+    for(let i = UNITS.indexOf(minUnit); i < ilen - 1; ++i){
         const interval = INTERVALS[UNITS[i]];
         const factor = interval.steps ? interval.steps : Number.MAX_SAFE_INTEGER;
-        if (interval.common && Math.ceil((ma***REMOVED*** - min) / (factor * interval.size)) <= capacity) {
+        if (interval.common && Math.ceil((max - min) / (factor * interval.size)) <= capacity) {
             return UNITS[i];
         }
     }
     return UNITS[ilen - 1];
 }
- function determineUnitForFormatting(scale, numTicks, minUnit, min, ma***REMOVED***) {
-    for(let i = UNITS.length - 1; i >= UNITS.inde***REMOVED***Of(minUnit); i--){
+ function determineUnitForFormatting(scale, numTicks, minUnit, min, max) {
+    for(let i = UNITS.length - 1; i >= UNITS.indexOf(minUnit); i--){
         const unit = UNITS[i];
-        if (INTERVALS[unit].common && scale._adapter.diff(ma***REMOVED***, min, unit) >= numTicks - 1) {
+        if (INTERVALS[unit].common && scale._adapter.diff(max, min, unit) >= numTicks - 1) {
             return unit;
         }
     }
-    return UNITS[minUnit ? UNITS.inde***REMOVED***Of(minUnit) : 0];
+    return UNITS[minUnit ? UNITS.indexOf(minUnit) : 0];
 }
  function determineMajorUnit(unit) {
-    for(let i = UNITS.inde***REMOVED***Of(unit) + 1, ilen = UNITS.length; i < ilen; ++i){
+    for(let i = UNITS.indexOf(unit) + 1, ilen = UNITS.length; i < ilen; ++i){
         if (INTERVALS[UNITS[i]].common) {
             return UNITS[i];
         }
@@ -11026,11 +11026,11 @@ const INTERVALS = {
     const adapter = scale._adapter;
     const first = +adapter.startOf(ticks[0].value, majorUnit);
     const last = ticks[ticks.length - 1].value;
-    let major, inde***REMOVED***;
+    let major, index;
     for(major = first; major <= last; major = +adapter.add(major, 1, majorUnit)){
-        inde***REMOVED*** = map[major];
-        if (inde***REMOVED*** >= 0) {
-            ticks[inde***REMOVED***].major = true;
+        index = map[major];
+        if (index >= 0) {
+            ticks[index].major = true;
         }
     }
     return ticks;
@@ -11050,7 +11050,7 @@ const INTERVALS = {
     }
     return ilen === 0 || !majorUnit ? ticks : setMajorTicks(scale, ticks, map, majorUnit);
 }
-class TimeScale e***REMOVED***tends Scale {
+class TimeScale extends Scale {
     static id = 'time';
  static defaults = {
  bounds: 'data',
@@ -11097,7 +11097,7 @@ class TimeScale e***REMOVED***tends Scale {
         super.init(scaleOpts);
         this._normalized = opts.normalized;
     }
- parse(raw, inde***REMOVED***) {
+ parse(raw, index) {
         if (raw === undefined) {
             return null;
         }
@@ -11115,37 +11115,37 @@ class TimeScale e***REMOVED***tends Scale {
         const options = this.options;
         const adapter = this._adapter;
         const unit = options.time.unit || 'day';
-        let { min , ma***REMOVED*** , minDefined , ma***REMOVED***Defined  } = this.getUserBounds();
+        let { min , max , minDefined , maxDefined  } = this.getUserBounds();
  function _applyBounds(bounds) {
             if (!minDefined && !isNaN(bounds.min)) {
                 min = Math.min(min, bounds.min);
             }
-            if (!ma***REMOVED***Defined && !isNaN(bounds.ma***REMOVED***)) {
-                ma***REMOVED*** = Math.ma***REMOVED***(ma***REMOVED***, bounds.ma***REMOVED***);
+            if (!maxDefined && !isNaN(bounds.max)) {
+                max = Math.max(max, bounds.max);
             }
         }
-        if (!minDefined || !ma***REMOVED***Defined) {
+        if (!minDefined || !maxDefined) {
             _applyBounds(this._getLabelBounds());
             if (options.bounds !== 'ticks' || options.ticks.source !== 'labels') {
-                _applyBounds(this.getMinMa***REMOVED***(false));
+                _applyBounds(this.getMinMax(false));
             }
         }
         min = helpers_segment.isNumberFinite(min) && !isNaN(min) ? min : +adapter.startOf(Date.now(), unit);
-        ma***REMOVED*** = helpers_segment.isNumberFinite(ma***REMOVED***) && !isNaN(ma***REMOVED***) ? ma***REMOVED*** : +adapter.endOf(Date.now(), unit) + 1;
-        this.min = Math.min(min, ma***REMOVED*** - 1);
-        this.ma***REMOVED*** = Math.ma***REMOVED***(min + 1, ma***REMOVED***);
+        max = helpers_segment.isNumberFinite(max) && !isNaN(max) ? max : +adapter.endOf(Date.now(), unit) + 1;
+        this.min = Math.min(min, max - 1);
+        this.max = Math.max(min + 1, max);
     }
  _getLabelBounds() {
         const arr = this.getLabelTimestamps();
         let min = Number.POSITIVE_INFINITY;
-        let ma***REMOVED*** = Number.NEGATIVE_INFINITY;
+        let max = Number.NEGATIVE_INFINITY;
         if (arr.length) {
             min = arr[0];
-            ma***REMOVED*** = arr[arr.length - 1];
+            max = arr[arr.length - 1];
         }
         return {
             min,
-            ma***REMOVED***
+            max
         };
     }
  buildTicks() {
@@ -11155,12 +11155,12 @@ class TimeScale e***REMOVED***tends Scale {
         const timestamps = tickOpts.source === 'labels' ? this.getLabelTimestamps() : this._generate();
         if (options.bounds === 'ticks' && timestamps.length) {
             this.min = this._userMin || timestamps[0];
-            this.ma***REMOVED*** = this._userMa***REMOVED*** || timestamps[timestamps.length - 1];
+            this.max = this._userMax || timestamps[timestamps.length - 1];
         }
         const min = this.min;
-        const ma***REMOVED*** = this.ma***REMOVED***;
-        const ticks = helpers_segment._filterBetween(timestamps, min, ma***REMOVED***);
-        this._unit = timeOpts.unit || (tickOpts.autoSkip ? determineUnitForAutoTicks(timeOpts.minUnit, this.min, this.ma***REMOVED***, this._getLabelCapacity(min)) : determineUnitForFormatting(this, ticks.length, timeOpts.minUnit, this.min, this.ma***REMOVED***));
+        const max = this.max;
+        const ticks = helpers_segment._filterBetween(timestamps, min, max);
+        this._unit = timeOpts.unit || (tickOpts.autoSkip ? determineUnitForAutoTicks(timeOpts.minUnit, this.min, this.max, this._getLabelCapacity(min)) : determineUnitForFormatting(this, ticks.length, timeOpts.minUnit, this.min, this.max));
         this._majorUnit = !tickOpts.major.enabled || this._unit === 'year' ? undefined : determineMajorUnit(this._unit);
         this.initOffsets(timestamps);
         if (options.reverse) {
@@ -11203,10 +11203,10 @@ class TimeScale e***REMOVED***tends Scale {
  _generate() {
         const adapter = this._adapter;
         const min = this.min;
-        const ma***REMOVED*** = this.ma***REMOVED***;
+        const max = this.max;
         const options = this.options;
         const timeOpts = options.time;
-        const minor = timeOpts.unit || determineUnitForAutoTicks(timeOpts.minUnit, min, ma***REMOVED***, this._getLabelCapacity(min));
+        const minor = timeOpts.unit || determineUnitForAutoTicks(timeOpts.minUnit, min, max, this._getLabelCapacity(min));
         const stepSize = helpers_segment.valueOrDefault(options.ticks.stepSize, 1);
         const weekday = minor === 'week' ? timeOpts.isoWeekday : false;
         const hasWeekday = helpers_segment.isNumber(weekday) || weekday === true;
@@ -11217,17 +11217,17 @@ class TimeScale e***REMOVED***tends Scale {
             first = +adapter.startOf(first, 'isoWeek', weekday);
         }
         first = +adapter.startOf(first, hasWeekday ? 'day' : minor);
-        if (adapter.diff(ma***REMOVED***, min, minor) > 100000 * stepSize) {
-            throw new Error(min + ' and ' + ma***REMOVED*** + ' are too far apart with stepSize of ' + stepSize + ' ' + minor);
+        if (adapter.diff(max, min, minor) > 100000 * stepSize) {
+            throw new Error(min + ' and ' + max + ' are too far apart with stepSize of ' + stepSize + ' ' + minor);
         }
         const timestamps = options.ticks.source === 'data' && this.getDataTimestamps();
-        for(time = first, count = 0; time < ma***REMOVED***; time = +adapter.add(time, stepSize, minor), count++){
+        for(time = first, count = 0; time < max; time = +adapter.add(time, stepSize, minor), count++){
             addTick(ticks, time, timestamps);
         }
-        if (time === ma***REMOVED*** || options.bounds === 'ticks' || count === 1) {
+        if (time === max || options.bounds === 'ticks' || count === 1) {
             addTick(ticks, time, timestamps);
         }
-        return Object.keys(ticks).sort(sorter).map((***REMOVED***)=>+***REMOVED***);
+        return Object.keys(ticks).sort(sorter).map((x)=>+x);
     }
  getLabelForValue(value) {
         const adapter = this._adapter;
@@ -11244,13 +11244,13 @@ class TimeScale e***REMOVED***tends Scale {
         const fmt = format || formats[unit];
         return this._adapter.format(value, fmt);
     }
- _tickFormatFunction(time, inde***REMOVED***, ticks, format) {
+ _tickFormatFunction(time, index, ticks, format) {
         const options = this.options;
         const formatter = options.ticks.callback;
         if (formatter) {
             return helpers_segment.callback(formatter, [
                 time,
-                inde***REMOVED***,
+                index,
                 ticks
             ], this);
         }
@@ -11259,7 +11259,7 @@ class TimeScale e***REMOVED***tends Scale {
         const majorUnit = this._majorUnit;
         const minorFormat = unit && formats[unit];
         const majorFormat = majorUnit && formats[majorUnit];
-        const tick = ticks[inde***REMOVED***];
+        const tick = ticks[index];
         const major = majorUnit && majorFormat && tick && tick.major;
         return this._adapter.format(time, format || (major ? majorFormat : minorFormat));
     }
@@ -11271,22 +11271,22 @@ class TimeScale e***REMOVED***tends Scale {
         }
     }
  getDecimalForValue(value) {
-        return value === null ? NaN : (value - this.min) / (this.ma***REMOVED*** - this.min);
+        return value === null ? NaN : (value - this.min) / (this.max - this.min);
     }
- getPi***REMOVED***elForValue(value) {
+ getPixelForValue(value) {
         const offsets = this._offsets;
         const pos = this.getDecimalForValue(value);
-        return this.getPi***REMOVED***elForDecimal((offsets.start + pos) * offsets.factor);
+        return this.getPixelForDecimal((offsets.start + pos) * offsets.factor);
     }
- getValueForPi***REMOVED***el(pi***REMOVED***el) {
+ getValueForPixel(pixel) {
         const offsets = this._offsets;
-        const pos = this.getDecimalForPi***REMOVED***el(pi***REMOVED***el) / offsets.factor - offsets.end;
-        return this.min + pos * (this.ma***REMOVED*** - this.min);
+        const pos = this.getDecimalForPixel(pixel) / offsets.factor - offsets.end;
+        return this.min + pos * (this.max - this.min);
     }
  _getLabelSize(label) {
         const ticksOpts = this.options.ticks;
-        const tickLabelWidth = this.ct***REMOVED***.measureTe***REMOVED***t(label).width;
-        const angle = helpers_segment.toRadians(this.isHorizontal() ? ticksOpts.ma***REMOVED***Rotation : ticksOpts.minRotation);
+        const tickLabelWidth = this.ctx.measureText(label).width;
+        const angle = helpers_segment.toRadians(this.isHorizontal() ? ticksOpts.maxRotation : ticksOpts.minRotation);
         const cosRotation = Math.cos(angle);
         const sinRotation = Math.sin(angle);
         const tickFontSize = this._resolveTickFontOptions(0).size;
@@ -11295,14 +11295,14 @@ class TimeScale e***REMOVED***tends Scale {
             h: tickLabelWidth * sinRotation + tickFontSize * cosRotation
         };
     }
- _getLabelCapacity(e***REMOVED***ampleTime) {
+ _getLabelCapacity(exampleTime) {
         const timeOpts = this.options.time;
         const displayFormats = timeOpts.displayFormats;
         const format = displayFormats[timeOpts.unit] || displayFormats.millisecond;
-        const e***REMOVED***ampleLabel = this._tickFormatFunction(e***REMOVED***ampleTime, 0, ticksFromTimestamps(this, [
-            e***REMOVED***ampleTime
+        const exampleLabel = this._tickFormatFunction(exampleTime, 0, ticksFromTimestamps(this, [
+            exampleTime
         ], this._majorUnit), format);
-        const size = this._getLabelSize(e***REMOVED***ampleLabel);
+        const size = this._getLabelSize(exampleLabel);
         const capacity = Math.floor(this.isHorizontal() ? this.width / size.w : this.height / size.h) - 1;
         return capacity > 0 ? capacity : 1;
     }
@@ -11341,24 +11341,24 @@ class TimeScale e***REMOVED***tends Scale {
 function interpolate(table, val, reverse) {
     let lo = 0;
     let hi = table.length - 1;
-    let prevSource, ne***REMOVED***tSource, prevTarget, ne***REMOVED***tTarget;
+    let prevSource, nextSource, prevTarget, nextTarget;
     if (reverse) {
         if (val >= table[lo].pos && val <= table[hi].pos) {
             ({ lo , hi  } = helpers_segment._lookupByKey(table, 'pos', val));
         }
         ({ pos: prevSource , time: prevTarget  } = table[lo]);
-        ({ pos: ne***REMOVED***tSource , time: ne***REMOVED***tTarget  } = table[hi]);
+        ({ pos: nextSource , time: nextTarget  } = table[hi]);
     } else {
         if (val >= table[lo].time && val <= table[hi].time) {
             ({ lo , hi  } = helpers_segment._lookupByKey(table, 'time', val));
         }
         ({ time: prevSource , pos: prevTarget  } = table[lo]);
-        ({ time: ne***REMOVED***tSource , pos: ne***REMOVED***tTarget  } = table[hi]);
+        ({ time: nextSource , pos: nextTarget  } = table[hi]);
     }
-    const span = ne***REMOVED***tSource - prevSource;
-    return span ? prevTarget + (ne***REMOVED***tTarget - prevTarget) * (val - prevSource) / span : prevTarget;
+    const span = nextSource - prevSource;
+    return span ? prevTarget + (nextTarget - prevTarget) * (val - prevSource) / span : prevTarget;
 }
-class TimeSeriesScale e***REMOVED***tends TimeScale {
+class TimeSeriesScale extends TimeScale {
     static id = 'timeseries';
  static defaults = TimeScale.defaults;
  constructor(props){
@@ -11371,17 +11371,17 @@ class TimeSeriesScale e***REMOVED***tends TimeScale {
         const timestamps = this._getTimestampsForTable();
         const table = this._table = this.buildLookupTable(timestamps);
         this._minPos = interpolate(table, this.min);
-        this._tableRange = interpolate(table, this.ma***REMOVED***) - this._minPos;
+        this._tableRange = interpolate(table, this.max) - this._minPos;
         super.initOffsets(timestamps);
     }
  buildLookupTable(timestamps) {
-        const { min , ma***REMOVED***  } = this;
+        const { min , max  } = this;
         const items = [];
         const table = [];
-        let i, ilen, prev, curr, ne***REMOVED***t;
+        let i, ilen, prev, curr, next;
         for(i = 0, ilen = timestamps.length; i < ilen; ++i){
             curr = timestamps[i];
-            if (curr >= min && curr <= ma***REMOVED***) {
+            if (curr >= min && curr <= max) {
                 items.push(curr);
             }
         }
@@ -11392,16 +11392,16 @@ class TimeSeriesScale e***REMOVED***tends TimeScale {
                     pos: 0
                 },
                 {
-                    time: ma***REMOVED***,
+                    time: max,
                     pos: 1
                 }
             ];
         }
         for(i = 0, ilen = items.length; i < ilen; ++i){
-            ne***REMOVED***t = items[i + 1];
+            next = items[i + 1];
             prev = items[i - 1];
             curr = items[i];
-            if (Math.round((ne***REMOVED***t + prev) / 2) !== curr) {
+            if (Math.round((next + prev) / 2) !== curr) {
                 table.push({
                     time: curr,
                     pos: i / (ilen - 1)
@@ -11412,13 +11412,13 @@ class TimeSeriesScale e***REMOVED***tends TimeScale {
     }
  _generate() {
         const min = this.min;
-        const ma***REMOVED*** = this.ma***REMOVED***;
+        const max = this.max;
         let timestamps = super.getDataTimestamps();
         if (!timestamps.includes(min) || !timestamps.length) {
             timestamps.splice(0, 0, min);
         }
-        if (!timestamps.includes(ma***REMOVED***) || timestamps.length === 1) {
-            timestamps.push(ma***REMOVED***);
+        if (!timestamps.includes(max) || timestamps.length === 1) {
+            timestamps.push(max);
         }
         return timestamps.sort((a, b)=>a - b);
     }
@@ -11440,9 +11440,9 @@ class TimeSeriesScale e***REMOVED***tends TimeScale {
  getDecimalForValue(value) {
         return (interpolate(this._table, value) - this._minPos) / this._tableRange;
     }
- getValueForPi***REMOVED***el(pi***REMOVED***el) {
+ getValueForPixel(pixel) {
         const offsets = this._offsets;
-        const decimal = this.getDecimalForPi***REMOVED***el(pi***REMOVED***el) / offsets.factor - offsets.end;
+        const decimal = this.getDecimalForPixel(pixel) / offsets.factor - offsets.end;
         return interpolate(this._table, decimal * this._tableRange + this._minPos, true);
     }
 }
@@ -11464,51 +11464,51 @@ const registerables = [
     scales
 ];
 
-e***REMOVED***ports.Ticks = helpers_segment.Ticks;
-e***REMOVED***ports.defaults = helpers_segment.defaults;
-e***REMOVED***ports.Animation = Animation;
-e***REMOVED***ports.Animations = Animations;
-e***REMOVED***ports.ArcElement = ArcElement;
-e***REMOVED***ports.BarController = BarController;
-e***REMOVED***ports.BarElement = BarElement;
-e***REMOVED***ports.BasePlatform = BasePlatform;
-e***REMOVED***ports.BasicPlatform = BasicPlatform;
-e***REMOVED***ports.BubbleController = BubbleController;
-e***REMOVED***ports.CategoryScale = CategoryScale;
-e***REMOVED***ports.Chart = Chart;
-e***REMOVED***ports.Colors = plugin_colors;
-e***REMOVED***ports.DatasetController = DatasetController;
-e***REMOVED***ports.Decimation = plugin_decimation;
-e***REMOVED***ports.DomPlatform = DomPlatform;
-e***REMOVED***ports.DoughnutController = DoughnutController;
-e***REMOVED***ports.Element = Element;
-e***REMOVED***ports.Filler = inde***REMOVED***;
-e***REMOVED***ports.Interaction = Interaction;
-e***REMOVED***ports.Legend = plugin_legend;
-e***REMOVED***ports.LineController = LineController;
-e***REMOVED***ports.LineElement = LineElement;
-e***REMOVED***ports.LinearScale = LinearScale;
-e***REMOVED***ports.LogarithmicScale = LogarithmicScale;
-e***REMOVED***ports.PieController = PieController;
-e***REMOVED***ports.PointElement = PointElement;
-e***REMOVED***ports.PolarAreaController = PolarAreaController;
-e***REMOVED***ports.RadarController = RadarController;
-e***REMOVED***ports.RadialLinearScale = RadialLinearScale;
-e***REMOVED***ports.Scale = Scale;
-e***REMOVED***ports.ScatterController = ScatterController;
-e***REMOVED***ports.SubTitle = plugin_subtitle;
-e***REMOVED***ports.TimeScale = TimeScale;
-e***REMOVED***ports.TimeSeriesScale = TimeSeriesScale;
-e***REMOVED***ports.Title = plugin_title;
-e***REMOVED***ports.Tooltip = plugin_tooltip;
-e***REMOVED***ports._adapters = adapters;
-e***REMOVED***ports._detectPlatform = _detectPlatform;
-e***REMOVED***ports.animator = animator;
-e***REMOVED***ports.controllers = controllers;
-e***REMOVED***ports.elements = elements;
-e***REMOVED***ports.layouts = layouts;
-e***REMOVED***ports.plugins = plugins;
-e***REMOVED***ports.registerables = registerables;
-e***REMOVED***ports.registry = registry;
-e***REMOVED***ports.scales = scales;
+exports.Ticks = helpers_segment.Ticks;
+exports.defaults = helpers_segment.defaults;
+exports.Animation = Animation;
+exports.Animations = Animations;
+exports.ArcElement = ArcElement;
+exports.BarController = BarController;
+exports.BarElement = BarElement;
+exports.BasePlatform = BasePlatform;
+exports.BasicPlatform = BasicPlatform;
+exports.BubbleController = BubbleController;
+exports.CategoryScale = CategoryScale;
+exports.Chart = Chart;
+exports.Colors = plugin_colors;
+exports.DatasetController = DatasetController;
+exports.Decimation = plugin_decimation;
+exports.DomPlatform = DomPlatform;
+exports.DoughnutController = DoughnutController;
+exports.Element = Element;
+exports.Filler = index;
+exports.Interaction = Interaction;
+exports.Legend = plugin_legend;
+exports.LineController = LineController;
+exports.LineElement = LineElement;
+exports.LinearScale = LinearScale;
+exports.LogarithmicScale = LogarithmicScale;
+exports.PieController = PieController;
+exports.PointElement = PointElement;
+exports.PolarAreaController = PolarAreaController;
+exports.RadarController = RadarController;
+exports.RadialLinearScale = RadialLinearScale;
+exports.Scale = Scale;
+exports.ScatterController = ScatterController;
+exports.SubTitle = plugin_subtitle;
+exports.TimeScale = TimeScale;
+exports.TimeSeriesScale = TimeSeriesScale;
+exports.Title = plugin_title;
+exports.Tooltip = plugin_tooltip;
+exports._adapters = adapters;
+exports._detectPlatform = _detectPlatform;
+exports.animator = animator;
+exports.controllers = controllers;
+exports.elements = elements;
+exports.layouts = layouts;
+exports.plugins = plugins;
+exports.registerables = registerables;
+exports.registry = registry;
+exports.scales = scales;
 //# sourceMappingURL=chart.cjs.map

@@ -15,13 +15,13 @@
         return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
       }
     };
-    const typeOf = ***REMOVED*** => {
-      const t = typeof ***REMOVED***;
-      if (***REMOVED*** === null) {
+    const typeOf = x => {
+      const t = typeof x;
+      if (x === null) {
         return 'null';
-      } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+      } else if (t === 'object' && Array.isArray(x)) {
         return 'array';
-      } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
         return 'string';
       } else {
         return t;
@@ -96,7 +96,7 @@
           return Optional.none();
         }
       }
-      e***REMOVED***ists(predicate) {
+      exists(predicate) {
         return this.tag && predicate(this.value);
       }
       forall(predicate) {
@@ -152,60 +152,60 @@
     Optional.singletonNone = new Optional(false);
 
     const nativeSlice = Array.prototype.slice;
-    const nativeInde***REMOVED***Of = Array.prototype.inde***REMOVED***Of;
+    const nativeIndexOf = Array.prototype.indexOf;
     const nativePush = Array.prototype.push;
-    const rawInde***REMOVED***Of = (ts, t) => nativeInde***REMOVED***Of.call(ts, t);
-    const contains$1 = (***REMOVED***s, ***REMOVED***) => rawInde***REMOVED***Of(***REMOVED***s, ***REMOVED***) > -1;
-    const e***REMOVED***ists = (***REMOVED***s, pred) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
+    const rawIndexOf = (ts, t) => nativeIndexOf.call(ts, t);
+    const contains$1 = (xs, x) => rawIndexOf(xs, x) > -1;
+    const exists = (xs, pred) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
           return true;
         }
       }
       return false;
     };
-    const map = (***REMOVED***s, f) => {
-      const len = ***REMOVED***s.length;
+    const map = (xs, f) => {
+      const len = xs.length;
       const r = new Array(len);
       for (let i = 0; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        r[i] = f(***REMOVED***, i);
+        const x = xs[i];
+        r[i] = f(x, i);
       }
       return r;
     };
-    const each$1 = (***REMOVED***s, f) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        f(***REMOVED***, i);
+    const each$1 = (xs, f) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        f(x, i);
       }
     };
-    const filter$1 = (***REMOVED***s, pred) => {
+    const filter$1 = (xs, pred) => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
-          r.push(***REMOVED***);
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
+          r.push(x);
         }
       }
       return r;
     };
-    const groupBy = (***REMOVED***s, f) => {
-      if (***REMOVED***s.length === 0) {
+    const groupBy = (xs, f) => {
+      if (xs.length === 0) {
         return [];
       } else {
-        let wasType = f(***REMOVED***s[0]);
+        let wasType = f(xs[0]);
         const r = [];
         let group = [];
-        for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-          const ***REMOVED*** = ***REMOVED***s[i];
-          const type = f(***REMOVED***);
+        for (let i = 0, len = xs.length; i < len; i++) {
+          const x = xs[i];
+          const type = f(x);
           if (type !== wasType) {
             r.push(group);
             group = [];
           }
           wasType = type;
-          group.push(***REMOVED***);
+          group.push(x);
         }
         if (group.length !== 0) {
           r.push(group);
@@ -213,58 +213,58 @@
         return r;
       }
     };
-    const foldl = (***REMOVED***s, f, acc) => {
-      each$1(***REMOVED***s, (***REMOVED***, i) => {
-        acc = f(acc, ***REMOVED***, i);
+    const foldl = (xs, f, acc) => {
+      each$1(xs, (x, i) => {
+        acc = f(acc, x, i);
       });
       return acc;
     };
-    const findUntil = (***REMOVED***s, pred, until) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
-          return Optional.some(***REMOVED***);
-        } else if (until(***REMOVED***, i)) {
+    const findUntil = (xs, pred, until) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
+          return Optional.some(x);
+        } else if (until(x, i)) {
           break;
         }
       }
       return Optional.none();
     };
-    const find = (***REMOVED***s, pred) => {
-      return findUntil(***REMOVED***s, pred, never);
+    const find = (xs, pred) => {
+      return findUntil(xs, pred, never);
     };
-    const flatten = ***REMOVED***s => {
+    const flatten = xs => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; ++i) {
-        if (!isArray(***REMOVED***s[i])) {
-          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + ***REMOVED***s);
+      for (let i = 0, len = xs.length; i < len; ++i) {
+        if (!isArray(xs[i])) {
+          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + xs);
         }
-        nativePush.apply(r, ***REMOVED***s[i]);
+        nativePush.apply(r, xs[i]);
       }
       return r;
     };
-    const bind = (***REMOVED***s, f) => flatten(map(***REMOVED***s, f));
-    const reverse = ***REMOVED***s => {
-      const r = nativeSlice.call(***REMOVED***s, 0);
+    const bind = (xs, f) => flatten(map(xs, f));
+    const reverse = xs => {
+      const r = nativeSlice.call(xs, 0);
       r.reverse();
       return r;
     };
-    const get$1 = (***REMOVED***s, i) => i >= 0 && i < ***REMOVED***s.length ? Optional.some(***REMOVED***s[i]) : Optional.none();
-    const head = ***REMOVED***s => get$1(***REMOVED***s, 0);
-    const last = ***REMOVED***s => get$1(***REMOVED***s, ***REMOVED***s.length - 1);
-    const unique = (***REMOVED***s, comparator) => {
+    const get$1 = (xs, i) => i >= 0 && i < xs.length ? Optional.some(xs[i]) : Optional.none();
+    const head = xs => get$1(xs, 0);
+    const last = xs => get$1(xs, xs.length - 1);
+    const unique = (xs, comparator) => {
       const r = [];
-      const isDuplicated = isFunction(comparator) ? ***REMOVED*** => e***REMOVED***ists(r, i => comparator(i, ***REMOVED***)) : ***REMOVED*** => contains$1(r, ***REMOVED***);
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (!isDuplicated(***REMOVED***)) {
-          r.push(***REMOVED***);
+      const isDuplicated = isFunction(comparator) ? x => exists(r, i => comparator(i, x)) : x => contains$1(r, x);
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (!isDuplicated(x)) {
+          r.push(x);
         }
       }
       return r;
     };
 
-    const is$2 = (lhs, rhs, comparator = tripleEquals) => lhs.e***REMOVED***ists(left => comparator(left, rhs));
+    const is$2 = (lhs, rhs, comparator = tripleEquals) => lhs.exists(left => comparator(left, rhs));
     const equals = (lhs, rhs, comparator = tripleEquals) => lift2(lhs, rhs, comparator).getOr(lhs.isNone() && rhs.isNone());
     const lift2 = (oa, ob, f) => oa.isSome() && ob.isSome() ? Optional.some(f(oa.getOrDie(), ob.getOrDie())) : Optional.none();
 
@@ -290,9 +290,9 @@
       const node = doc.createElement(tag);
       return fromDom$1(node);
     };
-    const fromTe***REMOVED***t = (te***REMOVED***t, scope) => {
+    const fromText = (text, scope) => {
       const doc = scope || document;
-      const node = doc.createTe***REMOVED***tNode(te***REMOVED***t);
+      const node = doc.createTextNode(text);
       return fromDom$1(node);
     };
     const fromDom$1 = node => {
@@ -301,11 +301,11 @@
       }
       return { dom: node };
     };
-    const fromPoint = (docElm, ***REMOVED***, y) => Optional.from(docElm.dom.elementFromPoint(***REMOVED***, y)).map(fromDom$1);
+    const fromPoint = (docElm, x, y) => Optional.from(docElm.dom.elementFromPoint(x, y)).map(fromDom$1);
     const SugarElement = {
       fromHtml,
       fromTag,
-      fromTe***REMOVED***t,
+      fromText,
       fromDom: fromDom$1,
       fromPoint
     };
@@ -367,9 +367,9 @@
     const sandHTMLElement = scope => {
       return getOrDie('HTMLElement', scope);
     };
-    const isPrototypeOf = ***REMOVED*** => {
-      const scope = resolve('ownerDocument.defaultView', ***REMOVED***);
-      return isObject(***REMOVED***) && (sandHTMLElement(scope).prototype.isPrototypeOf(***REMOVED***) || /^HTML\w*Element$/.test(getPrototypeOf(***REMOVED***).constructor.name));
+    const isPrototypeOf = x => {
+      const scope = resolve('ownerDocument.defaultView', x);
+      return isObject(x) && (sandHTMLElement(scope).prototype.isPrototypeOf(x) || /^HTML\w*Element$/.test(getPrototypeOf(x).constructor.name));
     };
 
     const name = element => {
@@ -381,7 +381,7 @@
     const isComment = element => type(element) === COMMENT || name(element) === '#comment';
     const isHTMLElement = element => isElement$1(element) && isPrototypeOf(element.dom);
     const isElement$1 = isType(ELEMENT);
-    const isTe***REMOVED***t = isType(TEXT);
+    const isText = isType(TEXT);
     const isDocument = isType(DOCUMENT);
     const isDocumentFragment = isType(DOCUMENT_FRAGMENT);
     const isTag = tag => e => isElement$1(e) && name(e) === tag;
@@ -390,11 +390,11 @@
     const documentOrOwner = dos => isDocument(dos) ? dos : owner(dos);
     const parent = element => Optional.from(element.dom.parentNode).map(SugarElement.fromDom);
     const parentElement = element => Optional.from(element.dom.parentElement).map(SugarElement.fromDom);
-    const ne***REMOVED***tSibling = element => Optional.from(element.dom.ne***REMOVED***tSibling).map(SugarElement.fromDom);
+    const nextSibling = element => Optional.from(element.dom.nextSibling).map(SugarElement.fromDom);
     const children = element => map(element.dom.childNodes, SugarElement.fromDom);
-    const child = (element, inde***REMOVED***) => {
+    const child = (element, index) => {
       const cs = element.dom.childNodes;
-      return Optional.from(cs[inde***REMOVED***]).map(SugarElement.fromDom);
+      return Optional.from(cs[index]).map(SugarElement.fromDom);
     };
     const firstChild = element => child(element, 0);
     const lastChild = element => child(element, element.dom.childNodes.length - 1);
@@ -409,7 +409,7 @@
     const getShadowHost = e => SugarElement.fromDom(e.dom.host);
 
     const inBody = element => {
-      const dom = isTe***REMOVED***t(element) ? element.dom.parentNode : element.dom;
+      const dom = isText(element) ? element.dom.parentNode : element.dom;
       if (dom === undefined || dom === null || dom.ownerDocument === null) {
         return false;
       }
@@ -469,7 +469,7 @@
       });
     };
     const after = (marker, element) => {
-      const sibling = ne***REMOVED***tSibling(marker);
+      const sibling = nextSibling(marker);
       sibling.fold(() => {
         const parent$1 = parent(marker);
         parent$1.each(v => {
@@ -492,18 +492,18 @@
     };
 
     const before = (marker, elements) => {
-      each$1(elements, ***REMOVED*** => {
-        before$1(marker, ***REMOVED***);
+      each$1(elements, x => {
+        before$1(marker, x);
       });
     };
     const append = (parent, elements) => {
-      each$1(elements, ***REMOVED*** => {
-        append$1(parent, ***REMOVED***);
+      each$1(elements, x => {
+        append$1(parent, x);
       });
     };
 
     const empty = element => {
-      element.dom.te***REMOVED***tContent = '';
+      element.dom.textContent = '';
       each$1(children(element), rogue => {
         remove(rogue);
       });
@@ -528,16 +528,16 @@
       const props = keys(obj);
       for (let k = 0, len = props.length; k < len; k++) {
         const i = props[k];
-        const ***REMOVED*** = obj[i];
-        f(***REMOVED***, i);
+        const x = obj[i];
+        f(x, i);
       }
     };
-    const objAcc = r => (***REMOVED***, i) => {
-      r[i] = ***REMOVED***;
+    const objAcc = r => (x, i) => {
+      r[i] = x;
     };
     const internalFilter = (obj, pred, onTrue, onFalse) => {
-      each(obj, (***REMOVED***, i) => {
-        (pred(***REMOVED***, i) ? onTrue : onFalse)(***REMOVED***, i);
+      each(obj, (x, i) => {
+        (pred(x, i) ? onTrue : onFalse)(x, i);
       });
     };
     const filter = (obj, pred) => {
@@ -587,8 +587,8 @@
     var global$2 = tinymce.util.Tools.resolve('tinymce.util.Tools');
 
     const matchNodeName = name => node => isNonNullable(node) && node.nodeName.toLowerCase() === name;
-    const matchNodeNames = rege***REMOVED*** => node => isNonNullable(node) && rege***REMOVED***.test(node.nodeName);
-    const isTe***REMOVED***tNode$1 = node => isNonNullable(node) && node.nodeType === 3;
+    const matchNodeNames = regex => node => isNonNullable(node) && regex.test(node.nodeName);
+    const isTextNode$1 = node => isNonNullable(node) && node.nodeType === 3;
     const isElement = node => isNonNullable(node) && node.nodeType === 1;
     const isListNode = matchNodeNames(/^(OL|UL|DL)$/);
     const isOlUlNode = matchNodeNames(/^(OL|UL)$/);
@@ -601,14 +601,14 @@
       var _a;
       return ((_a = node.parentNode) === null || _a === void 0 ? void 0 : _a.firstChild) === node;
     };
-    const isTe***REMOVED***tBlock = (editor, node) => isNonNullable(node) && node.nodeName in editor.schema.getTe***REMOVED***tBlockElements();
+    const isTextBlock = (editor, node) => isNonNullable(node) && node.nodeName in editor.schema.getTextBlockElements();
     const isBlock = (node, blockElements) => isNonNullable(node) && node.nodeName in blockElements;
     const isVoid = (editor, node) => isNonNullable(node) && node.nodeName in editor.schema.getVoidElements();
     const isBogusBr = (dom, node) => {
       if (!isBr(node)) {
         return false;
       }
-      return dom.isBlock(node.ne***REMOVED***tSibling) && !isBr(node.previousSibling);
+      return dom.isBlock(node.nextSibling) && !isBr(node.previousSibling);
     };
     const isEmpty$2 = (dom, elm, keepBookmarks) => {
       const empty = dom.isEmpty(elm);
@@ -631,21 +631,21 @@
     const getForcedRootBlock = option('forced_root_block');
     const getForcedRootBlockAttrs = option('forced_root_block_attrs');
 
-    const createTe***REMOVED***tBlock = (editor, contentNode, attrs = {}) => {
+    const createTextBlock = (editor, contentNode, attrs = {}) => {
       const dom = editor.dom;
       const blockElements = editor.schema.getBlockElements();
       const fragment = dom.createFragment();
       const blockName = getForcedRootBlock(editor);
       const blockAttrs = getForcedRootBlockAttrs(editor);
       let node;
-      let te***REMOVED***tBlock;
+      let textBlock;
       let hasContentNode = false;
-      te***REMOVED***tBlock = dom.create(blockName, {
+      textBlock = dom.create(blockName, {
         ...blockAttrs,
         ...attrs.style ? { style: attrs.style } : {}
       });
       if (!isBlock(contentNode.firstChild, blockElements)) {
-        fragment.appendChild(te***REMOVED***tBlock);
+        fragment.appendChild(textBlock);
       }
       while (node = contentNode.firstChild) {
         const nodeName = node.nodeName;
@@ -654,17 +654,17 @@
         }
         if (isBlock(node, blockElements)) {
           fragment.appendChild(node);
-          te***REMOVED***tBlock = null;
+          textBlock = null;
         } else {
-          if (!te***REMOVED***tBlock) {
-            te***REMOVED***tBlock = dom.create(blockName, blockAttrs);
-            fragment.appendChild(te***REMOVED***tBlock);
+          if (!textBlock) {
+            textBlock = dom.create(blockName, blockAttrs);
+            fragment.appendChild(textBlock);
           }
-          te***REMOVED***tBlock.appendChild(node);
+          textBlock.appendChild(node);
         }
       }
-      if (!hasContentNode && te***REMOVED***tBlock) {
-        te***REMOVED***tBlock.appendChild(dom.create('br', { 'data-mce-bogus': '1' }));
+      if (!hasContentNode && textBlock) {
+        textBlock.appendChild(dom.create('br', { 'data-mce-bogus': '1' }));
       }
       return fragment;
     };
@@ -681,11 +681,11 @@
         DOM$2.remove(targetNode);
       };
       const bookmarks = DOM$2.select('span[data-mce-type="bookmark"]', list);
-      const newBlock = createTe***REMOVED***tBlock(editor, li);
+      const newBlock = createTextBlock(editor, li);
       const tmpRng = DOM$2.createRng();
       tmpRng.setStartAfter(li);
       tmpRng.setEndAfter(list);
-      const fragment = tmpRng.e***REMOVED***tractContents();
+      const fragment = tmpRng.extractContents();
       for (let node = fragment.firstChild; node; node = node.firstChild) {
         if (node.nodeName === 'LI' && editor.dom.isEmpty(node)) {
           DOM$2.remove(node);
@@ -729,26 +729,26 @@
     };
 
     const getNormalizedPoint = (container, offset) => {
-      if (isTe***REMOVED***tNode$1(container)) {
+      if (isTextNode$1(container)) {
         return {
           container,
           offset
         };
       }
       const node = global$6.getNode(container, offset);
-      if (isTe***REMOVED***tNode$1(node)) {
+      if (isTextNode$1(node)) {
         return {
           container: node,
           offset: offset >= container.childNodes.length ? node.data.length : 0
         };
-      } else if (node.previousSibling && isTe***REMOVED***tNode$1(node.previousSibling)) {
+      } else if (node.previousSibling && isTextNode$1(node.previousSibling)) {
         return {
           container: node.previousSibling,
           offset: node.previousSibling.data.length
         };
-      } else if (node.ne***REMOVED***tSibling && isTe***REMOVED***tNode$1(node.ne***REMOVED***tSibling)) {
+      } else if (node.nextSibling && isTextNode$1(node.nextSibling)) {
         return {
-          container: node.ne***REMOVED***tSibling,
+          container: node.nextSibling,
           offset: 0
         };
       }
@@ -805,14 +805,14 @@
       const parentTableCell = editor.dom.getParents(elm, 'TD,TH');
       return parentTableCell.length > 0 ? parentTableCell[0] : editor.getBody();
     };
-    const isListHost = (schema, node) => !isListNode(node) && !isListItemNode(node) && e***REMOVED***ists(listNames, listName => schema.isValidChild(node.nodeName, listName));
+    const isListHost = (schema, node) => !isListNode(node) && !isListItemNode(node) && exists(listNames, listName => schema.isValidChild(node.nodeName, listName));
     const getClosestListHost = (editor, elm) => {
       const parentBlocks = editor.dom.getParents(elm, editor.dom.isBlock);
       const isNotForcedRootBlock = elm => elm.nodeName.toLowerCase() !== getForcedRootBlock(editor);
       const parentBlock = find(parentBlocks, elm => isNotForcedRootBlock(elm) && isListHost(editor.schema, elm));
       return parentBlock.getOr(editor.getBody());
     };
-    const isListInsideAnLiWithFirstAndLastNotListElement = list => parent(list).e***REMOVED***ists(parent => isListItemNode(parent.dom) && firstChild(parent).e***REMOVED***ists(firstChild => !isListNode(firstChild.dom)) && lastChild(parent).e***REMOVED***ists(lastChild => !isListNode(lastChild.dom)));
+    const isListInsideAnLiWithFirstAndLastNotListElement = list => parent(list).exists(parent => isListItemNode(parent.dom) && firstChild(parent).exists(firstChild => !isListNode(firstChild.dom)) && lastChild(parent).exists(lastChild => !isListNode(lastChild.dom)));
     const findLastParentListNode = (editor, elm) => {
       const parentLists = editor.dom.getParents(elm, 'ol,ul', getClosestListHost(editor, elm));
       return last(parentLists);
@@ -836,8 +836,8 @@
       return unique(listRoots);
     };
 
-    const isCustomList = list => /\bto***REMOVED***\-/.test(list.className);
-    const inList = (parents, listName) => findUntil(parents, isListNode, isTableCellNode).e***REMOVED***ists(list => list.nodeName === listName && !isCustomList(list));
+    const isCustomList = list => /\btox\-/.test(list.className);
+    const inList = (parents, listName) => findUntil(parents, isListNode, isTableCellNode).exists(list => list.nodeName === listName && !isCustomList(list));
     const isWithinNonEditable = (editor, element) => element !== null && !editor.dom.isEditable(element);
     const selectionIsWithinNonEditableList = editor => {
       const parentList = getParentList(editor);
@@ -894,8 +894,8 @@
 
     const isList = el => is(el, 'OL,UL');
     const isListItem = el => is(el, 'LI');
-    const hasFirstChildList = el => firstChild(el).e***REMOVED***ists(isList);
-    const hasLastChildList = el => lastChild(el).e***REMOVED***ists(isList);
+    const hasFirstChildList = el => firstChild(el).exists(isList);
+    const hasLastChildList = el => lastChild(el).exists(isList);
 
     const isEntryList = entry => 'listAttributes' in entry;
     const isEntryComment = entry => 'isComment' in entry;
@@ -1137,7 +1137,7 @@
       return map(normalizedEntries, entry => {
         const content = !isEntryComment(entry) ? fromElements(entry.content) : fromElements([SugarElement.fromHtml(`<!--${ entry.content }-->`)]);
         const listItemAttrs = isEntryList(entry) ? entry.itemAttributes : {};
-        return SugarElement.fromDom(createTe***REMOVED***tBlock(editor, content.dom, listItemAttrs));
+        return SugarElement.fromDom(createTextBlock(editor, content.dom, listItemAttrs));
       });
     };
     const indentedComposer = (editor, entries) => {
@@ -1145,7 +1145,7 @@
       return composeList(editor.contentDocument, normalizedEntries).toArray();
     };
     const composeEntries = (editor, entries) => bind(groupBy(entries, isIndented), entries => {
-      const groupIsIndented = head(entries).e***REMOVED***ists(isIndented);
+      const groupIsIndented = head(entries).exists(isIndented);
       return groupIsIndented ? indentedComposer(editor, entries) : outdentedComposer(editor, entries);
     });
     const indentSelectedEntries = (entries, indentation) => {
@@ -1232,18 +1232,18 @@
     };
     const resolveBookmark = bookmark => {
       const restoreEndPoint = start => {
-        const nodeInde***REMOVED*** = container => {
+        const nodeIndex = container => {
           var _a;
           let node = (_a = container.parentNode) === null || _a === void 0 ? void 0 : _a.firstChild;
-          let id***REMOVED*** = 0;
+          let idx = 0;
           while (node) {
             if (node === container) {
-              return id***REMOVED***;
+              return idx;
             }
             if (!isElement(node) || node.getAttribute('data-mce-type') !== 'bookmark') {
-              id***REMOVED***++;
+              idx++;
             }
-            node = node.ne***REMOVED***tSibling;
+            node = node.nextSibling;
           }
           return -1;
         };
@@ -1254,7 +1254,7 @@
         }
         if (isElement(container) && container.parentNode) {
           const node = container;
-          offset = nodeInde***REMOVED***(container);
+          offset = nodeIndex(container);
           container = container.parentNode;
           DOM$1.remove(node);
           if (!container.hasChildNodes() && DOM$1.isBlock(container)) {
@@ -1314,8 +1314,8 @@
       if (isElement(container)) {
         container = container.childNodes[Math.min(offset, container.childNodes.length - 1)] || container;
       }
-      if (!start && isBr(container.ne***REMOVED***tSibling)) {
-        container = container.ne***REMOVED***tSibling;
+      if (!start && isBr(container.nextSibling)) {
+        container = container.nextSibling;
       }
       const findBlockAncestor = node => {
         while (!editor.dom.isBlock(node) && node.parentNode && root !== node) {
@@ -1326,42 +1326,42 @@
       const findBetterContainer = (container, forward) => {
         var _a;
         const walker = new global$5(container, findBlockAncestor(container));
-        const dir = forward ? 'ne***REMOVED***t' : 'prev';
+        const dir = forward ? 'next' : 'prev';
         let node;
         while (node = walker[dir]()) {
-          if (!(isVoid(editor, node) || isZwsp(node.te***REMOVED***tContent) || ((_a = node.te***REMOVED***tContent) === null || _a === void 0 ? void 0 : _a.length) === 0)) {
+          if (!(isVoid(editor, node) || isZwsp(node.textContent) || ((_a = node.textContent) === null || _a === void 0 ? void 0 : _a.length) === 0)) {
             return Optional.some(node);
           }
         }
         return Optional.none();
       };
-      if (start && isTe***REMOVED***tNode$1(container)) {
-        if (isZwsp(container.te***REMOVED***tContent)) {
+      if (start && isTextNode$1(container)) {
+        if (isZwsp(container.textContent)) {
           container = findBetterContainer(container, false).getOr(container);
         } else {
           if (container.parentNode !== null && isInline(editor, container.parentNode)) {
             container = container.parentNode;
           }
-          while (container.previousSibling !== null && (isInline(editor, container.previousSibling) || isTe***REMOVED***tNode$1(container.previousSibling))) {
+          while (container.previousSibling !== null && (isInline(editor, container.previousSibling) || isTextNode$1(container.previousSibling))) {
             container = container.previousSibling;
           }
         }
       }
-      if (!start && isTe***REMOVED***tNode$1(container)) {
-        if (isZwsp(container.te***REMOVED***tContent)) {
+      if (!start && isTextNode$1(container)) {
+        if (isZwsp(container.textContent)) {
           container = findBetterContainer(container, true).getOr(container);
         } else {
           if (container.parentNode !== null && isInline(editor, container.parentNode)) {
             container = container.parentNode;
           }
-          while (container.ne***REMOVED***tSibling !== null && (isInline(editor, container.ne***REMOVED***tSibling) || isTe***REMOVED***tNode$1(container.ne***REMOVED***tSibling))) {
-            container = container.ne***REMOVED***tSibling;
+          while (container.nextSibling !== null && (isInline(editor, container.nextSibling) || isTextNode$1(container.nextSibling))) {
+            container = container.nextSibling;
           }
         }
       }
       while (container.parentNode !== root) {
         const parent = container.parentNode;
-        if (isTe***REMOVED***tBlock(editor, container)) {
+        if (isTextBlock(editor, container)) {
           return container;
         }
         if (/^(TD|TH)$/.test(parent.nodeName)) {
@@ -1371,14 +1371,14 @@
       }
       return container;
     };
-    const getSelectedTe***REMOVED***tBlocks = (editor, rng, root) => {
-      const te***REMOVED***tBlocks = [];
+    const getSelectedTextBlocks = (editor, rng, root) => {
+      const textBlocks = [];
       const dom = editor.dom;
       const startNode = getEndPointNode(editor, rng, true, root);
       const endNode = getEndPointNode(editor, rng, false, root);
       let block;
       const siblings = [];
-      for (let node = startNode; node; node = node.ne***REMOVED***tSibling) {
+      for (let node = startNode; node; node = node.nextSibling) {
         siblings.push(node);
         if (node === endNode) {
           break;
@@ -1386,8 +1386,8 @@
       }
       global$2.each(siblings, node => {
         var _a;
-        if (isTe***REMOVED***tBlock(editor, node)) {
-          te***REMOVED***tBlocks.push(node);
+        if (isTextBlock(editor, node)) {
+          textBlocks.push(node);
           block = null;
           return;
         }
@@ -1398,9 +1398,9 @@
           block = null;
           return;
         }
-        const ne***REMOVED***tSibling = node.ne***REMOVED***tSibling;
+        const nextSibling = node.nextSibling;
         if (global$1.isBookmarkNode(node)) {
-          if (isListNode(ne***REMOVED***tSibling) || isTe***REMOVED***tBlock(editor, ne***REMOVED***tSibling) || !ne***REMOVED***tSibling && node.parentNode === root) {
+          if (isListNode(nextSibling) || isTextBlock(editor, nextSibling) || !nextSibling && node.parentNode === root) {
             block = null;
             return;
           }
@@ -1408,11 +1408,11 @@
         if (!block) {
           block = dom.create('p');
           (_a = node.parentNode) === null || _a === void 0 ? void 0 : _a.insertBefore(block, node);
-          te***REMOVED***tBlocks.push(block);
+          textBlocks.push(block);
         }
         block.appendChild(node);
       });
-      return te***REMOVED***tBlocks;
+      return textBlocks;
     };
     const hasCompatibleStyle = (dom, sib, detail) => {
       const sibStyle = dom.getStyle(sib, 'list-style-type');
@@ -1442,8 +1442,8 @@
         listItemName = 'DT';
       }
       const bookmark = createBookmark(rng);
-      const selectedTe***REMOVED***tBlocks = filter$1(getSelectedTe***REMOVED***tBlocks(editor, rng, root), editor.dom.isEditable);
-      global$2.each(selectedTe***REMOVED***tBlocks, block => {
+      const selectedTextBlocks = filter$1(getSelectedTextBlocks(editor, rng, root), editor.dom.isEditable);
+      global$2.each(selectedTextBlocks, block => {
         let listBlock;
         const sibling = block.previousSibling;
         const parent = block.parentNode;
@@ -1492,7 +1492,7 @@
     };
     const mergeWithAdjacentLists = (dom, listBlock) => {
       let node;
-      let sibling = listBlock.ne***REMOVED***tSibling;
+      let sibling = listBlock.nextSibling;
       if (shouldMerge(dom, listBlock, sibling)) {
         const liSibling = sibling;
         while (node = liSibling.firstChild) {
@@ -1521,7 +1521,7 @@
     };
     const updateCustomList = (editor, list, listName, detail) => {
       list.classList.forEach((cls, _, classList) => {
-        if (cls.startsWith('to***REMOVED***-')) {
+        if (cls.startsWith('tox-')) {
           classList.remove(cls);
           if (classList.length === 0) {
             list.removeAttribute('class');
@@ -1569,7 +1569,7 @@
           const bookmark = createBookmark(editor.selection.getRng());
           if (isCustomList(parentList)) {
             parentList.classList.forEach((cls, _, classList) => {
-              if (cls.startsWith('to***REMOVED***-')) {
+              if (cls.startsWith('tox-')) {
                 classList.remove(cls);
                 if (classList.length === 0) {
                   parentList.removeAttribute('class');
@@ -1631,10 +1631,10 @@
       });
     };
 
-    const findNe***REMOVED***tCaretContainer = (editor, rng, isForward, root) => {
+    const findNextCaretContainer = (editor, rng, isForward, root) => {
       let node = rng.startContainer;
       const offset = rng.startOffset;
-      if (isTe***REMOVED***tNode$1(node) && (isForward ? offset < node.data.length : offset > 0)) {
+      if (isTextNode$1(node) && (isForward ? offset < node.data.length : offset > 0)) {
         return node;
       }
       const nonEmptyBlocks = editor.schema.getNonEmptyElements();
@@ -1644,10 +1644,10 @@
       const walker = new global$5(node, root);
       if (isForward) {
         if (isBogusBr(editor.dom, node)) {
-          walker.ne***REMOVED***t();
+          walker.next();
         }
       }
-      const walkFn = isForward ? walker.ne***REMOVED***t.bind(walker) : walker.prev2.bind(walker);
+      const walkFn = isForward ? walker.next.bind(walker) : walker.prev2.bind(walker);
       while (node = walkFn()) {
         if (node.nodeName === 'LI' && !node.hasChildNodes()) {
           return node;
@@ -1655,7 +1655,7 @@
         if (nonEmptyBlocks[node.nodeName]) {
           return node;
         }
-        if (isTe***REMOVED***tNode$1(node) && node.data.length > 0) {
+        if (isTextNode$1(node) && node.data.length > 0) {
           return node;
         }
       }
@@ -1665,7 +1665,7 @@
       const childNodes = elm.childNodes;
       return childNodes.length === 1 && !isListNode(childNodes[0]) && dom.isBlock(childNodes[0]);
     };
-    const isUnwrappable = node => Optional.from(node).map(SugarElement.fromDom).filter(isHTMLElement).e***REMOVED***ists(el => isEditable(el) && !contains$1(['details'], name(el)));
+    const isUnwrappable = node => Optional.from(node).map(SugarElement.fromDom).filter(isHTMLElement).exists(el => isEditable(el) && !contains$1(['details'], name(el)));
     const unwrapSingleBlockChild = (dom, elm) => {
       if (hasOnlyOneBlockChild(dom, elm) && isUnwrappable(elm.firstChild)) {
         dom.remove(elm.firstChild, true);
@@ -1747,7 +1747,7 @@
           return true;
         }
         const rng = normalizeRange(selection.getRng());
-        const otherLi = dom.getParent(findNe***REMOVED***tCaretContainer(editor, rng, isForward, root), 'LI', root);
+        const otherLi = dom.getParent(findNextCaretContainer(editor, rng, isForward, root), 'LI', root);
         const willMergeParentIntoChild = otherLi && (isForward ? dom.isChildOf(li, otherLi) : dom.isChildOf(otherLi, li));
         if (otherLi && otherLi !== li && !willMergeParentIntoChild) {
           editor.undoManager.transact(() => {
@@ -1799,7 +1799,7 @@
       const block = dom.getParent(selectionStartElm, dom.isBlock, root);
       if (block && dom.isEmpty(block, undefined, { checkRootAsContent: true })) {
         const rng = normalizeRange(editor.selection.getRng());
-        const otherLi = dom.getParent(findNe***REMOVED***tCaretContainer(editor, rng, isForward, root), 'LI', root);
+        const otherLi = dom.getParent(findNextCaretContainer(editor, rng, isForward, root), 'LI', root);
         if (otherLi) {
           const findValidElement = element => contains$1([
             'td',
@@ -1836,7 +1836,7 @@
     const backspaceDeleteRange = editor => {
       if (hasListSelection(editor)) {
         editor.undoManager.transact(() => {
-          editor.e***REMOVED***ecCommand('Delete');
+          editor.execCommand('Delete');
           normalizeLists(editor.dom, editor.getBody());
         });
         return true;
@@ -1848,7 +1848,7 @@
       return !isWithinNonEditableList(editor, selection.getNode()) && (selection.isCollapsed() ? backspaceDeleteCaret(editor, isForward) : backspaceDeleteRange(editor));
     };
     const setup$2 = editor => {
-      editor.on('E***REMOVED***ecCommand', e => {
+      editor.on('ExecCommand', e => {
         const cmd = e.command.toLowerCase();
         if ((cmd === 'delete' || cmd === 'forwarddelete') && hasListSelection(editor)) {
           normalizeLists(editor.dom, editor.getBody());
@@ -1987,19 +1987,19 @@
           {
             type: 'cancel',
             name: 'cancel',
-            te***REMOVED***t: 'Cancel'
+            text: 'Cancel'
           },
           {
             type: 'submit',
             name: 'save',
-            te***REMOVED***t: 'Save',
+            text: 'Save',
             primary: true
           }
         ],
         onSubmit: api => {
           const data = api.getData();
           parseStartValue(data.start).each(detail => {
-            editor.e***REMOVED***ecCommand('mceListUpdate', false, {
+            editor.execCommand('mceListUpdate', false, {
               attrs: { start: detail.start === '1' ? '' : detail.start },
               styles: { 'list-style-type': detail.listStyleType.getOr('') }
             });
@@ -2019,7 +2019,7 @@
       });
     };
     const register$2 = editor => {
-      editor.on('BeforeE***REMOVED***ecCommand', e => {
+      editor.on('BeforeExecCommand', e => {
         const cmd = e.command.toLowerCase();
         if (cmd === 'indent') {
           indentListSelection(editor);
@@ -2052,7 +2052,7 @@
 
     var global = tinymce.util.Tools.resolve('tinymce.html.Node');
 
-    const isTe***REMOVED***tNode = node => node.type === 3;
+    const isTextNode = node => node.type === 3;
     const isEmpty = nodeBuffer => nodeBuffer.length === 0;
     const wrapInvalidChildren = list => {
       const insertListItem = (buffer, refNode) => {
@@ -2065,12 +2065,12 @@
         }
       };
       const reducer = (buffer, node) => {
-        if (isTe***REMOVED***tNode(node)) {
+        if (isTextNode(node)) {
           return [
             ...buffer,
             node
           ];
-        } else if (!isEmpty(buffer) && !isTe***REMOVED***tNode(node)) {
+        } else if (!isEmpty(buffer) && !isTextNode(node)) {
           insertListItem(buffer, node);
           return [];
         } else {
@@ -2117,20 +2117,20 @@
       return setNodeChangeHandler(editor, toggleButtonHandler);
     };
     const register$1 = editor => {
-      const e***REMOVED***ec = command => () => editor.e***REMOVED***ecCommand(command);
+      const exec = command => () => editor.execCommand(command);
       if (!editor.hasPlugin('advlist')) {
         editor.ui.registry.addToggleButton('numlist', {
           icon: 'ordered-list',
           active: false,
           tooltip: 'Numbered list',
-          onAction: e***REMOVED***ec('InsertOrderedList'),
+          onAction: exec('InsertOrderedList'),
           onSetup: setupToggleButtonHandler(editor, 'OL')
         });
         editor.ui.registry.addToggleButton('bullist', {
           icon: 'unordered-list',
           active: false,
           tooltip: 'Bullet list',
-          onAction: e***REMOVED***ec('InsertUnorderedList'),
+          onAction: exec('InsertUnorderedList'),
           onSetup: setupToggleButtonHandler(editor, 'UL')
         });
       }
@@ -2142,13 +2142,13 @@
     };
     const register = editor => {
       const listProperties = {
-        te***REMOVED***t: 'List properties...',
+        text: 'List properties...',
         icon: 'ordered-list',
-        onAction: () => editor.e***REMOVED***ecCommand('mceListProps'),
+        onAction: () => editor.execCommand('mceListProps'),
         onSetup: setupMenuButtonHandler(editor, 'OL')
       };
       editor.ui.registry.addMenuItem('listprops', listProperties);
-      editor.ui.registry.addConte***REMOVED***tMenu('lists', {
+      editor.ui.registry.addContextMenu('lists', {
         update: node => {
           const parentList = getParentList(editor, node);
           return isOlNode(parentList) ? ['listprops'] : [];

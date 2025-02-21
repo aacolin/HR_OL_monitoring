@@ -8,12 +8,12 @@
     var global$4 = tinymce.util.Tools.resolve('tinymce.PluginManager');
 
     let unique = 0;
-    const generate = prefi***REMOVED*** => {
+    const generate = prefix => {
       const date = new Date();
       const time = date.getTime();
       const random = Math.floor(Math.random() * 1000000000);
       unique++;
-      return prefi***REMOVED*** + '_' + random + unique + String(time);
+      return prefix + '_' + random + unique + String(time);
     };
 
     const hasProto = (v, constructor, predicate) => {
@@ -24,13 +24,13 @@
         return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
       }
     };
-    const typeOf = ***REMOVED*** => {
-      const t = typeof ***REMOVED***;
-      if (***REMOVED*** === null) {
+    const typeOf = x => {
+      const t = typeof x;
+      if (x === null) {
         return 'null';
-      } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+      } else if (t === 'object' && Array.isArray(x)) {
         return 'array';
-      } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
         return 'string';
       } else {
         return t;
@@ -94,7 +94,7 @@
           return Optional.none();
         }
       }
-      e***REMOVED***ists(predicate) {
+      exists(predicate) {
         return this.tag && predicate(this.value);
       }
       forall(predicate) {
@@ -149,37 +149,37 @@
     }
     Optional.singletonNone = new Optional(false);
 
-    const nativeInde***REMOVED***Of = Array.prototype.inde***REMOVED***Of;
-    const rawInde***REMOVED***Of = (ts, t) => nativeInde***REMOVED***Of.call(ts, t);
-    const contains = (***REMOVED***s, ***REMOVED***) => rawInde***REMOVED***Of(***REMOVED***s, ***REMOVED***) > -1;
-    const map = (***REMOVED***s, f) => {
-      const len = ***REMOVED***s.length;
+    const nativeIndexOf = Array.prototype.indexOf;
+    const rawIndexOf = (ts, t) => nativeIndexOf.call(ts, t);
+    const contains = (xs, x) => rawIndexOf(xs, x) > -1;
+    const map = (xs, f) => {
+      const len = xs.length;
       const r = new Array(len);
       for (let i = 0; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        r[i] = f(***REMOVED***, i);
+        const x = xs[i];
+        r[i] = f(x, i);
       }
       return r;
     };
-    const each$1 = (***REMOVED***s, f) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        f(***REMOVED***, i);
+    const each$1 = (xs, f) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        f(x, i);
       }
     };
-    const filter = (***REMOVED***s, pred) => {
+    const filter = (xs, pred) => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
-          r.push(***REMOVED***);
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
+          r.push(x);
         }
       }
       return r;
     };
-    const foldl = (***REMOVED***s, f, acc) => {
-      each$1(***REMOVED***s, (***REMOVED***, i) => {
-        acc = f(acc, ***REMOVED***, i);
+    const foldl = (xs, f, acc) => {
+      each$1(xs, (x, i) => {
+        acc = f(acc, x, i);
       });
       return acc;
     };
@@ -189,8 +189,8 @@
       const props = keys(obj);
       for (let k = 0, len = props.length; k < len; k++) {
         const i = props[k];
-        const ***REMOVED*** = obj[i];
-        f(***REMOVED***, i);
+        const x = obj[i];
+        f(x, i);
       }
     };
 
@@ -210,7 +210,7 @@
     const isType = t => element => type(element) === t;
     const isComment = element => type(element) === COMMENT || name(element) === '#comment';
     const isElement = isType(ELEMENT);
-    const isTe***REMOVED***t = isType(TEXT);
+    const isText = isType(TEXT);
     const isDocument = isType(DOCUMENT);
     const isDocumentFragment = isType(DOCUMENT_FRAGMENT);
 
@@ -260,9 +260,9 @@
       const node = doc.createElement(tag);
       return fromDom(node);
     };
-    const fromTe***REMOVED***t = (te***REMOVED***t, scope) => {
+    const fromText = (text, scope) => {
       const doc = scope || document;
-      const node = doc.createTe***REMOVED***tNode(te***REMOVED***t);
+      const node = doc.createTextNode(text);
       return fromDom(node);
     };
     const fromDom = node => {
@@ -271,11 +271,11 @@
       }
       return { dom: node };
     };
-    const fromPoint = (docElm, ***REMOVED***, y) => Optional.from(docElm.dom.elementFromPoint(***REMOVED***, y)).map(fromDom);
+    const fromPoint = (docElm, x, y) => Optional.from(docElm.dom.elementFromPoint(x, y)).map(fromDom);
     const SugarElement = {
       fromHtml,
       fromTag,
-      fromTe***REMOVED***t,
+      fromText,
       fromDom,
       fromPoint
     };
@@ -312,7 +312,7 @@
     const eq = (e1, e2) => e1.dom === e2.dom;
     const is$1 = is$2;
 
-    const is = (lhs, rhs, comparator = tripleEquals) => lhs.e***REMOVED***ists(left => comparator(left, rhs));
+    const is = (lhs, rhs, comparator = tripleEquals) => lhs.exists(left => comparator(left, rhs));
 
     const blank = r => s => s.replace(r, '');
     const trim = blank(/^\s+|\s+$/g);
@@ -339,11 +339,11 @@
       return ret;
     };
     const prevSibling = element => Optional.from(element.dom.previousSibling).map(SugarElement.fromDom);
-    const ne***REMOVED***tSibling = element => Optional.from(element.dom.ne***REMOVED***tSibling).map(SugarElement.fromDom);
+    const nextSibling = element => Optional.from(element.dom.nextSibling).map(SugarElement.fromDom);
     const children = element => map(element.dom.childNodes, SugarElement.fromDom);
-    const child = (element, inde***REMOVED***) => {
+    const child = (element, index) => {
       const cs = element.dom.childNodes;
-      return Optional.from(cs[inde***REMOVED***]).map(SugarElement.fromDom);
+      return Optional.from(cs[index]).map(SugarElement.fromDom);
     };
     const firstChild = element => child(element, 0);
 
@@ -357,7 +357,7 @@
     const getShadowHost = e => SugarElement.fromDom(e.dom.host);
 
     const inBody = element => {
-      const dom = isTe***REMOVED***t(element) ? element.dom.parentNode : element.dom;
+      const dom = isText(element) ? element.dom.parentNode : element.dom;
       if (dom === undefined || dom === null || dom.ownerDocument === null) {
         return false;
       }
@@ -410,7 +410,7 @@
       });
     };
     const after$1 = (marker, element) => {
-      const sibling = ne***REMOVED***tSibling(marker);
+      const sibling = nextSibling(marker);
       sibling.fold(() => {
         const parent$1 = parent(marker);
         parent$1.each(v => {
@@ -437,24 +437,24 @@
     };
 
     const after = (marker, elements) => {
-      each$1(elements, (***REMOVED***, i) => {
+      each$1(elements, (x, i) => {
         const e = i === 0 ? marker : elements[i - 1];
-        after$1(e, ***REMOVED***);
+        after$1(e, x);
       });
     };
     const append = (parent, elements) => {
-      each$1(elements, ***REMOVED*** => {
-        append$1(parent, ***REMOVED***);
+      each$1(elements, x => {
+        append$1(parent, x);
       });
     };
 
     const descendants$1 = (scope, predicate) => {
       let result = [];
-      each$1(children(scope), ***REMOVED*** => {
-        if (predicate(***REMOVED***)) {
-          result = result.concat([***REMOVED***]);
+      each$1(children(scope), x => {
+        if (predicate(x)) {
+          result = result.concat([x]);
         }
-        result = result.concat(descendants$1(***REMOVED***, predicate));
+        result = result.concat(descendants$1(x, predicate));
       });
       return result;
     };
@@ -528,7 +528,7 @@
       };
     };
 
-    const api = NodeValue(isTe***REMOVED***t, 'te***REMOVED***t');
+    const api = NodeValue(isText, 'text');
     const get = element => api.get(element);
     const set = (element, value) => api.set(element, value);
 
@@ -609,8 +609,8 @@
           'noembed',
           'title',
           'style',
-          'te***REMOVED***tarea',
-          '***REMOVED***mp'
+          'textarea',
+          'xmp'
         ], tag);
       };
       const getLanguage = element => isElement(element) ? getOpt(element, 'lang') : Optional.none();
@@ -653,25 +653,25 @@
         create: constant({
           nu: SugarElement.fromTag,
           clone: clone$1,
-          te***REMOVED***t: SugarElement.fromTe***REMOVED***t
+          text: SugarElement.fromText
         }),
         query: constant({
           comparePosition,
           prevSibling: prevSibling,
-          ne***REMOVED***tSibling: ne***REMOVED***tSibling
+          nextSibling: nextSibling
         }),
         property: constant({
           children: children,
           name: name,
           parent: parent,
           document,
-          isTe***REMOVED***t: isTe***REMOVED***t,
+          isText: isText,
           isComment: isComment,
           isElement: isElement,
           isSpecial,
           getLanguage,
-          getTe***REMOVED***t: get,
-          setTe***REMOVED***t: set,
+          getText: get,
+          setText: set,
           isBoundary,
           isEmptyTag,
           isNonEditable
@@ -687,7 +687,7 @@
     });
 
     const scan = (universe, element, direction) => {
-      if (universe.property().isTe***REMOVED***t(element) && universe.property().getTe***REMOVED***t(element).trim().length === 0 || universe.property().isComment(element)) {
+      if (universe.property().isText(element) && universe.property().getText(element).trim().length === 0 || universe.property().isComment(element)) {
         return direction(element).bind(elem => {
           return scan(universe, elem, direction).orThunk(() => {
             return Optional.some(elem);
@@ -698,15 +698,15 @@
       }
     };
     const toEnd = (universe, element) => {
-      if (universe.property().isTe***REMOVED***t(element)) {
-        return universe.property().getTe***REMOVED***t(element).length;
+      if (universe.property().isText(element)) {
+        return universe.property().getText(element).length;
       }
       const children = universe.property().children(element);
       return children.length;
     };
     const freefallRtl$2 = (universe, element) => {
       const candidate = scan(universe, element, universe.query().prevSibling).getOr(element);
-      if (universe.property().isTe***REMOVED***t(candidate)) {
+      if (universe.property().isText(candidate)) {
         return point(candidate, toEnd(universe, candidate));
       }
       const children = universe.property().children(candidate);
@@ -790,10 +790,10 @@
       }
       const editorBody = SugarElement.fromDom(editor.getBody());
       const uid = generate('acc');
-      const summaryTe***REMOVED***t = editor.dom.encode(editor.selection.getRng().toString() || editor.translate('Accordion summary...'));
-      const bodyTe***REMOVED***t = editor.dom.encode(editor.translate('Accordion body...'));
-      const accordionSummaryHtml = `<summary class="${ accordionSummaryClass }">${ summaryTe***REMOVED***t }</summary>`;
-      const accordionBodyHtml = `<${ accordionBodyWrapperTag } class="${ accordionBodyWrapperClass }"><p>${ bodyTe***REMOVED***t }</p></${ accordionBodyWrapperTag }>`;
+      const summaryText = editor.dom.encode(editor.selection.getRng().toString() || editor.translate('Accordion summary...'));
+      const bodyText = editor.dom.encode(editor.translate('Accordion body...'));
+      const accordionSummaryHtml = `<summary class="${ accordionSummaryClass }">${ summaryText }</summary>`;
+      const accordionBodyHtml = `<${ accordionBodyWrapperTag } class="${ accordionBodyWrapperClass }"><p>${ bodyText }</p></${ accordionBodyWrapperTag }>`;
       editor.undoManager.transact(() => {
         editor.insertContent([
           `<details data-mce-id="${ uid }" class="${ accordionDetailsClass }" open="open">`,
@@ -829,9 +829,9 @@
     };
     const removeAccordion = editor => {
       getSelectedDetails(editor).each(details => {
-        const {ne***REMOVED***tSibling} = details;
-        if (ne***REMOVED***tSibling) {
-          editor.selection.select(ne***REMOVED***tSibling, true);
+        const {nextSibling} = details;
+        if (nextSibling) {
+          editor.selection.select(nextSibling, true);
           editor.selection.collapse(true);
         } else {
           insertAndSelectParagraphAfter(editor, details);
@@ -972,13 +972,13 @@
       editor.on('keydown', event => {
         if (!event.shiftKey && event.keyCode === global$1.ENTER && isInSummary(editor) || isAtDetailsStart(editor)) {
           event.preventDefault();
-          editor.e***REMOVED***ecCommand('ToggleAccordion');
+          editor.execCommand('ToggleAccordion');
         }
       });
     };
     const setup$1 = editor => {
       setupEnterKeyInSummary(editor);
-      editor.on('E***REMOVED***ecCommand', e => {
+      editor.on('ExecCommand', e => {
         const cmd = e.command.toLowerCase();
         if ((cmd === 'delete' || cmd === 'forwarddelete') && isDetailsSelected(editor)) {
           normalizeDetails(editor);
@@ -1008,7 +1008,7 @@
       return () => editor.off('NodeChange', onNodeChange);
     };
     const register = editor => {
-      const onAction = () => editor.e***REMOVED***ecCommand('InsertAccordion');
+      const onAction = () => editor.execCommand('InsertAccordion');
       editor.ui.registry.addButton('accordion', {
         icon: 'accordion',
         tooltip: 'Insert accordion',
@@ -1017,21 +1017,21 @@
       });
       editor.ui.registry.addMenuItem('accordion', {
         icon: 'accordion',
-        te***REMOVED***t: 'Accordion',
+        text: 'Accordion',
         onSetup: onSetup(editor),
         onAction
       });
       editor.ui.registry.addToggleButton('accordiontoggle', {
         icon: 'accordion-toggle',
         tooltip: 'Toggle accordion',
-        onAction: () => editor.e***REMOVED***ecCommand('ToggleAccordion')
+        onAction: () => editor.execCommand('ToggleAccordion')
       });
       editor.ui.registry.addToggleButton('accordionremove', {
         icon: 'remove',
         tooltip: 'Delete accordion',
-        onAction: () => editor.e***REMOVED***ecCommand('RemoveAccordion')
+        onAction: () => editor.execCommand('RemoveAccordion')
       });
-      editor.ui.registry.addConte***REMOVED***tToolbar('accordion', {
+      editor.ui.registry.addContextToolbar('accordion', {
         predicate: accordion => editor.dom.is(accordion, 'details') && editor.getBody().contains(accordion) && editor.dom.isEditable(accordion.parentNode),
         items: 'accordiontoggle accordionremove',
         scope: 'node',

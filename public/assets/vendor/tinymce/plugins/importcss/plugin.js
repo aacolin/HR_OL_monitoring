@@ -15,13 +15,13 @@
         return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
       }
     };
-    const typeOf = ***REMOVED*** => {
-      const t = typeof ***REMOVED***;
-      if (***REMOVED*** === null) {
+    const typeOf = x => {
+      const t = typeof x;
+      if (x === null) {
         return 'null';
-      } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+      } else if (t === 'object' && Array.isArray(x)) {
         return 'array';
-      } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
         return 'string';
       } else {
         return t;
@@ -50,7 +50,7 @@
         processor: 'boolean',
         default: true
       });
-      registerOption('importcss_e***REMOVED***clusive', {
+      registerOption('importcss_exclusive', {
         processor: 'boolean',
         default: true
       });
@@ -64,7 +64,7 @@
       });
     };
     const shouldMergeClasses = option('importcss_merge_classes');
-    const shouldImportE***REMOVED***clusive = option('importcss_e***REMOVED***clusive');
+    const shouldImportExclusive = option('importcss_exclusive');
     const getSelectorConverter = option('importcss_selector_converter');
     const getSelectorFilter = option('importcss_selector_filter');
     const getCssGroups = option('importcss_groups');
@@ -74,26 +74,26 @@
     const getSkinUrl = option('skin_url');
 
     const nativePush = Array.prototype.push;
-    const map = (***REMOVED***s, f) => {
-      const len = ***REMOVED***s.length;
+    const map = (xs, f) => {
+      const len = xs.length;
       const r = new Array(len);
       for (let i = 0; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        r[i] = f(***REMOVED***, i);
+        const x = xs[i];
+        r[i] = f(x, i);
       }
       return r;
     };
-    const flatten = ***REMOVED***s => {
+    const flatten = xs => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; ++i) {
-        if (!isArray(***REMOVED***s[i])) {
-          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + ***REMOVED***s);
+      for (let i = 0, len = xs.length; i < len; ++i) {
+        if (!isArray(xs[i])) {
+          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + xs);
         }
-        nativePush.apply(r, ***REMOVED***s[i]);
+        nativePush.apply(r, xs[i]);
       }
       return r;
     };
-    const bind = (***REMOVED***s, f) => flatten(map(***REMOVED***s, f));
+    const bind = (xs, f) => flatten(map(xs, f));
 
     const generate = () => {
       const ungroupedOrder = [];
@@ -127,11 +127,11 @@
       };
     };
 
-    const internalEditorStyle = /^\.(?:epho***REMOVED***|tiny-pageembed|mce)(?:[.-]+\w+)+$/;
-    const removeCacheSuffi***REMOVED*** = url => {
-      const cacheSuffi***REMOVED*** = global$1.cacheSuffi***REMOVED***;
+    const internalEditorStyle = /^\.(?:ephox|tiny-pageembed|mce)(?:[.-]+\w+)+$/;
+    const removeCacheSuffix = url => {
+      const cacheSuffix = global$1.cacheSuffix;
       if (isString(url)) {
-        url = url.replace('?' + cacheSuffi***REMOVED***, '').replace('&' + cacheSuffi***REMOVED***, '');
+        url = url.replace('?' + cacheSuffix, '').replace('&' + cacheSuffix, '');
       }
       return url;
     };
@@ -141,17 +141,17 @@
         const skinUrlBase = getSkinUrl(editor);
         const skinUrl = skinUrlBase ? editor.documentBaseURI.toAbsolute(skinUrlBase) : global$2.baseURL + '/skins/ui/' + skin;
         const contentSkinUrlPart = global$2.baseURL + '/skins/content/';
-        const suffi***REMOVED*** = editor.editorManager.suffi***REMOVED***;
-        return href === skinUrl + '/content' + (editor.inline ? '.inline' : '') + `${ suffi***REMOVED*** }.css` || href.inde***REMOVED***Of(contentSkinUrlPart) !== -1;
+        const suffix = editor.editorManager.suffix;
+        return href === skinUrl + '/content' + (editor.inline ? '.inline' : '') + `${ suffix }.css` || href.indexOf(contentSkinUrlPart) !== -1;
       }
       return false;
     };
     const compileFilter = filter => {
       if (isString(filter)) {
         return value => {
-          return value.inde***REMOVED***Of(filter) !== -1;
+          return value.indexOf(filter) !== -1;
         };
-      } else if (filter instanceof RegE***REMOVED***p) {
+      } else if (filter instanceof RegExp) {
         return value => {
           return filter.test(value);
         };
@@ -159,14 +159,14 @@
       return filter;
     };
     const isCssImportRule = rule => rule.styleSheet;
-    const isCssPageRule = rule => rule.selectorTe***REMOVED***t;
+    const isCssPageRule = rule => rule.selectorText;
     const getSelectors = (editor, doc, fileFilter) => {
       const selectors = [];
       const contentCSSUrls = {};
       const append = (styleSheet, imported) => {
         let href = styleSheet.href;
         let rules;
-        href = removeCacheSuffi***REMOVED***(href);
+        href = removeCacheSuffix(href);
         if (!href || fileFilter && !fileFilter(href, imported) || isSkinContentCss(editor, href)) {
           return;
         }
@@ -181,7 +181,7 @@
           if (isCssImportRule(cssRule) && cssRule.styleSheet) {
             append(cssRule.styleSheet, true);
           } else if (isCssPageRule(cssRule)) {
-            global.each(cssRule.selectorTe***REMOVED***t.split(','), selector => {
+            global.each(cssRule.selectorText.split(','), selector => {
               selectors.push(global.trim(selector));
             });
           }
@@ -203,9 +203,9 @@
       }
       return selectors;
     };
-    const defaultConvertSelectorToFormat = (editor, selectorTe***REMOVED***t) => {
+    const defaultConvertSelectorToFormat = (editor, selectorText) => {
       let format = {};
-      const selector = /^(?:([a-z0-9\-_]+))?(\.[a-z0-9_\-\.]+)$/i.e***REMOVED***ec(selectorTe***REMOVED***t);
+      const selector = /^(?:([a-z0-9\-_]+))?(\.[a-z0-9_\-\.]+)$/i.exec(selectorText);
       if (!selector) {
         return;
       }
@@ -213,8 +213,8 @@
       const classes = selector[2].substr(1).split('.').join(' ');
       const inlineSelectorElements = global.makeMap('a,img');
       if (selector[1]) {
-        format = { title: selectorTe***REMOVED***t };
-        if (editor.schema.getTe***REMOVED***tBlockElements()[elementName]) {
+        format = { title: selectorText };
+        if (editor.schema.getTextBlockElements()[elementName]) {
           format.block = elementName;
         } else if (editor.schema.getBlockElements()[elementName] || inlineSelectorElements[elementName.toLowerCase()]) {
           format.selector = elementName;
@@ -224,7 +224,7 @@
       } else if (selector[2]) {
         format = {
           inline: 'span',
-          title: selectorTe***REMOVED***t.substr(1),
+          title: selectorText.substr(1),
           classes
         };
       }
@@ -242,21 +242,21 @@
     };
     const compileUserDefinedGroups = groups => {
       return global.map(groups, group => {
-        return global.e***REMOVED***tend({}, group, {
+        return global.extend({}, group, {
           original: group,
           selectors: {},
           filter: compileFilter(group.filter)
         });
       });
     };
-    const isE***REMOVED***clusiveMode = (editor, group) => {
-      return group === null || shouldImportE***REMOVED***clusive(editor);
+    const isExclusiveMode = (editor, group) => {
+      return group === null || shouldImportExclusive(editor);
     };
     const isUniqueSelector = (editor, selector, group, globallyUniqueSelectors) => {
-      return !(isE***REMOVED***clusiveMode(editor, group) ? selector in globallyUniqueSelectors : selector in group.selectors);
+      return !(isExclusiveMode(editor, group) ? selector in globallyUniqueSelectors : selector in group.selectors);
     };
     const markUniqueSelector = (editor, selector, group, globallyUniqueSelectors) => {
-      if (isE***REMOVED***clusiveMode(editor, group)) {
+      if (isExclusiveMode(editor, group)) {
         globallyUniqueSelectors[selector] = true;
       } else {
         group.selectors[selector] = true;
@@ -326,8 +326,8 @@
     };
 
     const get = editor => {
-      const convertSelectorToFormat = selectorTe***REMOVED***t => {
-        return defaultConvertSelectorToFormat(editor, selectorTe***REMOVED***t);
+      const convertSelectorToFormat = selectorText => {
+        return defaultConvertSelectorToFormat(editor, selectorText);
       };
       return { convertSelectorToFormat };
     };

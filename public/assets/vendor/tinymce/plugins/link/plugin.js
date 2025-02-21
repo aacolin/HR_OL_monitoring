@@ -15,13 +15,13 @@
         return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
       }
     };
-    const typeOf = ***REMOVED*** => {
-      const t = typeof ***REMOVED***;
-      if (***REMOVED*** === null) {
+    const typeOf = x => {
+      const t = typeof x;
+      if (x === null) {
         return 'null';
-      } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+      } else if (t === 'object' && Array.isArray(x)) {
         return 'array';
-      } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
         return 'string';
       } else {
         return t;
@@ -99,7 +99,7 @@
           return Optional.none();
         }
       }
-      e***REMOVED***ists(predicate) {
+      exists(predicate) {
         return this.tag && predicate(this.value);
       }
       forall(predicate) {
@@ -154,42 +154,42 @@
     }
     Optional.singletonNone = new Optional(false);
 
-    const nativeInde***REMOVED***Of = Array.prototype.inde***REMOVED***Of;
+    const nativeIndexOf = Array.prototype.indexOf;
     const nativePush = Array.prototype.push;
-    const rawInde***REMOVED***Of = (ts, t) => nativeInde***REMOVED***Of.call(ts, t);
-    const contains = (***REMOVED***s, ***REMOVED***) => rawInde***REMOVED***Of(***REMOVED***s, ***REMOVED***) > -1;
-    const map = (***REMOVED***s, f) => {
-      const len = ***REMOVED***s.length;
+    const rawIndexOf = (ts, t) => nativeIndexOf.call(ts, t);
+    const contains = (xs, x) => rawIndexOf(xs, x) > -1;
+    const map = (xs, f) => {
+      const len = xs.length;
       const r = new Array(len);
       for (let i = 0; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        r[i] = f(***REMOVED***, i);
+        const x = xs[i];
+        r[i] = f(x, i);
       }
       return r;
     };
-    const each$1 = (***REMOVED***s, f) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        f(***REMOVED***, i);
+    const each$1 = (xs, f) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        f(x, i);
       }
     };
-    const foldl = (***REMOVED***s, f, acc) => {
-      each$1(***REMOVED***s, (***REMOVED***, i) => {
-        acc = f(acc, ***REMOVED***, i);
+    const foldl = (xs, f, acc) => {
+      each$1(xs, (x, i) => {
+        acc = f(acc, x, i);
       });
       return acc;
     };
-    const flatten = ***REMOVED***s => {
+    const flatten = xs => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; ++i) {
-        if (!isArray(***REMOVED***s[i])) {
-          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + ***REMOVED***s);
+      for (let i = 0, len = xs.length; i < len; ++i) {
+        if (!isArray(xs[i])) {
+          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + xs);
         }
-        nativePush.apply(r, ***REMOVED***s[i]);
+        nativePush.apply(r, xs[i]);
       }
       return r;
     };
-    const bind = (***REMOVED***s, f) => flatten(map(***REMOVED***s, f));
+    const bind = (xs, f) => flatten(map(xs, f));
     const findMap = (arr, f) => {
       for (let i = 0; i < arr.length; i++) {
         const r = f(arr[i], i);
@@ -200,11 +200,11 @@
       return Optional.none();
     };
 
-    const is = (lhs, rhs, comparator = tripleEquals) => lhs.e***REMOVED***ists(left => comparator(left, rhs));
+    const is = (lhs, rhs, comparator = tripleEquals) => lhs.exists(left => comparator(left, rhs));
     const cat = arr => {
       const r = [];
-      const push = ***REMOVED*** => {
-        r.push(***REMOVED***);
+      const push = x => {
+        r.push(x);
       };
       for (let i = 0; i < arr.length; i++) {
         arr[i].each(push);
@@ -216,7 +216,7 @@
     const option = name => editor => editor.options.get(name);
     const register$1 = editor => {
       const registerOption = editor.options.register;
-      registerOption('link_assume_e***REMOVED***ternal_targets', {
+      registerOption('link_assume_external_targets', {
         processor: value => {
           const valid = isString(value) || isBoolean(value);
           if (valid) {
@@ -245,7 +245,7 @@
         },
         default: false
       });
-      registerOption('link_conte***REMOVED***t_toolbar', {
+      registerOption('link_context_toolbar', {
         processor: 'boolean',
         default: false
       });
@@ -280,8 +280,8 @@
         default: false
       });
     };
-    const assumeE***REMOVED***ternalTargets = option('link_assume_e***REMOVED***ternal_targets');
-    const hasConte***REMOVED***tToolbar = option('link_conte***REMOVED***t_toolbar');
+    const assumeExternalTargets = option('link_assume_external_targets');
+    const hasContextToolbar = option('link_context_toolbar');
     const getLinkList = option('link_list');
     const getDefaultLinkTarget = option('link_default_target');
     const getDefaultLinkProtocol = option('link_default_protocol');
@@ -298,16 +298,16 @@
       const props = keys(obj);
       for (let k = 0, len = props.length; k < len; k++) {
         const i = props[k];
-        const ***REMOVED*** = obj[i];
-        f(***REMOVED***, i);
+        const x = obj[i];
+        f(x, i);
       }
     };
-    const objAcc = r => (***REMOVED***, i) => {
-      r[i] = ***REMOVED***;
+    const objAcc = r => (x, i) => {
+      r[i] = x;
     };
     const internalFilter = (obj, pred, onTrue, onFalse) => {
-      each(obj, (***REMOVED***, i) => {
-        (pred(***REMOVED***, i) ? onTrue : onFalse)(***REMOVED***, i);
+      each(obj, (x, i) => {
+        (pred(x, i) ? onTrue : onFalse)(x, i);
       });
     };
     const filter = (obj, pred) => {
@@ -339,7 +339,7 @@
           if (predicate(current)) {
             elements.push(current);
           }
-        } while (current = walker.ne***REMOVED***t());
+        } while (current = walker.next());
         return elements;
       }
     };
@@ -360,7 +360,7 @@
       const newRels = isUnsafe ? addTargetRules(rels) : removeTargetRules(rels);
       return newRels.length > 0 ? toString(newRels) : '';
     };
-    const trimCaretContainers = te***REMOVED***t => te***REMOVED***t.replace(/\uFEFF/g, '');
+    const trimCaretContainers = text => text.replace(/\uFEFF/g, '');
     const getAnchorElement = (editor, selectedElm) => {
       selectedElm = selectedElm || getLinksInSelection(editor.selection.getRng())[0] || editor.selection.getNode();
       if (isImageFigure(selectedElm)) {
@@ -370,18 +370,18 @@
       }
     };
     const isInAnchor = (editor, selectedElm) => getAnchorElement(editor, selectedElm).isSome();
-    const getAnchorTe***REMOVED***t = (selection, anchorElm) => {
-      const te***REMOVED***t = anchorElm.fold(() => selection.getContent({ format: 'te***REMOVED***t' }), anchorElm => anchorElm.innerTe***REMOVED***t || anchorElm.te***REMOVED***tContent || '');
-      return trimCaretContainers(te***REMOVED***t);
+    const getAnchorText = (selection, anchorElm) => {
+      const text = anchorElm.fold(() => selection.getContent({ format: 'text' }), anchorElm => anchorElm.innerText || anchorElm.textContent || '');
+      return trimCaretContainers(text);
     };
     const getLinksInSelection = rng => collectNodesInRange(rng, isLink);
     const getLinks$1 = elements => global$2.grep(elements, isLink);
     const hasLinks = elements => getLinks$1(elements).length > 0;
     const hasLinksInSelection = rng => getLinksInSelection(rng).length > 0;
-    const isOnlyTe***REMOVED***tSelected = editor => {
-      const inlineTe***REMOVED***tElements = editor.schema.getTe***REMOVED***tInlineElements();
-      const isElement = elm => elm.nodeType === 1 && !isAnchor(elm) && !has(inlineTe***REMOVED***tElements, elm.nodeName.toLowerCase());
-      const isInBlockAnchor = getAnchorElement(editor).e***REMOVED***ists(anchor => anchor.hasAttribute('data-mce-block'));
+    const isOnlyTextSelected = editor => {
+      const inlineTextElements = editor.schema.getTextInlineElements();
+      const isElement = elm => elm.nodeType === 1 && !isAnchor(elm) && !has(inlineTextElements, elm.nodeName.toLowerCase());
+      const isInBlockAnchor = getAnchorElement(editor).exists(anchor => anchor.hasAttribute('data-mce-block'));
       if (isInBlockAnchor) {
         return false;
       }
@@ -409,9 +409,9 @@
         return acc;
       }, { href: data.href });
     };
-    const handleE***REMOVED***ternalTargets = (href, assumeE***REMOVED***ternalTargets) => {
-      if ((assumeE***REMOVED***ternalTargets === 'http' || assumeE***REMOVED***ternalTargets === 'https') && !hasProtocol(href)) {
-        return assumeE***REMOVED***ternalTargets + '://' + href;
+    const handleExternalTargets = (href, assumeExternalTargets) => {
+      if ((assumeExternalTargets === 'http' || assumeExternalTargets === 'https') && !hasProtocol(href)) {
+        return assumeExternalTargets + '://' + href;
       }
       return href;
     };
@@ -424,29 +424,29 @@
       if (Optional.from(newLinkAttrs.target).isNone() && getTargetList(editor) === false) {
         newLinkAttrs.target = getDefaultLinkTarget(editor);
       }
-      newLinkAttrs.href = handleE***REMOVED***ternalTargets(newLinkAttrs.href, assumeE***REMOVED***ternalTargets(editor));
+      newLinkAttrs.href = handleExternalTargets(newLinkAttrs.href, assumeExternalTargets(editor));
       return newLinkAttrs;
     };
-    const updateLink = (editor, anchorElm, te***REMOVED***t, linkAttrs) => {
-      te***REMOVED***t.each(te***REMOVED***t => {
-        if (has(anchorElm, 'innerTe***REMOVED***t')) {
-          anchorElm.innerTe***REMOVED***t = te***REMOVED***t;
+    const updateLink = (editor, anchorElm, text, linkAttrs) => {
+      text.each(text => {
+        if (has(anchorElm, 'innerText')) {
+          anchorElm.innerText = text;
         } else {
-          anchorElm.te***REMOVED***tContent = te***REMOVED***t;
+          anchorElm.textContent = text;
         }
       });
       editor.dom.setAttribs(anchorElm, linkAttrs);
       editor.selection.select(anchorElm);
     };
-    const createLink = (editor, selectedElm, te***REMOVED***t, linkAttrs) => {
+    const createLink = (editor, selectedElm, text, linkAttrs) => {
       const dom = editor.dom;
       if (isImageFigure(selectedElm)) {
         linkImageFigure(dom, selectedElm, linkAttrs);
       } else {
-        te***REMOVED***t.fold(() => {
-          editor.e***REMOVED***ecCommand('mceInsertLink', false, linkAttrs);
-        }, te***REMOVED***t => {
-          editor.insertContent(dom.createHTML('a', linkAttrs, dom.encode(te***REMOVED***t)));
+        text.fold(() => {
+          editor.execCommand('mceInsertLink', false, linkAttrs);
+        }, text => {
+          editor.insertContent(dom.createHTML('a', linkAttrs, dom.encode(text)));
         });
       }
     };
@@ -459,10 +459,10 @@
           attachState.attach();
         }
         anchorElm.fold(() => {
-          createLink(editor, selectedElm, data.te***REMOVED***t, linkAttrs);
+          createLink(editor, selectedElm, data.text, linkAttrs);
         }, elm => {
           editor.focus();
-          updateLink(editor, elm, data.te***REMOVED***t, linkAttrs);
+          updateLink(editor, elm, data.text, linkAttrs);
         });
       });
     };
@@ -479,7 +479,7 @@
         rng.setEndAfter(endAnchorElm);
       }
       selection.setRng(rng);
-      editor.e***REMOVED***ecCommand('unlink');
+      editor.execCommand('unlink');
       selection.moveToBookmark(bookmark);
     };
     const unlinkDomMutation = editor => {
@@ -499,7 +499,7 @@
         href,
         rel,
         target,
-        te***REMOVED***t,
+        text,
         title
       } = data;
       return filter({
@@ -507,7 +507,7 @@
         href,
         rel: rel.getOrNull(),
         target: target.getOrNull(),
-        te***REMOVED***t: te***REMOVED***t.getOrNull(),
+        text: text.getOrNull(),
         title: title.getOrNull()
       }, (v, _k) => isNull(v) === false);
     };
@@ -526,10 +526,10 @@
     };
     const link = (editor, attachState, data) => {
       const sanitizedData = sanitizeData(editor, data);
-      editor.hasPlugin('rtc', true) ? editor.e***REMOVED***ecCommand('createlink', false, unwrapOptions(sanitizedData)) : linkDomMutation(editor, attachState, sanitizedData);
+      editor.hasPlugin('rtc', true) ? editor.execCommand('createlink', false, unwrapOptions(sanitizedData)) : linkDomMutation(editor, attachState, sanitizedData);
     };
     const unlink = editor => {
-      editor.hasPlugin('rtc', true) ? editor.e***REMOVED***ecCommand('unlink') : unlinkDomMutation(editor);
+      editor.hasPlugin('rtc', true) ? editor.execCommand('unlink') : unlinkDomMutation(editor);
     };
     const unlinkImageFigure = (editor, fig) => {
       var _a;
@@ -553,40 +553,40 @@
     };
 
     const getValue = item => isString(item.value) ? item.value : '';
-    const getTe***REMOVED***t = item => {
-      if (isString(item.te***REMOVED***t)) {
-        return item.te***REMOVED***t;
+    const getText = item => {
+      if (isString(item.text)) {
+        return item.text;
       } else if (isString(item.title)) {
         return item.title;
       } else {
         return '';
       }
     };
-    const sanitizeList = (list, e***REMOVED***tractValue) => {
+    const sanitizeList = (list, extractValue) => {
       const out = [];
       global$2.each(list, item => {
-        const te***REMOVED***t = getTe***REMOVED***t(item);
+        const text = getText(item);
         if (item.menu !== undefined) {
-          const items = sanitizeList(item.menu, e***REMOVED***tractValue);
+          const items = sanitizeList(item.menu, extractValue);
           out.push({
-            te***REMOVED***t,
+            text,
             items
           });
         } else {
-          const value = e***REMOVED***tractValue(item);
+          const value = extractValue(item);
           out.push({
-            te***REMOVED***t,
+            text,
             value
           });
         }
       });
       return out;
     };
-    const sanitizeWith = (e***REMOVED***tracter = getValue) => list => Optional.from(list).map(list => sanitizeList(list, e***REMOVED***tracter));
+    const sanitizeWith = (extracter = getValue) => list => Optional.from(list).map(list => sanitizeList(list, extracter));
     const sanitize = list => sanitizeWith(getValue)(list);
     const createUi = (name, label) => items => ({
       name,
-      type: 'listbo***REMOVED***',
+      type: 'listbox',
       label,
       items
     });
@@ -598,25 +598,25 @@
     };
 
     const isListGroup = item => hasNonNullableKey(item, 'items');
-    const findTe***REMOVED***tByValue = (value, catalog) => findMap(catalog, item => {
+    const findTextByValue = (value, catalog) => findMap(catalog, item => {
       if (isListGroup(item)) {
-        return findTe***REMOVED***tByValue(value, item.items);
+        return findTextByValue(value, item.items);
       } else {
         return someIf(item.value === value, item);
       }
     });
-    const getDelta = (persistentTe***REMOVED***t, fieldName, catalog, data) => {
+    const getDelta = (persistentText, fieldName, catalog, data) => {
       const value = data[fieldName];
-      const hasPersistentTe***REMOVED***t = persistentTe***REMOVED***t.length > 0;
-      return value !== undefined ? findTe***REMOVED***tByValue(value, catalog).map(i => ({
+      const hasPersistentText = persistentText.length > 0;
+      return value !== undefined ? findTextByValue(value, catalog).map(i => ({
         url: {
           value: i.value,
           meta: {
-            te***REMOVED***t: hasPersistentTe***REMOVED***t ? persistentTe***REMOVED***t : i.te***REMOVED***t,
+            text: hasPersistentText ? persistentText : i.text,
             attach: noop
           }
         },
-        te***REMOVED***t: hasPersistentTe***REMOVED***t ? persistentTe***REMOVED***t : i.te***REMOVED***t
+        text: hasPersistentText ? persistentText : i.text
       })) : Optional.none();
     };
     const findCatalog = (catalogs, fieldName) => {
@@ -630,23 +630,23 @@
     };
     const init = (initialData, linkCatalog) => {
       const persistentData = {
-        te***REMOVED***t: initialData.te***REMOVED***t,
+        text: initialData.text,
         title: initialData.title
       };
       const getTitleFromUrlChange = url => {
         var _a;
         return someIf(persistentData.title.length <= 0, Optional.from((_a = url.meta) === null || _a === void 0 ? void 0 : _a.title).getOr(''));
       };
-      const getTe***REMOVED***tFromUrlChange = url => {
+      const getTextFromUrlChange = url => {
         var _a;
-        return someIf(persistentData.te***REMOVED***t.length <= 0, Optional.from((_a = url.meta) === null || _a === void 0 ? void 0 : _a.te***REMOVED***t).getOr(url.value));
+        return someIf(persistentData.text.length <= 0, Optional.from((_a = url.meta) === null || _a === void 0 ? void 0 : _a.text).getOr(url.value));
       };
       const onUrlChange = data => {
-        const te***REMOVED***t = getTe***REMOVED***tFromUrlChange(data.url);
+        const text = getTextFromUrlChange(data.url);
         const title = getTitleFromUrlChange(data.url);
-        if (te***REMOVED***t.isSome() || title.isSome()) {
+        if (text.isSome() || title.isSome()) {
           return Optional.some({
-            ...te***REMOVED***t.map(te***REMOVED***t => ({ te***REMOVED***t })).getOr({}),
+            ...text.map(text => ({ text })).getOr({}),
             ...title.map(title => ({ title })).getOr({})
           });
         } else {
@@ -655,7 +655,7 @@
       };
       const onCatalogChange = (data, change) => {
         const catalog = findCatalog(linkCatalog, change).getOr([]);
-        return getDelta(persistentData.te***REMOVED***t, change, catalog, data);
+        return getDelta(persistentData.text, change, catalog, data);
       };
       const onChange = (getData, change) => {
         const name = change.name;
@@ -666,7 +666,7 @@
             'link'
           ], name)) {
           return onCatalogChange(getData(), name);
-        } else if (name === 'te***REMOVED***t' || name === 'title') {
+        } else if (name === 'text' || name === 'title') {
           persistentData[name] = getData()[name];
           return Optional.none();
         } else {
@@ -693,20 +693,20 @@
     };
     const tryEmailTransform = data => {
       const url = data.href;
-      const suggestMailTo = url.inde***REMOVED***Of('@') > 0 && url.inde***REMOVED***Of('/') === -1 && url.inde***REMOVED***Of('mailto:') === -1;
+      const suggestMailTo = url.indexOf('@') > 0 && url.indexOf('/') === -1 && url.indexOf('mailto:') === -1;
       return suggestMailTo ? Optional.some({
-        message: 'The URL you entered seems to be an email address. Do you want to add the required mailto: prefi***REMOVED***?',
+        message: 'The URL you entered seems to be an email address. Do you want to add the required mailto: prefix?',
         preprocess: oldData => ({
           ...oldData,
           href: 'mailto:' + url
         })
       }) : Optional.none();
     };
-    const tryProtocolTransform = (assumeE***REMOVED***ternalTargets, defaultLinkProtocol) => data => {
+    const tryProtocolTransform = (assumeExternalTargets, defaultLinkProtocol) => data => {
       const url = data.href;
-      const suggestProtocol = assumeE***REMOVED***ternalTargets === 1 && !hasProtocol(url) || assumeE***REMOVED***ternalTargets === 0 && /^\s*www(\.|\d\.)/i.test(url);
+      const suggestProtocol = assumeExternalTargets === 1 && !hasProtocol(url) || assumeExternalTargets === 0 && /^\s*www(\.|\d\.)/i.test(url);
       return suggestProtocol ? Optional.some({
-        message: `The URL you entered seems to be an e***REMOVED***ternal link. Do you want to add the required ${ defaultLinkProtocol }:// prefi***REMOVED***?`,
+        message: `The URL you entered seems to be an external link. Do you want to add the required ${ defaultLinkProtocol }:// prefix?`,
         preprocess: oldData => ({
           ...oldData,
           href: defaultLinkProtocol + '://' + url
@@ -715,7 +715,7 @@
     };
     const preprocess = (editor, data) => findMap([
       tryEmailTransform,
-      tryProtocolTransform(assumeE***REMOVED***ternalTargets(editor), getDefaultLinkProtocol(editor))
+      tryProtocolTransform(assumeExternalTargets(editor), getDefaultLinkProtocol(editor))
     ], f => f(data)).fold(() => Promise.resolve(data), transform => new Promise(callback => {
       delayedConfirm(editor, transform.message, state => {
         callback(state ? transform.preprocess(data) : data);
@@ -728,12 +728,12 @@
       const anchors = bind(anchorNodes, anchor => {
         const id = anchor.name || anchor.id;
         return id ? [{
-            te***REMOVED***t: id,
+            text: id,
             value: '#' + id
           }] : [];
       });
       return anchors.length > 0 ? Optional.some([{
-          te***REMOVED***t: 'None',
+          text: 'None',
           value: ''
         }].concat(anchors)) : Optional.none();
     };
@@ -748,28 +748,28 @@
     };
     const ClassListOptions = { getClasses };
 
-    const parseJson = te***REMOVED***t => {
+    const parseJson = text => {
       try {
-        return Optional.some(JSON.parse(te***REMOVED***t));
+        return Optional.some(JSON.parse(text));
       } catch (err) {
         return Optional.none();
       }
     };
     const getLinks = editor => {
-      const e***REMOVED***tractor = item => editor.convertURL(item.value || item.url || '', 'href');
+      const extractor = item => editor.convertURL(item.value || item.url || '', 'href');
       const linkList = getLinkList(editor);
       return new Promise(resolve => {
         if (isString(linkList)) {
-          fetch(linkList).then(res => res.ok ? res.te***REMOVED***t().then(parseJson) : Promise.reject()).then(resolve, () => resolve(Optional.none()));
+          fetch(linkList).then(res => res.ok ? res.text().then(parseJson) : Promise.reject()).then(resolve, () => resolve(Optional.none()));
         } else if (isFunction(linkList)) {
           linkList(output => resolve(Optional.some(output)));
         } else {
           resolve(Optional.from(linkList));
         }
-      }).then(optItems => optItems.bind(ListOptions.sanitizeWith(e***REMOVED***tractor)).map(items => {
+      }).then(optItems => optItems.bind(ListOptions.sanitizeWith(extractor)).map(items => {
         if (items.length > 0) {
           const noneItem = [{
-              te***REMOVED***t: 'None',
+              text: 'None',
               value: ''
             }];
           return noneItem.concat(items);
@@ -785,8 +785,8 @@
       if (list.length > 0) {
         const isTargetBlank = is(initialTarget, '_blank');
         const enforceSafe = allowUnsafeLinkTarget(editor) === false;
-        const safeRelE***REMOVED***tractor = item => applyRelTargetRules(ListOptions.getValue(item), isTargetBlank);
-        const sanitizer = enforceSafe ? ListOptions.sanitizeWith(safeRelE***REMOVED***tractor) : ListOptions.sanitize;
+        const safeRelExtractor = item => applyRelTargetRules(ListOptions.getValue(item), isTargetBlank);
+        const sanitizer = enforceSafe ? ListOptions.sanitizeWith(safeRelExtractor) : ListOptions.sanitize;
         return sanitizer(list);
       }
       return Optional.none();
@@ -795,11 +795,11 @@
 
     const fallbacks = [
       {
-        te***REMOVED***t: 'Current window',
+        text: 'Current window',
         value: ''
       },
       {
-        te***REMOVED***t: 'New window',
+        text: 'New window',
         value: '_blank'
       }
     ];
@@ -818,10 +818,10 @@
       const val = dom.getAttrib(elem, name);
       return val !== null && val.length > 0 ? Optional.some(val) : Optional.none();
     };
-    const e***REMOVED***tractFromAnchor = (editor, anchor) => {
+    const extractFromAnchor = (editor, anchor) => {
       const dom = editor.dom;
-      const onlyTe***REMOVED***t = isOnlyTe***REMOVED***tSelected(editor);
-      const te***REMOVED***t = onlyTe***REMOVED***t ? Optional.some(getAnchorTe***REMOVED***t(editor.selection, anchor)) : Optional.none();
+      const onlyText = isOnlyTextSelected(editor);
+      const text = onlyText ? Optional.some(getAnchorText(editor.selection, anchor)) : Optional.none();
       const url = anchor.bind(anchorElm => Optional.from(dom.getAttrib(anchorElm, 'href')));
       const target = anchor.bind(anchorElm => Optional.from(dom.getAttrib(anchorElm, 'target')));
       const rel = anchor.bind(anchorElm => nonEmptyAttr(dom, anchorElm, 'rel'));
@@ -829,7 +829,7 @@
       const title = anchor.bind(anchorElm => nonEmptyAttr(dom, anchorElm, 'title'));
       return {
         url,
-        te***REMOVED***t,
+        text,
         title,
         target,
         rel,
@@ -837,7 +837,7 @@
       };
     };
     const collect = (editor, linkNode) => LinkListOptions.getLinks(editor).then(links => {
-      const anchor = e***REMOVED***tractFromAnchor(editor, linkNode);
+      const anchor = extractFromAnchor(editor, linkNode);
       return {
         anchor,
         catalogs: {
@@ -863,7 +863,7 @@
       const getChangedValue = key => Optional.from(data[key]).filter(value => !is(info.anchor[key], value));
       const changedData = {
         href: data.url.value,
-        te***REMOVED***t: getChangedValue('te***REMOVED***t'),
+        text: getChangedValue('text'),
         target: getChangedValue('target'),
         rel: getChangedValue('rel'),
         class: getChangedValue('linkClass'),
@@ -890,7 +890,7 @@
           value: url,
           meta: { original: { value: url } }
         },
-        te***REMOVED***t: anchor.te***REMOVED***t.getOr(''),
+        text: anchor.text.getOr(''),
         title: anchor.title.getOr(''),
         anchor: url,
         link: url,
@@ -905,14 +905,14 @@
           type: 'urlinput',
           filetype: 'file',
           label: 'URL',
-          picker_te***REMOVED***t: 'Browse links'
+          picker_text: 'Browse links'
         }];
-      const displayTe***REMOVED***t = settings.anchor.te***REMOVED***t.map(() => ({
-        name: 'te***REMOVED***t',
+      const displayText = settings.anchor.text.map(() => ({
+        name: 'text',
         type: 'input',
-        label: 'Te***REMOVED***t to display'
+        label: 'Text to display'
       })).toArray();
-      const titleTe***REMOVED***t = settings.flags.titleEnabled ? [{
+      const titleText = settings.flags.titleEnabled ? [{
           name: 'title',
           type: 'input',
           label: 'Title'
@@ -925,8 +925,8 @@
         type: 'panel',
         items: flatten([
           urlInput,
-          displayTe***REMOVED***t,
-          titleTe***REMOVED***t,
+          displayText,
+          titleText,
           cat([
             catalogs.anchor.map(ListOptions.createUi('anchor', 'Anchors')),
             catalogs.rels.map(ListOptions.createUi('rel', 'Rel')),
@@ -944,12 +944,12 @@
           {
             type: 'cancel',
             name: 'cancel',
-            te***REMOVED***t: 'Cancel'
+            text: 'Cancel'
           },
           {
             type: 'submit',
             name: 'save',
-            te***REMOVED***t: 'Save',
+            text: 'Save',
             primary: true
           }
         ],
@@ -977,14 +977,14 @@
         if ((value === null || value === void 0 ? void 0 : value.dialog) === true || !useQuickLink(editor)) {
           open(editor);
         } else {
-          editor.dispatch('conte***REMOVED***ttoolbar-show', { toolbarKey: 'quicklink' });
+          editor.dispatch('contexttoolbar-show', { toolbarKey: 'quicklink' });
         }
       });
     };
 
     const setup$2 = editor => {
       editor.addShortcut('Meta+K', '', () => {
-        editor.e***REMOVED***ecCommand('mceLink');
+        editor.execCommand('mceLink');
       });
     };
 
@@ -1085,7 +1085,7 @@
       const selectedLink = value();
       const getSelectedLink = () => selectedLink.get().or(getLinkFromSelection(editor));
       const gotoSelectedLink = () => getSelectedLink().each(link => gotoLink(editor, link));
-      editor.on('conte***REMOVED***tmenu', e => {
+      editor.on('contextmenu', e => {
         getLinkFromElement(editor, e.target).each(selectedLink.set);
       });
       editor.on('SelectionChange', () => {
@@ -1114,7 +1114,7 @@
     };
 
     const openDialog = editor => () => {
-      editor.e***REMOVED***ecCommand('mceLink', false, { dialog: true });
+      editor.execCommand('mceLink', false, { dialog: true });
     };
     const toggleState = (editor, toggler) => {
       editor.on('NodeChange', toggler);
@@ -1167,29 +1167,29 @@
     };
     const setupMenuItems = (editor, openLink) => {
       editor.ui.registry.addMenuItem('openlink', {
-        te***REMOVED***t: 'Open link',
+        text: 'Open link',
         icon: 'new-tab',
         onAction: openLink.gotoSelectedLink,
         onSetup: toggleRequiresLinkState(editor)
       });
       editor.ui.registry.addMenuItem('link', {
         icon: 'link',
-        te***REMOVED***t: 'Link...',
+        text: 'Link...',
         shortcut: 'Meta+K',
         onAction: openDialog(editor),
         onSetup: toggleLinkMenuState(editor)
       });
       editor.ui.registry.addMenuItem('unlink', {
         icon: 'unlink',
-        te***REMOVED***t: 'Remove link',
+        text: 'Remove link',
         onAction: () => unlink(editor),
         onSetup: toggleRequiresLinkState(editor)
       });
     };
-    const setupConte***REMOVED***tMenu = editor => {
+    const setupContextMenu = editor => {
       const inLink = 'link unlink openlink';
       const noLink = 'link';
-      editor.ui.registry.addConte***REMOVED***tMenu('link', {
+      editor.ui.registry.addContextMenu('link', {
         update: element => {
           const isEditable = editor.dom.isEditable(element);
           if (!isEditable) {
@@ -1199,7 +1199,7 @@
         }
       });
     };
-    const setupConte***REMOVED***tToolbars = (editor, openLink) => {
+    const setupContextToolbars = (editor, openLink) => {
       const collapseSelectionToEnd = editor => {
         editor.selection.collapse(false);
       };
@@ -1208,32 +1208,32 @@
         buttonApi.setEnabled(isInAnchor(editor, node));
         return noop;
       };
-      const getLinkTe***REMOVED***t = value => {
+      const getLinkText = value => {
         const anchor = getAnchorElement(editor);
-        const onlyTe***REMOVED***t = isOnlyTe***REMOVED***tSelected(editor);
-        if (anchor.isNone() && onlyTe***REMOVED***t) {
-          const te***REMOVED***t = getAnchorTe***REMOVED***t(editor.selection, anchor);
-          return someIf(te***REMOVED***t.length === 0, value);
+        const onlyText = isOnlyTextSelected(editor);
+        if (anchor.isNone() && onlyText) {
+          const text = getAnchorText(editor.selection, anchor);
+          return someIf(text.length === 0, value);
         } else {
           return Optional.none();
         }
       };
-      editor.ui.registry.addConte***REMOVED***tForm('quicklink', {
+      editor.ui.registry.addContextForm('quicklink', {
         launch: {
-          type: 'conte***REMOVED***tformtogglebutton',
+          type: 'contextformtogglebutton',
           icon: 'link',
           tooltip: 'Link',
           onSetup: toggleLinkState(editor)
         },
         label: 'Link',
-        predicate: node => hasConte***REMOVED***tToolbar(editor) && isInAnchor(editor, node),
+        predicate: node => hasContextToolbar(editor) && isInAnchor(editor, node),
         initValue: () => {
           const elm = getAnchorElement(editor);
           return elm.fold(constant(''), getHref);
         },
         commands: [
           {
-            type: 'conte***REMOVED***tformtogglebutton',
+            type: 'contextformtogglebutton',
             icon: 'link',
             tooltip: 'Link',
             primary: true,
@@ -1244,14 +1244,14 @@
             },
             onAction: formApi => {
               const value = formApi.getValue();
-              const te***REMOVED***t = getLinkTe***REMOVED***t(value);
+              const text = getLinkText(value);
               const attachState = {
                 href: value,
                 attach: noop
               };
               link(editor, attachState, {
                 href: value,
-                te***REMOVED***t,
+                text,
                 title: Optional.none(),
                 rel: Optional.none(),
                 target: Optional.from(getDefaultLinkTarget(editor)),
@@ -1262,7 +1262,7 @@
             }
           },
           {
-            type: 'conte***REMOVED***tformbutton',
+            type: 'contextformbutton',
             icon: 'unlink',
             tooltip: 'Remove link',
             onSetup: onSetupLink,
@@ -1272,7 +1272,7 @@
             }
           },
           {
-            type: 'conte***REMOVED***tformbutton',
+            type: 'contextformbutton',
             icon: 'new-tab',
             tooltip: 'Open link',
             onSetup: onSetupLink,
@@ -1288,8 +1288,8 @@
       const openLink = setup$1(editor);
       setupButtons(editor, openLink);
       setupMenuItems(editor, openLink);
-      setupConte***REMOVED***tMenu(editor);
-      setupConte***REMOVED***tToolbars(editor, openLink);
+      setupContextMenu(editor);
+      setupContextToolbars(editor, openLink);
     };
 
     var Plugin = () => {

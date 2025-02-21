@@ -15,13 +15,13 @@
         return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
       }
     };
-    const typeOf = ***REMOVED*** => {
-      const t = typeof ***REMOVED***;
-      if (***REMOVED*** === null) {
+    const typeOf = x => {
+      const t = typeof x;
+      if (x === null) {
         return 'null';
-      } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+      } else if (t === 'object' && Array.isArray(x)) {
         return 'array';
-      } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
         return 'string';
       } else {
         return t;
@@ -75,21 +75,21 @@
         default: defaultImageToolbar
       });
     };
-    const getTe***REMOVED***tSelectionToolbarItems = option('quickbars_selection_toolbar');
+    const getTextSelectionToolbarItems = option('quickbars_selection_toolbar');
     const getInsertToolbarItems = option('quickbars_insert_toolbar');
     const getImageToolbarItems = option('quickbars_image_toolbar');
 
     let unique = 0;
-    const generate = prefi***REMOVED*** => {
+    const generate = prefix => {
       const date = new Date();
       const time = date.getTime();
       const random = Math.floor(Math.random() * 1000000000);
       unique++;
-      return prefi***REMOVED*** + '_' + random + unique + String(time);
+      return prefix + '_' + random + unique + String(time);
     };
 
     const insertTable = (editor, columns, rows) => {
-      editor.e***REMOVED***ecCommand('mceInsertTable', false, {
+      editor.execCommand('mceInsertTable', false, {
         rows,
         columns
       });
@@ -118,7 +118,7 @@
       const fileInput = document.createElement('input');
       fileInput.type = 'file';
       fileInput.accept = 'image/*';
-      fileInput.style.position = 'fi***REMOVED***ed';
+      fileInput.style.position = 'fixed';
       fileInput.style.left = '0';
       fileInput.style.top = '0';
       fileInput.style.opacity = '0.001';
@@ -222,7 +222,7 @@
           return Optional.none();
         }
       }
-      e***REMOVED***ists(predicate) {
+      exists(predicate) {
         return this.tag && predicate(this.value);
       }
       forall(predicate) {
@@ -317,9 +317,9 @@
       const node = doc.createElement(tag);
       return fromDom(node);
     };
-    const fromTe***REMOVED***t = (te***REMOVED***t, scope) => {
+    const fromText = (text, scope) => {
       const doc = scope || document;
-      const node = doc.createTe***REMOVED***tNode(te***REMOVED***t);
+      const node = doc.createTextNode(text);
       return fromDom(node);
     };
     const fromDom = node => {
@@ -328,11 +328,11 @@
       }
       return { dom: node };
     };
-    const fromPoint = (docElm, ***REMOVED***, y) => Optional.from(docElm.dom.elementFromPoint(***REMOVED***, y)).map(fromDom);
+    const fromPoint = (docElm, x, y) => Optional.from(docElm.dom.elementFromPoint(x, y)).map(fromDom);
     const SugarElement = {
       fromHtml,
       fromTag,
-      fromTe***REMOVED***t,
+      fromText,
       fromDom,
       fromPoint
     };
@@ -387,12 +387,12 @@
     const addToEditor$1 = editor => {
       const insertToolbarItems = getInsertToolbarItems(editor);
       if (insertToolbarItems.length > 0) {
-        editor.ui.registry.addConte***REMOVED***tToolbar('quickblock', {
+        editor.ui.registry.addContextToolbar('quickblock', {
           predicate: node => {
             const sugarNode = SugarElement.fromDom(node);
-            const te***REMOVED***tBlockElementsMap = editor.schema.getTe***REMOVED***tBlockElements();
+            const textBlockElementsMap = editor.schema.getTextBlockElements();
             const isRoot = elem => elem.dom === editor.getBody();
-            return !has$1(sugarNode, 'data-mce-bogus') && closest(sugarNode, 'table,[data-mce-bogus="all"]', isRoot).fold(() => closest$1(sugarNode, elem => name(elem) in te***REMOVED***tBlockElementsMap && editor.dom.isEmpty(elem.dom), isRoot), never);
+            return !has$1(sugarNode, 'data-mce-bogus') && closest(sugarNode, 'table,[data-mce-bogus="all"]', isRoot).fold(() => closest$1(sugarNode, elem => name(elem) in textBlockElementsMap && editor.dom.isEmpty(elem.dom), isRoot), never);
           },
           items: insertToolbarItems,
           position: 'line',
@@ -407,26 +407,26 @@
 
     const addToEditor = editor => {
       const isEditable = node => editor.dom.isEditable(node);
-      const isInEditableConte***REMOVED***t = el => isEditable(el.parentElement);
+      const isInEditableContext = el => isEditable(el.parentElement);
       const isImage = node => {
         const isImageFigure = node.nodeName === 'FIGURE' && /image/i.test(node.className);
         const isImage = node.nodeName === 'IMG' || isImageFigure;
         const isPagebreak = has(SugarElement.fromDom(node), 'mce-pagebreak');
-        return isImage && isInEditableConte***REMOVED***t(node) && !isPagebreak;
+        return isImage && isInEditableContext(node) && !isPagebreak;
       };
       const imageToolbarItems = getImageToolbarItems(editor);
       if (imageToolbarItems.length > 0) {
-        editor.ui.registry.addConte***REMOVED***tToolbar('imageselection', {
+        editor.ui.registry.addContextToolbar('imageselection', {
           predicate: isImage,
           items: imageToolbarItems,
           position: 'node'
         });
       }
-      const te***REMOVED***tToolbarItems = getTe***REMOVED***tSelectionToolbarItems(editor);
-      if (te***REMOVED***tToolbarItems.length > 0) {
-        editor.ui.registry.addConte***REMOVED***tToolbar('te***REMOVED***tselection', {
+      const textToolbarItems = getTextSelectionToolbarItems(editor);
+      if (textToolbarItems.length > 0) {
+        editor.ui.registry.addContextToolbar('textselection', {
           predicate: node => !isImage(node) && !editor.selection.isCollapsed() && isEditable(node),
-          items: te***REMOVED***tToolbarItems,
+          items: textToolbarItems,
           position: 'selection',
           scope: 'editor'
         });

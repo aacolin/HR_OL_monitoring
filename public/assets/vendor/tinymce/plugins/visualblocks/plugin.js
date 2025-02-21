@@ -68,7 +68,7 @@
       return () => editor.off('VisualBlocks', editorEventCallback);
     };
     const register = (editor, enabledState) => {
-      const onAction = () => editor.e***REMOVED***ecCommand('mceVisualBlocks');
+      const onAction = () => editor.execCommand('mceVisualBlocks');
       editor.ui.registry.addToggleButton('visualblocks', {
         icon: 'visualblocks',
         tooltip: 'Show blocks',
@@ -76,7 +76,7 @@
         onSetup: toggleActiveState(editor, enabledState)
       });
       editor.ui.registry.addToggleMenuItem('visualblocks', {
-        te***REMOVED***t: 'Show blocks',
+        text: 'Show blocks',
         icon: 'visualblocks',
         onAction,
         onSetup: toggleActiveState(editor, enabledState)

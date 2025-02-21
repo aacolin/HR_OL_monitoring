@@ -1,7 +1,7 @@
 import Element from '../core/core.element.js';
-import type { CartesianParsedData, ChartArea, Point, PointHoverOptions, PointOptions } from '../types/inde***REMOVED***.js';
-e***REMOVED***port type PointProps = Point;
-e***REMOVED***port default class PointElement e***REMOVED***tends Element<PointProps, PointOptions & PointHoverOptions> {
+import type { CartesianParsedData, ChartArea, Point, PointHoverOptions, PointOptions } from '../types/index.js';
+export type PointProps = Point;
+export default class PointElement extends Element<PointProps, PointOptions & PointHoverOptions> {
     static id: string;
     parsed: CartesianParsedData;
     skip?: boolean;
@@ -30,10 +30,10 @@ e***REMOVED***port default class PointElement e***REMOVED***tends Element<PointP
     inXRange(mouseX: number, useFinalPosition?: boolean): boolean;
     inYRange(mouseY: number, useFinalPosition?: boolean): boolean;
     getCenterPoint(useFinalPosition?: boolean): {
-        ***REMOVED***: number;
+        x: number;
         y: number;
     };
     size(options?: Partial<PointOptions & PointHoverOptions>): number;
-    draw(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, area: ChartArea): void;
+    draw(ctx: CanvasRenderingContext2D, area: ChartArea): void;
     getRange(): any;
 }

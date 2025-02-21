@@ -22,12 +22,12 @@
     var global$4 = tinymce.util.Tools.resolve('tinymce.PluginManager');
 
     let unique = 0;
-    const generate = prefi***REMOVED*** => {
+    const generate = prefix => {
       const date = new Date();
       const time = date.getTime();
       const random = Math.floor(Math.random() * 1000000000);
       unique++;
-      return prefi***REMOVED*** + '_' + random + unique + String(time);
+      return prefix + '_' + random + unique + String(time);
     };
 
     const get$1 = customTabs => {
@@ -60,7 +60,7 @@
         onAction: dialogOpener
       });
       editor.ui.registry.addMenuItem('help', {
-        te***REMOVED***t: 'Help',
+        text: 'Help',
         icon: 'help',
         shortcut: 'Alt+0',
         onAction: dialogOpener
@@ -75,13 +75,13 @@
         return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
       }
     };
-    const typeOf = ***REMOVED*** => {
-      const t = typeof ***REMOVED***;
-      if (***REMOVED*** === null) {
+    const typeOf = x => {
+      const t = typeof x;
+      if (x === null) {
         return 'null';
-      } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+      } else if (t === 'object' && Array.isArray(x)) {
         return 'array';
-      } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
         return 'string';
       } else {
         return t;
@@ -141,7 +141,7 @@
           return Optional.none();
         }
       }
-      e***REMOVED***ists(predicate) {
+      exists(predicate) {
         return this.tag && predicate(this.value);
       }
       forall(predicate) {
@@ -197,44 +197,44 @@
     Optional.singletonNone = new Optional(false);
 
     const nativeSlice = Array.prototype.slice;
-    const nativeInde***REMOVED***Of = Array.prototype.inde***REMOVED***Of;
-    const rawInde***REMOVED***Of = (ts, t) => nativeInde***REMOVED***Of.call(ts, t);
-    const contains = (***REMOVED***s, ***REMOVED***) => rawInde***REMOVED***Of(***REMOVED***s, ***REMOVED***) > -1;
-    const map = (***REMOVED***s, f) => {
-      const len = ***REMOVED***s.length;
+    const nativeIndexOf = Array.prototype.indexOf;
+    const rawIndexOf = (ts, t) => nativeIndexOf.call(ts, t);
+    const contains = (xs, x) => rawIndexOf(xs, x) > -1;
+    const map = (xs, f) => {
+      const len = xs.length;
       const r = new Array(len);
       for (let i = 0; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        r[i] = f(***REMOVED***, i);
+        const x = xs[i];
+        r[i] = f(x, i);
       }
       return r;
     };
-    const filter = (***REMOVED***s, pred) => {
+    const filter = (xs, pred) => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
-          r.push(***REMOVED***);
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
+          r.push(x);
         }
       }
       return r;
     };
-    const findUntil = (***REMOVED***s, pred, until) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
-          return Optional.some(***REMOVED***);
-        } else if (until(***REMOVED***, i)) {
+    const findUntil = (xs, pred, until) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
+          return Optional.some(x);
+        } else if (until(x, i)) {
           break;
         }
       }
       return Optional.none();
     };
-    const find = (***REMOVED***s, pred) => {
-      return findUntil(***REMOVED***s, pred, never);
+    const find = (xs, pred) => {
+      return findUntil(xs, pred, never);
     };
-    const sort = (***REMOVED***s, comparator) => {
-      const copy = nativeSlice.call(***REMOVED***s, 0);
+    const sort = (xs, comparator) => {
+      const copy = nativeSlice.call(xs, 0);
       copy.sort(comparator);
       return copy;
     };
@@ -248,8 +248,8 @@
 
     const cat = arr => {
       const r = [];
-      const push = ***REMOVED*** => {
-        r.push(***REMOVED***);
+      const push = x => {
+        r.push(x);
       };
       for (let i = 0; i < arr.length; i++) {
         arr[i].each(push);
@@ -284,14 +284,14 @@
 
     var global$1 = tinymce.util.Tools.resolve('tinymce.Env');
 
-    const convertTe***REMOVED***t = source => {
+    const convertText = source => {
       const isMac = global$1.os.isMacOS() || global$1.os.isiOS();
       const mac = {
-        alt: '&#***REMOVED***2325;',
-        ctrl: '&#***REMOVED***2303;',
-        shift: '&#***REMOVED***21E7;',
-        meta: '&#***REMOVED***2318;',
-        access: '&#***REMOVED***2303;&#***REMOVED***2325;'
+        alt: '&#x2325;',
+        ctrl: '&#x2303;',
+        shift: '&#x21E7;',
+        meta: '&#x2318;',
+        access: '&#x2303;&#x2325;'
       };
       const other = {
         meta: 'Ctrl ',
@@ -392,7 +392,7 @@
       },
       {
         shortcuts: ['Ctrl + F9'],
-        action: 'Focus to conte***REMOVED***tual toolbar'
+        action: 'Focus to contextual toolbar'
       },
       {
         shortcuts: ['Shift + Enter'],
@@ -418,10 +418,10 @@
 
     const tab$2 = () => {
       const shortcutList = map(shortcuts, shortcut => {
-        const shortcutTe***REMOVED***t = map(shortcut.shortcuts, convertTe***REMOVED***t).join(' or ');
+        const shortcutText = map(shortcut.shortcuts, convertText).join(' or ');
         return [
           shortcut.action,
-          shortcutTe***REMOVED***t
+          shortcutText
         ];
       });
       const tablePanel = {
@@ -549,8 +549,8 @@
         name: 'Table'
       },
       {
-        key: 'te***REMOVED***tcolor',
-        name: 'Te***REMOVED***t Color'
+        key: 'textcolor',
+        name: 'Text Color'
       },
       {
         key: 'visualblocks',
@@ -607,13 +607,13 @@
         type: 'premium'
       },
       {
-        key: 'e***REMOVED***portpdf',
-        name: 'E***REMOVED***port to PDF',
+        key: 'exportpdf',
+        name: 'Export to PDF',
         type: 'premium'
       },
       {
-        key: 'e***REMOVED***portword',
-        name: 'E***REMOVED***port to Word',
+        key: 'exportword',
+        name: 'Export to Word',
         type: 'premium'
       },
       {
@@ -735,9 +735,9 @@
         });
         const sortedPremiumPlugins = sort(map(premiumPlugins, p => p.name), (s1, s2) => s1.localeCompare(s2));
         const premiumPluginList = map(sortedPremiumPlugins, pluginName => `<li>${ pluginName }</li>`).join('');
-        return '<div>' + '<p><b>' + global$2.translate('Premium plugins:') + '</b></p>' + '<ul>' + premiumPluginList + '<li class="to***REMOVED***-help__more-link" ">' + '<a href="https://www.tiny.cloud/pricing/?utm_campaign=help_dialog_plugin_tab&utm_source=tiny&utm_medium=referral&utm_term=read_more&utm_content=premium_plugin_heading" rel="noopener" target="_blank"' + ' data-alloy-tabstop="true" tabinde***REMOVED***="-1">' + global$2.translate('Learn more...') + '</a></li>' + '</ul>' + '</div>';
+        return '<div>' + '<p><b>' + global$2.translate('Premium plugins:') + '</b></p>' + '<ul>' + premiumPluginList + '<li class="tox-help__more-link" ">' + '<a href="https://www.tiny.cloud/pricing/?utm_campaign=help_dialog_plugin_tab&utm_source=tiny&utm_medium=referral&utm_term=read_more&utm_content=premium_plugin_heading" rel="noopener" target="_blank"' + ' data-alloy-tabstop="true" tabindex="-1">' + global$2.translate('Learn more...') + '</a></li>' + '</ul>' + '</div>';
       };
-      const makeLink = p => `<a data-alloy-tabstop="true" tabinde***REMOVED***="-1" href="${ p.url }" target="_blank" rel="noopener">${ p.name }</a>`;
+      const makeLink = p => `<a data-alloy-tabstop="true" tabindex="-1" href="${ p.url }" target="_blank" rel="noopener">${ p.name }</a>`;
       const identifyUnknownPlugin = (editor, key) => {
         const getMetadata = editor.plugins[key].getMetadata;
         if (isFunction(getMetadata)) {
@@ -753,15 +753,15 @@
           };
         }
       };
-      const getPluginData = (editor, key) => find(urls, ***REMOVED*** => {
-        return ***REMOVED***.key === key;
+      const getPluginData = (editor, key) => find(urls, x => {
+        return x.key === key;
       }).fold(() => {
         return identifyUnknownPlugin(editor, key);
-      }, ***REMOVED*** => {
-        const name = ***REMOVED***.type === 'premium' ? `${ ***REMOVED***.name }*` : ***REMOVED***.name;
+      }, x => {
+        const name = x.type === 'premium' ? `${ x.name }*` : x.name;
         const html = makeLink({
           name,
-          url: `https://www.tiny.cloud/docs/tinymce/7/${ ***REMOVED***.slug }/`
+          url: `https://www.tiny.cloud/docs/tinymce/7/${ x.slug }/`
         });
         return {
           name,
@@ -811,9 +811,9 @@
     var global = tinymce.util.Tools.resolve('tinymce.EditorManager');
 
     const tab = () => {
-      const getVersion = (major, minor) => major.inde***REMOVED***Of('@') === 0 ? 'X.X.X' : major + '.' + minor;
+      const getVersion = (major, minor) => major.indexOf('@') === 0 ? 'X.X.X' : major + '.' + minor;
       const version = getVersion(global.majorVersion, global.minorVersion);
-      const changeLogLink = '<a data-alloy-tabstop="true" tabinde***REMOVED***="-1" href="https://www.tiny.cloud/docs/tinymce/7/changelog/?utm_campaign=help_dialog_version_tab&utm_source=tiny&utm_medium=referral" rel="noopener" target="_blank">TinyMCE ' + version + '</a>';
+      const changeLogLink = '<a data-alloy-tabstop="true" tabindex="-1" href="https://www.tiny.cloud/docs/tinymce/7/changelog/?utm_campaign=help_dialog_version_tab&utm_source=tiny&utm_medium=referral" rel="noopener" target="_blank">TinyMCE ' + version + '</a>';
       const htmlPanel = {
         type: 'htmlpanel',
         html: '<p>' + global$2.translate([
@@ -851,9 +851,9 @@
     };
     const getNamesFromTabs = tabs => {
       const names = keys(tabs);
-      const id***REMOVED*** = names.inde***REMOVED***Of('versions');
-      if (id***REMOVED*** !== -1) {
-        names.splice(id***REMOVED***, 1);
+      const idx = names.indexOf('versions');
+      if (idx !== -1) {
+        names.splice(idx, 1);
         names.push('versions');
       }
       return {
@@ -890,7 +890,7 @@
           buttons: [{
               type: 'cancel',
               name: 'close',
-              te***REMOVED***t: 'Close',
+              text: 'Close',
               primary: true
             }],
           initialData: {}

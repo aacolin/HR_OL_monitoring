@@ -1,4 +1,4 @@
-import type { Chart, Point, FontSpec, CanvasFontSpec, PointStyle, RenderTe***REMOVED***tOpts } from '../types/inde***REMOVED***.js';
+import type { Chart, Point, FontSpec, CanvasFontSpec, PointStyle, RenderTextOpts } from '../types/index.js';
 import type { TRBL, SplinePoint, RoundedRect, TRBLCorners } from '../types/geometric.js';
 /**
  * Converts the given font object into a CSS font string.
@@ -6,42 +6,42 @@ import type { TRBL, SplinePoint, RoundedRect, TRBLCorners } from '../types/geome
  * @return The CSS font string. See https://developer.mozilla.org/en-US/docs/Web/CSS/font
  * @private
  */
-e***REMOVED***port declare function toFontString(font: FontSpec): string;
+export declare function toFontString(font: FontSpec): string;
 /**
  * @private
  */
-e***REMOVED***port declare function _measureTe***REMOVED***t(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, data: Record<string, number>, gc: string[], longest: number, string: string): number;
+export declare function _measureText(ctx: CanvasRenderingContext2D, data: Record<string, number>, gc: string[], longest: number, string: string): number;
 type Thing = string | undefined | null;
 type Things = (Thing | Thing[])[];
 /**
  * @private
  */
-e***REMOVED***port declare function _longestTe***REMOVED***t(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, font: string, arrayOfThings: Things, cache?: {
+export declare function _longestText(ctx: CanvasRenderingContext2D, font: string, arrayOfThings: Things, cache?: {
     data?: Record<string, number>;
     garbageCollect?: string[];
     font?: string;
 }): number;
 /**
- * Returns the aligned pi***REMOVED***el value to avoid anti-aliasing blur
+ * Returns the aligned pixel value to avoid anti-aliasing blur
  * @param chart - The chart instance.
- * @param pi***REMOVED***el - A pi***REMOVED***el value.
+ * @param pixel - A pixel value.
  * @param width - The width of the element.
- * @returns The aligned pi***REMOVED***el value.
+ * @returns The aligned pixel value.
  * @private
  */
-e***REMOVED***port declare function _alignPi***REMOVED***el(chart: Chart, pi***REMOVED***el: number, width: number): number;
+export declare function _alignPixel(chart: Chart, pixel: number, width: number): number;
 /**
  * Clears the entire canvas.
  */
-e***REMOVED***port declare function clearCanvas(canvas?: HTMLCanvasElement, ct***REMOVED***?: CanvasRenderingConte***REMOVED***t2D): void;
-e***REMOVED***port interface DrawPointOptions {
+export declare function clearCanvas(canvas?: HTMLCanvasElement, ctx?: CanvasRenderingContext2D): void;
+export interface DrawPointOptions {
     pointStyle: PointStyle;
     rotation?: number;
     radius: number;
     borderWidth: number;
 }
-e***REMOVED***port declare function drawPoint(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, options: DrawPointOptions, ***REMOVED***: number, y: number): void;
-e***REMOVED***port declare function drawPointLegend(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, options: DrawPointOptions, ***REMOVED***: number, y: number, w: number): void;
+export declare function drawPoint(ctx: CanvasRenderingContext2D, options: DrawPointOptions, x: number, y: number): void;
+export declare function drawPointLegend(ctx: CanvasRenderingContext2D, options: DrawPointOptions, x: number, y: number, w: number): void;
 /**
  * Returns true if the point is inside the rectangle
  * @param point - The point to test
@@ -49,27 +49,27 @@ e***REMOVED***port declare function drawPointLegend(ct***REMOVED***: CanvasRende
  * @param margin - allowed margin
  * @private
  */
-e***REMOVED***port declare function _isPointInArea(point: Point, area: TRBL, margin?: number): boolean;
-e***REMOVED***port declare function clipArea(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, area: TRBL): void;
-e***REMOVED***port declare function unclipArea(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D): void;
+export declare function _isPointInArea(point: Point, area: TRBL, margin?: number): boolean;
+export declare function clipArea(ctx: CanvasRenderingContext2D, area: TRBL): void;
+export declare function unclipArea(ctx: CanvasRenderingContext2D): void;
 /**
  * @private
  */
-e***REMOVED***port declare function _steppedLineTo(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, previous: Point, target: Point, flip?: boolean, mode?: string): void;
+export declare function _steppedLineTo(ctx: CanvasRenderingContext2D, previous: Point, target: Point, flip?: boolean, mode?: string): void;
 /**
  * @private
  */
-e***REMOVED***port declare function _bezierCurveTo(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, previous: SplinePoint, target: SplinePoint, flip?: boolean): void;
+export declare function _bezierCurveTo(ctx: CanvasRenderingContext2D, previous: SplinePoint, target: SplinePoint, flip?: boolean): void;
 /**
- * Render te***REMOVED***t onto the canvas
+ * Render text onto the canvas
  */
-e***REMOVED***port declare function renderTe***REMOVED***t(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, te***REMOVED***t: string | string[], ***REMOVED***: number, y: number, font: CanvasFontSpec, opts?: RenderTe***REMOVED***tOpts): void;
+export declare function renderText(ctx: CanvasRenderingContext2D, text: string | string[], x: number, y: number, font: CanvasFontSpec, opts?: RenderTextOpts): void;
 /**
  * Add a path of a rectangle with rounded corners to the current sub-path
- * @param ct***REMOVED*** - Conte***REMOVED***t
+ * @param ctx - Context
  * @param rect - Bounding rect
  */
-e***REMOVED***port declare function addRoundedRectPath(ct***REMOVED***: CanvasRenderingConte***REMOVED***t2D, rect: RoundedRect & {
+export declare function addRoundedRectPath(ctx: CanvasRenderingContext2D, rect: RoundedRect & {
     radius: TRBLCorners;
 }): void;
-e***REMOVED***port {};
+export {};

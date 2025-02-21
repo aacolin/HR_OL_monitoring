@@ -1,25 +1,25 @@
 /**
  * @typedef { import('./core.controller.js').default } Chart
- * @typedef { import('../types/inde***REMOVED***.js').ChartEvent } ChartEvent
+ * @typedef { import('../types/index.js').ChartEvent } ChartEvent
  * @typedef { import('../plugins/plugin.tooltip.js').default } Tooltip
  */
 /**
  * @callback filterCallback
  * @param {{plugin: object, options: object}} value
- * @param {number} [inde***REMOVED***]
+ * @param {number} [index]
  * @param {array} [array]
  * @param {object} [thisArg]
  * @return {boolean}
  */
-e***REMOVED***port default class PluginService {
+export default class PluginService {
     _init: any[];
     /**
        * Calls enabled plugins for `chart` on the specified hook and with the given args.
-       * This method immediately returns as soon as a plugin e***REMOVED***plicitly returns false. The
+       * This method immediately returns as soon as a plugin explicitly returns false. The
        * returned value can be used, for instance, to interrupt the current action.
        * @param {Chart} chart - The chart instance for which plugins should be called.
        * @param {string} hook - The name of the plugin method to call (e.g. 'beforeUpdate').
-       * @param {object} [args] - E***REMOVED***tra arguments to apply to the hook call.
+       * @param {object} [args] - Extra arguments to apply to the hook call.
      * @param {filterCallback} [filter] - Filtering function for limiting which plugins are notified
        * @returns {boolean} false if any of the plugins return false, else returns true.
        */
@@ -52,10 +52,10 @@ e***REMOVED***port default class PluginService {
        */
     private _notifyStateChanges;
 }
-e***REMOVED***port type Chart = import('./core.controller.js').default;
-e***REMOVED***port type ChartEvent = import('../types/inde***REMOVED***.js').ChartEvent;
-e***REMOVED***port type Tooltip = any;
-e***REMOVED***port type filterCallback = (value: {
+export type Chart = import('./core.controller.js').default;
+export type ChartEvent = import('../types/index.js').ChartEvent;
+export type Tooltip = any;
+export type filterCallback = (value: {
     plugin: object;
     options: object;
-}, inde***REMOVED***?: number, array?: any[], thisArg?: object) => boolean;
+}, index?: number, array?: any[], thisArg?: object) => boolean;

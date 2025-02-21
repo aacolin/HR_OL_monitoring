@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Κυρ", "Δευ", "Τρι", "Τετ", "Πεμ", "Παρ", "Σαβ"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Λήψη SVG",
-      "e***REMOVED***portToPNG": "Λήψη PNG",
-      "e***REMOVED***portToCSV": "Λήψη CSV",
+      "exportToSVG": "Λήψη SVG",
+      "exportToPNG": "Λήψη PNG",
+      "exportToCSV": "Λήψη CSV",
       "menu": "Menu",
       "selection": "Επιλογή",
       "selectionZoom": "Μεγένθυση βάση επιλογής",

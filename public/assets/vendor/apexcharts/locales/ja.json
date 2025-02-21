@@ -40,9 +40,9 @@
     ],
     "shortDays": ["日", "月", "火", "水", "木", "金", "土"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "SVGダウンロード",
-      "e***REMOVED***portToPNG": "PNGダウンロード",
-      "e***REMOVED***portToCSV": "CSVダウンロード",
+      "exportToSVG": "SVGダウンロード",
+      "exportToPNG": "PNGダウンロード",
+      "exportToCSV": "CSVダウンロード",
       "menu": "メニュー",
       "selection": "選択",
       "selectionZoom": "選択ズーム",

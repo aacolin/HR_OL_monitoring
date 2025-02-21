@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.he_IL',
   '\n' +
   '<dl>\n' +
   '  <dt>התמקד בשורת התפריטים</dt>\n' +
-  '  <dd>Windows או Linu***REMOVED***:‏ Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows או Linux:‏ Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>העבר מיקוד לסרגל הכלים</dt>\n' +
-  '  <dd>Windows או Linu***REMOVED***:‏ Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows או Linux:‏ Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>העבר מיקוד לכותרת התחתונה</dt>\n' +
-  '  <dd>Windows או Linu***REMOVED***:‏ Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows או Linux:‏ Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>העבר מיקוד להודעה</dt>\n' +
-  '  <dd>Windows או Linu***REMOVED***:‏ Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows או Linux:‏ Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>העבר מיקוד לסרגל כלים הקשרי</dt>\n' +
-  '  <dd>Windows‏, Linu***REMOVED*** או macOS:‏ Ctrl+F9</dd>\n' +
+  '  <dd>Windows‏, Linux או macOS:‏ Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>הניווט יתחיל ברכיב הראשון במשך, שיודגש או שיהיה מתחתיו קו תחתון במקרה של הפריט הראשון\n' +

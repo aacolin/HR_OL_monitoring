@@ -9,7 +9,7 @@ import { Color } from '@kurkle/color';
 /**
  * @namespace Chart.helpers
  */ /**
- * An empty function that can be used, for e***REMOVED***ample, for optional callback.
+ * An empty function that can be used, for example, for optional callback.
  */ function noop() {
 /* noop */ }
 /**
@@ -40,7 +40,7 @@ import { Color } from '@kurkle/color';
     return false;
 }
 /**
- * Returns true if `value` is an object (e***REMOVED***cluding null), else returns false.
+ * Returns true if `value` is an object (excluding null), else returns false.
  * @param value - The value to test.
  * @since 2.7.0
  */ function isObject(value) {
@@ -113,7 +113,7 @@ function each(loopable, fn, thisArg, reverse) {
     for(i = 0, ilen = a0.length; i < ilen; ++i){
         v0 = a0[i];
         v1 = a1[i];
-        if (v0.datasetInde***REMOVED*** !== v1.datasetInde***REMOVED*** || v0.inde***REMOVED*** !== v1.inde***REMOVED***) {
+        if (v0.datasetIndex !== v1.datasetIndex || v0.index !== v1.index) {
             return false;
         }
     }
@@ -143,7 +143,7 @@ function isValidKey(key) {
         '__proto__',
         'prototype',
         'constructor'
-    ].inde***REMOVED***Of(key) === -1;
+    ].indexOf(key) === -1;
 }
 /**
  * The default merger when Chart.helpers.merge is called without merger option.
@@ -156,7 +156,7 @@ function isValidKey(key) {
     const tval = target[key];
     const sval = source[key];
     if (isObject(tval) && isObject(sval)) {
-        // eslint-disable-ne***REMOVED***t-line @typescript-eslint/no-use-before-define
+        // eslint-disable-next-line @typescript-eslint/no-use-before-define
         merge(tval, sval, options);
     } else {
         target[key] = clone(sval);
@@ -186,7 +186,7 @@ function merge(target, source, options) {
     return target;
 }
 function mergeIf(target, source) {
-    // eslint-disable-ne***REMOVED***t-line @typescript-eslint/no-use-before-define
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return merge(target, source, {
         merger: _mergerIf
     });
@@ -218,7 +218,7 @@ const keyResolvers = {
     // Chart.helpers.core resolveObjectKey should resolve empty key to root object
     '': (v)=>v,
     // default resolvers
-    ***REMOVED***: (o)=>o.***REMOVED***,
+    x: (o)=>o.x,
     y: (o)=>o.y
 };
 /**
@@ -277,7 +277,7 @@ const setsEqual = (a, b)=>{
  * @param e - The event
  * @private
  */ function _isClickEvent(e) {
-    return e.type === 'mouseup' || e.type === 'click' || e.type === 'conte***REMOVED***tmenu';
+    return e.type === 'mouseup' || e.type === 'click' || e.type === 'contextmenu';
 }
 
 /**
@@ -293,11 +293,11 @@ const QUARTER_PI = PI / 4;
 const TWO_THIRDS_PI = PI * 2 / 3;
 const log10 = Math.log10;
 const sign = Math.sign;
-function almostEquals(***REMOVED***, y, epsilon) {
-    return Math.abs(***REMOVED*** - y) < epsilon;
+function almostEquals(x, y, epsilon) {
+    return Math.abs(x - y) < epsilon;
 }
 /**
- * Implementation of the nice number algorithm used in determining where a***REMOVED***is labels will go
+ * Implementation of the nice number algorithm used in determining where axis labels will go
  */ function niceNum(range) {
     const roundedRange = Math.round(range);
     range = almostEquals(range, roundedRange, range / 1000) ? roundedRange : range;
@@ -328,19 +328,19 @@ function almostEquals(***REMOVED***, y, epsilon) {
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
-function almostWhole(***REMOVED***, epsilon) {
-    const rounded = Math.round(***REMOVED***);
-    return rounded - epsilon <= ***REMOVED*** && rounded + epsilon >= ***REMOVED***;
+function almostWhole(x, epsilon) {
+    const rounded = Math.round(x);
+    return rounded - epsilon <= x && rounded + epsilon >= x;
 }
 /**
  * @private
- */ function _setMinAndMa***REMOVED***ByKey(array, target, property) {
+ */ function _setMinAndMaxByKey(array, target, property) {
     let i, ilen, value;
     for(i = 0, ilen = array.length; i < ilen; i++){
         value = array[i][property];
         if (!isNaN(value)) {
             target.min = Math.min(target.min, value);
-            target.ma***REMOVED*** = Math.ma***REMOVED***(target.ma***REMOVED***, value);
+            target.max = Math.max(target.max, value);
         }
     }
 }
@@ -353,16 +353,16 @@ function toDegrees(radians) {
 /**
  * Returns the number of decimal places
  * i.e. the number of digits after the decimal point, of the value of this Number.
- * @param ***REMOVED*** - A number.
+ * @param x - A number.
  * @returns The number of decimal places.
  * @private
- */ function _decimalPlaces(***REMOVED***) {
-    if (!isNumberFinite(***REMOVED***)) {
+ */ function _decimalPlaces(x) {
+    if (!isNumberFinite(x)) {
         return;
     }
     let e = 1;
     let p = 0;
-    while(Math.round(***REMOVED*** * e) / e !== ***REMOVED***){
+    while(Math.round(x * e) / e !== x){
         e *= 10;
         p++;
     }
@@ -370,7 +370,7 @@ function toDegrees(radians) {
 }
 // Gets the angle from vertical upright to the point about a centre.
 function getAngleFromPoint(centrePoint, anglePoint) {
-    const distanceFromXCenter = anglePoint.***REMOVED*** - centrePoint.***REMOVED***;
+    const distanceFromXCenter = anglePoint.x - centrePoint.x;
     const distanceFromYCenter = anglePoint.y - centrePoint.y;
     const radialDistanceFromCenter = Math.sqrt(distanceFromXCenter * distanceFromXCenter + distanceFromYCenter * distanceFromYCenter);
     let angle = Math.atan2(distanceFromYCenter, distanceFromXCenter);
@@ -383,7 +383,7 @@ function getAngleFromPoint(centrePoint, anglePoint) {
     };
 }
 function distanceBetweenPoints(pt1, pt2) {
-    return Math.sqrt(Math.pow(pt2.***REMOVED*** - pt1.***REMOVED***, 2) + Math.pow(pt2.y - pt1.y, 2));
+    return Math.sqrt(Math.pow(pt2.x - pt1.x, 2) + Math.pow(pt2.y - pt1.y, 2));
 }
 /**
  * Shortest distance between angles, in either direction.
@@ -410,13 +410,13 @@ function distanceBetweenPoints(pt1, pt2) {
     return a === s || a === e || sameAngleIsFullCircle && s === e || angleToStart > angleToEnd && startToAngle < endToAngle;
 }
 /**
- * Limit `value` between `min` and `ma***REMOVED***`
+ * Limit `value` between `min` and `max`
  * @param value
  * @param min
- * @param ma***REMOVED***
+ * @param max
  * @private
- */ function _limitValue(value, min, ma***REMOVED***) {
-    return Math.ma***REMOVED***(min, Math.min(ma***REMOVED***, value));
+ */ function _limitValue(value, min, max) {
+    return Math.max(min, Math.min(max, value));
 }
 /**
  * @param {number} value
@@ -431,11 +431,11 @@ function distanceBetweenPoints(pt1, pt2) {
  * @param [epsilon]
  * @private
  */ function _isBetween(value, start, end, epsilon = 1e-6) {
-    return value >= Math.min(start, end) - epsilon && value <= Math.ma***REMOVED***(start, end) + epsilon;
+    return value >= Math.min(start, end) - epsilon && value <= Math.max(start, end) + epsilon;
 }
 
 function _lookup(table, value, cmp) {
-    cmp = cmp || ((inde***REMOVED***)=>table[inde***REMOVED***] < value);
+    cmp = cmp || ((index)=>table[index] < value);
     let hi = table.length - 1;
     let lo = 0;
     let mid;
@@ -457,32 +457,32 @@ function _lookup(table, value, cmp) {
  * @param table - the table search. must be sorted!
  * @param key - property name for the value in each entry
  * @param value - value to find
- * @param last - lookup last inde***REMOVED***
+ * @param last - lookup last index
  * @private
- */ const _lookupByKey = (table, key, value, last)=>_lookup(table, value, last ? (inde***REMOVED***)=>{
-        const ti = table[inde***REMOVED***][key];
-        return ti < value || ti === value && table[inde***REMOVED*** + 1][key] === value;
-    } : (inde***REMOVED***)=>table[inde***REMOVED***][key] < value);
+ */ const _lookupByKey = (table, key, value, last)=>_lookup(table, value, last ? (index)=>{
+        const ti = table[index][key];
+        return ti < value || ti === value && table[index + 1][key] === value;
+    } : (index)=>table[index][key] < value);
 /**
  * Reverse binary search
  * @param table - the table search. must be sorted!
  * @param key - property name for the value in each entry
  * @param value - value to find
  * @private
- */ const _rlookupByKey = (table, key, value)=>_lookup(table, value, (inde***REMOVED***)=>table[inde***REMOVED***][key] >= value);
+ */ const _rlookupByKey = (table, key, value)=>_lookup(table, value, (index)=>table[index][key] >= value);
 /**
- * Return subset of `values` between `min` and `ma***REMOVED***` inclusive.
+ * Return subset of `values` between `min` and `max` inclusive.
  * Values are assumed to be in sorted order.
  * @param values - sorted array of values
  * @param min - min value
- * @param ma***REMOVED*** - ma***REMOVED*** value
- */ function _filterBetween(values, min, ma***REMOVED***) {
+ * @param max - max value
+ */ function _filterBetween(values, min, max) {
     let start = 0;
     let end = values.length;
     while(start < end && values[start] < min){
         start++;
     }
-    while(end > start && values[end - 1] > ma***REMOVED***){
+    while(end > start && values[end - 1] > max){
         end--;
     }
     return start > 0 || end < values.length ? values.slice(start, end) : values;
@@ -532,9 +532,9 @@ function unlistenArrayEvents(array, listener) {
         return;
     }
     const listeners = stub.listeners;
-    const inde***REMOVED*** = listeners.inde***REMOVED***Of(listener);
-    if (inde***REMOVED*** !== -1) {
-        listeners.splice(inde***REMOVED***, 1);
+    const index = listeners.indexOf(listener);
+    if (index !== -1) {
+        listeners.splice(index, 1);
     }
     if (listeners.length > 0) {
         return;
@@ -554,8 +554,8 @@ function unlistenArrayEvents(array, listener) {
     return Array.from(set);
 }
 
-function fontString(pi***REMOVED***elSize, fontStyle, fontFamily) {
-    return fontStyle + ' ' + pi***REMOVED***elSize + 'p***REMOVED*** ' + fontFamily;
+function fontString(pixelSize, fontStyle, fontFamily) {
+    return fontStyle + ' ' + pixelSize + 'px ' + fontFamily;
 }
 /**
 * Request animation polyfill
@@ -610,7 +610,7 @@ function fontString(pi***REMOVED***elSize, fontStyle, fontFamily) {
 /**
  * Returns `left`, `right` or `(left + right) / 2` depending on `align`. Defaults to `left`
  * @private
- */ const _te***REMOVED***tX = (align, left, right, rtl)=>{
+ */ const _textX = (align, left, right, rtl)=>{
     const check = rtl ? 'left' : 'right';
     return align === check ? right : align === 'center' ? (left + right) / 2 : left;
 };
@@ -623,17 +623,17 @@ function fontString(pi***REMOVED***elSize, fontStyle, fontFamily) {
     let count = pointCount;
     if (meta._sorted) {
         const { iScale , _parsed  } = meta;
-        const a***REMOVED***is = iScale.a***REMOVED***is;
-        const { min , ma***REMOVED*** , minDefined , ma***REMOVED***Defined  } = iScale.getUserBounds();
+        const axis = iScale.axis;
+        const { min , max , minDefined , maxDefined  } = iScale.getUserBounds();
         if (minDefined) {
-            start = _limitValue(Math.min(// @ts-e***REMOVED***pect-error Need to type _parsed
-            _lookupByKey(_parsed, a***REMOVED***is, min).lo, // @ts-e***REMOVED***pect-error Need to fi***REMOVED*** types on _lookupByKey
-            animationsDisabled ? pointCount : _lookupByKey(points, a***REMOVED***is, iScale.getPi***REMOVED***elForValue(min)).lo), 0, pointCount - 1);
+            start = _limitValue(Math.min(// @ts-expect-error Need to type _parsed
+            _lookupByKey(_parsed, axis, min).lo, // @ts-expect-error Need to fix types on _lookupByKey
+            animationsDisabled ? pointCount : _lookupByKey(points, axis, iScale.getPixelForValue(min)).lo), 0, pointCount - 1);
         }
-        if (ma***REMOVED***Defined) {
-            count = _limitValue(Math.ma***REMOVED***(// @ts-e***REMOVED***pect-error Need to type _parsed
-            _lookupByKey(_parsed, iScale.a***REMOVED***is, ma***REMOVED***, true).hi + 1, // @ts-e***REMOVED***pect-error Need to fi***REMOVED*** types on _lookupByKey
-            animationsDisabled ? 0 : _lookupByKey(points, a***REMOVED***is, iScale.getPi***REMOVED***elForValue(ma***REMOVED***), true).hi + 1), start, pointCount) - start;
+        if (maxDefined) {
+            count = _limitValue(Math.max(// @ts-expect-error Need to type _parsed
+            _lookupByKey(_parsed, iScale.axis, max, true).hi + 1, // @ts-expect-error Need to fix types on _lookupByKey
+            animationsDisabled ? 0 : _lookupByKey(points, axis, iScale.getPixelForValue(max), true).hi + 1), start, pointCount) - start;
         } else {
             count = pointCount - start;
         }
@@ -649,18 +649,18 @@ function fontString(pi***REMOVED***elSize, fontStyle, fontFamily) {
  * @returns {boolean}
  * @private
  */ function _scaleRangesChanged(meta) {
-    const { ***REMOVED***Scale , yScale , _scaleRanges  } = meta;
+    const { xScale , yScale , _scaleRanges  } = meta;
     const newRanges = {
-        ***REMOVED***min: ***REMOVED***Scale.min,
-        ***REMOVED***ma***REMOVED***: ***REMOVED***Scale.ma***REMOVED***,
+        xmin: xScale.min,
+        xmax: xScale.max,
         ymin: yScale.min,
-        yma***REMOVED***: yScale.ma***REMOVED***
+        ymax: yScale.max
     };
     if (!_scaleRanges) {
         meta._scaleRanges = newRanges;
         return true;
     }
-    const changed = _scaleRanges.***REMOVED***min !== ***REMOVED***Scale.min || _scaleRanges.***REMOVED***ma***REMOVED*** !== ***REMOVED***Scale.ma***REMOVED*** || _scaleRanges.ymin !== yScale.min || _scaleRanges.yma***REMOVED*** !== yScale.ma***REMOVED***;
+    const changed = _scaleRanges.xmin !== xScale.min || _scaleRanges.xmax !== xScale.max || _scaleRanges.ymin !== yScale.min || _scaleRanges.ymax !== yScale.max;
     Object.assign(_scaleRanges, newRanges);
     return changed;
 }
@@ -689,9 +689,9 @@ const elasticOut = (t, s, p)=>Math.pow(2, -10 * t) * Math.sin((t - s) * TAU / p)
     easeInSine: (t)=>-Math.cos(t * HALF_PI) + 1,
     easeOutSine: (t)=>Math.sin(t * HALF_PI),
     easeInOutSine: (t)=>-0.5 * (Math.cos(PI * t) - 1),
-    easeInE***REMOVED***po: (t)=>t === 0 ? 0 : Math.pow(2, 10 * (t - 1)),
-    easeOutE***REMOVED***po: (t)=>t === 1 ? 1 : -Math.pow(2, -10 * t) + 1,
-    easeInOutE***REMOVED***po: (t)=>atEdge(t) ? t : t < 0.5 ? 0.5 * Math.pow(2, 10 * (t * 2 - 1)) : 0.5 * (-Math.pow(2, -10 * (t * 2 - 1)) + 2),
+    easeInExpo: (t)=>t === 0 ? 0 : Math.pow(2, 10 * (t - 1)),
+    easeOutExpo: (t)=>t === 1 ? 1 : -Math.pow(2, -10 * t) + 1,
+    easeInOutExpo: (t)=>atEdge(t) ? t : t < 0.5 ? 0.5 * Math.pow(2, 10 * (t * 2 - 1)) : 0.5 * (-Math.pow(2, -10 * (t * 2 - 1)) + 2),
     easeInCirc: (t)=>t >= 1 ? t : -(Math.sqrt(1 - t * t) - 1),
     easeOutCirc: (t)=>Math.sqrt(1 - (t -= 1) * t),
     easeInOutCirc: (t)=>(t /= 0.5) < 1 ? -0.5 * (Math.sqrt(1 - t * t) - 1) : 0.5 * (Math.sqrt(1 - (t -= 2) * t) + 1),
@@ -746,11 +746,11 @@ function color(value) {
     return isPatternOrGradient(value) ? value : new Color(value);
 }
 function getHoverColor(value) {
-    return isPatternOrGradient(value) ? value : new Color(value).saturate(0.5).darken(0.1).he***REMOVED***String();
+    return isPatternOrGradient(value) ? value : new Color(value).saturate(0.5).darken(0.1).hexString();
 }
 
 const numbers = [
-    '***REMOVED***',
+    'x',
     'y',
     'borderWidth',
     'radius',
@@ -774,7 +774,7 @@ function applyAnimationsDefaults(defaults) {
     });
     defaults.describe('animation', {
         _fallback: false,
-        _inde***REMOVED***able: false,
+        _indexable: false,
         _scriptable: (name)=>name !== 'onProgress' && name !== 'onComplete' && name !== 'fn'
     });
     defaults.set('animations', {
@@ -858,7 +858,7 @@ const formatters = {
  values (value) {
         return isArray(value) ?  value : '' + value;
     },
- numeric (tickValue, inde***REMOVED***, ticks) {
+ numeric (tickValue, index, ticks) {
         if (tickValue === 0) {
             return '0';
         }
@@ -866,27 +866,27 @@ const formatters = {
         let notation;
         let delta = tickValue;
         if (ticks.length > 1) {
-            const ma***REMOVED***Tick = Math.ma***REMOVED***(Math.abs(ticks[0].value), Math.abs(ticks[ticks.length - 1].value));
-            if (ma***REMOVED***Tick < 1e-4 || ma***REMOVED***Tick > 1e+15) {
+            const maxTick = Math.max(Math.abs(ticks[0].value), Math.abs(ticks[ticks.length - 1].value));
+            if (maxTick < 1e-4 || maxTick > 1e+15) {
                 notation = 'scientific';
             }
             delta = calculateDelta(tickValue, ticks);
         }
         const logDelta = log10(Math.abs(delta));
-        const numDecimal = isNaN(logDelta) ? 1 : Math.ma***REMOVED***(Math.min(-1 * Math.floor(logDelta), 20), 0);
+        const numDecimal = isNaN(logDelta) ? 1 : Math.max(Math.min(-1 * Math.floor(logDelta), 20), 0);
         const options = {
             notation,
             minimumFractionDigits: numDecimal,
-            ma***REMOVED***imumFractionDigits: numDecimal
+            maximumFractionDigits: numDecimal
         };
         Object.assign(options, this.options.ticks.format);
         return formatNumber(tickValue, locale, options);
     },
- logarithmic (tickValue, inde***REMOVED***, ticks) {
+ logarithmic (tickValue, index, ticks) {
         if (tickValue === 0) {
             return '0';
         }
-        const remain = ticks[inde***REMOVED***].significand || tickValue / Math.pow(10, Math.floor(log10(tickValue)));
+        const remain = ticks[index].significand || tickValue / Math.pow(10, Math.floor(log10(tickValue)));
         if ([
             1,
             2,
@@ -894,8 +894,8 @@ const formatters = {
             5,
             10,
             15
-        ].includes(remain) || inde***REMOVED*** > 0.8 * ticks.length) {
-            return formatters.numeric.call(this, tickValue, inde***REMOVED***, ticks);
+        ].includes(remain) || index > 0.8 * ticks.length) {
+            return formatters.numeric.call(this, tickValue, index, ticks);
         }
         return '';
     }
@@ -926,8 +926,8 @@ function applyScaleDefaults(defaults) {
             drawOnChartArea: true,
             drawTicks: true,
             tickLength: 8,
-            tickWidth: (_ct***REMOVED***, options)=>options.lineWidth,
-            tickColor: (_ct***REMOVED***, options)=>options.color,
+            tickWidth: (_ctx, options)=>options.lineWidth,
+            tickColor: (_ctx, options)=>options.color,
             offset: false
         },
         border: {
@@ -938,7 +938,7 @@ function applyScaleDefaults(defaults) {
         },
         title: {
             display: false,
-            te***REMOVED***t: '',
+            text: '',
             padding: {
                 top: 4,
                 bottom: 4
@@ -946,10 +946,10 @@ function applyScaleDefaults(defaults) {
         },
         ticks: {
             minRotation: 0,
-            ma***REMOVED***Rotation: 50,
+            maxRotation: 50,
             mirror: false,
-            te***REMOVED***tStrokeWidth: 0,
-            te***REMOVED***tStrokeColor: '',
+            textStrokeWidth: 0,
+            textStrokeColor: '',
             padding: 3,
             display: true,
             autoSkip: true,
@@ -972,14 +972,14 @@ function applyScaleDefaults(defaults) {
     defaults.describe('scale', {
         _fallback: false,
         _scriptable: (name)=>!name.startsWith('before') && !name.startsWith('after') && name !== 'callback' && name !== 'parser',
-        _inde***REMOVED***able: (name)=>name !== 'borderDash' && name !== 'tickBorderDash' && name !== 'dash'
+        _indexable: (name)=>name !== 'borderDash' && name !== 'tickBorderDash' && name !== 'dash'
     });
     defaults.describe('scales', {
         _fallback: 'scale'
     });
     defaults.describe('scale.ticks', {
         _scriptable: (name)=>name !== 'backdropPadding' && name !== 'callback',
-        _inde***REMOVED***able: (name)=>name !== 'backdropPadding'
+        _indexable: (name)=>name !== 'backdropPadding'
     });
 }
 
@@ -1009,7 +1009,7 @@ function set(root, scope, values) {
         this.borderColor = 'rgba(0,0,0,0.1)';
         this.color = '#666';
         this.datasets = {};
-        this.devicePi***REMOVED***elRatio = (conte***REMOVED***t)=>conte***REMOVED***t.chart.platform.getDevicePi***REMOVED***elRatio();
+        this.devicePixelRatio = (context)=>context.chart.platform.getDevicePixelRatio();
         this.elements = {};
         this.events = [
             'mousemove',
@@ -1026,10 +1026,10 @@ function set(root, scope, values) {
             weight: null
         };
         this.hover = {};
-        this.hoverBackgroundColor = (ct***REMOVED***, options)=>getHoverColor(options.backgroundColor);
-        this.hoverBorderColor = (ct***REMOVED***, options)=>getHoverColor(options.borderColor);
-        this.hoverColor = (ct***REMOVED***, options)=>getHoverColor(options.color);
-        this.inde***REMOVED***A***REMOVED***is = '***REMOVED***';
+        this.hoverBackgroundColor = (ctx, options)=>getHoverColor(options.backgroundColor);
+        this.hoverBorderColor = (ctx, options)=>getHoverColor(options.borderColor);
+        this.hoverColor = (ctx, options)=>getHoverColor(options.color);
+        this.indexAxis = 'x';
         this.interaction = {
             mode: 'nearest',
             intersect: true,
@@ -1091,13 +1091,13 @@ function set(root, scope, values) {
 }
 var defaults = /* #__PURE__ */ new Defaults({
     _scriptable: (name)=>!name.startsWith('on'),
-    _inde***REMOVED***able: (name)=>name !== 'events',
+    _indexable: (name)=>name !== 'events',
     hover: {
         _fallback: 'interaction'
     },
     interaction: {
         _scriptable: false,
-        _inde***REMOVED***able: false
+        _indexable: false
     }
 }, [
     applyAnimationsDefaults,
@@ -1114,25 +1114,25 @@ var defaults = /* #__PURE__ */ new Defaults({
     if (!font || isNullOrUndef(font.size) || isNullOrUndef(font.family)) {
         return null;
     }
-    return (font.style ? font.style + ' ' : '') + (font.weight ? font.weight + ' ' : '') + font.size + 'p***REMOVED*** ' + font.family;
+    return (font.style ? font.style + ' ' : '') + (font.weight ? font.weight + ' ' : '') + font.size + 'px ' + font.family;
 }
 /**
  * @private
- */ function _measureTe***REMOVED***t(ct***REMOVED***, data, gc, longest, string) {
-    let te***REMOVED***tWidth = data[string];
-    if (!te***REMOVED***tWidth) {
-        te***REMOVED***tWidth = data[string] = ct***REMOVED***.measureTe***REMOVED***t(string).width;
+ */ function _measureText(ctx, data, gc, longest, string) {
+    let textWidth = data[string];
+    if (!textWidth) {
+        textWidth = data[string] = ctx.measureText(string).width;
         gc.push(string);
     }
-    if (te***REMOVED***tWidth > longest) {
-        longest = te***REMOVED***tWidth;
+    if (textWidth > longest) {
+        longest = textWidth;
     }
     return longest;
 }
 /**
  * @private
- */ // eslint-disable-ne***REMOVED***t-line comple***REMOVED***ity
-function _longestTe***REMOVED***t(ct***REMOVED***, font, arrayOfThings, cache) {
+ */ // eslint-disable-next-line complexity
+function _longestText(ctx, font, arrayOfThings, cache) {
     cache = cache || {};
     let data = cache.data = cache.data || {};
     let gc = cache.garbageCollect = cache.garbageCollect || [];
@@ -1141,8 +1141,8 @@ function _longestTe***REMOVED***t(ct***REMOVED***, font, arrayOfThings, cache) {
         gc = cache.garbageCollect = [];
         cache.font = font;
     }
-    ct***REMOVED***.save();
-    ct***REMOVED***.font = font;
+    ctx.save();
+    ctx.font = font;
     let longest = 0;
     const ilen = arrayOfThings.length;
     let i, j, jlen, thing, nestedThing;
@@ -1150,7 +1150,7 @@ function _longestTe***REMOVED***t(ct***REMOVED***, font, arrayOfThings, cache) {
         thing = arrayOfThings[i];
         // Undefined strings and arrays should not be measured
         if (thing !== undefined && thing !== null && !isArray(thing)) {
-            longest = _measureTe***REMOVED***t(ct***REMOVED***, data, gc, longest, thing);
+            longest = _measureText(ctx, data, gc, longest, thing);
         } else if (isArray(thing)) {
             // if it is an array lets measure each element
             // to do maybe simplify this function a bit so we can do this more recursively?
@@ -1158,12 +1158,12 @@ function _longestTe***REMOVED***t(ct***REMOVED***, font, arrayOfThings, cache) {
                 nestedThing = thing[j];
                 // Undefined strings and arrays should not be measured
                 if (nestedThing !== undefined && nestedThing !== null && !isArray(nestedThing)) {
-                    longest = _measureTe***REMOVED***t(ct***REMOVED***, data, gc, longest, nestedThing);
+                    longest = _measureText(ctx, data, gc, longest, nestedThing);
                 }
             }
         }
     }
-    ct***REMOVED***.restore();
+    ctx.restore();
     const gcLen = gc.length / 2;
     if (gcLen > arrayOfThings.length) {
         for(i = 0; i < gcLen; i++){
@@ -1174,38 +1174,38 @@ function _longestTe***REMOVED***t(ct***REMOVED***, font, arrayOfThings, cache) {
     return longest;
 }
 /**
- * Returns the aligned pi***REMOVED***el value to avoid anti-aliasing blur
+ * Returns the aligned pixel value to avoid anti-aliasing blur
  * @param chart - The chart instance.
- * @param pi***REMOVED***el - A pi***REMOVED***el value.
+ * @param pixel - A pixel value.
  * @param width - The width of the element.
- * @returns The aligned pi***REMOVED***el value.
+ * @returns The aligned pixel value.
  * @private
- */ function _alignPi***REMOVED***el(chart, pi***REMOVED***el, width) {
-    const devicePi***REMOVED***elRatio = chart.currentDevicePi***REMOVED***elRatio;
-    const halfWidth = width !== 0 ? Math.ma***REMOVED***(width / 2, 0.5) : 0;
-    return Math.round((pi***REMOVED***el - halfWidth) * devicePi***REMOVED***elRatio) / devicePi***REMOVED***elRatio + halfWidth;
+ */ function _alignPixel(chart, pixel, width) {
+    const devicePixelRatio = chart.currentDevicePixelRatio;
+    const halfWidth = width !== 0 ? Math.max(width / 2, 0.5) : 0;
+    return Math.round((pixel - halfWidth) * devicePixelRatio) / devicePixelRatio + halfWidth;
 }
 /**
  * Clears the entire canvas.
- */ function clearCanvas(canvas, ct***REMOVED***) {
-    if (!ct***REMOVED*** && !canvas) {
+ */ function clearCanvas(canvas, ctx) {
+    if (!ctx && !canvas) {
         return;
     }
-    ct***REMOVED*** = ct***REMOVED*** || canvas.getConte***REMOVED***t('2d');
-    ct***REMOVED***.save();
+    ctx = ctx || canvas.getContext('2d');
+    ctx.save();
     // canvas.width and canvas.height do not consider the canvas transform,
     // while clearRect does
-    ct***REMOVED***.resetTransform();
-    ct***REMOVED***.clearRect(0, 0, canvas.width, canvas.height);
-    ct***REMOVED***.restore();
+    ctx.resetTransform();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.restore();
 }
-function drawPoint(ct***REMOVED***, options, ***REMOVED***, y) {
-    // eslint-disable-ne***REMOVED***t-line @typescript-eslint/no-use-before-define
-    drawPointLegend(ct***REMOVED***, options, ***REMOVED***, y, null);
+function drawPoint(ctx, options, x, y) {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    drawPointLegend(ctx, options, x, y, null);
 }
-// eslint-disable-ne***REMOVED***t-line comple***REMOVED***ity
-function drawPointLegend(ct***REMOVED***, options, ***REMOVED***, y, w) {
-    let type, ***REMOVED***Offset, yOffset, size, cornerRadius, width, ***REMOVED***OffsetW, yOffsetW;
+// eslint-disable-next-line complexity
+function drawPointLegend(ctx, options, x, y, w) {
+    let type, xOffset, yOffset, size, cornerRadius, width, xOffsetW, yOffsetW;
     const style = options.pointStyle;
     const rotation = options.rotation;
     const radius = options.radius;
@@ -1213,36 +1213,36 @@ function drawPointLegend(ct***REMOVED***, options, ***REMOVED***, y, w) {
     if (style && typeof style === 'object') {
         type = style.toString();
         if (type === '[object HTMLImageElement]' || type === '[object HTMLCanvasElement]') {
-            ct***REMOVED***.save();
-            ct***REMOVED***.translate(***REMOVED***, y);
-            ct***REMOVED***.rotate(rad);
-            ct***REMOVED***.drawImage(style, -style.width / 2, -style.height / 2, style.width, style.height);
-            ct***REMOVED***.restore();
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(rad);
+            ctx.drawImage(style, -style.width / 2, -style.height / 2, style.width, style.height);
+            ctx.restore();
             return;
         }
     }
     if (isNaN(radius) || radius <= 0) {
         return;
     }
-    ct***REMOVED***.beginPath();
+    ctx.beginPath();
     switch(style){
         // Default includes circle
         default:
             if (w) {
-                ct***REMOVED***.ellipse(***REMOVED***, y, w / 2, radius, 0, 0, TAU);
+                ctx.ellipse(x, y, w / 2, radius, 0, 0, TAU);
             } else {
-                ct***REMOVED***.arc(***REMOVED***, y, radius, 0, TAU);
+                ctx.arc(x, y, radius, 0, TAU);
             }
-            ct***REMOVED***.closePath();
+            ctx.closePath();
             break;
         case 'triangle':
             width = w ? w / 2 : radius;
-            ct***REMOVED***.moveTo(***REMOVED*** + Math.sin(rad) * width, y - Math.cos(rad) * radius);
+            ctx.moveTo(x + Math.sin(rad) * width, y - Math.cos(rad) * radius);
             rad += TWO_THIRDS_PI;
-            ct***REMOVED***.lineTo(***REMOVED*** + Math.sin(rad) * width, y - Math.cos(rad) * radius);
+            ctx.lineTo(x + Math.sin(rad) * width, y - Math.cos(rad) * radius);
             rad += TWO_THIRDS_PI;
-            ct***REMOVED***.lineTo(***REMOVED*** + Math.sin(rad) * width, y - Math.cos(rad) * radius);
-            ct***REMOVED***.closePath();
+            ctx.lineTo(x + Math.sin(rad) * width, y - Math.cos(rad) * radius);
+            ctx.closePath();
             break;
         case 'rectRounded':
             // NOTE: the rounded rect implementation changed to use `arc` instead of
@@ -1254,83 +1254,83 @@ function drawPointLegend(ct***REMOVED***, options, ***REMOVED***, y, w) {
             // https://github.com/chartjs/Chart.js/issues/5858
             cornerRadius = radius * 0.516;
             size = radius - cornerRadius;
-            ***REMOVED***Offset = Math.cos(rad + QUARTER_PI) * size;
-            ***REMOVED***OffsetW = Math.cos(rad + QUARTER_PI) * (w ? w / 2 - cornerRadius : size);
+            xOffset = Math.cos(rad + QUARTER_PI) * size;
+            xOffsetW = Math.cos(rad + QUARTER_PI) * (w ? w / 2 - cornerRadius : size);
             yOffset = Math.sin(rad + QUARTER_PI) * size;
             yOffsetW = Math.sin(rad + QUARTER_PI) * (w ? w / 2 - cornerRadius : size);
-            ct***REMOVED***.arc(***REMOVED*** - ***REMOVED***OffsetW, y - yOffset, cornerRadius, rad - PI, rad - HALF_PI);
-            ct***REMOVED***.arc(***REMOVED*** + yOffsetW, y - ***REMOVED***Offset, cornerRadius, rad - HALF_PI, rad);
-            ct***REMOVED***.arc(***REMOVED*** + ***REMOVED***OffsetW, y + yOffset, cornerRadius, rad, rad + HALF_PI);
-            ct***REMOVED***.arc(***REMOVED*** - yOffsetW, y + ***REMOVED***Offset, cornerRadius, rad + HALF_PI, rad + PI);
-            ct***REMOVED***.closePath();
+            ctx.arc(x - xOffsetW, y - yOffset, cornerRadius, rad - PI, rad - HALF_PI);
+            ctx.arc(x + yOffsetW, y - xOffset, cornerRadius, rad - HALF_PI, rad);
+            ctx.arc(x + xOffsetW, y + yOffset, cornerRadius, rad, rad + HALF_PI);
+            ctx.arc(x - yOffsetW, y + xOffset, cornerRadius, rad + HALF_PI, rad + PI);
+            ctx.closePath();
             break;
         case 'rect':
             if (!rotation) {
                 size = Math.SQRT1_2 * radius;
                 width = w ? w / 2 : size;
-                ct***REMOVED***.rect(***REMOVED*** - width, y - size, 2 * width, 2 * size);
+                ctx.rect(x - width, y - size, 2 * width, 2 * size);
                 break;
             }
             rad += QUARTER_PI;
         /* falls through */ case 'rectRot':
-            ***REMOVED***OffsetW = Math.cos(rad) * (w ? w / 2 : radius);
-            ***REMOVED***Offset = Math.cos(rad) * radius;
+            xOffsetW = Math.cos(rad) * (w ? w / 2 : radius);
+            xOffset = Math.cos(rad) * radius;
             yOffset = Math.sin(rad) * radius;
             yOffsetW = Math.sin(rad) * (w ? w / 2 : radius);
-            ct***REMOVED***.moveTo(***REMOVED*** - ***REMOVED***OffsetW, y - yOffset);
-            ct***REMOVED***.lineTo(***REMOVED*** + yOffsetW, y - ***REMOVED***Offset);
-            ct***REMOVED***.lineTo(***REMOVED*** + ***REMOVED***OffsetW, y + yOffset);
-            ct***REMOVED***.lineTo(***REMOVED*** - yOffsetW, y + ***REMOVED***Offset);
-            ct***REMOVED***.closePath();
+            ctx.moveTo(x - xOffsetW, y - yOffset);
+            ctx.lineTo(x + yOffsetW, y - xOffset);
+            ctx.lineTo(x + xOffsetW, y + yOffset);
+            ctx.lineTo(x - yOffsetW, y + xOffset);
+            ctx.closePath();
             break;
         case 'crossRot':
             rad += QUARTER_PI;
         /* falls through */ case 'cross':
-            ***REMOVED***OffsetW = Math.cos(rad) * (w ? w / 2 : radius);
-            ***REMOVED***Offset = Math.cos(rad) * radius;
+            xOffsetW = Math.cos(rad) * (w ? w / 2 : radius);
+            xOffset = Math.cos(rad) * radius;
             yOffset = Math.sin(rad) * radius;
             yOffsetW = Math.sin(rad) * (w ? w / 2 : radius);
-            ct***REMOVED***.moveTo(***REMOVED*** - ***REMOVED***OffsetW, y - yOffset);
-            ct***REMOVED***.lineTo(***REMOVED*** + ***REMOVED***OffsetW, y + yOffset);
-            ct***REMOVED***.moveTo(***REMOVED*** + yOffsetW, y - ***REMOVED***Offset);
-            ct***REMOVED***.lineTo(***REMOVED*** - yOffsetW, y + ***REMOVED***Offset);
+            ctx.moveTo(x - xOffsetW, y - yOffset);
+            ctx.lineTo(x + xOffsetW, y + yOffset);
+            ctx.moveTo(x + yOffsetW, y - xOffset);
+            ctx.lineTo(x - yOffsetW, y + xOffset);
             break;
         case 'star':
-            ***REMOVED***OffsetW = Math.cos(rad) * (w ? w / 2 : radius);
-            ***REMOVED***Offset = Math.cos(rad) * radius;
+            xOffsetW = Math.cos(rad) * (w ? w / 2 : radius);
+            xOffset = Math.cos(rad) * radius;
             yOffset = Math.sin(rad) * radius;
             yOffsetW = Math.sin(rad) * (w ? w / 2 : radius);
-            ct***REMOVED***.moveTo(***REMOVED*** - ***REMOVED***OffsetW, y - yOffset);
-            ct***REMOVED***.lineTo(***REMOVED*** + ***REMOVED***OffsetW, y + yOffset);
-            ct***REMOVED***.moveTo(***REMOVED*** + yOffsetW, y - ***REMOVED***Offset);
-            ct***REMOVED***.lineTo(***REMOVED*** - yOffsetW, y + ***REMOVED***Offset);
+            ctx.moveTo(x - xOffsetW, y - yOffset);
+            ctx.lineTo(x + xOffsetW, y + yOffset);
+            ctx.moveTo(x + yOffsetW, y - xOffset);
+            ctx.lineTo(x - yOffsetW, y + xOffset);
             rad += QUARTER_PI;
-            ***REMOVED***OffsetW = Math.cos(rad) * (w ? w / 2 : radius);
-            ***REMOVED***Offset = Math.cos(rad) * radius;
+            xOffsetW = Math.cos(rad) * (w ? w / 2 : radius);
+            xOffset = Math.cos(rad) * radius;
             yOffset = Math.sin(rad) * radius;
             yOffsetW = Math.sin(rad) * (w ? w / 2 : radius);
-            ct***REMOVED***.moveTo(***REMOVED*** - ***REMOVED***OffsetW, y - yOffset);
-            ct***REMOVED***.lineTo(***REMOVED*** + ***REMOVED***OffsetW, y + yOffset);
-            ct***REMOVED***.moveTo(***REMOVED*** + yOffsetW, y - ***REMOVED***Offset);
-            ct***REMOVED***.lineTo(***REMOVED*** - yOffsetW, y + ***REMOVED***Offset);
+            ctx.moveTo(x - xOffsetW, y - yOffset);
+            ctx.lineTo(x + xOffsetW, y + yOffset);
+            ctx.moveTo(x + yOffsetW, y - xOffset);
+            ctx.lineTo(x - yOffsetW, y + xOffset);
             break;
         case 'line':
-            ***REMOVED***Offset = w ? w / 2 : Math.cos(rad) * radius;
+            xOffset = w ? w / 2 : Math.cos(rad) * radius;
             yOffset = Math.sin(rad) * radius;
-            ct***REMOVED***.moveTo(***REMOVED*** - ***REMOVED***Offset, y - yOffset);
-            ct***REMOVED***.lineTo(***REMOVED*** + ***REMOVED***Offset, y + yOffset);
+            ctx.moveTo(x - xOffset, y - yOffset);
+            ctx.lineTo(x + xOffset, y + yOffset);
             break;
         case 'dash':
-            ct***REMOVED***.moveTo(***REMOVED***, y);
-            ct***REMOVED***.lineTo(***REMOVED*** + Math.cos(rad) * (w ? w / 2 : radius), y + Math.sin(rad) * radius);
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + Math.cos(rad) * (w ? w / 2 : radius), y + Math.sin(rad) * radius);
             break;
         case false:
-            ct***REMOVED***.closePath();
+            ctx.closePath();
             break;
     }
-    ct***REMOVED***.fill();
+    ctx.fill();
     if (options.borderWidth > 0) {
-        ct***REMOVED***.stroke();
+        ctx.stroke();
     }
 }
 /**
@@ -1341,152 +1341,152 @@ function drawPointLegend(ct***REMOVED***, options, ***REMOVED***, y, w) {
  * @private
  */ function _isPointInArea(point, area, margin) {
     margin = margin || 0.5; // margin - default is to match rounded decimals
-    return !area || point && point.***REMOVED*** > area.left - margin && point.***REMOVED*** < area.right + margin && point.y > area.top - margin && point.y < area.bottom + margin;
+    return !area || point && point.x > area.left - margin && point.x < area.right + margin && point.y > area.top - margin && point.y < area.bottom + margin;
 }
-function clipArea(ct***REMOVED***, area) {
-    ct***REMOVED***.save();
-    ct***REMOVED***.beginPath();
-    ct***REMOVED***.rect(area.left, area.top, area.right - area.left, area.bottom - area.top);
-    ct***REMOVED***.clip();
+function clipArea(ctx, area) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(area.left, area.top, area.right - area.left, area.bottom - area.top);
+    ctx.clip();
 }
-function unclipArea(ct***REMOVED***) {
-    ct***REMOVED***.restore();
+function unclipArea(ctx) {
+    ctx.restore();
 }
 /**
  * @private
- */ function _steppedLineTo(ct***REMOVED***, previous, target, flip, mode) {
+ */ function _steppedLineTo(ctx, previous, target, flip, mode) {
     if (!previous) {
-        return ct***REMOVED***.lineTo(target.***REMOVED***, target.y);
+        return ctx.lineTo(target.x, target.y);
     }
     if (mode === 'middle') {
-        const midpoint = (previous.***REMOVED*** + target.***REMOVED***) / 2.0;
-        ct***REMOVED***.lineTo(midpoint, previous.y);
-        ct***REMOVED***.lineTo(midpoint, target.y);
+        const midpoint = (previous.x + target.x) / 2.0;
+        ctx.lineTo(midpoint, previous.y);
+        ctx.lineTo(midpoint, target.y);
     } else if (mode === 'after' !== !!flip) {
-        ct***REMOVED***.lineTo(previous.***REMOVED***, target.y);
+        ctx.lineTo(previous.x, target.y);
     } else {
-        ct***REMOVED***.lineTo(target.***REMOVED***, previous.y);
+        ctx.lineTo(target.x, previous.y);
     }
-    ct***REMOVED***.lineTo(target.***REMOVED***, target.y);
+    ctx.lineTo(target.x, target.y);
 }
 /**
  * @private
- */ function _bezierCurveTo(ct***REMOVED***, previous, target, flip) {
+ */ function _bezierCurveTo(ctx, previous, target, flip) {
     if (!previous) {
-        return ct***REMOVED***.lineTo(target.***REMOVED***, target.y);
+        return ctx.lineTo(target.x, target.y);
     }
-    ct***REMOVED***.bezierCurveTo(flip ? previous.cp1***REMOVED*** : previous.cp2***REMOVED***, flip ? previous.cp1y : previous.cp2y, flip ? target.cp2***REMOVED*** : target.cp1***REMOVED***, flip ? target.cp2y : target.cp1y, target.***REMOVED***, target.y);
+    ctx.bezierCurveTo(flip ? previous.cp1x : previous.cp2x, flip ? previous.cp1y : previous.cp2y, flip ? target.cp2x : target.cp1x, flip ? target.cp2y : target.cp1y, target.x, target.y);
 }
-function setRenderOpts(ct***REMOVED***, opts) {
+function setRenderOpts(ctx, opts) {
     if (opts.translation) {
-        ct***REMOVED***.translate(opts.translation[0], opts.translation[1]);
+        ctx.translate(opts.translation[0], opts.translation[1]);
     }
     if (!isNullOrUndef(opts.rotation)) {
-        ct***REMOVED***.rotate(opts.rotation);
+        ctx.rotate(opts.rotation);
     }
     if (opts.color) {
-        ct***REMOVED***.fillStyle = opts.color;
+        ctx.fillStyle = opts.color;
     }
-    if (opts.te***REMOVED***tAlign) {
-        ct***REMOVED***.te***REMOVED***tAlign = opts.te***REMOVED***tAlign;
+    if (opts.textAlign) {
+        ctx.textAlign = opts.textAlign;
     }
-    if (opts.te***REMOVED***tBaseline) {
-        ct***REMOVED***.te***REMOVED***tBaseline = opts.te***REMOVED***tBaseline;
+    if (opts.textBaseline) {
+        ctx.textBaseline = opts.textBaseline;
     }
 }
-function decorateTe***REMOVED***t(ct***REMOVED***, ***REMOVED***, y, line, opts) {
+function decorateText(ctx, x, y, line, opts) {
     if (opts.strikethrough || opts.underline) {
         /**
      * Now that IE11 support has been dropped, we can use more
-     * of the Te***REMOVED***tMetrics object. The actual bounding bo***REMOVED***es
-     * are unflagged in Chrome, Firefo***REMOVED***, Edge, and Safari so they
+     * of the TextMetrics object. The actual bounding boxes
+     * are unflagged in Chrome, Firefox, Edge, and Safari so they
      * can be safely used.
-     * See https://developer.mozilla.org/en-US/docs/Web/API/Te***REMOVED***tMetrics#Browser_compatibility
-     */ const metrics = ct***REMOVED***.measureTe***REMOVED***t(line);
-        const left = ***REMOVED*** - metrics.actualBoundingBo***REMOVED***Left;
-        const right = ***REMOVED*** + metrics.actualBoundingBo***REMOVED***Right;
-        const top = y - metrics.actualBoundingBo***REMOVED***Ascent;
-        const bottom = y + metrics.actualBoundingBo***REMOVED***Descent;
+     * See https://developer.mozilla.org/en-US/docs/Web/API/TextMetrics#Browser_compatibility
+     */ const metrics = ctx.measureText(line);
+        const left = x - metrics.actualBoundingBoxLeft;
+        const right = x + metrics.actualBoundingBoxRight;
+        const top = y - metrics.actualBoundingBoxAscent;
+        const bottom = y + metrics.actualBoundingBoxDescent;
         const yDecoration = opts.strikethrough ? (top + bottom) / 2 : bottom;
-        ct***REMOVED***.strokeStyle = ct***REMOVED***.fillStyle;
-        ct***REMOVED***.beginPath();
-        ct***REMOVED***.lineWidth = opts.decorationWidth || 2;
-        ct***REMOVED***.moveTo(left, yDecoration);
-        ct***REMOVED***.lineTo(right, yDecoration);
-        ct***REMOVED***.stroke();
+        ctx.strokeStyle = ctx.fillStyle;
+        ctx.beginPath();
+        ctx.lineWidth = opts.decorationWidth || 2;
+        ctx.moveTo(left, yDecoration);
+        ctx.lineTo(right, yDecoration);
+        ctx.stroke();
     }
 }
-function drawBackdrop(ct***REMOVED***, opts) {
-    const oldColor = ct***REMOVED***.fillStyle;
-    ct***REMOVED***.fillStyle = opts.color;
-    ct***REMOVED***.fillRect(opts.left, opts.top, opts.width, opts.height);
-    ct***REMOVED***.fillStyle = oldColor;
+function drawBackdrop(ctx, opts) {
+    const oldColor = ctx.fillStyle;
+    ctx.fillStyle = opts.color;
+    ctx.fillRect(opts.left, opts.top, opts.width, opts.height);
+    ctx.fillStyle = oldColor;
 }
 /**
- * Render te***REMOVED***t onto the canvas
- */ function renderTe***REMOVED***t(ct***REMOVED***, te***REMOVED***t, ***REMOVED***, y, font, opts = {}) {
-    const lines = isArray(te***REMOVED***t) ? te***REMOVED***t : [
-        te***REMOVED***t
+ * Render text onto the canvas
+ */ function renderText(ctx, text, x, y, font, opts = {}) {
+    const lines = isArray(text) ? text : [
+        text
     ];
     const stroke = opts.strokeWidth > 0 && opts.strokeColor !== '';
     let i, line;
-    ct***REMOVED***.save();
-    ct***REMOVED***.font = font.string;
-    setRenderOpts(ct***REMOVED***, opts);
+    ctx.save();
+    ctx.font = font.string;
+    setRenderOpts(ctx, opts);
     for(i = 0; i < lines.length; ++i){
         line = lines[i];
         if (opts.backdrop) {
-            drawBackdrop(ct***REMOVED***, opts.backdrop);
+            drawBackdrop(ctx, opts.backdrop);
         }
         if (stroke) {
             if (opts.strokeColor) {
-                ct***REMOVED***.strokeStyle = opts.strokeColor;
+                ctx.strokeStyle = opts.strokeColor;
             }
             if (!isNullOrUndef(opts.strokeWidth)) {
-                ct***REMOVED***.lineWidth = opts.strokeWidth;
+                ctx.lineWidth = opts.strokeWidth;
             }
-            ct***REMOVED***.strokeTe***REMOVED***t(line, ***REMOVED***, y, opts.ma***REMOVED***Width);
+            ctx.strokeText(line, x, y, opts.maxWidth);
         }
-        ct***REMOVED***.fillTe***REMOVED***t(line, ***REMOVED***, y, opts.ma***REMOVED***Width);
-        decorateTe***REMOVED***t(ct***REMOVED***, ***REMOVED***, y, line, opts);
+        ctx.fillText(line, x, y, opts.maxWidth);
+        decorateText(ctx, x, y, line, opts);
         y += Number(font.lineHeight);
     }
-    ct***REMOVED***.restore();
+    ctx.restore();
 }
 /**
  * Add a path of a rectangle with rounded corners to the current sub-path
- * @param ct***REMOVED*** - Conte***REMOVED***t
+ * @param ctx - Context
  * @param rect - Bounding rect
- */ function addRoundedRectPath(ct***REMOVED***, rect) {
-    const { ***REMOVED*** , y , w , h , radius  } = rect;
+ */ function addRoundedRectPath(ctx, rect) {
+    const { x , y , w , h , radius  } = rect;
     // top left arc
-    ct***REMOVED***.arc(***REMOVED*** + radius.topLeft, y + radius.topLeft, radius.topLeft, 1.5 * PI, PI, true);
+    ctx.arc(x + radius.topLeft, y + radius.topLeft, radius.topLeft, 1.5 * PI, PI, true);
     // line from top left to bottom left
-    ct***REMOVED***.lineTo(***REMOVED***, y + h - radius.bottomLeft);
+    ctx.lineTo(x, y + h - radius.bottomLeft);
     // bottom left arc
-    ct***REMOVED***.arc(***REMOVED*** + radius.bottomLeft, y + h - radius.bottomLeft, radius.bottomLeft, PI, HALF_PI, true);
+    ctx.arc(x + radius.bottomLeft, y + h - radius.bottomLeft, radius.bottomLeft, PI, HALF_PI, true);
     // line from bottom left to bottom right
-    ct***REMOVED***.lineTo(***REMOVED*** + w - radius.bottomRight, y + h);
+    ctx.lineTo(x + w - radius.bottomRight, y + h);
     // bottom right arc
-    ct***REMOVED***.arc(***REMOVED*** + w - radius.bottomRight, y + h - radius.bottomRight, radius.bottomRight, HALF_PI, 0, true);
+    ctx.arc(x + w - radius.bottomRight, y + h - radius.bottomRight, radius.bottomRight, HALF_PI, 0, true);
     // line from bottom right to top right
-    ct***REMOVED***.lineTo(***REMOVED*** + w, y + radius.topRight);
+    ctx.lineTo(x + w, y + radius.topRight);
     // top right arc
-    ct***REMOVED***.arc(***REMOVED*** + w - radius.topRight, y + radius.topRight, radius.topRight, 0, -HALF_PI, true);
+    ctx.arc(x + w - radius.topRight, y + radius.topRight, radius.topRight, 0, -HALF_PI, true);
     // line from top right to top left
-    ct***REMOVED***.lineTo(***REMOVED*** + radius.topLeft, y);
+    ctx.lineTo(x + radius.topLeft, y);
 }
 
-const LINE_HEIGHT = /^(normal|(\d+(?:\.\d+)?)(p***REMOVED***|em|%)?)$/;
+const LINE_HEIGHT = /^(normal|(\d+(?:\.\d+)?)(px|em|%)?)$/;
 const FONT_STYLE = /^(normal|italic|initial|inherit|unset|(oblique( -?[0-9]?[0-9]deg)?))$/;
 /**
  * @alias Chart.helpers.options
  * @namespace
  */ /**
- * Converts the given line height `value` in pi***REMOVED***els for a specific font `size`.
- * @param value - The lineHeight to parse (eg. 1.6, '14p***REMOVED***', '75%', '1.6em').
- * @param size - The font size (in pi***REMOVED***els) used to resolve relative `value`.
- * @returns The effective line height in pi***REMOVED***els (size * 1.2 if value is invalid).
+ * Converts the given line height `value` in pixels for a specific font `size`.
+ * @param value - The lineHeight to parse (eg. 1.6, '14px', '75%', '1.6em').
+ * @param size - The font size (in pixels) used to resolve relative `value`.
+ * @returns The effective line height in pixels (size * 1.2 if value is invalid).
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/line-height
  * @since 2.7.0
  */ function toLineHeight(value, size) {
@@ -1496,7 +1496,7 @@ const FONT_STYLE = /^(normal|italic|initial|inherit|unset|(oblique( -?[0-9]?[0-9
     }
     value = +matches[2];
     switch(matches[3]){
-        case 'p***REMOVED***':
+        case 'px':
             return value;
         case '%':
             value /= 100;
@@ -1519,15 +1519,15 @@ function _readValueToProps(value, props) {
  * Converts the given value into a TRBL object.
  * @param value - If a number, set the value to all TRBL component,
  *  else, if an object, use defined properties and sets undefined ones to 0.
- *  ***REMOVED*** / y are shorthands for same value for left/right and top/bottom.
+ *  x / y are shorthands for same value for left/right and top/bottom.
  * @returns The padding values (top, right, bottom, left)
  * @since 3.0.0
  */ function toTRBL(value) {
     return _readValueToProps(value, {
         top: 'y',
-        right: '***REMOVED***',
+        right: 'x',
         bottom: 'y',
-        left: '***REMOVED***'
+        left: 'x'
     });
 }
 /**
@@ -1548,7 +1548,7 @@ function _readValueToProps(value, props) {
  * Converts the given value into a padding object with pre-computed width/height.
  * @param value - If a number, set the value to all TRBL component,
  *  else, if an object, use defined properties and sets undefined ones to 0.
- *  ***REMOVED*** / y are shorthands for same value for left/right and top/bottom.
+ *  x / y are shorthands for same value for left/right and top/bottom.
  * @returns The padding values (top, right, bottom, left, width, height)
  * @since 2.7.0
  */ function toPadding(value) {
@@ -1589,14 +1589,14 @@ function _readValueToProps(value, props) {
 /**
  * Evaluates the given `inputs` sequentially and returns the first defined value.
  * @param inputs - An array of values, falling back to the last value.
- * @param conte***REMOVED***t - If defined and the current value is a function, the value
- * is called with `conte***REMOVED***t` as first argument and the result becomes the new input.
- * @param inde***REMOVED*** - If defined and the current value is an array, the value
- * at `inde***REMOVED***` become the new input.
+ * @param context - If defined and the current value is a function, the value
+ * is called with `context` as first argument and the result becomes the new input.
+ * @param index - If defined and the current value is an array, the value
+ * at `index` become the new input.
  * @param info - object to return information about resolution in
  * @param info.cacheable - Will be set to `false` if option is not cacheable.
  * @since 2.7.0
- */ function resolve(inputs, conte***REMOVED***t, inde***REMOVED***, info) {
+ */ function resolve(inputs, context, index, info) {
     let cacheable = true;
     let i, ilen, value;
     for(i = 0, ilen = inputs.length; i < ilen; ++i){
@@ -1604,12 +1604,12 @@ function _readValueToProps(value, props) {
         if (value === undefined) {
             continue;
         }
-        if (conte***REMOVED***t !== undefined && typeof value === 'function') {
-            value = value(conte***REMOVED***t);
+        if (context !== undefined && typeof value === 'function') {
+            value = value(context);
             cacheable = false;
         }
-        if (inde***REMOVED*** !== undefined && isArray(value)) {
-            value = value[inde***REMOVED*** % value.length];
+        if (index !== undefined && isArray(value)) {
+            value = value[index % value.length];
             cacheable = false;
         }
         if (value !== undefined) {
@@ -1621,33 +1621,33 @@ function _readValueToProps(value, props) {
     }
 }
 /**
- * @param minma***REMOVED***
+ * @param minmax
  * @param grace
  * @param beginAtZero
  * @private
- */ function _addGrace(minma***REMOVED***, grace, beginAtZero) {
-    const { min , ma***REMOVED***  } = minma***REMOVED***;
-    const change = toDimension(grace, (ma***REMOVED*** - min) / 2);
+ */ function _addGrace(minmax, grace, beginAtZero) {
+    const { min , max  } = minmax;
+    const change = toDimension(grace, (max - min) / 2);
     const keepZero = (value, add)=>beginAtZero && value === 0 ? 0 : value + add;
     return {
         min: keepZero(min, -Math.abs(change)),
-        ma***REMOVED***: keepZero(ma***REMOVED***, change)
+        max: keepZero(max, change)
     };
 }
-function createConte***REMOVED***t(parentConte***REMOVED***t, conte***REMOVED***t) {
-    return Object.assign(Object.create(parentConte***REMOVED***t), conte***REMOVED***t);
+function createContext(parentContext, context) {
+    return Object.assign(Object.create(parentContext), context);
 }
 
 /**
- * Creates a Pro***REMOVED***y for resolving raw values for options.
+ * Creates a Proxy for resolving raw values for options.
  * @param scopes - The option scopes to look for values, in resolution order
- * @param prefi***REMOVED***es - The prefi***REMOVED***es for values, in resolution order.
+ * @param prefixes - The prefixes for values, in resolution order.
  * @param rootScopes - The root option scopes
  * @param fallback - Parent scopes fallback
  * @param getTarget - callback for getting the target for changed values
- * @returns Pro***REMOVED***y
+ * @returns Proxy
  * @private
- */ function _createResolver(scopes, prefi***REMOVED***es = [
+ */ function _createResolver(scopes, prefixes = [
     ''
 ], rootScopes, fallback, getTarget = ()=>scopes[0]) {
     const finalRootScopes = rootScopes || scopes;
@@ -1664,9 +1664,9 @@ function createConte***REMOVED***t(parentConte***REMOVED***t, conte***REMOVED***
         override: (scope)=>_createResolver([
                 scope,
                 ...scopes
-            ], prefi***REMOVED***es, finalRootScopes, fallback)
+            ], prefixes, finalRootScopes, fallback)
     };
-    return new Pro***REMOVED***y(cache, {
+    return new Proxy(cache, {
         /**
      * A trap for the delete operator.
      */ deleteProperty (target, prop) {
@@ -1678,7 +1678,7 @@ function createConte***REMOVED***t(parentConte***REMOVED***t, conte***REMOVED***
         /**
      * A trap for getting property values.
      */ get (target, prop) {
-            return _cached(target, prop, ()=>_resolveWithPrefi***REMOVED***es(prop, prefi***REMOVED***es, scopes, target));
+            return _cached(target, prop, ()=>_resolveWithPrefixes(prop, prefixes, scopes, target));
         },
         /**
      * A trap for Object.getOwnPropertyDescriptor.
@@ -1712,64 +1712,64 @@ function createConte***REMOVED***t(parentConte***REMOVED***t, conte***REMOVED***
     });
 }
 /**
- * Returns an Pro***REMOVED***y for resolving option values with conte***REMOVED***t.
- * @param pro***REMOVED***y - The Pro***REMOVED***y returned by `_createResolver`
- * @param conte***REMOVED***t - Conte***REMOVED***t object for scriptable/inde***REMOVED***able options
- * @param subPro***REMOVED***y - The pro***REMOVED***y provided for scriptable options
+ * Returns an Proxy for resolving option values with context.
+ * @param proxy - The Proxy returned by `_createResolver`
+ * @param context - Context object for scriptable/indexable options
+ * @param subProxy - The proxy provided for scriptable options
  * @param descriptorDefaults - Defaults for descriptors
  * @private
- */ function _attachConte***REMOVED***t(pro***REMOVED***y, conte***REMOVED***t, subPro***REMOVED***y, descriptorDefaults) {
+ */ function _attachContext(proxy, context, subProxy, descriptorDefaults) {
     const cache = {
         _cacheable: false,
-        _pro***REMOVED***y: pro***REMOVED***y,
-        _conte***REMOVED***t: conte***REMOVED***t,
-        _subPro***REMOVED***y: subPro***REMOVED***y,
+        _proxy: proxy,
+        _context: context,
+        _subProxy: subProxy,
         _stack: new Set(),
-        _descriptors: _descriptors(pro***REMOVED***y, descriptorDefaults),
-        setConte***REMOVED***t: (ct***REMOVED***)=>_attachConte***REMOVED***t(pro***REMOVED***y, ct***REMOVED***, subPro***REMOVED***y, descriptorDefaults),
-        override: (scope)=>_attachConte***REMOVED***t(pro***REMOVED***y.override(scope), conte***REMOVED***t, subPro***REMOVED***y, descriptorDefaults)
+        _descriptors: _descriptors(proxy, descriptorDefaults),
+        setContext: (ctx)=>_attachContext(proxy, ctx, subProxy, descriptorDefaults),
+        override: (scope)=>_attachContext(proxy.override(scope), context, subProxy, descriptorDefaults)
     };
-    return new Pro***REMOVED***y(cache, {
+    return new Proxy(cache, {
         /**
      * A trap for the delete operator.
      */ deleteProperty (target, prop) {
             delete target[prop]; // remove from cache
-            delete pro***REMOVED***y[prop]; // remove from pro***REMOVED***y
+            delete proxy[prop]; // remove from proxy
             return true;
         },
         /**
      * A trap for getting property values.
      */ get (target, prop, receiver) {
-            return _cached(target, prop, ()=>_resolveWithConte***REMOVED***t(target, prop, receiver));
+            return _cached(target, prop, ()=>_resolveWithContext(target, prop, receiver));
         },
         /**
      * A trap for Object.getOwnPropertyDescriptor.
      * Also used by Object.hasOwnProperty.
      */ getOwnPropertyDescriptor (target, prop) {
-            return target._descriptors.allKeys ? Reflect.has(pro***REMOVED***y, prop) ? {
+            return target._descriptors.allKeys ? Reflect.has(proxy, prop) ? {
                 enumerable: true,
                 configurable: true
-            } : undefined : Reflect.getOwnPropertyDescriptor(pro***REMOVED***y, prop);
+            } : undefined : Reflect.getOwnPropertyDescriptor(proxy, prop);
         },
         /**
      * A trap for Object.getPrototypeOf.
      */ getPrototypeOf () {
-            return Reflect.getPrototypeOf(pro***REMOVED***y);
+            return Reflect.getPrototypeOf(proxy);
         },
         /**
      * A trap for the in operator.
      */ has (target, prop) {
-            return Reflect.has(pro***REMOVED***y, prop);
+            return Reflect.has(proxy, prop);
         },
         /**
      * A trap for Object.getOwnPropertyNames and Object.getOwnPropertySymbols.
      */ ownKeys () {
-            return Reflect.ownKeys(pro***REMOVED***y);
+            return Reflect.ownKeys(proxy);
         },
         /**
      * A trap for setting property values.
      */ set (target, prop, value) {
-            pro***REMOVED***y[prop] = value; // set to pro***REMOVED***y
+            proxy[prop] = value; // set to proxy
             delete target[prop]; // remove from cache
             return true;
         }
@@ -1777,20 +1777,20 @@ function createConte***REMOVED***t(parentConte***REMOVED***t, conte***REMOVED***
 }
 /**
  * @private
- */ function _descriptors(pro***REMOVED***y, defaults = {
+ */ function _descriptors(proxy, defaults = {
     scriptable: true,
-    inde***REMOVED***able: true
+    indexable: true
 }) {
-    const { _scriptable =defaults.scriptable , _inde***REMOVED***able =defaults.inde***REMOVED***able , _allKeys =defaults.allKeys  } = pro***REMOVED***y;
+    const { _scriptable =defaults.scriptable , _indexable =defaults.indexable , _allKeys =defaults.allKeys  } = proxy;
     return {
         allKeys: _allKeys,
         scriptable: _scriptable,
-        inde***REMOVED***able: _inde***REMOVED***able,
+        indexable: _indexable,
         isScriptable: isFunction(_scriptable) ? _scriptable : ()=>_scriptable,
-        isInde***REMOVED***able: isFunction(_inde***REMOVED***able) ? _inde***REMOVED***able : ()=>_inde***REMOVED***able
+        isIndexable: isFunction(_indexable) ? _indexable : ()=>_indexable
     };
 }
-const readKey = (prefi***REMOVED***, name)=>prefi***REMOVED*** ? prefi***REMOVED*** + _capitalize(name) : name;
+const readKey = (prefix, name)=>prefix ? prefix + _capitalize(name) : name;
 const needsSubResolver = (prop, value)=>isObject(value) && prop !== 'adapters' && (Object.getPrototypeOf(value) === null || value.constructor === Object);
 function _cached(target, prop, resolve) {
     if (Object.prototype.hasOwnProperty.call(target, prop) || prop === 'constructor') {
@@ -1801,48 +1801,48 @@ function _cached(target, prop, resolve) {
     target[prop] = value;
     return value;
 }
-function _resolveWithConte***REMOVED***t(target, prop, receiver) {
-    const { _pro***REMOVED***y , _conte***REMOVED***t , _subPro***REMOVED***y , _descriptors: descriptors  } = target;
-    let value = _pro***REMOVED***y[prop]; // resolve from pro***REMOVED***y
-    // resolve with conte***REMOVED***t
+function _resolveWithContext(target, prop, receiver) {
+    const { _proxy , _context , _subProxy , _descriptors: descriptors  } = target;
+    let value = _proxy[prop]; // resolve from proxy
+    // resolve with context
     if (isFunction(value) && descriptors.isScriptable(prop)) {
         value = _resolveScriptable(prop, value, target, receiver);
     }
     if (isArray(value) && value.length) {
-        value = _resolveArray(prop, value, target, descriptors.isInde***REMOVED***able);
+        value = _resolveArray(prop, value, target, descriptors.isIndexable);
     }
     if (needsSubResolver(prop, value)) {
         // if the resolved value is an object, create a sub resolver for it
-        value = _attachConte***REMOVED***t(value, _conte***REMOVED***t, _subPro***REMOVED***y && _subPro***REMOVED***y[prop], descriptors);
+        value = _attachContext(value, _context, _subProxy && _subProxy[prop], descriptors);
     }
     return value;
 }
 function _resolveScriptable(prop, getValue, target, receiver) {
-    const { _pro***REMOVED***y , _conte***REMOVED***t , _subPro***REMOVED***y , _stack  } = target;
+    const { _proxy , _context , _subProxy , _stack  } = target;
     if (_stack.has(prop)) {
         throw new Error('Recursion detected: ' + Array.from(_stack).join('->') + '->' + prop);
     }
     _stack.add(prop);
-    let value = getValue(_conte***REMOVED***t, _subPro***REMOVED***y || receiver);
+    let value = getValue(_context, _subProxy || receiver);
     _stack.delete(prop);
     if (needsSubResolver(prop, value)) {
         // When scriptable option returns an object, create a resolver on that.
-        value = createSubResolver(_pro***REMOVED***y._scopes, _pro***REMOVED***y, prop, value);
+        value = createSubResolver(_proxy._scopes, _proxy, prop, value);
     }
     return value;
 }
-function _resolveArray(prop, value, target, isInde***REMOVED***able) {
-    const { _pro***REMOVED***y , _conte***REMOVED***t , _subPro***REMOVED***y , _descriptors: descriptors  } = target;
-    if (typeof _conte***REMOVED***t.inde***REMOVED*** !== 'undefined' && isInde***REMOVED***able(prop)) {
-        return value[_conte***REMOVED***t.inde***REMOVED*** % value.length];
+function _resolveArray(prop, value, target, isIndexable) {
+    const { _proxy , _context , _subProxy , _descriptors: descriptors  } = target;
+    if (typeof _context.index !== 'undefined' && isIndexable(prop)) {
+        return value[_context.index % value.length];
     } else if (isObject(value[0])) {
         // Array of objects, return array or resolvers
         const arr = value;
-        const scopes = _pro***REMOVED***y._scopes.filter((s)=>s !== arr);
+        const scopes = _proxy._scopes.filter((s)=>s !== arr);
         value = [];
         for (const item of arr){
-            const resolver = createSubResolver(scopes, _pro***REMOVED***y, prop, item);
-            value.push(_attachConte***REMOVED***t(resolver, _conte***REMOVED***t, _subPro***REMOVED***y && _subPro***REMOVED***y[prop], descriptors));
+            const resolver = createSubResolver(scopes, _proxy, prop, item);
+            value.push(_attachContext(resolver, _context, _subProxy && _subProxy[prop], descriptors));
         }
     }
     return value;
@@ -1864,7 +1864,7 @@ function addScopes(set, parentScopes, key, parentFallback, value) {
             }
         } else if (scope === false && typeof parentFallback !== 'undefined' && key !== parentFallback) {
             // Fallback to `false` results to `false`, when falling back to different key.
-            // For e***REMOVED***ample `interaction` from `hover` or `plugins.tooltip` and `animation` from `animations`
+            // For example `interaction` from `hover` or `plugins.tooltip` and `animation` from `animations`
             return null;
         }
     }
@@ -1911,12 +1911,12 @@ function subGetTarget(resolver, prop, value) {
     }
     return target || {};
 }
-function _resolveWithPrefi***REMOVED***es(prop, prefi***REMOVED***es, scopes, pro***REMOVED***y) {
+function _resolveWithPrefixes(prop, prefixes, scopes, proxy) {
     let value;
-    for (const prefi***REMOVED*** of prefi***REMOVED***es){
-        value = _resolve(readKey(prefi***REMOVED***, prop), scopes);
+    for (const prefix of prefixes){
+        value = _resolve(readKey(prefix, prop), scopes);
         if (typeof value !== 'undefined') {
-            return needsSubResolver(prop, value) ? createSubResolver(scopes, pro***REMOVED***y, prop, value) : value;
+            return needsSubResolver(prop, value) ? createSubResolver(scopes, proxy, prop, value) : value;
         }
     }
 }
@@ -1951,12 +1951,12 @@ function _parseObjectDataRadialScale(meta, data, start, count) {
     const { iScale  } = meta;
     const { key ='r'  } = this._parsing;
     const parsed = new Array(count);
-    let i, ilen, inde***REMOVED***, item;
+    let i, ilen, index, item;
     for(i = 0, ilen = count; i < ilen; ++i){
-        inde***REMOVED*** = i + start;
-        item = data[inde***REMOVED***];
+        index = i + start;
+        item = data[index];
         parsed[i] = {
-            r: iScale.parse(resolveObjectKey(item, key), inde***REMOVED***)
+            r: iScale.parse(resolveObjectKey(item, key), index)
         };
     }
     return parsed;
@@ -1964,16 +1964,16 @@ function _parseObjectDataRadialScale(meta, data, start, count) {
 
 const EPSILON = Number.EPSILON || 1e-14;
 const getPoint = (points, i)=>i < points.length && !points[i].skip && points[i];
-const getValueA***REMOVED***is = (inde***REMOVED***A***REMOVED***is)=>inde***REMOVED***A***REMOVED***is === '***REMOVED***' ? 'y' : '***REMOVED***';
+const getValueAxis = (indexAxis)=>indexAxis === 'x' ? 'y' : 'x';
 function splineCurve(firstPoint, middlePoint, afterPoint, t) {
     // Props to Rob Spencer at scaled innovation for his post on splining between points
     // http://scaledinnovation.com/analytics/splines/aboutSplines.html
     // This function must also respect "skipped" points
     const previous = firstPoint.skip ? middlePoint : firstPoint;
     const current = middlePoint;
-    const ne***REMOVED***t = afterPoint.skip ? middlePoint : afterPoint;
+    const next = afterPoint.skip ? middlePoint : afterPoint;
     const d01 = distanceBetweenPoints(current, previous);
-    const d12 = distanceBetweenPoints(ne***REMOVED***t, current);
+    const d12 = distanceBetweenPoints(next, current);
     let s01 = d01 / (d01 + d12);
     let s12 = d12 / (d01 + d12);
     // If all points are the same, s01 & s02 will be inf
@@ -1983,12 +1983,12 @@ function splineCurve(firstPoint, middlePoint, afterPoint, t) {
     const fb = t * s12;
     return {
         previous: {
-            ***REMOVED***: current.***REMOVED*** - fa * (ne***REMOVED***t.***REMOVED*** - previous.***REMOVED***),
-            y: current.y - fa * (ne***REMOVED***t.y - previous.y)
+            x: current.x - fa * (next.x - previous.x),
+            y: current.y - fa * (next.y - previous.y)
         },
-        ne***REMOVED***t: {
-            ***REMOVED***: current.***REMOVED*** + fb * (ne***REMOVED***t.***REMOVED*** - previous.***REMOVED***),
-            y: current.y + fb * (ne***REMOVED***t.y - previous.y)
+        next: {
+            x: current.x + fb * (next.x - previous.x),
+            y: current.y + fb * (next.y - previous.y)
         }
     };
 }
@@ -2019,8 +2019,8 @@ function splineCurve(firstPoint, middlePoint, afterPoint, t) {
         mK[i + 1] = betaK * tauK * deltaK[i];
     }
 }
-function monotoneCompute(points, mK, inde***REMOVED***A***REMOVED***is = '***REMOVED***') {
-    const valueA***REMOVED***is = getValueA***REMOVED***is(inde***REMOVED***A***REMOVED***is);
+function monotoneCompute(points, mK, indexAxis = 'x') {
+    const valueAxis = getValueAxis(indexAxis);
     const pointsLen = points.length;
     let delta, pointBefore, pointCurrent;
     let pointAfter = getPoint(points, 0);
@@ -2031,27 +2031,27 @@ function monotoneCompute(points, mK, inde***REMOVED***A***REMOVED***is = '***REM
         if (!pointCurrent) {
             continue;
         }
-        const iPi***REMOVED***el = pointCurrent[inde***REMOVED***A***REMOVED***is];
-        const vPi***REMOVED***el = pointCurrent[valueA***REMOVED***is];
+        const iPixel = pointCurrent[indexAxis];
+        const vPixel = pointCurrent[valueAxis];
         if (pointBefore) {
-            delta = (iPi***REMOVED***el - pointBefore[inde***REMOVED***A***REMOVED***is]) / 3;
-            pointCurrent[`cp1${inde***REMOVED***A***REMOVED***is}`] = iPi***REMOVED***el - delta;
-            pointCurrent[`cp1${valueA***REMOVED***is}`] = vPi***REMOVED***el - delta * mK[i];
+            delta = (iPixel - pointBefore[indexAxis]) / 3;
+            pointCurrent[`cp1${indexAxis}`] = iPixel - delta;
+            pointCurrent[`cp1${valueAxis}`] = vPixel - delta * mK[i];
         }
         if (pointAfter) {
-            delta = (pointAfter[inde***REMOVED***A***REMOVED***is] - iPi***REMOVED***el) / 3;
-            pointCurrent[`cp2${inde***REMOVED***A***REMOVED***is}`] = iPi***REMOVED***el + delta;
-            pointCurrent[`cp2${valueA***REMOVED***is}`] = vPi***REMOVED***el + delta * mK[i];
+            delta = (pointAfter[indexAxis] - iPixel) / 3;
+            pointCurrent[`cp2${indexAxis}`] = iPixel + delta;
+            pointCurrent[`cp2${valueAxis}`] = vPixel + delta * mK[i];
         }
     }
 }
 /**
  * This function calculates Bézier control points in a similar way than |splineCurve|,
- * but preserves monotonicity of the provided data and ensures no local e***REMOVED***tremums are added
+ * but preserves monotonicity of the provided data and ensures no local extremums are added
  * between the dataset discrete points due to the interpolation.
  * See : https://en.wikipedia.org/wiki/Monotone_cubic_interpolation
- */ function splineCurveMonotone(points, inde***REMOVED***A***REMOVED***is = '***REMOVED***') {
-    const valueA***REMOVED***is = getValueA***REMOVED***is(inde***REMOVED***A***REMOVED***is);
+ */ function splineCurveMonotone(points, indexAxis = 'x') {
+    const valueAxis = getValueAxis(indexAxis);
     const pointsLen = points.length;
     const deltaK = Array(pointsLen).fill(0);
     const mK = Array(pointsLen);
@@ -2066,58 +2066,58 @@ function monotoneCompute(points, mK, inde***REMOVED***A***REMOVED***is = '***REM
             continue;
         }
         if (pointAfter) {
-            const slopeDelta = pointAfter[inde***REMOVED***A***REMOVED***is] - pointCurrent[inde***REMOVED***A***REMOVED***is];
-            // In the case of two points that appear at the same ***REMOVED*** pi***REMOVED***el, slopeDeltaX is 0
-            deltaK[i] = slopeDelta !== 0 ? (pointAfter[valueA***REMOVED***is] - pointCurrent[valueA***REMOVED***is]) / slopeDelta : 0;
+            const slopeDelta = pointAfter[indexAxis] - pointCurrent[indexAxis];
+            // In the case of two points that appear at the same x pixel, slopeDeltaX is 0
+            deltaK[i] = slopeDelta !== 0 ? (pointAfter[valueAxis] - pointCurrent[valueAxis]) / slopeDelta : 0;
         }
         mK[i] = !pointBefore ? deltaK[i] : !pointAfter ? deltaK[i - 1] : sign(deltaK[i - 1]) !== sign(deltaK[i]) ? 0 : (deltaK[i - 1] + deltaK[i]) / 2;
     }
     monotoneAdjust(points, deltaK, mK);
-    monotoneCompute(points, mK, inde***REMOVED***A***REMOVED***is);
+    monotoneCompute(points, mK, indexAxis);
 }
-function capControlPoint(pt, min, ma***REMOVED***) {
-    return Math.ma***REMOVED***(Math.min(pt, ma***REMOVED***), min);
+function capControlPoint(pt, min, max) {
+    return Math.max(Math.min(pt, max), min);
 }
 function capBezierPoints(points, area) {
     let i, ilen, point, inArea, inAreaPrev;
-    let inAreaNe***REMOVED***t = _isPointInArea(points[0], area);
+    let inAreaNext = _isPointInArea(points[0], area);
     for(i = 0, ilen = points.length; i < ilen; ++i){
         inAreaPrev = inArea;
-        inArea = inAreaNe***REMOVED***t;
-        inAreaNe***REMOVED***t = i < ilen - 1 && _isPointInArea(points[i + 1], area);
+        inArea = inAreaNext;
+        inAreaNext = i < ilen - 1 && _isPointInArea(points[i + 1], area);
         if (!inArea) {
             continue;
         }
         point = points[i];
         if (inAreaPrev) {
-            point.cp1***REMOVED*** = capControlPoint(point.cp1***REMOVED***, area.left, area.right);
+            point.cp1x = capControlPoint(point.cp1x, area.left, area.right);
             point.cp1y = capControlPoint(point.cp1y, area.top, area.bottom);
         }
-        if (inAreaNe***REMOVED***t) {
-            point.cp2***REMOVED*** = capControlPoint(point.cp2***REMOVED***, area.left, area.right);
+        if (inAreaNext) {
+            point.cp2x = capControlPoint(point.cp2x, area.left, area.right);
             point.cp2y = capControlPoint(point.cp2y, area.top, area.bottom);
         }
     }
 }
 /**
  * @private
- */ function _updateBezierControlPoints(points, options, area, loop, inde***REMOVED***A***REMOVED***is) {
+ */ function _updateBezierControlPoints(points, options, area, loop, indexAxis) {
     let i, ilen, point, controlPoints;
     // Only consider points that are drawn in case the spanGaps option is used
     if (options.spanGaps) {
         points = points.filter((pt)=>!pt.skip);
     }
     if (options.cubicInterpolationMode === 'monotone') {
-        splineCurveMonotone(points, inde***REMOVED***A***REMOVED***is);
+        splineCurveMonotone(points, indexAxis);
     } else {
         let prev = loop ? points[points.length - 1] : points[0];
         for(i = 0, ilen = points.length; i < ilen; ++i){
             point = points[i];
             controlPoints = splineCurve(prev, point, points[Math.min(i + 1, ilen - (loop ? 0 : 1)) % ilen], options.tension);
-            point.cp1***REMOVED*** = controlPoints.previous.***REMOVED***;
+            point.cp1x = controlPoints.previous.x;
             point.cp1y = controlPoints.previous.y;
-            point.cp2***REMOVED*** = controlPoints.ne***REMOVED***t.***REMOVED***;
-            point.cp2y = controlPoints.ne***REMOVED***t.y;
+            point.cp2x = controlPoints.next.x;
+            point.cp2y = controlPoints.next.y;
             prev = point;
         }
     }
@@ -2127,8 +2127,8 @@ function capBezierPoints(points, area) {
 }
 
 /**
- * Note: typedefs are auto-e***REMOVED***ported, so use a made-up `dom` namespace where
- * necessary to avoid duplicates with `e***REMOVED***port * from './helpers`; see
+ * Note: typedefs are auto-exported, so use a made-up `dom` namespace where
+ * necessary to avoid duplicates with `export * from './helpers`; see
  * https://github.com/microsoft/TypeScript/issues/46011
  * @typedef { import('../core/core.controller.js').default } dom.Chart
  * @typedef { import('../../types').ChartEvent } ChartEvent
@@ -2147,20 +2147,20 @@ function capBezierPoints(points, area) {
     return parent;
 }
 /**
- * convert ma***REMOVED***-width/ma***REMOVED***-height values that may be percentages into a number
+ * convert max-width/max-height values that may be percentages into a number
  * @private
- */ function parseMa***REMOVED***Style(styleValue, node, parentProperty) {
-    let valueInPi***REMOVED***els;
+ */ function parseMaxStyle(styleValue, node, parentProperty) {
+    let valueInPixels;
     if (typeof styleValue === 'string') {
-        valueInPi***REMOVED***els = parseInt(styleValue, 10);
-        if (styleValue.inde***REMOVED***Of('%') !== -1) {
+        valueInPixels = parseInt(styleValue, 10);
+        if (styleValue.indexOf('%') !== -1) {
             // percentage * size in dimension
-            valueInPi***REMOVED***els = valueInPi***REMOVED***els / 100 * node.parentNode[parentProperty];
+            valueInPixels = valueInPixels / 100 * node.parentNode[parentProperty];
         }
     } else {
-        valueInPi***REMOVED***els = styleValue;
+        valueInPixels = styleValue;
     }
-    return valueInPi***REMOVED***els;
+    return valueInPixels;
 }
 const getComputedStyle = (element)=>element.ownerDocument.defaultView.getComputedStyle(element, null);
 function getStyle(el, property) {
@@ -2172,18 +2172,18 @@ const positions = [
     'bottom',
     'left'
 ];
-function getPositionedStyle(styles, style, suffi***REMOVED***) {
+function getPositionedStyle(styles, style, suffix) {
     const result = {};
-    suffi***REMOVED*** = suffi***REMOVED*** ? '-' + suffi***REMOVED*** : '';
+    suffix = suffix ? '-' + suffix : '';
     for(let i = 0; i < 4; i++){
         const pos = positions[i];
-        result[pos] = parseFloat(styles[style + '-' + pos + suffi***REMOVED***]) || 0;
+        result[pos] = parseFloat(styles[style + '-' + pos + suffix]) || 0;
     }
     result.width = result.left + result.right;
     result.height = result.top + result.bottom;
     return result;
 }
-const useOffsetPos = (***REMOVED***, y, target)=>(***REMOVED*** > 0 || y > 0) && (!target || !target.shadowRoot);
+const useOffsetPos = (x, y, target)=>(x > 0 || y > 0) && (!target || !target.shadowRoot);
 /**
  * @param e
  * @param canvas
@@ -2192,94 +2192,94 @@ const useOffsetPos = (***REMOVED***, y, target)=>(***REMOVED*** > 0 || y > 0) &&
     const touches = e.touches;
     const source = touches && touches.length ? touches[0] : e;
     const { offsetX , offsetY  } = source;
-    let bo***REMOVED*** = false;
-    let ***REMOVED***, y;
+    let box = false;
+    let x, y;
     if (useOffsetPos(offsetX, offsetY, e.target)) {
-        ***REMOVED*** = offsetX;
+        x = offsetX;
         y = offsetY;
     } else {
         const rect = canvas.getBoundingClientRect();
-        ***REMOVED*** = source.clientX - rect.left;
+        x = source.clientX - rect.left;
         y = source.clientY - rect.top;
-        bo***REMOVED*** = true;
+        box = true;
     }
     return {
-        ***REMOVED***,
+        x,
         y,
-        bo***REMOVED***
+        box
     };
 }
 /**
- * Gets an event's ***REMOVED***, y coordinates, relative to the chart area
+ * Gets an event's x, y coordinates, relative to the chart area
  * @param event
  * @param chart
- * @returns ***REMOVED*** and y coordinates of the event
+ * @returns x and y coordinates of the event
  */ function getRelativePosition(event, chart) {
     if ('native' in event) {
         return event;
     }
-    const { canvas , currentDevicePi***REMOVED***elRatio  } = chart;
+    const { canvas , currentDevicePixelRatio  } = chart;
     const style = getComputedStyle(canvas);
-    const borderBo***REMOVED*** = style.bo***REMOVED***Sizing === 'border-bo***REMOVED***';
+    const borderBox = style.boxSizing === 'border-box';
     const paddings = getPositionedStyle(style, 'padding');
     const borders = getPositionedStyle(style, 'border', 'width');
-    const { ***REMOVED*** , y , bo***REMOVED***  } = getCanvasPosition(event, canvas);
-    const ***REMOVED***Offset = paddings.left + (bo***REMOVED*** && borders.left);
-    const yOffset = paddings.top + (bo***REMOVED*** && borders.top);
+    const { x , y , box  } = getCanvasPosition(event, canvas);
+    const xOffset = paddings.left + (box && borders.left);
+    const yOffset = paddings.top + (box && borders.top);
     let { width , height  } = chart;
-    if (borderBo***REMOVED***) {
+    if (borderBox) {
         width -= paddings.width + borders.width;
         height -= paddings.height + borders.height;
     }
     return {
-        ***REMOVED***: Math.round((***REMOVED*** - ***REMOVED***Offset) / width * canvas.width / currentDevicePi***REMOVED***elRatio),
-        y: Math.round((y - yOffset) / height * canvas.height / currentDevicePi***REMOVED***elRatio)
+        x: Math.round((x - xOffset) / width * canvas.width / currentDevicePixelRatio),
+        y: Math.round((y - yOffset) / height * canvas.height / currentDevicePixelRatio)
     };
 }
 function getContainerSize(canvas, width, height) {
-    let ma***REMOVED***Width, ma***REMOVED***Height;
+    let maxWidth, maxHeight;
     if (width === undefined || height === undefined) {
         const container = canvas && _getParentNode(canvas);
         if (!container) {
             width = canvas.clientWidth;
             height = canvas.clientHeight;
         } else {
-            const rect = container.getBoundingClientRect(); // this is the border bo***REMOVED*** of the container
+            const rect = container.getBoundingClientRect(); // this is the border box of the container
             const containerStyle = getComputedStyle(container);
             const containerBorder = getPositionedStyle(containerStyle, 'border', 'width');
             const containerPadding = getPositionedStyle(containerStyle, 'padding');
             width = rect.width - containerPadding.width - containerBorder.width;
             height = rect.height - containerPadding.height - containerBorder.height;
-            ma***REMOVED***Width = parseMa***REMOVED***Style(containerStyle.ma***REMOVED***Width, container, 'clientWidth');
-            ma***REMOVED***Height = parseMa***REMOVED***Style(containerStyle.ma***REMOVED***Height, container, 'clientHeight');
+            maxWidth = parseMaxStyle(containerStyle.maxWidth, container, 'clientWidth');
+            maxHeight = parseMaxStyle(containerStyle.maxHeight, container, 'clientHeight');
         }
     }
     return {
         width,
         height,
-        ma***REMOVED***Width: ma***REMOVED***Width || INFINITY,
-        ma***REMOVED***Height: ma***REMOVED***Height || INFINITY
+        maxWidth: maxWidth || INFINITY,
+        maxHeight: maxHeight || INFINITY
     };
 }
 const round1 = (v)=>Math.round(v * 10) / 10;
-// eslint-disable-ne***REMOVED***t-line comple***REMOVED***ity
-function getMa***REMOVED***imumSize(canvas, bbWidth, bbHeight, aspectRatio) {
+// eslint-disable-next-line complexity
+function getMaximumSize(canvas, bbWidth, bbHeight, aspectRatio) {
     const style = getComputedStyle(canvas);
     const margins = getPositionedStyle(style, 'margin');
-    const ma***REMOVED***Width = parseMa***REMOVED***Style(style.ma***REMOVED***Width, canvas, 'clientWidth') || INFINITY;
-    const ma***REMOVED***Height = parseMa***REMOVED***Style(style.ma***REMOVED***Height, canvas, 'clientHeight') || INFINITY;
+    const maxWidth = parseMaxStyle(style.maxWidth, canvas, 'clientWidth') || INFINITY;
+    const maxHeight = parseMaxStyle(style.maxHeight, canvas, 'clientHeight') || INFINITY;
     const containerSize = getContainerSize(canvas, bbWidth, bbHeight);
     let { width , height  } = containerSize;
-    if (style.bo***REMOVED***Sizing === 'content-bo***REMOVED***') {
+    if (style.boxSizing === 'content-box') {
         const borders = getPositionedStyle(style, 'border', 'width');
         const paddings = getPositionedStyle(style, 'padding');
         width -= paddings.width + borders.width;
         height -= paddings.height + borders.height;
     }
-    width = Math.ma***REMOVED***(0, width - margins.width);
-    height = Math.ma***REMOVED***(0, aspectRatio ? width / aspectRatio : height - margins.height);
-    width = round1(Math.min(width, ma***REMOVED***Width, containerSize.ma***REMOVED***Width));
-    height = round1(Math.min(height, ma***REMOVED***Height, containerSize.ma***REMOVED***Height));
+    width = Math.max(0, width - margins.width);
+    height = Math.max(0, aspectRatio ? width / aspectRatio : height - margins.height);
+    width = round1(Math.min(width, maxWidth, containerSize.maxWidth));
+    height = round1(Math.min(height, maxHeight, containerSize.maxHeight));
     if (width && !height) {
         // https://github.com/chartjs/Chart.js/issues/4659
         // If the canvas has width, but no height, default to aspectRatio of 2 (canvas default)
@@ -2299,11 +2299,11 @@ function getMa***REMOVED***imumSize(canvas, bbWidth, bbHeight, aspectRatio) {
  * @param chart
  * @param forceRatio
  * @param forceStyle
- * @returns True if the canvas conte***REMOVED***t size or transformation has changed.
+ * @returns True if the canvas context size or transformation has changed.
  */ function retinaScale(chart, forceRatio, forceStyle) {
-    const pi***REMOVED***elRatio = forceRatio || 1;
-    const deviceHeight = Math.floor(chart.height * pi***REMOVED***elRatio);
-    const deviceWidth = Math.floor(chart.width * pi***REMOVED***elRatio);
+    const pixelRatio = forceRatio || 1;
+    const deviceHeight = Math.floor(chart.height * pixelRatio);
+    const deviceWidth = Math.floor(chart.width * pixelRatio);
     chart.height = Math.floor(chart.height);
     chart.width = Math.floor(chart.width);
     const canvas = chart.canvas;
@@ -2311,14 +2311,14 @@ function getMa***REMOVED***imumSize(canvas, bbWidth, bbHeight, aspectRatio) {
     // making the chart visually bigger, so let's enforce it to the "correct" values.
     // See https://github.com/chartjs/Chart.js/issues/3575
     if (canvas.style && (forceStyle || !canvas.style.height && !canvas.style.width)) {
-        canvas.style.height = `${chart.height}p***REMOVED***`;
-        canvas.style.width = `${chart.width}p***REMOVED***`;
+        canvas.style.height = `${chart.height}px`;
+        canvas.style.width = `${chart.width}px`;
     }
-    if (chart.currentDevicePi***REMOVED***elRatio !== pi***REMOVED***elRatio || canvas.height !== deviceHeight || canvas.width !== deviceWidth) {
-        chart.currentDevicePi***REMOVED***elRatio = pi***REMOVED***elRatio;
+    if (chart.currentDevicePixelRatio !== pixelRatio || canvas.height !== deviceHeight || canvas.width !== deviceWidth) {
+        chart.currentDevicePixelRatio = pixelRatio;
         canvas.height = deviceHeight;
         canvas.width = deviceWidth;
-        chart.ct***REMOVED***.setTransform(pi***REMOVED***elRatio, 0, 0, pi***REMOVED***elRatio, 0, 0);
+        chart.ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
         return true;
     }
     return false;
@@ -2348,14 +2348,14 @@ function getMa***REMOVED***imumSize(canvas, bbWidth, bbHeight, aspectRatio) {
 /**
  * The "used" size is the final value of a dimension property after all calculations have
  * been performed. This method uses the computed style of `element` but returns undefined
- * if the computed style is not e***REMOVED***pressed in pi***REMOVED***els. That can happen in some cases where
+ * if the computed style is not expressed in pixels. That can happen in some cases where
  * `element` has a size relative to its parent and this last one is not yet displayed,
- * for e***REMOVED***ample because of `display: none` on a parent node.
+ * for example because of `display: none` on a parent node.
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/used_value
- * @returns Size in pi***REMOVED***els or undefined if unknown.
+ * @returns Size in pixels or undefined if unknown.
  */ function readUsedSize(element, property) {
     const value = getStyle(element, property);
-    const matches = value && value.match(/^(\d+)(\.\d+)?p***REMOVED***$/);
+    const matches = value && value.match(/^(\d+)(\.\d+)?px$/);
     return matches ? +matches[1] : undefined;
 }
 
@@ -2363,7 +2363,7 @@ function getMa***REMOVED***imumSize(canvas, bbWidth, bbHeight, aspectRatio) {
  * @private
  */ function _pointInLine(p1, p2, t, mode) {
     return {
-        ***REMOVED***: p1.***REMOVED*** + t * (p2.***REMOVED*** - p1.***REMOVED***),
+        x: p1.x + t * (p2.x - p1.x),
         y: p1.y + t * (p2.y - p1.y)
     };
 }
@@ -2371,7 +2371,7 @@ function getMa***REMOVED***imumSize(canvas, bbWidth, bbHeight, aspectRatio) {
  * @private
  */ function _steppedInterpolation(p1, p2, t, mode) {
     return {
-        ***REMOVED***: p1.***REMOVED*** + t * (p2.***REMOVED*** - p1.***REMOVED***),
+        x: p1.x + t * (p2.x - p1.x),
         y: mode === 'middle' ? t < 0.5 ? p1.y : p2.y : mode === 'after' ? t < 1 ? p1.y : p2.y : t > 0 ? p2.y : p1.y
     };
 }
@@ -2379,11 +2379,11 @@ function getMa***REMOVED***imumSize(canvas, bbWidth, bbHeight, aspectRatio) {
  * @private
  */ function _bezierInterpolation(p1, p2, t, mode) {
     const cp1 = {
-        ***REMOVED***: p1.cp2***REMOVED***,
+        x: p1.cp2x,
         y: p1.cp2y
     };
     const cp2 = {
-        ***REMOVED***: p2.cp1***REMOVED***,
+        x: p2.cp1x,
         y: p2.cp1y
     };
     const a = _pointInLine(p1, cp1, t);
@@ -2396,62 +2396,62 @@ function getMa***REMOVED***imumSize(canvas, bbWidth, bbHeight, aspectRatio) {
 
 const getRightToLeftAdapter = function(rectX, width) {
     return {
-        ***REMOVED*** (***REMOVED***) {
-            return rectX + rectX + width - ***REMOVED***;
+        x (x) {
+            return rectX + rectX + width - x;
         },
         setWidth (w) {
             width = w;
         },
-        te***REMOVED***tAlign (align) {
+        textAlign (align) {
             if (align === 'center') {
                 return align;
             }
             return align === 'right' ? 'left' : 'right';
         },
-        ***REMOVED***Plus (***REMOVED***, value) {
-            return ***REMOVED*** - value;
+        xPlus (x, value) {
+            return x - value;
         },
-        leftForLtr (***REMOVED***, itemWidth) {
-            return ***REMOVED*** - itemWidth;
+        leftForLtr (x, itemWidth) {
+            return x - itemWidth;
         }
     };
 };
 const getLeftToRightAdapter = function() {
     return {
-        ***REMOVED*** (***REMOVED***) {
-            return ***REMOVED***;
+        x (x) {
+            return x;
         },
         setWidth (w) {},
-        te***REMOVED***tAlign (align) {
+        textAlign (align) {
             return align;
         },
-        ***REMOVED***Plus (***REMOVED***, value) {
-            return ***REMOVED*** + value;
+        xPlus (x, value) {
+            return x + value;
         },
-        leftForLtr (***REMOVED***, _itemWidth) {
-            return ***REMOVED***;
+        leftForLtr (x, _itemWidth) {
+            return x;
         }
     };
 };
 function getRtlAdapter(rtl, rectX, width) {
     return rtl ? getRightToLeftAdapter(rectX, width) : getLeftToRightAdapter();
 }
-function overrideTe***REMOVED***tDirection(ct***REMOVED***, direction) {
+function overrideTextDirection(ctx, direction) {
     let style, original;
     if (direction === 'ltr' || direction === 'rtl') {
-        style = ct***REMOVED***.canvas.style;
+        style = ctx.canvas.style;
         original = [
             style.getPropertyValue('direction'),
             style.getPropertyPriority('direction')
         ];
         style.setProperty('direction', direction, 'important');
-        ct***REMOVED***.prevTe***REMOVED***tDirection = original;
+        ctx.prevTextDirection = original;
     }
 }
-function restoreTe***REMOVED***tDirection(ct***REMOVED***, original) {
+function restoreTextDirection(ctx, original) {
     if (original !== undefined) {
-        delete ct***REMOVED***.prevTe***REMOVED***tDirection;
-        ct***REMOVED***.canvas.style.setProperty('direction', original[0], original[1]);
+        delete ctx.prevTextDirection;
+        ctx.canvas.style.setProperty('direction', original[0], original[1]);
     }
 }
 
@@ -2466,7 +2466,7 @@ function propertyFn(property) {
     return {
         between: _isBetween,
         compare: (a, b)=>a - b,
-        normalize: (***REMOVED***)=>***REMOVED***
+        normalize: (x)=>x
     };
 }
 function normalizeSegment({ start , end , count , loop , style  }) {
@@ -2596,13 +2596,13 @@ function getSegment(segment, points, bounds) {
         end
     };
 }
- function solidSegments(points, start, ma***REMOVED***, loop) {
+ function solidSegments(points, start, max, loop) {
     const count = points.length;
     const result = [];
     let last = start;
     let prev = points[start];
     let end;
-    for(end = start + 1; end <= ma***REMOVED***; ++end){
+    for(end = start + 1; end <= max; ++end){
         const cur = points[end % count];
         if (cur.skip || cur.stop) {
             if (!prev.skip) {
@@ -2649,20 +2649,20 @@ function getSegment(segment, points, bounds) {
             }
         ], points, segmentOptions);
     }
-    const ma***REMOVED*** = end < start ? end + count : end;
+    const max = end < start ? end + count : end;
     const completeLoop = !!line._fullLoop && start === 0 && end === count - 1;
-    return splitByStyles(line, solidSegments(points, start, ma***REMOVED***, completeLoop), points, segmentOptions);
+    return splitByStyles(line, solidSegments(points, start, max, completeLoop), points, segmentOptions);
 }
  function splitByStyles(line, segments, points, segmentOptions) {
-    if (!segmentOptions || !segmentOptions.setConte***REMOVED***t || !points) {
+    if (!segmentOptions || !segmentOptions.setContext || !points) {
         return segments;
     }
     return doSplitByStyles(line, segments, points, segmentOptions);
 }
  function doSplitByStyles(line, segments, points, segmentOptions) {
-    const chartConte***REMOVED***t = line._chart.getConte***REMOVED***t();
+    const chartContext = line._chart.getContext();
     const baseStyle = readStyle(line.options);
-    const { _datasetInde***REMOVED***: datasetInde***REMOVED*** , options: { spanGaps  }  } = line;
+    const { _datasetIndex: datasetIndex , options: { spanGaps  }  } = line;
     const count = points.length;
     const result = [];
     let prevStyle = baseStyle;
@@ -2697,13 +2697,13 @@ function getSegment(segment, points, bounds) {
         let style;
         for(i = start + 1; i <= segment.end; i++){
             const pt = points[i % count];
-            style = readStyle(segmentOptions.setConte***REMOVED***t(createConte***REMOVED***t(chartConte***REMOVED***t, {
+            style = readStyle(segmentOptions.setContext(createContext(chartContext, {
                 type: 'segment',
                 p0: prev,
                 p1: pt,
-                p0DataInde***REMOVED***: (i - 1) % count,
-                p1DataInde***REMOVED***: i % count,
-                datasetInde***REMOVED***
+                p0DataIndex: (i - 1) % count,
+                p1DataIndex: i % count,
+                datasetIndex
             })));
             if (styleChanged(style, prevStyle)) {
                 addStyle(start, i - 1, segment.loop, prevStyle);
@@ -2740,10 +2740,10 @@ function styleChanged(style, prevStyle) {
         if (!cache.includes(value)) {
             cache.push(value);
         }
-        return cache.inde***REMOVED***Of(value);
+        return cache.indexOf(value);
     };
     return JSON.stringify(style, replacer) !== JSON.stringify(prevStyle, replacer);
 }
 
-e***REMOVED***port { unclipArea as $, _rlookupByKey as A, _lookupByKey as B, _isPointInArea as C, getAngleFromPoint as D, toPadding as E, each as F, getMa***REMOVED***imumSize as G, HALF_PI as H, _getParentNode as I, readUsedSize as J, supportsEventListenerOptions as K, throttled as L, _isDomSupported as M, _factorize as N, finiteOrDefault as O, PI as P, callback as Q, _addGrace as R, _limitValue as S, TAU as T, toDegrees as U, _measureTe***REMOVED***t as V, _int16Range as W, _alignPi***REMOVED***el as X, clipArea as Y, renderTe***REMOVED***t as Z, _arrayUnique as _, resolve as a, fontString as a$, toFont as a0, _toLeftRightCenter as a1, _alignStartEnd as a2, overrides as a3, merge as a4, _capitalize as a5, descriptors as a6, isFunction as a7, _attachConte***REMOVED***t as a8, _createResolver as a9, overrideTe***REMOVED***tDirection as aA, _te***REMOVED***tX as aB, restoreTe***REMOVED***tDirection as aC, drawPointLegend as aD, distanceBetweenPoints as aE, noop as aF, _setMinAndMa***REMOVED***ByKey as aG, niceNum as aH, almostWhole as aI, almostEquals as aJ, _decimalPlaces as aK, Ticks as aL, log10 as aM, _longestTe***REMOVED***t as aN, _filterBetween as aO, _lookup as aP, isPatternOrGradient as aQ, getHoverColor as aR, clone as aS, _merger as aT, _mergerIf as aU, _deprecated as aV, _splitKey as aW, toFontString as aX, splineCurve as aY, splineCurveMonotone as aZ, getStyle as a_, _descriptors as aa, mergeIf as ab, uid as ac, debounce as ad, retinaScale as ae, clearCanvas as af, setsEqual as ag, _elementsEqual as ah, _isClickEvent as ai, _isBetween as aj, _readValueToProps as ak, _updateBezierControlPoints as al, _computeSegments as am, _boundSegments as an, _steppedInterpolation as ao, _bezierInterpolation as ap, _pointInLine as aq, _steppedLineTo as ar, _bezierCurveTo as as, drawPoint as at, addRoundedRectPath as au, toTRBL as av, toTRBLCorners as aw, _boundSegment as a***REMOVED***, _normalizeAngle as ay, getRtlAdapter as az, isArray as b, toLineHeight as b0, PITAU as b1, INFINITY as b2, RAD_PER_DEG as b3, QUARTER_PI as b4, TWO_THIRDS_PI as b5, _angleDiff as b6, color as c, defaults as d, effects as e, resolveObjectKey as f, isNumberFinite as g, defined as h, isObject as i, createConte***REMOVED***t as j, isNullOrUndef as k, listenArrayEvents as l, toPercentage as m, toDimension as n, formatNumber as o, _angleBetween as p, _getStartAndCountOfVisiblePoints as q, requestAnimFrame as r, sign as s, toRadians as t, unlistenArrayEvents as u, valueOrDefault as v, _scaleRangesChanged as w, isNumber as ***REMOVED***, _parseObjectDataRadialScale as y, getRelativePosition as z };
+export { unclipArea as $, _rlookupByKey as A, _lookupByKey as B, _isPointInArea as C, getAngleFromPoint as D, toPadding as E, each as F, getMaximumSize as G, HALF_PI as H, _getParentNode as I, readUsedSize as J, supportsEventListenerOptions as K, throttled as L, _isDomSupported as M, _factorize as N, finiteOrDefault as O, PI as P, callback as Q, _addGrace as R, _limitValue as S, TAU as T, toDegrees as U, _measureText as V, _int16Range as W, _alignPixel as X, clipArea as Y, renderText as Z, _arrayUnique as _, resolve as a, fontString as a$, toFont as a0, _toLeftRightCenter as a1, _alignStartEnd as a2, overrides as a3, merge as a4, _capitalize as a5, descriptors as a6, isFunction as a7, _attachContext as a8, _createResolver as a9, overrideTextDirection as aA, _textX as aB, restoreTextDirection as aC, drawPointLegend as aD, distanceBetweenPoints as aE, noop as aF, _setMinAndMaxByKey as aG, niceNum as aH, almostWhole as aI, almostEquals as aJ, _decimalPlaces as aK, Ticks as aL, log10 as aM, _longestText as aN, _filterBetween as aO, _lookup as aP, isPatternOrGradient as aQ, getHoverColor as aR, clone as aS, _merger as aT, _mergerIf as aU, _deprecated as aV, _splitKey as aW, toFontString as aX, splineCurve as aY, splineCurveMonotone as aZ, getStyle as a_, _descriptors as aa, mergeIf as ab, uid as ac, debounce as ad, retinaScale as ae, clearCanvas as af, setsEqual as ag, _elementsEqual as ah, _isClickEvent as ai, _isBetween as aj, _readValueToProps as ak, _updateBezierControlPoints as al, _computeSegments as am, _boundSegments as an, _steppedInterpolation as ao, _bezierInterpolation as ap, _pointInLine as aq, _steppedLineTo as ar, _bezierCurveTo as as, drawPoint as at, addRoundedRectPath as au, toTRBL as av, toTRBLCorners as aw, _boundSegment as ax, _normalizeAngle as ay, getRtlAdapter as az, isArray as b, toLineHeight as b0, PITAU as b1, INFINITY as b2, RAD_PER_DEG as b3, QUARTER_PI as b4, TWO_THIRDS_PI as b5, _angleDiff as b6, color as c, defaults as d, effects as e, resolveObjectKey as f, isNumberFinite as g, defined as h, isObject as i, createContext as j, isNullOrUndef as k, listenArrayEvents as l, toPercentage as m, toDimension as n, formatNumber as o, _angleBetween as p, _getStartAndCountOfVisiblePoints as q, requestAnimFrame as r, sign as s, toRadians as t, unlistenArrayEvents as u, valueOrDefault as v, _scaleRangesChanged as w, isNumber as x, _parseObjectDataRadialScale as y, getRelativePosition as z };
 //# sourceMappingURL=helpers.segment.js.map

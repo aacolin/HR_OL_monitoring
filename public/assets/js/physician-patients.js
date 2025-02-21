@@ -25,11 +25,11 @@ function handleTokenValidation(localStorageToken, sessionToken) {
 }
 
 function validateTokenWithServer(token) {
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/physicians/token-auth',
         method: 'GET',
         contentType: 'application/json',
-        headers: {'***REMOVED***-auth': token},
+        headers: {'x-auth': token},
         dataType: 'json',
     }).done(function() {
         document.body.classList.remove('hidden');
@@ -41,7 +41,7 @@ function validateTokenWithServer(token) {
 
 
 function getPhysicianProfile(token) {
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/physicians/profile',
         method: 'POST',
         contentType: 'application/json',
@@ -60,8 +60,8 @@ function getPhysicianProfile(token) {
 function displayPhysicianProfile(data) {
     const profile = data.profile;
     const physicianName = profile.firstName + ' ' + profile.lastName;
-    $('#physicianFullName').te***REMOVED***t(physicianName);
-    $('#physicianProfileName').te***REMOVED***t("Welcome Dr. " + physicianName);
+    $('#physicianFullName').text(physicianName);
+    $('#physicianProfileName').text("Welcome Dr. " + physicianName);
 }
 
 function handleTokenValidationError() {
@@ -80,7 +80,7 @@ function handleDropDownPatientsList() {
         event.preventDefault();
 
         const patientEmail = $(event.target).data('email');
-        const patientName = $(event.target).te***REMOVED***t();
+        const patientName = $(event.target).text();
         displayPatientGraphs(patientEmail, patientName);
     });
 
@@ -93,13 +93,13 @@ function displayPatientGraphs(patientEmail, patientName){
     generateDailyGraphs();
     generateWeeklyGraphs();
 
-    $('#patientNameCard').te***REMOVED***t("Patient: " + patientName);
+    $('#patientNameCard').text("Patient: " + patientName);
     $('#patientGraphs').show();
 }
 
 function generateDailyGraphs() {
     initializeReportsChart("#heartRateChart", generateHeartRateData);
-    initializeReportsChart("#bloodO***REMOVED***ygenChart", generateO***REMOVED***ygenLevelData);
+    initializeReportsChart("#bloodOxygenChart", generateOxygenLevelData);
 
 }
 
@@ -117,9 +117,9 @@ function initializeReportsChart(target, dataGenerator) {
     // Generate data for the graph based on current day
     const data = dataGenerator(startDate, endDate, interval);
 
-    new Ape***REMOVED***Charts(document.querySelector(target), {
+    new ApexCharts(document.querySelector(target), {
         series: [{
-            name: target === "#heartRateChart" ? 'Heart Rate' : 'O***REMOVED***ygen Levels',
+            name: target === "#heartRateChart" ? 'Heart Rate' : 'Oxygen Levels',
             data: data,
         }],
         chart: {
@@ -129,8 +129,8 @@ function initializeReportsChart(target, dataGenerator) {
                 show: true
             }
         },
-        colors: [target === "#heartRateChart" ? '#ff0000' : '#4154f1'], // Red for heart rate, blue for o***REMOVED***ygen levels
-        ***REMOVED***a***REMOVED***is: {
+        colors: [target === "#heartRateChart" ? '#ff0000' : '#4154f1'], // Red for heart rate, blue for oxygen levels
+        xaxis: {
             type: 'datetime',
             labels: {
                 formatter: function(value, timestamp) {
@@ -147,9 +147,9 @@ function initializeReportsChart(target, dataGenerator) {
 
 function initializeWeeklyCharts() {
     const weeklyHeartRateData = generateWeeklyData(generateRandomHeartRate);
-    const weeklyO***REMOVED***ygenData = generateWeeklyData(generateRandomWeeklyO***REMOVED***ygenLevel);
+    const weeklyOxygenData = generateWeeklyData(generateRandomWeeklyOxygenLevel);
 
-    new Ape***REMOVED***Charts(document.querySelector("#weeklyHeartRateChart"), {
+    new ApexCharts(document.querySelector("#weeklyHeartRateChart"), {
         series: [{
             name: 'Weekly Heart Rate',
             data: weeklyHeartRateData,
@@ -162,30 +162,30 @@ function initializeWeeklyCharts() {
             }
         },
         colors: ['#71f5a5'], // Green for heart rate
-        ***REMOVED***a***REMOVED***is: {
+        xaxis: {
             type: 'datetime',
             min: new Date().setDate(new Date().getDate() - 6), // Start from 6 days ago
-            ma***REMOVED***: new Date().getTime(), // End at current time
+            max: new Date().getTime(), // End at current time
             labels: {
                 formatter: function(value) {
                     const date = new Date(value);
                     return date.toLocaleString('en-US', { weekday: 'long' }); // Show day name
                 }
             },
-            tickAmount: 6 // Ensure there are e***REMOVED***actly 6 ticks on the ***REMOVED***-a***REMOVED***is
+            tickAmount: 6 // Ensure there are exactly 6 ticks on the x-axis
         },
         dataLabels: {
             enabled: true, // Enable data labels
             formatter: function(value) {
-                return value.toFi***REMOVED***ed(2); // Format the value to 2 decimal places
+                return value.toFixed(2); // Format the value to 2 decimal places
             }
         }
     }).render();
 
-    new Ape***REMOVED***Charts(document.querySelector("#weeklyO***REMOVED***ygenChart"), {
+    new ApexCharts(document.querySelector("#weeklyOxygenChart"), {
         series: [{
-            name: 'Weekly O***REMOVED***ygen Levels',
-            data: weeklyO***REMOVED***ygenData,
+            name: 'Weekly Oxygen Levels',
+            data: weeklyOxygenData,
         }],
         chart: {
             height: 350,
@@ -194,23 +194,23 @@ function initializeWeeklyCharts() {
                 show: true
             }
         },
-        colors: ['#41acf1'], // Blue for o***REMOVED***ygen levels
-        ***REMOVED***a***REMOVED***is: {
+        colors: ['#41acf1'], // Blue for oxygen levels
+        xaxis: {
             type: 'datetime',
             min: new Date().setDate(new Date().getDate() - 6), // Start from 6 days ago
-            ma***REMOVED***: new Date().getTime(), // End at current time
+            max: new Date().getTime(), // End at current time
             labels: {
                 formatter: function(value) {
                     const date = new Date(value);
                     return date.toLocaleString('en-US', { weekday: 'long' }); // Show day name
                 }
             },
-            tickAmount: 6 // Ensure there are e***REMOVED***actly 6 ticks on the ***REMOVED***-a***REMOVED***is
+            tickAmount: 6 // Ensure there are exactly 6 ticks on the x-axis
         },
         dataLabels: {
             enabled: true, // Enable data labels
             formatter: function(value) {
-                return value.toFi***REMOVED***ed(2); // Format the value to 2 decimal places
+                return value.toFixed(2); // Format the value to 2 decimal places
             }
         }
     }).render();
@@ -222,7 +222,7 @@ function generateWeeklyData(dataGenerator) {
 
     for (let i = 0; i < 7; i++) {
         data.push({
-            ***REMOVED***: currentTime.toISOString(),
+            x: currentTime.toISOString(),
             y: dataGenerator()
         });
         currentTime.setDate(currentTime.getDate() - 1);
@@ -237,7 +237,7 @@ function generateHeartRateData(startDate, endDate, interval) {
 
     while (currentTime <= endDate) {
         data.push({
-            ***REMOVED***: currentTime.toISOString(),
+            x: currentTime.toISOString(),
             y: generateRandomHeartRate()
         });
         currentTime = new Date(currentTime.getTime() + interval * 60000);
@@ -246,14 +246,14 @@ function generateHeartRateData(startDate, endDate, interval) {
     return data;
 }
 
-function generateO***REMOVED***ygenLevelData(startDate, endDate, interval) {
+function generateOxygenLevelData(startDate, endDate, interval) {
     let data = [];
     let currentTime = new Date(startDate);
 
     while (currentTime <= endDate) {
         data.push({
-            ***REMOVED***: currentTime.toISOString(),
-            y: generateRandomO***REMOVED***ygenLevel()
+            x: currentTime.toISOString(),
+            y: generateRandomOxygenLevel()
         });
         currentTime = new Date(currentTime.getTime() + interval * 60000);
     }
@@ -276,7 +276,7 @@ function generateRandomHeartRate() {
     }
 }
 
-function generateRandomO***REMOVED***ygenLevel() {
+function generateRandomOxygenLevel() {
     const baseline = 98;
     const minRate = 94;
     const baselineVariance = 2;
@@ -291,7 +291,7 @@ function generateRandomO***REMOVED***ygenLevel() {
     }
 }
 
-function generateRandomWeeklyO***REMOVED***ygenLevel() {
+function generateRandomWeeklyOxygenLevel() {
     const baseline = 98;
     const minRate = 94;
     const baselineVariance = 2;
@@ -310,7 +310,7 @@ function generateRandomWeeklyO***REMOVED***ygenLevel() {
 function requestPatientsList() {
     const sessionToken = window.sessionStorage.getItem('physician-token');
 
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/physicians/profile',
         method: 'POST',
         contentType: 'application/json',
@@ -319,7 +319,7 @@ function requestPatientsList() {
     })
     .done(function(data) {
         const physicianEmail = data.profile.email;
-        $.aja***REMOVED***({
+        $.ajax({
             url: '/patients/patients-list',
             method: 'POST',
             contentType: 'application/json',

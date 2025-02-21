@@ -1,13 +1,13 @@
-e***REMOVED***port default class PolarAreaController e***REMOVED***tends DatasetController {
+export default class PolarAreaController extends DatasetController {
     static id: string;
     /**
      * @type {any}
      */
     static overrides: any;
-    constructor(chart: any, datasetInde***REMOVED***: any);
+    constructor(chart: any, datasetIndex: any);
     innerRadius: number;
     outerRadius: number;
-    getLabelAndValue(inde***REMOVED***: any): {
+    getLabelAndValue(index: any): {
         label: any;
         value: string;
     };
@@ -18,9 +18,9 @@ e***REMOVED***port default class PolarAreaController e***REMOVED***tends Dataset
     /**
      * @protected
      */
-    protected getMinMa***REMOVED***(): {
+    protected getMinMax(): {
         min: number;
-        ma***REMOVED***: number;
+        max: number;
     };
     /**
        * @private

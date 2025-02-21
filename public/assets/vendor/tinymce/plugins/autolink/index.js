@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "autolink" plugin for usage with module loaders
+// Exports the "autolink" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/autolink')

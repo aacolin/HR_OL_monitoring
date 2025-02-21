@@ -31,7 +31,7 @@
         if(typeof grecaptcha !== "undefined" ) {
           grecaptcha.ready(function() {
             try {
-              grecaptcha.e***REMOVED***ecute(recaptcha, {action: 'php_email_form_submit'})
+              grecaptcha.execute(recaptcha, {action: 'php_email_form_submit'})
               .then(token => {
                 formData.set('recaptcha-response', token);
                 php_email_form_submit(thisForm, action, formData);
@@ -57,9 +57,9 @@
     })
     .then(response => {
       if( response.ok ) {
-        return response.te***REMOVED***t();
+        return response.text();
       } else {
-        throw new Error(`${response.status} ${response.statusTe***REMOVED***t} ${response.url}`); 
+        throw new Error(`${response.status} ${response.statusText} ${response.url}`); 
       }
     })
     .then(data => {

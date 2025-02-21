@@ -2,42 +2,42 @@
 require('dotenv').config();
 const bodyParser = require('body-parser');
 
-var e***REMOVED***press = require('e***REMOVED***press');
+var express = require('express');
 var path = require('path');
 var httpError = require('http-errors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var favicon = require('serve-favicon');
 
-var app = e***REMOVED***press();
+var app = express();
 var sensorRouter = require('./routes/sensor');
 
 // Middleware setup
 app.use(logger('dev'));     // Show HTTP requests in the console
-app.use(e***REMOVED***press.json());    // Parse JSON bodies
-// app.use(e***REMOVED***press.urlencoded({ e***REMOVED***tended: false }));   // Parse URL-encoded bodies
-app.use(bodyParser.urlencoded({ e***REMOVED***tended: false }));
+app.use(express.json());    // Parse JSON bodies
+// app.use(express.urlencoded({ extended: false }));   // Parse URL-encoded bodies
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());    // Parse cookie headers
-app.use(e***REMOVED***press.static(path.join(__dirname, 'public')));    // Serve static files
-app.use(function (req, res, ne***REMOVED***t) {   // Set up CORS
+app.use(express.static(path.join(__dirname, 'public')));    // Serve static files
+app.use(function (req, res, next) {   // Set up CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
   res.setHeader('Access-Control-Allow-Credentials', true);
-  ne***REMOVED***t();
+  next();
 });
 
 // Serve the favicon
 app.use(favicon(path.join(__dirname, 'public','assets', 'img', 'favicon.png')));
 
 // set up routes
-var inde***REMOVED***Router = require('./routes/inde***REMOVED***');
+var indexRouter = require('./routes/index');
 var patientsRouter = require('./routes/patients');
 var physiciansRouter = require('./routes/physicians');
 var devicesRouter = require('./routes/devices');
 
 // Routes
-app.use('/', inde***REMOVED***Router);
+app.use('/', indexRouter);
 app.use('/patients', patientsRouter);
 app.use('/physicians', physiciansRouter);
 app.use('/devices', devicesRouter);
@@ -48,14 +48,14 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // catch 404 and forward to error handler
-app.use(function(req, res, ne***REMOVED***t) {
+app.use(function(req, res, next) {
   const err = new Error('404 Page Not Found');
   err.status = 404;
-  ne***REMOVED***t(err);
+  next(err);
 });
 
 // set up error handling
-app.use(function(err, req, res, ne***REMOVED***t) {
+app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.json({
     message: err.message,
@@ -63,4 +63,4 @@ app.use(function(err, req, res, ne***REMOVED***t) {
   });
 });
 
-module.e***REMOVED***ports = app;
+module.exports = app;

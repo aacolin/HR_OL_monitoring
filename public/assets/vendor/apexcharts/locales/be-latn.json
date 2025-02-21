@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Nd", "Pn", "Aŭ", "Sr", "Čć", "Pt", "Sb"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Spampavać SVG",
-      "e***REMOVED***portToPNG": "Spampavać PNG",
-      "e***REMOVED***portToCSV": "Spampavać CSV",
+      "exportToSVG": "Spampavać SVG",
+      "exportToPNG": "Spampavać PNG",
+      "exportToCSV": "Spampavać CSV",
       "menu": "Meniu",
       "selection": "Vyłučeńnie",
       "selectionZoom": "Vyłučeńnie z maštabavańniem",

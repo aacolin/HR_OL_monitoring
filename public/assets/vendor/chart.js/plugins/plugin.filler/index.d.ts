@@ -9,4 +9,4 @@ declare namespace _default {
         const drawTime: string;
     }
 }
-e***REMOVED***port default _default;
+export default _default;

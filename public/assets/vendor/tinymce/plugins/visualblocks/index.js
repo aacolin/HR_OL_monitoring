@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "visualblocks" plugin for usage with module loaders
+// Exports the "visualblocks" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/visualblocks')

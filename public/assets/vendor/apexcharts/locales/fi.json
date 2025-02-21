@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Lataa SVG",
-      "e***REMOVED***portToPNG": "Lataa PNG",
-      "e***REMOVED***portToCSV": "Lataa CSV",
+      "exportToSVG": "Lataa SVG",
+      "exportToPNG": "Lataa PNG",
+      "exportToCSV": "Lataa CSV",
       "menu": "Valikko",
       "selection": "Valinta",
       "selectionZoom": "Valinnan zoomaus",

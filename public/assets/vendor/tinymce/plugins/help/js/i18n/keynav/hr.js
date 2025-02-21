@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.hr',
   '\n' +
   '<dl>\n' +
   '  <dt>Fokusiranje trake izbornika</dt>\n' +
-  '  <dd>Windows ili Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows ili Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Fokusiranje alatne trake</dt>\n' +
-  '  <dd>Windows ili Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows ili Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Fokusiranje podnožja</dt>\n' +
-  '  <dd>Windows ili Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows ili Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Fokusiranje obavijesti</dt>\n' +
-  '  <dd>Windows ili Linu***REMOVED***: Alt + F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows ili Linux: Alt + F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>Fokusiranje kontekstne alatne trake</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** ili macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux ili macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Navigacija će započeti kod prve stavke na korisničkom sučelju, koja će biti istaknuta ili podcrtana ako se radi o prvoj stavci u\n' +

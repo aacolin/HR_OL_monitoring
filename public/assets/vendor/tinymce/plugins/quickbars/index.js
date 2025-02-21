@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "quickbars" plugin for usage with module loaders
+// Exports the "quickbars" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/quickbars')

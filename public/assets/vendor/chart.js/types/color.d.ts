@@ -1,1 +1,1 @@
-e***REMOVED***port type Color = string | CanvasGradient | CanvasPattern;
+export type Color = string | CanvasGradient | CanvasPattern;

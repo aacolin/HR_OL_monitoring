@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.sl_SI',
   '\n' +
   '<dl>\n' +
   '  <dt>Fokus na menijsko vrstico</dt>\n' +
-  '  <dd>Windows ali Linu***REMOVED***: Alt + F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows ali Linux: Alt + F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Fokus na orodno vrstico</dt>\n' +
-  '  <dd>Windows ali Linu***REMOVED***: Alt + F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows ali Linux: Alt + F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Fokus na nogo</dt>\n' +
-  '  <dd>Windows ali Linu***REMOVED***: Alt + F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows ali Linux: Alt + F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Označitev obvestila</dt>\n' +
-  '  <dd>Windows ali Linu***REMOVED***: Alt + F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows ali Linux: Alt + F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>Fokus na kontekstualno orodno vrstico</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** ali macOS: Ctrl + F9</dd>\n' +
+  '  <dd>Windows, Linux ali macOS: Ctrl + F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Krmarjenje se bo začelo s prvim elementom uporabniškega vmesnika, ki bo izpostavljena ali podčrtan, če gre za prvi element na\n' +

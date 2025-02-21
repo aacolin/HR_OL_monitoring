@@ -1,5 +1,5 @@
-const e***REMOVED***press = require('e***REMOVED***press');
-const router = e***REMOVED***press.Router();
+const express = require('express');
+const router = express.Router();
 const jwt = require("jwt-simple");
 const bcrypt = require("bcryptjs");
 const fs = require('fs');
@@ -7,7 +7,7 @@ const secret = fs.readFileSync(__dirname + '/../jwt/secret').toString();
 const Patient = require('../models/patient');
 const dotenv = require('dotenv');
 dotenv.config();
-const a***REMOVED***ios = require('a***REMOVED***ios');
+const axios = require('axios');
 const request = require('request');
 const qs = require('qs');
 
@@ -21,7 +21,7 @@ var particleClientSecret =  process.env.PARTICLE_CLIENT_SECRET;
 // Function to verify the Particle access token
 async function verifyParticleAccessToken() {
     try {
-        await a***REMOVED***ios.get('https://api.particle.io/v1/devices', {
+        await axios.get('https://api.particle.io/v1/devices', {
             headers: {
                 'Authorization': `Bearer ${particleAccessToken}`
             }
@@ -30,7 +30,7 @@ async function verifyParticleAccessToken() {
         return particleAccessToken;
     } catch (error) {
         if (error.response.status === 401) {
-            console.log('Particle cloud. Invalid or e***REMOVED***pired token : ' + error);
+            console.log('Particle cloud. Invalid or expired token : ' + error);
             console.log('Requesting new token');
             return await requestNewParticleToken();
         } else {
@@ -43,7 +43,7 @@ async function verifyParticleAccessToken() {
 async function requestNewParticleToken() {
     try {
         // Request a new access token from the Particle Cloud API
-        const response = await a***REMOVED***ios.post('https://api.particle.io/oauth/token', qs.stringify({
+        const response = await axios.post('https://api.particle.io/oauth/token', qs.stringify({
             grant_type: 'password',
             username: particleUserName,
             password: particlePassword,
@@ -65,7 +65,7 @@ async function requestNewParticleToken() {
 function updateEnvFile(key, value) {
     const envFilePath = __dirname + '/../.env';
     const envFileContent = fs.readFileSync(envFilePath, 'utf8');
-    const newEnvFileContent = envFileContent.replace(new RegE***REMOVED***p(`${key}=.*`), `${key}=${value}`);
+    const newEnvFileContent = envFileContent.replace(new RegExp(`${key}=.*`), `${key}=${value}`);
     fs.writeFileSync(envFilePath, newEnvFileContent);
 }
 
@@ -145,7 +145,7 @@ router.post('/add-device', async function(req, res) {
             return res.status(404).json({ message: 'Patient not found' });
         }
 
-        // Check if the deviceId already e***REMOVED***ists in the patient's devices list
+        // Check if the deviceId already exists in the patient's devices list
         if (patient.devices.includes(deviceId)) {
             return res.status(400).json({ message: 'Device already added' });
         }
@@ -176,4 +176,4 @@ router.post('/add-device', async function(req, res) {
 
 
 
-module.e***REMOVED***ports = router;
+module.exports = router;

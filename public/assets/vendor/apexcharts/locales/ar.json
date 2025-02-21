@@ -48,9 +48,9 @@
 "سبت"
 ],
 "toolbar": {
-"e***REMOVED***portToSVG": "تحميل بصيغة SVG",
-"e***REMOVED***portToPNG": "تحميل بصيغة PNG",
-"e***REMOVED***portToCSV": "تحميل بصيغة CSV",
+"exportToSVG": "تحميل بصيغة SVG",
+"exportToPNG": "تحميل بصيغة PNG",
+"exportToCSV": "تحميل بصيغة CSV",
 "menu": "القائمة",
 "selection": "تحديد",
 "selectionZoom": "تكبير التحديد",

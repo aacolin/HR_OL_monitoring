@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.th_TH',
   '\n' +
   '<dl>\n' +
   '  <dt>โฟกัสที่แถบเมนู</dt>\n' +
-  '  <dd>Windows หรือ Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows หรือ Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>โฟกัสที่แถบเครื่องมือ</dt>\n' +
-  '  <dd>Windows หรือ Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows หรือ Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>โฟกัสที่ส่วนท้าย</dt>\n' +
-  '  <dd>Windows หรือ Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows หรือ Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>โฟกัสไปที่การแจ้งเตือน</dt>\n' +
-  '  <dd>Windows หรือ Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows หรือ Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>โฟกัสที่แถบเครื่องมือตามบริบท</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** หรือ macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux หรือ macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>การนำทางจะเริ่มที่รายการ UI แรก ซึ่งจะมีการไฮไลต์หรือขีดเส้นใต้ไว้ในกรณีที่รายการแรกอยู่ใน\n' +

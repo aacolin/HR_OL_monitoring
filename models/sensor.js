@@ -9,4 +9,4 @@ const sensorDataSchema = new db.Schema({
 
 const sensor = db.model('sensor', sensorSchema, 'data');
 
-module.e***REMOVED***ports = sensorData;
+module.exports = sensorData;

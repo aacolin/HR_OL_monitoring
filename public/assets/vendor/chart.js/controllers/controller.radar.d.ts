@@ -1,4 +1,4 @@
-e***REMOVED***port default class RadarController e***REMOVED***tends DatasetController {
+export default class RadarController extends DatasetController {
     static id: string;
     /**
      * @type {any}
@@ -7,7 +7,7 @@ e***REMOVED***port default class RadarController e***REMOVED***tends DatasetCont
     /**
        * @protected
        */
-    protected getLabelAndValue(inde***REMOVED***: any): {
+    protected getLabelAndValue(index: any): {
         label: any;
         value: string;
     };

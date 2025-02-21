@@ -7,51 +7,51 @@ body {
   }
 .form-container {
     width: 25% !important; /* Set width to 50% */
-    margin: 20p***REMOVED***; /* Add margin for spacing */
-    padding: 20p***REMOVED***;
+    margin: 20px; /* Add margin for spacing */
+    padding: 20px;
     background-color: #fff;
-    border-radius: 8p***REMOVED***;
-    bo***REMOVED***-shadow: 0 2p***REMOVED*** 4p***REMOVED*** rgba(0, 0, 0, 0.1);
-    /* Remove float and use fle***REMOVED***bo***REMOVED*** for alignment */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Remove float and use flexbox for alignment */
     display: block;
-    fle***REMOVED***-direction: column;
-    align-items: fle***REMOVED***-start;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .form-group {
    
-    margin-bottom: 15p***REMOVED***;
+    margin-bottom: 15px;
 }
 
 
 label {
   
     display: block;
-    margin-bottom: 5p***REMOVED***;
+    margin-bottom: 5px;
 }
 
-input[type="te***REMOVED***t"],
+input[type="text"],
 input[type="datetime-local"],
 input[type="number"],
 input[type="submit"],
 input[type="button"] {
-    width: calc(100% - 20p***REMOVED***);
-    padding: 10p***REMOVED***;
-    margin-bottom: 10p***REMOVED***;
-    border-radius: 4p***REMOVED***;
-    border: 1p***REMOVED*** solid #ccc;
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
 }
 
 select#deviceId {
     width: 100%;
-    padding: 10p***REMOVED***;
-    margin-bottom: 10p***REMOVED***;
-    border-radius: 4p***REMOVED***;
-    border: 1p***REMOVED*** solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
     background-color: white;
 }
 
-input[type="te***REMOVED***t"],
+input[type="text"],
 input[type="datetime-local"],
 input[type="number"] {
     width: 100%; 
@@ -66,7 +66,7 @@ input[type="button"] {
     border: none;
     display: block;
     margin: 0 auto; /* Center the buttons */
-    margin-bottom: 10p***REMOVED***;
+    margin-bottom: 10px;
 }
 
 input[type="submit"]:hover,

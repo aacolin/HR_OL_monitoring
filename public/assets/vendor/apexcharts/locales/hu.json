@@ -48,9 +48,9 @@
       "V"
     ],
     "toolbar": {
-      "e***REMOVED***portToSVG": "E***REMOVED***portálás SVG-be",
-      "e***REMOVED***portToPNG": "E***REMOVED***portálás PNG-be",
-      "e***REMOVED***portToCSV": "E***REMOVED***portálás CSV-be",
+      "exportToSVG": "Exportálás SVG-be",
+      "exportToPNG": "Exportálás PNG-be",
+      "exportToCSV": "Exportálás CSV-be",
       "menu": "Fő ajánlat",
       "download": "SVG letöltése",
       "selection": "Kiválasztás",

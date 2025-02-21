@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "SVG İndir",
-      "e***REMOVED***portToPNG": "PNG İndir",
-      "e***REMOVED***portToCSV": "CSV İndir",
+      "exportToSVG": "SVG İndir",
+      "exportToPNG": "PNG İndir",
+      "exportToCSV": "CSV İndir",
       "menu": "Menü",
       "selection": "Seçim",
       "selectionZoom": "Seçim Yakınlaştır",

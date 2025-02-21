@@ -1,4 +1,4 @@
-e***REMOVED***port function _segments(line: any, target: any, property: any): ({
+export function _segments(line: any, target: any, property: any): ({
     source: any;
     target: {
         property: any;
@@ -21,16 +21,16 @@ e***REMOVED***port function _segments(line: any, target: any, property: any): ({
         style?: any;
     };
     start: {
-        [***REMOVED***: number]: any;
+        [x: number]: any;
     };
     end: {
-        [***REMOVED***: number]: any;
+        [x: number]: any;
     };
 })[];
-e***REMOVED***port function _getBounds(property: any, first: any, last: any, loop: any): {
+export function _getBounds(property: any, first: any, last: any, loop: any): {
     property: any;
     start: any;
     end: any;
 };
-e***REMOVED***port function _pointsFromSegments(boundary: any, line: any): any[];
-e***REMOVED***port function _findSegmentEnd(start: any, end: any, points: any): any;
+export function _pointsFromSegments(boundary: any, line: any): any[];
+export function _findSegmentEnd(start: any, end: any, points: any): any;

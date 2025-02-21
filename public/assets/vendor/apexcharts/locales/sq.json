@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Die", "Hën", "Mar", "Mër", "Enj", "Pre", "Sht"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Shkarko SVG",
-      "e***REMOVED***portToPNG": "Shkarko PNG",
-      "e***REMOVED***portToCSV": "Shkarko CSV",
+      "exportToSVG": "Shkarko SVG",
+      "exportToPNG": "Shkarko PNG",
+      "exportToCSV": "Shkarko CSV",
       "menu": "Menu",
       "selection": "Seleksiono",
       "selectionZoom": "Seleksiono Zmadhim",

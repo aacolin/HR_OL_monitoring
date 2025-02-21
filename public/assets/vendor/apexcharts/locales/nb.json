@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Sø", "Ma", "Ti", "On", "To", "Fr", "Lø"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Last ned SVG",
-      "e***REMOVED***portToPNG": "Last ned PNG",
-      "e***REMOVED***portToCSV": "Last ned CSV",
+      "exportToSVG": "Last ned SVG",
+      "exportToPNG": "Last ned PNG",
+      "exportToCSV": "Last ned CSV",
       "menu": "Menu",
       "selection": "Velg",
       "selectionZoom": "Zoom: Velg",

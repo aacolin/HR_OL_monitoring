@@ -27,11 +27,11 @@ function handleTokenValidation() {
 
 
 function validateTokenWithServer(token) {
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/physicians/token-auth',
         method: 'GET',
         contentType: 'application/json',
-        headers: {'***REMOVED***-auth': token},
+        headers: {'x-auth': token},
         dataType: 'json',
     }).done(function(data) {
         document.body.classList.remove('hidden');
@@ -61,7 +61,7 @@ function setupLogoutHandler() {
 }
 
 function getPhysicianProfile(token) {
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/physicians/profile',
         method: 'POST',
         contentType: 'application/json',
@@ -80,10 +80,10 @@ function displayPhysicianProfile(profile) {
     const physicianName = profile.firstName + ' ' + profile.lastName;
     const physicianEmail = profile.email;
     const specialty = profile.specialty;
-    $('#physicianFullName').te***REMOVED***t(physicianName);
-    $('#physicianSpecialty').te***REMOVED***t(specialty);
-    $('#physicianEmail').te***REMOVED***t(physicianEmail);
-    $('.physicianFirstName').te***REMOVED***t(physicianName);
+    $('#physicianFullName').text(physicianName);
+    $('#physicianSpecialty').text(specialty);
+    $('#physicianEmail').text(physicianEmail);
+    $('.physicianFirstName').text(physicianName);
 
 }
 
@@ -113,7 +113,7 @@ function setupSaveProfileChangesHandler() {
 
 function saveProfileChanges(firstName, lastName) {
     const token = window.sessionStorage.getItem('physician-token');
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/physicians/profile', // Corrected URL
         method: 'PUT',
         contentType: 'application/json',
@@ -211,7 +211,7 @@ function setupChangePasswordHandler() {
 
 function changePassword(currentPassword, newPassword) {
     const token = window.sessionStorage.getItem('physician-token');
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/physicians/change-password',
         method: 'PUT',
         contentType: 'application/json',

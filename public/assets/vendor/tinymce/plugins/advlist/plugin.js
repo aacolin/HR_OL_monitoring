@@ -9,7 +9,7 @@
 
     const applyListFormat = (editor, listName, styleValue) => {
       const cmd = listName === 'UL' ? 'InsertUnorderedList' : 'InsertOrderedList';
-      editor.e***REMOVED***ecCommand(cmd, false, styleValue === false ? null : { 'list-style-type': styleValue });
+      editor.execCommand(cmd, false, styleValue === false ? null : { 'list-style-type': styleValue });
     };
 
     const register$2 = editor => {
@@ -79,7 +79,7 @@
           return Optional.none();
         }
       }
-      e***REMOVED***ists(predicate) {
+      exists(predicate) {
         return this.tag && predicate(this.value);
       }
       forall(predicate) {
@@ -134,26 +134,26 @@
     }
     Optional.singletonNone = new Optional(false);
 
-    const findUntil = (***REMOVED***s, pred, until) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
-          return Optional.some(***REMOVED***);
-        } else if (until(***REMOVED***, i)) {
+    const findUntil = (xs, pred, until) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
+          return Optional.some(x);
+        } else if (until(x, i)) {
           break;
         }
       }
       return Optional.none();
     };
 
-    const isCustomList = list => /\bto***REMOVED***\-/.test(list.className);
+    const isCustomList = list => /\btox\-/.test(list.className);
     const isChildOfBody = (editor, elm) => {
       return editor.dom.isChildOf(elm, editor.getBody());
     };
-    const matchNodeNames = rege***REMOVED*** => node => isNonNullable(node) && rege***REMOVED***.test(node.nodeName);
+    const matchNodeNames = regex => node => isNonNullable(node) && regex.test(node.nodeName);
     const isListNode = matchNodeNames(/^(OL|UL|DL)$/);
     const isTableCellNode = matchNodeNames(/^(TH|TD)$/);
-    const inList = (editor, parents, nodeName) => findUntil(parents, parent => isListNode(parent) && !isCustomList(parent), isTableCellNode).e***REMOVED***ists(list => list.nodeName === nodeName && isChildOfBody(editor, list));
+    const inList = (editor, parents, nodeName) => findUntil(parents, parent => isListNode(parent) && !isCustomList(parent), isTableCellNode).exists(list => list.nodeName === nodeName && isChildOfBody(editor, list));
     const getSelectedStyleType = editor => {
       const listElm = editor.dom.getParent(editor.selection.getNode(), 'ol,ul');
       const style = editor.dom.getStyle(listElm, 'listStyleType');
@@ -174,7 +174,7 @@
       return () => editor.off('NodeChange', nodeChangeHandler);
     };
 
-    const styleValueToTe***REMOVED***t = styleValue => {
+    const styleValueToText = styleValue => {
       return styleValue.replace(/\-/g, ' ').replace(/\b\w/g, chr => {
         return chr.toUpperCase();
       });
@@ -200,17 +200,17 @@
             const iconStyle = nodeName === 'OL' ? 'num' : 'bull';
             const iconName = styleValue === 'disc' || styleValue === 'decimal' ? 'default' : styleValue;
             const itemValue = normalizeStyleValue(styleValue);
-            const displayTe***REMOVED***t = styleValueToTe***REMOVED***t(styleValue);
+            const displayText = styleValueToText(styleValue);
             return {
               type: 'choiceitem',
               value: itemValue,
               icon: 'list-' + iconStyle + '-' + iconName,
-              te***REMOVED***t: displayTe***REMOVED***t
+              text: displayText
             };
           });
           callback(items);
         },
-        onAction: () => editor.e***REMOVED***ecCommand(cmd),
+        onAction: () => editor.execCommand(cmd),
         onItemAction: (_splitButtonApi, value) => {
           applyListFormat(editor, nodeName, value);
         },
@@ -227,7 +227,7 @@
         tooltip,
         icon: nodeName === 'OL' ? 'ordered-list' : 'unordered-list',
         onSetup: makeSetupHandler(editor, nodeName),
-        onAction: () => editor.queryCommandState(cmd) || styleValue === '' ? editor.e***REMOVED***ecCommand(cmd) : applyListFormat(editor, nodeName, styleValue)
+        onAction: () => editor.queryCommandState(cmd) || styleValue === '' ? editor.execCommand(cmd) : applyListFormat(editor, nodeName, styleValue)
       });
     };
     const addControl = (editor, id, tooltip, cmd, nodeName, styles) => {

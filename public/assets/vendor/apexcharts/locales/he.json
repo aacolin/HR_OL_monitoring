@@ -40,9 +40,9 @@
     ],
     "shortDays": ["א׳", "ב׳", "ג׳", "ד׳", "ה׳", "ו׳", "ש׳"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "הורד SVG",
-      "e***REMOVED***portToPNG": "הורד PNG",
-      "e***REMOVED***portToCSV": "הורד CSV",
+      "exportToSVG": "הורד SVG",
+      "exportToPNG": "הורד PNG",
+      "exportToCSV": "הורד CSV",
       "menu": "תפריט",
       "selection": "בחירה",
       "selectionZoom": "זום בחירה",

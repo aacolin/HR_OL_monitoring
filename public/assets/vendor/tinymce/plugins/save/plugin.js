@@ -30,7 +30,7 @@
 
     const displayErrorMessage = (editor, message) => {
       editor.notificationManager.open({
-        te***REMOVED***t: message,
+        text: message,
         type: 'error'
       });
     };
@@ -92,7 +92,7 @@
         icon: 'save',
         tooltip: 'Save',
         enabled: false,
-        onAction: () => editor.e***REMOVED***ecCommand('mceSave'),
+        onAction: () => editor.execCommand('mceSave'),
         onSetup: stateToggle(editor),
         shortcut: 'Meta+S'
       });
@@ -100,7 +100,7 @@
         icon: 'cancel',
         tooltip: 'Cancel',
         enabled: false,
-        onAction: () => editor.e***REMOVED***ecCommand('mceCancel'),
+        onAction: () => editor.execCommand('mceCancel'),
         onSetup: stateToggle(editor)
       });
       editor.addShortcut('Meta+S', '', 'mceSave');

@@ -1,139 +1,139 @@
 /***************************************************
-  This is a library written for the Ma***REMOVED***im MAX30105 Optical Smoke Detector
+  This is a library written for the Maxim MAX30105 Optical Smoke Detector
   It should also work with the MAX30102. However, the MAX30102 does not have a Green LED.
 
   These sensors use I2C to communicate, as well as a single (optional)
   interrupt line that is not currently supported in this driver.
 
   Written by Peter Jansen and Nathan Seidle (SparkFun)
-  BSD license, all te***REMOVED***t above must be included in any redistribution.
+  BSD license, all text above must be included in any redistribution.
  *****************************************************/
 
 #include "MAX30105.h"
 
 // Status Registers
-static const uint8_t MAX30105_INTSTAT1 =		0***REMOVED***00;
-static const uint8_t MAX30105_INTSTAT2 =		0***REMOVED***01;
-static const uint8_t MAX30105_INTENABLE1 =		0***REMOVED***02;
-static const uint8_t MAX30105_INTENABLE2 =		0***REMOVED***03;
+static const uint8_t MAX30105_INTSTAT1 =		0x00;
+static const uint8_t MAX30105_INTSTAT2 =		0x01;
+static const uint8_t MAX30105_INTENABLE1 =		0x02;
+static const uint8_t MAX30105_INTENABLE2 =		0x03;
 
 // FIFO Registers
-static const uint8_t MAX30105_FIFOWRITEPTR = 	0***REMOVED***04;
-static const uint8_t MAX30105_FIFOOVERFLOW = 	0***REMOVED***05;
-static const uint8_t MAX30105_FIFOREADPTR = 	0***REMOVED***06;
-static const uint8_t MAX30105_FIFODATA =		0***REMOVED***07;
+static const uint8_t MAX30105_FIFOWRITEPTR = 	0x04;
+static const uint8_t MAX30105_FIFOOVERFLOW = 	0x05;
+static const uint8_t MAX30105_FIFOREADPTR = 	0x06;
+static const uint8_t MAX30105_FIFODATA =		0x07;
 
 // Configuration Registers
-static const uint8_t MAX30105_FIFOCONFIG = 		0***REMOVED***08;
-static const uint8_t MAX30105_MODECONFIG = 		0***REMOVED***09;
-static const uint8_t MAX30105_PARTICLECONFIG = 	0***REMOVED***0A;    // Note, sometimes listed as "SPO2" config in datasheet (pg. 11)
-static const uint8_t MAX30105_LED1_PULSEAMP = 	0***REMOVED***0C;
-static const uint8_t MAX30105_LED2_PULSEAMP = 	0***REMOVED***0D;
-static const uint8_t MAX30105_LED3_PULSEAMP = 	0***REMOVED***0E;
-static const uint8_t MAX30105_LED_PROX_AMP = 	0***REMOVED***10;
-static const uint8_t MAX30105_MULTILEDCONFIG1 = 0***REMOVED***11;
-static const uint8_t MAX30105_MULTILEDCONFIG2 = 0***REMOVED***12;
+static const uint8_t MAX30105_FIFOCONFIG = 		0x08;
+static const uint8_t MAX30105_MODECONFIG = 		0x09;
+static const uint8_t MAX30105_PARTICLECONFIG = 	0x0A;    // Note, sometimes listed as "SPO2" config in datasheet (pg. 11)
+static const uint8_t MAX30105_LED1_PULSEAMP = 	0x0C;
+static const uint8_t MAX30105_LED2_PULSEAMP = 	0x0D;
+static const uint8_t MAX30105_LED3_PULSEAMP = 	0x0E;
+static const uint8_t MAX30105_LED_PROX_AMP = 	0x10;
+static const uint8_t MAX30105_MULTILEDCONFIG1 = 0x11;
+static const uint8_t MAX30105_MULTILEDCONFIG2 = 0x12;
 
 // Die Temperature Registers
-static const uint8_t MAX30105_DIETEMPINT = 		0***REMOVED***1F;
-static const uint8_t MAX30105_DIETEMPFRAC = 	0***REMOVED***20;
-static const uint8_t MAX30105_DIETEMPCONFIG = 	0***REMOVED***21;
+static const uint8_t MAX30105_DIETEMPINT = 		0x1F;
+static const uint8_t MAX30105_DIETEMPFRAC = 	0x20;
+static const uint8_t MAX30105_DIETEMPCONFIG = 	0x21;
 
-// Pro***REMOVED***imity Function Registers
-static const uint8_t MAX30105_PROXINTTHRESH = 	0***REMOVED***30;
+// Proximity Function Registers
+static const uint8_t MAX30105_PROXINTTHRESH = 	0x30;
 
 // Part ID Registers
-static const uint8_t MAX30105_REVISIONID = 		0***REMOVED***FE;
-static const uint8_t MAX30105_PARTID = 			0***REMOVED***FF;    // Should always be 0***REMOVED***15. Identical to MAX30102.
+static const uint8_t MAX30105_REVISIONID = 		0xFE;
+static const uint8_t MAX30105_PARTID = 			0xFF;    // Should always be 0x15. Identical to MAX30102.
 
 // MAX30105 Commands
 // Interrupt configuration (pg 13, 14)
 static const uint8_t MAX30105_INT_A_FULL_MASK =		(byte)~0b10000000;
-static const uint8_t MAX30105_INT_A_FULL_ENABLE = 	0***REMOVED***80;
-static const uint8_t MAX30105_INT_A_FULL_DISABLE = 	0***REMOVED***00;
+static const uint8_t MAX30105_INT_A_FULL_ENABLE = 	0x80;
+static const uint8_t MAX30105_INT_A_FULL_DISABLE = 	0x00;
 
 static const uint8_t MAX30105_INT_DATA_RDY_MASK = (byte)~0b01000000;
-static const uint8_t MAX30105_INT_DATA_RDY_ENABLE =	0***REMOVED***40;
-static const uint8_t MAX30105_INT_DATA_RDY_DISABLE = 0***REMOVED***00;
+static const uint8_t MAX30105_INT_DATA_RDY_ENABLE =	0x40;
+static const uint8_t MAX30105_INT_DATA_RDY_DISABLE = 0x00;
 
 static const uint8_t MAX30105_INT_ALC_OVF_MASK = (byte)~0b00100000;
-static const uint8_t MAX30105_INT_ALC_OVF_ENABLE = 	0***REMOVED***20;
-static const uint8_t MAX30105_INT_ALC_OVF_DISABLE = 0***REMOVED***00;
+static const uint8_t MAX30105_INT_ALC_OVF_ENABLE = 	0x20;
+static const uint8_t MAX30105_INT_ALC_OVF_DISABLE = 0x00;
 
 static const uint8_t MAX30105_INT_PROX_INT_MASK = (byte)~0b00010000;
-static const uint8_t MAX30105_INT_PROX_INT_ENABLE = 0***REMOVED***10;
-static const uint8_t MAX30105_INT_PROX_INT_DISABLE = 0***REMOVED***00;
+static const uint8_t MAX30105_INT_PROX_INT_ENABLE = 0x10;
+static const uint8_t MAX30105_INT_PROX_INT_DISABLE = 0x00;
 
 static const uint8_t MAX30105_INT_DIE_TEMP_RDY_MASK = (byte)~0b00000010;
-static const uint8_t MAX30105_INT_DIE_TEMP_RDY_ENABLE = 0***REMOVED***02;
-static const uint8_t MAX30105_INT_DIE_TEMP_RDY_DISABLE = 0***REMOVED***00;
+static const uint8_t MAX30105_INT_DIE_TEMP_RDY_ENABLE = 0x02;
+static const uint8_t MAX30105_INT_DIE_TEMP_RDY_DISABLE = 0x00;
 
 static const uint8_t MAX30105_SAMPLEAVG_MASK =	(byte)~0b11100000;
-static const uint8_t MAX30105_SAMPLEAVG_1 = 	0***REMOVED***00;
-static const uint8_t MAX30105_SAMPLEAVG_2 = 	0***REMOVED***20;
-static const uint8_t MAX30105_SAMPLEAVG_4 = 	0***REMOVED***40;
-static const uint8_t MAX30105_SAMPLEAVG_8 = 	0***REMOVED***60;
-static const uint8_t MAX30105_SAMPLEAVG_16 = 	0***REMOVED***80;
-static const uint8_t MAX30105_SAMPLEAVG_32 = 	0***REMOVED***A0;
+static const uint8_t MAX30105_SAMPLEAVG_1 = 	0x00;
+static const uint8_t MAX30105_SAMPLEAVG_2 = 	0x20;
+static const uint8_t MAX30105_SAMPLEAVG_4 = 	0x40;
+static const uint8_t MAX30105_SAMPLEAVG_8 = 	0x60;
+static const uint8_t MAX30105_SAMPLEAVG_16 = 	0x80;
+static const uint8_t MAX30105_SAMPLEAVG_32 = 	0xA0;
 
-static const uint8_t MAX30105_ROLLOVER_MASK = 	0***REMOVED***EF;
-static const uint8_t MAX30105_ROLLOVER_ENABLE = 0***REMOVED***10;
-static const uint8_t MAX30105_ROLLOVER_DISABLE = 0***REMOVED***00;
+static const uint8_t MAX30105_ROLLOVER_MASK = 	0xEF;
+static const uint8_t MAX30105_ROLLOVER_ENABLE = 0x10;
+static const uint8_t MAX30105_ROLLOVER_DISABLE = 0x00;
 
-static const uint8_t MAX30105_A_FULL_MASK = 	0***REMOVED***F0;
+static const uint8_t MAX30105_A_FULL_MASK = 	0xF0;
 
 // Mode configuration commands (page 19)
-static const uint8_t MAX30105_SHUTDOWN_MASK = 	0***REMOVED***7F;
-static const uint8_t MAX30105_SHUTDOWN =        0***REMOVED***80;
-static const uint8_t MAX30105_WAKEUP = 	        0***REMOVED***00;
+static const uint8_t MAX30105_SHUTDOWN_MASK = 	0x7F;
+static const uint8_t MAX30105_SHUTDOWN =        0x80;
+static const uint8_t MAX30105_WAKEUP = 	        0x00;
 
-static const uint8_t MAX30105_RESET_MASK = 	0***REMOVED***BF;
-static const uint8_t MAX30105_RESET = 		0***REMOVED***40;
+static const uint8_t MAX30105_RESET_MASK = 	0xBF;
+static const uint8_t MAX30105_RESET = 		0x40;
 
-static const uint8_t MAX30105_MODE_MASK = 	0***REMOVED***F8;
-static const uint8_t MAX30105_MODE_REDONLY = 	0***REMOVED***02;
-static const uint8_t MAX30105_MODE_REDIRONLY = 	0***REMOVED***03;
-static const uint8_t MAX30105_MODE_MULTILED = 	0***REMOVED***07;
+static const uint8_t MAX30105_MODE_MASK = 	0xF8;
+static const uint8_t MAX30105_MODE_REDONLY = 	0x02;
+static const uint8_t MAX30105_MODE_REDIRONLY = 	0x03;
+static const uint8_t MAX30105_MODE_MULTILED = 	0x07;
 
 // Particle sensing configuration commands (pgs 19-20)
-static const uint8_t MAX30105_ADCRANGE_MASK = 	0***REMOVED***9F;
-static const uint8_t MAX30105_ADCRANGE_2048 = 	0***REMOVED***00;
-static const uint8_t MAX30105_ADCRANGE_4096 = 	0***REMOVED***20;
-static const uint8_t MAX30105_ADCRANGE_8192 = 	0***REMOVED***40;
-static const uint8_t MAX30105_ADCRANGE_16384 = 	0***REMOVED***60;
+static const uint8_t MAX30105_ADCRANGE_MASK = 	0x9F;
+static const uint8_t MAX30105_ADCRANGE_2048 = 	0x00;
+static const uint8_t MAX30105_ADCRANGE_4096 = 	0x20;
+static const uint8_t MAX30105_ADCRANGE_8192 = 	0x40;
+static const uint8_t MAX30105_ADCRANGE_16384 = 	0x60;
 
-static const uint8_t MAX30105_SAMPLERATE_MASK = 0***REMOVED***E3;
-static const uint8_t MAX30105_SAMPLERATE_50 = 	0***REMOVED***00;
-static const uint8_t MAX30105_SAMPLERATE_100 = 	0***REMOVED***04;
-static const uint8_t MAX30105_SAMPLERATE_200 = 	0***REMOVED***08;
-static const uint8_t MAX30105_SAMPLERATE_400 = 	0***REMOVED***0C;
-static const uint8_t MAX30105_SAMPLERATE_800 = 	0***REMOVED***10;
-static const uint8_t MAX30105_SAMPLERATE_1000 = 0***REMOVED***14;
-static const uint8_t MAX30105_SAMPLERATE_1600 = 0***REMOVED***18;
-static const uint8_t MAX30105_SAMPLERATE_3200 = 0***REMOVED***1C;
+static const uint8_t MAX30105_SAMPLERATE_MASK = 0xE3;
+static const uint8_t MAX30105_SAMPLERATE_50 = 	0x00;
+static const uint8_t MAX30105_SAMPLERATE_100 = 	0x04;
+static const uint8_t MAX30105_SAMPLERATE_200 = 	0x08;
+static const uint8_t MAX30105_SAMPLERATE_400 = 	0x0C;
+static const uint8_t MAX30105_SAMPLERATE_800 = 	0x10;
+static const uint8_t MAX30105_SAMPLERATE_1000 = 0x14;
+static const uint8_t MAX30105_SAMPLERATE_1600 = 0x18;
+static const uint8_t MAX30105_SAMPLERATE_3200 = 0x1C;
 
-static const uint8_t MAX30105_PULSEWIDTH_MASK = 0***REMOVED***FC;
-static const uint8_t MAX30105_PULSEWIDTH_69 = 	0***REMOVED***00;
-static const uint8_t MAX30105_PULSEWIDTH_118 = 	0***REMOVED***01;
-static const uint8_t MAX30105_PULSEWIDTH_215 = 	0***REMOVED***02;
-static const uint8_t MAX30105_PULSEWIDTH_411 = 	0***REMOVED***03;
+static const uint8_t MAX30105_PULSEWIDTH_MASK = 0xFC;
+static const uint8_t MAX30105_PULSEWIDTH_69 = 	0x00;
+static const uint8_t MAX30105_PULSEWIDTH_118 = 	0x01;
+static const uint8_t MAX30105_PULSEWIDTH_215 = 	0x02;
+static const uint8_t MAX30105_PULSEWIDTH_411 = 	0x03;
 
 //Multi-LED Mode configuration (pg 22)
-static const uint8_t MAX30105_SLOT1_MASK = 	0***REMOVED***F8;
-static const uint8_t MAX30105_SLOT2_MASK = 	0***REMOVED***8F;
-static const uint8_t MAX30105_SLOT3_MASK = 	0***REMOVED***F8;
-static const uint8_t MAX30105_SLOT4_MASK = 	0***REMOVED***8F;
+static const uint8_t MAX30105_SLOT1_MASK = 	0xF8;
+static const uint8_t MAX30105_SLOT2_MASK = 	0x8F;
+static const uint8_t MAX30105_SLOT3_MASK = 	0xF8;
+static const uint8_t MAX30105_SLOT4_MASK = 	0x8F;
 
-static const uint8_t SLOT_NONE = 		0***REMOVED***00;
-static const uint8_t SLOT_RED_LED = 		0***REMOVED***01;
-static const uint8_t SLOT_IR_LED = 	        0***REMOVED***02;
-static const uint8_t SLOT_GREEN_LED = 		0***REMOVED***03;
-static const uint8_t SLOT_NONE_PILOT = 		0***REMOVED***04;
-static const uint8_t SLOT_RED_PILOT =		0***REMOVED***05;
-static const uint8_t SLOT_IR_PILOT = 		0***REMOVED***06;
-static const uint8_t SLOT_GREEN_PILOT = 	0***REMOVED***07;
+static const uint8_t SLOT_NONE = 		0x00;
+static const uint8_t SLOT_RED_LED = 		0x01;
+static const uint8_t SLOT_IR_LED = 	        0x02;
+static const uint8_t SLOT_GREEN_LED = 		0x03;
+static const uint8_t SLOT_NONE_PILOT = 		0x04;
+static const uint8_t SLOT_RED_PILOT =		0x05;
+static const uint8_t SLOT_IR_PILOT = 		0x06;
+static const uint8_t SLOT_GREEN_PILOT = 	0x07;
 
-static const uint8_t MAX_30105_EXPECTEDPARTID = 0***REMOVED***15;
+static const uint8_t MAX_30105_EXPECTEDPARTID = 0x15;
 
 MAX30105::MAX30105() {
   // Constructor
@@ -151,7 +151,7 @@ boolean MAX30105::begin(TwoWire &wirePort, uint32_t i2cSpeed, uint8_t i2caddr) {
   // Step 1: Initial Communication and Verification
   // Check that a MAX30105 is connected
   if (readPartID() != MAX_30105_EXPECTEDPARTID) {
-    // Error -- Part ID read from MAX30105 does not match e***REMOVED***pected part ID.
+    // Error -- Part ID read from MAX30105 does not match expected part ID.
     // This may mean there is a physical connectivity problem (broken wire, unpowered, etc).
     return false;
   }
@@ -258,7 +258,7 @@ void MAX30105::setPulseWidth(uint8_t pulseWidth) {
   bitMask(MAX30105_PARTICLECONFIG, MAX30105_PULSEWIDTH_MASK, pulseWidth);
 }
 
-// NOTE: Amplitude values: 0***REMOVED***00 = 0mA, 0***REMOVED***7F = 25.4mA, 0***REMOVED***FF = 50mA (typical)
+// NOTE: Amplitude values: 0x00 = 0mA, 0x7F = 25.4mA, 0xFF = 50mA (typical)
 // See datasheet, page 21
 void MAX30105::setPulseAmplitudeRed(uint8_t amplitude) {
   writeRegister8(_i2caddr, MAX30105_LED1_PULSEAMP, amplitude);
@@ -272,11 +272,11 @@ void MAX30105::setPulseAmplitudeGreen(uint8_t amplitude) {
   writeRegister8(_i2caddr, MAX30105_LED3_PULSEAMP, amplitude);
 }
 
-void MAX30105::setPulseAmplitudePro***REMOVED***imity(uint8_t amplitude) {
+void MAX30105::setPulseAmplitudeProximity(uint8_t amplitude) {
   writeRegister8(_i2caddr, MAX30105_LED_PROX_AMP, amplitude);
 }
 
-void MAX30105::setPro***REMOVED***imityThreshold(uint8_t threshMSB) {
+void MAX30105::setProximityThreshold(uint8_t threshMSB) {
   // Set the IR ADC count that will trigger the beginning of particle-sensing mode.
   // The threshMSB signifies only the 8 most significant-bits of the ADC count.
   // See datasheet, page 24.
@@ -284,7 +284,7 @@ void MAX30105::setPro***REMOVED***imityThreshold(uint8_t threshMSB) {
 }
 
 //Given a slot number assign a thing to it
-//Devices are SLOT_RED_LED or SLOT_RED_PILOT (pro***REMOVED***imity)
+//Devices are SLOT_RED_LED or SLOT_RED_PILOT (proximity)
 //Assigning a SLOT_RED_LED will pulse LED
 //Assigning a SLOT_RED_PILOT will ??
 void MAX30105::enableSlot(uint8_t slotNumber, uint8_t device) {
@@ -345,7 +345,7 @@ void MAX30105::disableFIFORollover(void) {
 
 //Set number of samples to trigger the almost full interrupt (Page 18)
 //Power on default is 32 samples
-//Note it is reverse: 0***REMOVED***00 is 32 samples, 0***REMOVED***0F is 17 samples
+//Note it is reverse: 0x00 is 32 samples, 0x0F is 17 samples
 void MAX30105::setFIFOAlmostFull(uint8_t numberOfSamples) {
   bitMask(MAX30105_FIFOCONFIG, MAX30105_A_FULL_MASK, numberOfSamples);
 }
@@ -366,10 +366,10 @@ uint8_t MAX30105::getReadPointer(void) {
 float MAX30105::readTemperature() {
 	
   //DIE_TEMP_RDY interrupt must be enabled
-  //See issue 19: https://github.com/sparkfun/SparkFun_MAX3010***REMOVED***_Sensor_Library/issues/19
+  //See issue 19: https://github.com/sparkfun/SparkFun_MAX3010x_Sensor_Library/issues/19
   
   // Step 1: Config die temperature register to take 1 temperature sample
-  writeRegister8(_i2caddr, MAX30105_DIETEMPCONFIG, 0***REMOVED***01);
+  writeRegister8(_i2caddr, MAX30105_DIETEMPCONFIG, 0x01);
 
   // Poll for bit to clear, reading is then complete
   // Timeout after 100ms
@@ -377,7 +377,7 @@ float MAX30105::readTemperature() {
   while (millis() - startTime < 100)
   {
     //uint8_t response = readRegister8(_i2caddr, MAX30105_DIETEMPCONFIG); //Original way
-    //if ((response & 0***REMOVED***01) == 0) break; //We're done!
+    //if ((response & 0x01) == 0) break; //We're done!
     
 	//Check to see if DIE_TEMP_RDY interrupt is set
 	uint8_t response = readRegister8(_i2caddr, MAX30105_INTSTAT2);
@@ -489,16 +489,16 @@ void MAX30105::setup(byte powerLevel, byte sampleAverage, byte ledMode, int samp
 
   //LED Pulse Amplitude Configuration
   //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-  //Default is 0***REMOVED***1F which gets us 6.4mA
-  //powerLevel = 0***REMOVED***02, 0.4mA - Presence detection of ~4 inch
-  //powerLevel = 0***REMOVED***1F, 6.4mA - Presence detection of ~8 inch
-  //powerLevel = 0***REMOVED***7F, 25.4mA - Presence detection of ~8 inch
-  //powerLevel = 0***REMOVED***FF, 50.0mA - Presence detection of ~12 inch
+  //Default is 0x1F which gets us 6.4mA
+  //powerLevel = 0x02, 0.4mA - Presence detection of ~4 inch
+  //powerLevel = 0x1F, 6.4mA - Presence detection of ~8 inch
+  //powerLevel = 0x7F, 25.4mA - Presence detection of ~8 inch
+  //powerLevel = 0xFF, 50.0mA - Presence detection of ~12 inch
 
   setPulseAmplitudeRed(powerLevel);
   setPulseAmplitudeIR(powerLevel);
   setPulseAmplitudeGreen(powerLevel);
-  setPulseAmplitudePro***REMOVED***imity(powerLevel);
+  setPulseAmplitudeProximity(powerLevel);
   //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
   //Multi-LED Mode Configuration, Enable the reading of the three LEDs
@@ -557,26 +557,26 @@ uint32_t MAX30105::getGreen(void)
     return(0); //Sensor failed to find new data
 }
 
-//Report the ne***REMOVED***t Red value in the FIFO
+//Report the next Red value in the FIFO
 uint32_t MAX30105::getFIFORed(void)
 {
   return (sense.red[sense.tail]);
 }
 
-//Report the ne***REMOVED***t IR value in the FIFO
+//Report the next IR value in the FIFO
 uint32_t MAX30105::getFIFOIR(void)
 {
   return (sense.IR[sense.tail]);
 }
 
-//Report the ne***REMOVED***t Green value in the FIFO
+//Report the next Green value in the FIFO
 uint32_t MAX30105::getFIFOGreen(void)
 {
   return (sense.green[sense.tail]);
 }
 
 //Advance the tail
-void MAX30105::ne***REMOVED***tSample(void)
+void MAX30105::nextSample(void)
 {
   if(available()) //Only advance the tail if new data is available
   {
@@ -607,7 +607,7 @@ uint16_t MAX30105::check(void)
     if (numberOfSamples < 0) numberOfSamples += 32; //Wrap condition
 
     //We now have the number of readings, now calc bytes to read
-    //For this e***REMOVED***ample we are just doing Red and IR (3 bytes each)
+    //For this example we are just doing Red and IR (3 bytes each)
     int bytesLeftToRead = numberOfSamples * activeLEDs * 3;
 
     //Get ready to read a burst of data from the FIFO register
@@ -652,7 +652,7 @@ uint16_t MAX30105::check(void)
         //Convert array to long
         memcpy(&tempLong, temp, sizeof(tempLong));
 		
-		tempLong &= 0***REMOVED***3FFFF; //Zero out all but 18 bits
+		tempLong &= 0x3FFFF; //Zero out all but 18 bits
 
         sense.red[sense.head] = tempLong; //Store this reading into the sense array
 
@@ -667,7 +667,7 @@ uint16_t MAX30105::check(void)
           //Convert array to long
           memcpy(&tempLong, temp, sizeof(tempLong));
 
-		  tempLong &= 0***REMOVED***3FFFF; //Zero out all but 18 bits
+		  tempLong &= 0x3FFFF; //Zero out all but 18 bits
           
 		  sense.IR[sense.head] = tempLong;
         }
@@ -683,7 +683,7 @@ uint16_t MAX30105::check(void)
           //Convert array to long
           memcpy(&tempLong, temp, sizeof(tempLong));
 
-		  tempLong &= 0***REMOVED***3FFFF; //Zero out all but 18 bits
+		  tempLong &= 0x3FFFF; //Zero out all but 18 bits
 
           sense.green[sense.head] = tempLong;
         }
@@ -701,13 +701,13 @@ uint16_t MAX30105::check(void)
 //Check for new data but give up after a certain amount of time
 //Returns true if new data was found
 //Returns false if new data was not found
-bool MAX30105::safeCheck(uint8_t ma***REMOVED***TimeToCheck)
+bool MAX30105::safeCheck(uint8_t maxTimeToCheck)
 {
   uint32_t markTime = millis();
   
   while(1)
   {
-	if(millis() - markTime > ma***REMOVED***TimeToCheck) return(false);
+	if(millis() - markTime > maxTimeToCheck) return(false);
 
 	if(check() == true) //We found new data!
 	  return(true);
@@ -719,7 +719,7 @@ bool MAX30105::safeCheck(uint8_t ma***REMOVED***TimeToCheck)
 //Given a register, read it, mask it, and then set the thing
 void MAX30105::bitMask(uint8_t reg, uint8_t mask, uint8_t thing)
 {
-  // Grab current register conte***REMOVED***t
+  // Grab current register context
   uint8_t originalContents = readRegister8(_i2caddr, reg);
 
   // Zero-out the portions of the register we're interested in

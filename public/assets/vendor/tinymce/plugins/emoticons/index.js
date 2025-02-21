@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "emoticons" plugin for usage with module loaders
+// Exports the "emoticons" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/emoticons')

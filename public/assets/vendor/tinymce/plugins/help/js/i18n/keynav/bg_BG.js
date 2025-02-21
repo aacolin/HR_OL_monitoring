@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.bg_BG',
   '\n' +
   '<dl>\n' +
   '  <dt>Фокусиране върху лентата с менюта</dt>\n' +
-  '  <dd>Windows или Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows или Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Фокусиране върху лентата с инструменти</dt>\n' +
-  '  <dd>Windows или Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows или Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Фокусиране върху долния колонтитул</dt>\n' +
-  '  <dd>Windows или Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows или Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Фокусиране на известието</dt>\n' +
-  '  <dd>Windows или Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows или Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>Фокусиране върху контекстуалната лента с инструменти</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** или macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux или macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Навигацията ще започне с първия елемент на ПИ, който ще бъде маркиран или подчертан в случая на първия елемент в\n' +

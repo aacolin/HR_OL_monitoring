@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.zh_TW',
   '\n' +
   '<dl>\n' +
   '  <dt>跳至功能表列</dt>\n' +
-  '  <dd>Windows 或 Linu***REMOVED***：Alt+F9</dd>\n' +
-  '  <dd>macOS：&#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows 或 Linux：Alt+F9</dd>\n' +
+  '  <dd>macOS：&#x2325;F9</dd>\n' +
   '  <dt>跳至工具列</dt>\n' +
-  '  <dd>Windows 或 Linu***REMOVED***：Alt+F10</dd>\n' +
-  '  <dd>macOS：&#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows 或 Linux：Alt+F10</dd>\n' +
+  '  <dd>macOS：&#x2325;F10</dd>\n' +
   '  <dt>跳至頁尾</dt>\n' +
-  '  <dd>Windows 或 Linu***REMOVED***：Alt+F11</dd>\n' +
-  '  <dd>macOS：&#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows 或 Linux：Alt+F11</dd>\n' +
+  '  <dd>macOS：&#x2325;F11</dd>\n' +
   '  <dt>跳至通知</dt>\n' +
-  '  <dd>Windows 或 Linu***REMOVED***：Alt+F12</dd>\n' +
-  '  <dd>macOS：&#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows 或 Linux：Alt+F12</dd>\n' +
+  '  <dd>macOS：&#x2325;F12</dd>\n' +
   '  <dt>跳至關聯式工具列</dt>\n' +
-  '  <dd>Windows、Linu***REMOVED*** 或 macOS：Ctrl+F9</dd>\n' +
+  '  <dd>Windows、Linux 或 macOS：Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>瀏覽會從第一個 UI 項目開始，該項目會反白顯示，但如果是「頁尾」元素路徑的第一項，\n' +

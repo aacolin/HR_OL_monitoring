@@ -45,7 +45,7 @@
 
     const stringRepeat = (string, repeats) => {
       let str = '';
-      for (let inde***REMOVED*** = 0; inde***REMOVED*** < repeats; inde***REMOVED***++) {
+      for (let index = 0; index < repeats; index++) {
         str += string;
       }
       return str;
@@ -94,7 +94,7 @@
       };
     };
     const register = editor => {
-      const onAction = () => editor.e***REMOVED***ecCommand('mceNonBreaking');
+      const onAction = () => editor.execCommand('mceNonBreaking');
       editor.ui.registry.addButton('nonbreaking', {
         icon: 'non-breaking',
         tooltip: 'Nonbreaking space',
@@ -103,7 +103,7 @@
       });
       editor.ui.registry.addMenuItem('nonbreaking', {
         icon: 'non-breaking',
-        te***REMOVED***t: 'Nonbreaking space',
+        text: 'Nonbreaking space',
         onAction,
         onSetup: onSetupEditable(editor)
       });

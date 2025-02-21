@@ -40,13 +40,13 @@
         return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
       }
     };
-    const typeOf = ***REMOVED*** => {
-      const t = typeof ***REMOVED***;
-      if (***REMOVED*** === null) {
+    const typeOf = x => {
+      const t = typeof x;
+      if (x === null) {
         return 'null';
-      } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+      } else if (t === 'object' && Array.isArray(x)) {
         return 'array';
-      } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
         return 'string';
       } else {
         return t;
@@ -101,7 +101,7 @@
           return Optional.none();
         }
       }
-      e***REMOVED***ists(predicate) {
+      exists(predicate) {
         return this.tag && predicate(this.value);
       }
       forall(predicate) {
@@ -156,27 +156,27 @@
     }
     Optional.singletonNone = new Optional(false);
 
-    const map = (***REMOVED***s, f) => {
-      const len = ***REMOVED***s.length;
+    const map = (xs, f) => {
+      const len = xs.length;
       const r = new Array(len);
       for (let i = 0; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        r[i] = f(***REMOVED***, i);
+        const x = xs[i];
+        r[i] = f(x, i);
       }
       return r;
     };
-    const each$1 = (***REMOVED***s, f) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        f(***REMOVED***, i);
+    const each$1 = (xs, f) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        f(x, i);
       }
     };
-    const filter = (***REMOVED***s, pred) => {
+    const filter = (xs, pred) => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        if (pred(***REMOVED***, i)) {
-          r.push(***REMOVED***);
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        if (pred(x, i)) {
+          r.push(x);
         }
       }
       return r;
@@ -187,8 +187,8 @@
       const props = keys(obj);
       for (let k = 0, len = props.length; k < len; k++) {
         const i = props[k];
-        const ***REMOVED*** = obj[i];
-        f(***REMOVED***, i);
+        const x = obj[i];
+        f(x, i);
       }
     };
 
@@ -221,9 +221,9 @@
     const sandHTMLElement = scope => {
       return getOrDie('HTMLElement', scope);
     };
-    const isPrototypeOf = ***REMOVED*** => {
-      const scope = resolve('ownerDocument.defaultView', ***REMOVED***);
-      return isObject(***REMOVED***) && (sandHTMLElement(scope).prototype.isPrototypeOf(***REMOVED***) || /^HTML\w*Element$/.test(getPrototypeOf(***REMOVED***).constructor.name));
+    const isPrototypeOf = x => {
+      const scope = resolve('ownerDocument.defaultView', x);
+      return isObject(x) && (sandHTMLElement(scope).prototype.isPrototypeOf(x) || /^HTML\w*Element$/.test(getPrototypeOf(x).constructor.name));
     };
 
     const ELEMENT = 1;
@@ -234,7 +234,7 @@
     const isType = t => element => type(element) === t;
     const isHTMLElement = element => isElement(element) && isPrototypeOf(element.dom);
     const isElement = isType(ELEMENT);
-    const isTe***REMOVED***t = isType(TEXT);
+    const isText = isType(TEXT);
 
     const rawSet = (dom, key, value) => {
       if (isString(value) || isBoolean(value) || isNumber(value)) {
@@ -319,9 +319,9 @@
       const node = doc.createElement(tag);
       return fromDom(node);
     };
-    const fromTe***REMOVED***t = (te***REMOVED***t, scope) => {
+    const fromText = (text, scope) => {
       const doc = scope || document;
-      const node = doc.createTe***REMOVED***tNode(te***REMOVED***t);
+      const node = doc.createTextNode(text);
       return fromDom(node);
     };
     const fromDom = node => {
@@ -330,25 +330,25 @@
       }
       return { dom: node };
     };
-    const fromPoint = (docElm, ***REMOVED***, y) => Optional.from(docElm.dom.elementFromPoint(***REMOVED***, y)).map(fromDom);
+    const fromPoint = (docElm, x, y) => Optional.from(docElm.dom.elementFromPoint(x, y)).map(fromDom);
     const SugarElement = {
       fromHtml,
       fromTag,
-      fromTe***REMOVED***t,
+      fromText,
       fromDom,
       fromPoint
     };
 
     const charMap = {
-      '\***REMOVED***A0': 'nbsp',
-      '\***REMOVED***AD': 'shy'
+      '\xA0': 'nbsp',
+      '\xAD': 'shy'
     };
-    const charMapToRegE***REMOVED***p = (charMap, global) => {
-      let regE***REMOVED***p = '';
+    const charMapToRegExp = (charMap, global) => {
+      let regExp = '';
       each(charMap, (_value, key) => {
-        regE***REMOVED***p += key;
+        regExp += key;
       });
-      return new RegE***REMOVED***p('[' + regE***REMOVED***p + ']', global ? 'g' : '');
+      return new RegExp('[' + regExp + ']', global ? 'g' : '');
     };
     const charMapToSelector = charMap => {
       let selector = '';
@@ -360,8 +360,8 @@
       });
       return selector;
     };
-    const regE***REMOVED***p = charMapToRegE***REMOVED***p(charMap);
-    const regE***REMOVED***pGlobal = charMapToRegE***REMOVED***p(charMap, true);
+    const regExp = charMapToRegExp(charMap);
+    const regExpGlobal = charMapToRegExp(charMap, true);
     const selector = charMapToSelector(charMap);
     const nbspClass = 'mce-nbsp';
 
@@ -372,7 +372,7 @@
     const isWrappedNbsp = node => node.nodeName.toLowerCase() === 'span' && node.classList.contains('mce-nbsp-wrap');
     const isMatch = n => {
       const value$1 = value(n);
-      return isTe***REMOVED***t(n) && isString(value$1) && regE***REMOVED***p.test(value$1);
+      return isText(n) && isString(value$1) && regExp.test(value$1);
     };
     const isContentEditableFalse = node => isHTMLElement(node) && getRaw(node) === 'false';
     const isChildEditable = (node, currentState) => {
@@ -391,11 +391,11 @@
       const dom = scope.dom;
       const children = map(dom.childNodes, SugarElement.fromDom);
       const isEditable = node => isWrappedNbsp(node.dom) || !isContentEditableFalse(node);
-      each$1(children, ***REMOVED*** => {
-        if (editable && isEditable(***REMOVED***) && predicate(***REMOVED***)) {
-          result = result.concat([***REMOVED***]);
+      each$1(children, x => {
+        if (editable && isEditable(x) && predicate(x)) {
+          result = result.concat([x]);
         }
-        result = result.concat(filterEditableDescendants(***REMOVED***, predicate, isChildEditable(***REMOVED***, editable)));
+        result = result.concat(filterEditableDescendants(x, predicate, isChildEditable(x, editable)));
       });
       return result;
     };
@@ -408,7 +408,7 @@
       }
       return undefined;
     };
-    const replaceWithSpans = te***REMOVED***t => te***REMOVED***t.replace(regE***REMOVED***pGlobal, wrapCharWithSpan);
+    const replaceWithSpans = text => text.replace(regExpGlobal, wrapCharWithSpan);
 
     const show = (editor, rootElm) => {
       const dom = editor.dom;
@@ -528,7 +528,7 @@
       return () => editor.off('VisualChars', editorEventCallback);
     };
     const register = (editor, toggleState) => {
-      const onAction = () => editor.e***REMOVED***ecCommand('mceVisualChars');
+      const onAction = () => editor.execCommand('mceVisualChars');
       editor.ui.registry.addToggleButton('visualchars', {
         tooltip: 'Show invisible characters',
         icon: 'visualchars',
@@ -536,7 +536,7 @@
         onSetup: toggleActiveState(editor, toggleState)
       });
       editor.ui.registry.addToggleMenuItem('visualchars', {
-        te***REMOVED***t: 'Show invisible characters',
+        text: 'Show invisible characters',
         icon: 'visualchars',
         onAction,
         onSetup: toggleActiveState(editor, toggleState)

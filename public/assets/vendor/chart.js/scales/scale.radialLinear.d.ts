@@ -1,4 +1,4 @@
-e***REMOVED***port default class RadialLinearScale e***REMOVED***tends LinearScaleBase {
+export default class RadialLinearScale extends LinearScaleBase {
     static id: string;
     /**
      * @type {any}
@@ -15,7 +15,7 @@ e***REMOVED***port default class RadialLinearScale e***REMOVED***tends LinearSca
         };
     };
     /** @type {number} */
-    ***REMOVED***Center: number;
+    xCenter: number;
     /** @type {number} */
     yCenter: number;
     /** @type {number} */
@@ -26,26 +26,26 @@ e***REMOVED***port default class RadialLinearScale e***REMOVED***tends LinearSca
     _padding: import("../types.js").ChartArea;
     generateTickLabels(ticks: any): void;
     setCenterPoint(leftMovement: any, rightMovement: any, topMovement: any, bottomMovement: any): void;
-    getInde***REMOVED***Angle(inde***REMOVED***: any): number;
+    getIndexAngle(index: any): number;
     getDistanceFromCenterForValue(value: any): number;
     getValueForDistanceFromCenter(distance: any): any;
-    getPointLabelConte***REMOVED***t(inde***REMOVED***: any): any;
-    getPointPosition(inde***REMOVED***: any, distanceFromCenter: any, additionalAngle?: number): {
-        ***REMOVED***: number;
+    getPointLabelContext(index: any): any;
+    getPointPosition(index: any, distanceFromCenter: any, additionalAngle?: number): {
+        x: number;
         y: number;
         angle: number;
     };
-    getPointPositionForValue(inde***REMOVED***: any, value: any): {
-        ***REMOVED***: number;
+    getPointPositionForValue(index: any, value: any): {
+        x: number;
         y: number;
         angle: number;
     };
-    getBasePosition(inde***REMOVED***: any): {
-        ***REMOVED***: number;
+    getBasePosition(index: any): {
+        x: number;
         y: number;
         angle: number;
     };
-    getPointLabelPosition(inde***REMOVED***: any): {
+    getPointLabelPosition(index: any): {
         left: any;
         top: any;
         right: any;

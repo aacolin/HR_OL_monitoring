@@ -1,14 +1,14 @@
-e***REMOVED***port default class DoughnutController e***REMOVED***tends DatasetController {
+export default class DoughnutController extends DatasetController {
     static id: string;
     static descriptors: {
         _scriptable: (name: any) => boolean;
-        _inde***REMOVED***able: (name: any) => boolean;
+        _indexable: (name: any) => boolean;
     };
     /**
      * @type {any}
      */
     static overrides: any;
-    constructor(chart: any, datasetInde***REMOVED***: any);
+    constructor(chart: any, datasetIndex: any);
     innerRadius: number;
     outerRadius: number;
     offsetX: number;
@@ -26,10 +26,10 @@ e***REMOVED***port default class DoughnutController e***REMOVED***tends DatasetC
        */
     private _getCircumference;
     /**
-       * Get the ma***REMOVED***imal rotation & circumference e***REMOVED***tents
+       * Get the maximal rotation & circumference extents
        * across all visible datasets.
        */
-    _getRotationE***REMOVED***tents(): {
+    _getRotationExtents(): {
         rotation: number;
         circumference: number;
     };
@@ -39,12 +39,12 @@ e***REMOVED***port default class DoughnutController e***REMOVED***tends DatasetC
     private _circumference;
     calculateTotal(): number;
     calculateCircumference(value: any): number;
-    getLabelAndValue(inde***REMOVED***: any): {
+    getLabelAndValue(index: any): {
         label: any;
         value: string;
     };
-    getMa***REMOVED***BorderWidth(arcs: any): number;
-    getMa***REMOVED***Offset(arcs: any): number;
+    getMaxBorderWidth(arcs: any): number;
+    getMaxOffset(arcs: any): number;
     /**
        * Get radius length offset of the dataset in relation to the visible datasets weights. This allows determining the inner and outer radius correctly
        * @private
@@ -60,5 +60,5 @@ e***REMOVED***port default class DoughnutController e***REMOVED***tends DatasetC
        */
     private _getVisibleDatasetWeightTotal;
 }
-e***REMOVED***port type Chart = import('../core/core.controller.js').default;
+export type Chart = import('../core/core.controller.js').default;
 import DatasetController from "../core/core.datasetController.js";

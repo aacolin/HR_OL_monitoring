@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.ms',
   '\n' +
   '<dl>\n' +
   '  <dt>Fokus bar Menu</dt>\n' +
-  '  <dd>Windows atau Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows atau Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Fokus Bar Alat</dt>\n' +
-  '  <dd>Windows atau Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows atau Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Fokus pengaki</dt>\n' +
-  '  <dd>Windows atau Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows atau Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Tumpu kepada pemberitahuan</dt>\n' +
-  '  <dd>Windows atau Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows atau Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>Fokus bar alat kontekstual</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** atau macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux atau macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Navigasi akan bermula pada item UI pertama, yang akan diserlahkan atau digaris bawah dalam saiz item pertama dalam\n' +

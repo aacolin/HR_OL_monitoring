@@ -15,13 +15,13 @@
         return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
       }
     };
-    const typeOf = ***REMOVED*** => {
-      const t = typeof ***REMOVED***;
-      if (***REMOVED*** === null) {
+    const typeOf = x => {
+      const t = typeof x;
+      if (x === null) {
         return 'null';
-      } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+      } else if (t === 'object' && Array.isArray(x)) {
         return 'array';
-      } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
         return 'string';
       } else {
         return t;
@@ -72,7 +72,7 @@
           return Optional.none();
         }
       }
-      e***REMOVED***ists(predicate) {
+      exists(predicate) {
         return this.tag && predicate(this.value);
       }
       forall(predicate) {
@@ -128,19 +128,19 @@
     Optional.singletonNone = new Optional(false);
 
     const nativePush = Array.prototype.push;
-    const each$1 = (***REMOVED***s, f) => {
-      for (let i = 0, len = ***REMOVED***s.length; i < len; i++) {
-        const ***REMOVED*** = ***REMOVED***s[i];
-        f(***REMOVED***, i);
+    const each$1 = (xs, f) => {
+      for (let i = 0, len = xs.length; i < len; i++) {
+        const x = xs[i];
+        f(x, i);
       }
     };
-    const flatten = ***REMOVED***s => {
+    const flatten = xs => {
       const r = [];
-      for (let i = 0, len = ***REMOVED***s.length; i < len; ++i) {
-        if (!isArray(***REMOVED***s[i])) {
-          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + ***REMOVED***s);
+      for (let i = 0, len = xs.length; i < len; ++i) {
+        if (!isArray(xs[i])) {
+          throw new Error('Arr.flatten item ' + i + ' was not an array, input: ' + xs);
         }
-        nativePush.apply(r, ***REMOVED***s[i]);
+        nativePush.apply(r, xs[i]);
       }
       return r;
     };
@@ -165,8 +165,8 @@
       const props = keys(obj);
       for (let k = 0, len = props.length; k < len; k++) {
         const i = props[k];
-        const ***REMOVED*** = obj[i];
-        f(***REMOVED***, i);
+        const x = obj[i];
+        f(x, i);
       }
     };
     const get$1 = (obj, key) => {
@@ -219,17 +219,17 @@
     var global$3 = tinymce.util.Tools.resolve('tinymce.html.DomParser');
 
     const DOM$1 = global$4.DOM;
-    const trimP***REMOVED*** = value => value.replace(/p***REMOVED***$/, '');
-    const getEpho***REMOVED***EmbedData = node => {
+    const trimPx = value => value.replace(/px$/, '');
+    const getEphoxEmbedData = node => {
       const style = node.attr('style');
       const styles = style ? DOM$1.parseStyle(style) : {};
       return {
-        type: 'epho***REMOVED***-embed-iri',
-        source: node.attr('data-epho***REMOVED***-embed-iri'),
+        type: 'ephox-embed-iri',
+        source: node.attr('data-ephox-embed-iri'),
         altsource: '',
         poster: '',
-        width: get$1(styles, 'ma***REMOVED***-width').map(trimP***REMOVED***).getOr(''),
-        height: get$1(styles, 'ma***REMOVED***-height').map(trimP***REMOVED***).getOr('')
+        width: get$1(styles, 'max-width').map(trimPx).getOr(''),
+        height: get$1(styles, 'max-height').map(trimPx).getOr('')
       };
     };
     const htmlToData = (html, schema) => {
@@ -242,8 +242,8 @@
       for (let node = rootNode; node; node = node.walk()) {
         if (node.type === 1) {
           const name = node.name;
-          if (node.attr('data-epho***REMOVED***-embed-iri')) {
-            data = getEpho***REMOVED***EmbedData(node);
+          if (node.attr('data-ephox-embed-iri')) {
+            data = getEphoxEmbedData(node);
             break;
           } else {
             if (!data.source && name === 'param') {
@@ -253,7 +253,7 @@
               if (!data.type) {
                 data.type = name;
               }
-              data = global$5.e***REMOVED***tend(node.attributes.map, data);
+              data = global$5.extend(node.attributes.map, data);
             }
             if (name === 'source') {
               if (!data.source) {
@@ -278,12 +278,12 @@
       var _a;
       const mimes = {
         mp3: 'audio/mpeg',
-        m4a: 'audio/***REMOVED***-m4a',
+        m4a: 'audio/x-m4a',
         wav: 'audio/wav',
         mp4: 'video/mp4',
         webm: 'video/webm',
         ogg: 'video/ogg',
-        swf: 'application/***REMOVED***-shockwave-flash'
+        swf: 'application/x-shockwave-flash'
       };
       const fileEnd = (_a = url.toLowerCase().split('.').pop()) !== null && _a !== void 0 ? _a : '';
       return get$1(mimes, fileEnd).getOr('');
@@ -301,15 +301,15 @@
     }, schema);
 
     const DOM = global$4.DOM;
-    const addP***REMOVED*** = value => /^[0-9.]+$/.test(value) ? value + 'p***REMOVED***' : value;
-    const updateEpho***REMOVED***Embed = (data, node) => {
+    const addPx = value => /^[0-9.]+$/.test(value) ? value + 'px' : value;
+    const updateEphoxEmbed = (data, node) => {
       const style = node.attr('style');
       const styleMap = style ? DOM.parseStyle(style) : {};
       if (isNonNullable(data.width)) {
-        styleMap['ma***REMOVED***-width'] = addP***REMOVED***(data.width);
+        styleMap['max-width'] = addPx(data.width);
       }
       if (isNonNullable(data.height)) {
-        styleMap['ma***REMOVED***-height'] = addP***REMOVED***(data.height);
+        styleMap['max-height'] = addPx(data.height);
       }
       node.attr('style', DOM.serializeStyle(styleMap));
     };
@@ -326,8 +326,8 @@
       for (let node = rootNode; node; node = node.walk()) {
         if (node.type === 1) {
           const name = node.name;
-          if (node.attr('data-epho***REMOVED***-embed-iri')) {
-            updateEpho***REMOVED***Embed(data, node);
+          if (node.attr('data-ephox-embed-iri')) {
+            updateEphoxEmbed(data, node);
             break;
           } else {
             switch (name) {
@@ -347,11 +347,11 @@
               case 'video':
                 node.attr('poster', data.poster);
                 node.attr('src', null);
-                for (let inde***REMOVED*** = numSources; inde***REMOVED*** < 2; inde***REMOVED***++) {
-                  if (data[sources[inde***REMOVED***]]) {
+                for (let index = numSources; index < 2; index++) {
+                  if (data[sources[index]]) {
                     const source = new global$2('source', 1);
-                    source.attr('src', data[sources[inde***REMOVED***]]);
-                    source.attr('type', data[sources[inde***REMOVED***] + 'mime'] || null);
+                    source.attr('src', data[sources[index]]);
+                    source.attr('type', data[sources[index] + 'mime'] || null);
                     node.append(source);
                   }
                 }
@@ -396,7 +396,7 @@
 
     const urlPatterns = [
       {
-        rege***REMOVED***: /youtu\.be\/([\w\-_\?&=.]+)/i,
+        regex: /youtu\.be\/([\w\-_\?&=.]+)/i,
         type: 'iframe',
         w: 560,
         h: 314,
@@ -404,7 +404,7 @@
         allowFullscreen: true
       },
       {
-        rege***REMOVED***: /youtube\.com(.+)v=([^&]+)(&([a-z0-9&=\-_]+))?/i,
+        regex: /youtube\.com(.+)v=([^&]+)(&([a-z0-9&=\-_]+))?/i,
         type: 'iframe',
         w: 560,
         h: 314,
@@ -412,7 +412,7 @@
         allowFullscreen: true
       },
       {
-        rege***REMOVED***: /youtube.com\/embed\/([a-z0-9\?&=\-_]+)/i,
+        regex: /youtube.com\/embed\/([a-z0-9\?&=\-_]+)/i,
         type: 'iframe',
         w: 560,
         h: 314,
@@ -420,7 +420,7 @@
         allowFullscreen: true
       },
       {
-        rege***REMOVED***: /vimeo\.com\/([0-9]+)\?h=(\w+)/,
+        regex: /vimeo\.com\/([0-9]+)\?h=(\w+)/,
         type: 'iframe',
         w: 425,
         h: 350,
@@ -428,7 +428,7 @@
         allowFullscreen: true
       },
       {
-        rege***REMOVED***: /vimeo\.com\/(.*)\/([0-9]+)\?h=(\w+)/,
+        regex: /vimeo\.com\/(.*)\/([0-9]+)\?h=(\w+)/,
         type: 'iframe',
         w: 425,
         h: 350,
@@ -436,7 +436,7 @@
         allowFullscreen: true
       },
       {
-        rege***REMOVED***: /vimeo\.com\/([0-9]+)/,
+        regex: /vimeo\.com\/([0-9]+)/,
         type: 'iframe',
         w: 425,
         h: 350,
@@ -444,7 +444,7 @@
         allowFullscreen: true
       },
       {
-        rege***REMOVED***: /vimeo\.com\/(.*)\/([0-9]+)/,
+        regex: /vimeo\.com\/(.*)\/([0-9]+)/,
         type: 'iframe',
         w: 425,
         h: 350,
@@ -452,7 +452,7 @@
         allowFullscreen: true
       },
       {
-        rege***REMOVED***: /maps\.google\.([a-z]{2,3})\/maps\/(.+)msid=(.+)/,
+        regex: /maps\.google\.([a-z]{2,3})\/maps\/(.+)msid=(.+)/,
         type: 'iframe',
         w: 425,
         h: 350,
@@ -460,7 +460,7 @@
         allowFullscreen: false
       },
       {
-        rege***REMOVED***: /dailymotion\.com\/video\/([^_]+)/,
+        regex: /dailymotion\.com\/video\/([^_]+)/,
         type: 'iframe',
         w: 480,
         h: 270,
@@ -468,7 +468,7 @@
         allowFullscreen: true
       },
       {
-        rege***REMOVED***: /dai\.ly\/([^_]+)/,
+        regex: /dai\.ly\/([^_]+)/,
         type: 'iframe',
         w: 480,
         h: 270,
@@ -486,7 +486,7 @@
     };
     const getUrl = (pattern, url) => {
       const protocol = getProtocol(url);
-      const match = pattern.rege***REMOVED***.e***REMOVED***ec(url);
+      const match = pattern.regex.exec(url);
       let newUrl = protocol + pattern.url;
       if (isNonNullable(match)) {
         for (let i = 0; i < match.length; i++) {
@@ -496,9 +496,9 @@
       return newUrl.replace(/\?$/, '');
     };
     const matchPattern = url => {
-      const patterns = urlPatterns.filter(pattern => pattern.rege***REMOVED***.test(url));
+      const patterns = urlPatterns.filter(pattern => pattern.regex.test(url));
       if (patterns.length > 0) {
-        return global$5.e***REMOVED***tend({}, patterns[0], { url: getUrl(patterns[0], url) });
+        return global$5.extend({}, patterns[0], { url: getUrl(patterns[0], url) });
       } else {
         return null;
       }
@@ -513,7 +513,7 @@
       }
     };
     const getFlashHtml = data => {
-      let html = '<object data="' + data.source + '" width="' + data.width + '" height="' + data.height + '" type="application/***REMOVED***-shockwave-flash">';
+      let html = '<object data="' + data.source + '" width="' + data.width + '" height="' + data.height + '" type="application/x-shockwave-flash">';
       if (data.poster) {
         html += '<img src="' + data.poster + '" width="' + data.width + '" height="' + data.height + '" />';
       }
@@ -536,9 +536,9 @@
     };
     const dataToHtml = (editor, dataIn) => {
       var _a;
-      const data = global$5.e***REMOVED***tend({}, dataIn);
+      const data = global$5.extend({}, dataIn);
       if (!data.source) {
-        global$5.e***REMOVED***tend(data, htmlToData((_a = data.embed) !== null && _a !== void 0 ? _a : '', editor.schema));
+        global$5.extend(data, htmlToData((_a = data.embed) !== null && _a !== void 0 ? _a : '', editor.schema));
         if (!data.source) {
           return '';
         }
@@ -575,9 +575,9 @@
         });
         if (data.type === 'iframe') {
           return getIframeHtml(data, iframeTemplateCallback);
-        } else if (data.sourcemime === 'application/***REMOVED***-shockwave-flash') {
+        } else if (data.sourcemime === 'application/x-shockwave-flash') {
           return getFlashHtml(data);
-        } else if (data.sourcemime.inde***REMOVED***Of('audio') !== -1) {
+        } else if (data.sourcemime.indexOf('audio') !== -1) {
           return getAudioHtml(data, audioTemplateCallback);
         } else {
           return getVideoHtml(data, videoTemplateCallback);
@@ -585,7 +585,7 @@
       }
     };
 
-    const isMediaElement = element => element.hasAttribute('data-mce-object') || element.hasAttribute('data-epho***REMOVED***-embed-iri');
+    const isMediaElement = element => element.hasAttribute('data-mce-object') || element.hasAttribute('data-ephox-embed-iri');
     const setup$2 = editor => {
       editor.on('mousedown', e => {
         const previewObj = editor.dom.getParent(e.target, '.mce-preview-object');
@@ -646,7 +646,7 @@
     };
     const isCached = url => has(cache, url);
 
-    const e***REMOVED***tractMeta = (sourceInput, data) => get$1(data, sourceInput).bind(mainData => get$1(mainData, 'meta'));
+    const extractMeta = (sourceInput, data) => get$1(data, sourceInput).bind(mainData => get$1(mainData, 'meta'));
     const getValue = (data, metaData, sourceInput) => prop => {
       const getFromData = () => get$1(data, prop);
       const getFromMetaData = () => get$1(metaData, prop);
@@ -668,7 +668,7 @@
       return dimensions;
     };
     const unwrap = (data, sourceInput) => {
-      const metaData = sourceInput && sourceInput !== 'dimensions' ? e***REMOVED***tractMeta(sourceInput, data).getOr({}) : {};
+      const metaData = sourceInput && sourceInput !== 'dimensions' ? extractMeta(sourceInput, data).getOr({}) : {};
       const get = getValue(data, metaData, sourceInput);
       return {
         ...get('source'),
@@ -701,7 +701,7 @@
       const errorMessage = error && error.msg ? 'Media embed handler error: ' + error.msg : 'Media embed handler threw unknown error.';
       editor.notificationManager.open({
         type: 'error',
-        te***REMOVED***t: errorMessage
+        text: errorMessage
       });
     };
     const getEditorData = editor => {
@@ -712,8 +712,8 @@
         if (isEmbedIframe(data.source, data.type)) {
           const rect = editor.dom.getRect(element);
           return {
-            width: rect.w.toString().replace(/p***REMOVED***$/, ''),
-            height: rect.h.toString().replace(/p***REMOVED***$/, '')
+            width: rect.w.toString().replace(/px$/, ''),
+            height: rect.h.toString().replace(/px$/, '')
           };
         } else {
           return {};
@@ -755,7 +755,7 @@
       selectPlaceholder(editor, beforeObjects);
       editor.nodeChanged();
     };
-    const isEmbedIframe = (url, mediaDataType) => isNonNullable(mediaDataType) && mediaDataType === 'epho***REMOVED***-embed-iri' && isNonNullable(matchPattern(url));
+    const isEmbedIframe = (url, mediaDataType) => isNonNullable(mediaDataType) && mediaDataType === 'ephox-embed-iri' && isNonNullable(matchPattern(url));
     const shouldInsertAsNewIframe = (prevData, newData) => {
       const hasDimensionsChanged = (prevData, newData) => prevData.width !== newData.width || prevData.height !== newData.height;
       return hasDimensionsChanged(prevData, newData) && isEmbedIframe(newData.source, prevData.type);
@@ -811,7 +811,7 @@
           type: 'urlinput',
           filetype: 'media',
           label: 'Source',
-          picker_te***REMOVED***t: 'Browse files'
+          picker_text: 'Browse files'
         }];
       const sizeInput = !hasDimensions(editor) ? [] : [{
           type: 'sizeinput',
@@ -827,14 +827,14 @@
           sizeInput
         ])
       };
-      const embedTe***REMOVED***tarea = {
-        type: 'te***REMOVED***tarea',
+      const embedTextarea = {
+        type: 'textarea',
         name: 'embed',
         label: 'Paste your embed code below:'
       };
       const embedTab = {
         title: 'Embed',
-        items: [embedTe***REMOVED***tarea]
+        items: [embedTextarea]
       };
       const advancedFormItems = [];
       if (hasAltSource(editor)) {
@@ -877,12 +877,12 @@
           {
             type: 'cancel',
             name: 'cancel',
-            te***REMOVED***t: 'Cancel'
+            text: 'Cancel'
           },
           {
             type: 'submit',
             name: 'save',
-            te***REMOVED***t: 'Save',
+            text: 'Save',
             primary: true
           }
         ],
@@ -926,8 +926,8 @@
     };
 
     const checkRange = (str, substr, start) => substr === '' || str.length >= substr.length && str.substr(start, start + substr.length) === substr;
-    const startsWith = (str, prefi***REMOVED***) => {
-      return checkRange(str, prefi***REMOVED***, 0);
+    const startsWith = (str, prefix) => {
+      return checkRange(str, prefix, 0);
     };
 
     var global = tinymce.util.Tools.resolve('tinymce.Env');
@@ -957,7 +957,7 @@
       });
     };
     const appendNodeContent = (editor, nodeName, previewNode, html) => {
-      const newNode = Parser(editor.schema).parse(html, { conte***REMOVED***t: nodeName });
+      const newNode = Parser(editor.schema).parse(html, { context: nodeName });
       while (newNode.firstChild) {
         previewNode.append(newNode.firstChild);
       }
@@ -998,7 +998,7 @@
         previewNode.attr({
           allowfullscreen: node.attr('allowfullscreen'),
           frameborder: '0',
-          sandbo***REMOVED***: node.attr('sandbo***REMOVED***'),
+          sandbox: node.attr('sandbox'),
           referrerpolicy: node.attr('referrerpolicy')
         });
       } else {
@@ -1055,7 +1055,7 @@
     const isWithinEmbedWrapper = node => {
       let tempNode = node;
       while (tempNode = tempNode.parent) {
-        if (tempNode.attr('data-epho***REMOVED***-embed-iri') || isPageEmbedWrapper(tempNode)) {
+        if (tempNode.attr('data-ephox-embed-iri') || isPageEmbedWrapper(tempNode)) {
           return true;
         }
       }
@@ -1084,14 +1084,14 @@
       }
     };
 
-    const parseAndSanitize = (editor, conte***REMOVED***t, html) => {
+    const parseAndSanitize = (editor, context, html) => {
       const getEditorOption = editor.options.get;
-      const sanitize = getEditorOption('***REMOVED***ss_sanitization');
+      const sanitize = getEditorOption('xss_sanitization');
       const validate = shouldFilterHtml(editor);
       return Parser(editor.schema, {
         sanitize,
         validate
-      }).parse(html, { conte***REMOVED***t });
+      }).parse(html, { context });
     };
 
     const setup$1 = editor => {
@@ -1123,7 +1123,7 @@
             const realElm = new global$2(realElmName, 1);
             if (realElmName !== 'audio') {
               const className = node.attr('class');
-              if (className && className.inde***REMOVED***Of('mce-preview-object') !== -1 && node.firstChild) {
+              if (className && className.indexOf('mce-preview-object') !== -1 && node.firstChild) {
                 realElm.attr({
                   width: node.firstChild.attr('width'),
                   height: node.firstChild.attr('height')
@@ -1140,7 +1140,7 @@
             let ai = attribs.length;
             while (ai--) {
               const attrName = attribs[ai].name;
-              if (attrName.inde***REMOVED***Of('data-mce-p-') === 0) {
+              if (attrName.indexOf('data-mce-p-') === 0) {
                 realElm.attr(attrName.substr(11), attribs[ai].value);
               }
             }
@@ -1183,7 +1183,7 @@
       };
     };
     const register = editor => {
-      const onAction = () => editor.e***REMOVED***ecCommand('mceMedia');
+      const onAction = () => editor.execCommand('mceMedia');
       editor.ui.registry.addToggleButton('media', {
         tooltip: 'Insert/edit media',
         icon: 'embed',
@@ -1191,7 +1191,7 @@
         onSetup: buttonApi => {
           const selection = editor.selection;
           buttonApi.setActive(isMediaElement(selection.getNode()));
-          const unbindSelectorChanged = selection.selectorChangedWithUnbind('img[data-mce-object],span[data-mce-object],div[data-epho***REMOVED***-embed-iri]', buttonApi.setActive).unbind;
+          const unbindSelectorChanged = selection.selectorChangedWithUnbind('img[data-mce-object],span[data-mce-object],div[data-ephox-embed-iri]', buttonApi.setActive).unbind;
           const unbindEditable = onSetupEditable(editor)(buttonApi);
           return () => {
             unbindSelectorChanged();
@@ -1201,7 +1201,7 @@
       });
       editor.ui.registry.addMenuItem('media', {
         icon: 'embed',
-        te***REMOVED***t: 'Media...',
+        text: 'Media...',
         onAction,
         onSetup: onSetupEditable(editor)
       });

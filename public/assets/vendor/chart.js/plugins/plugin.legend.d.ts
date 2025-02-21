@@ -1,14 +1,14 @@
-e***REMOVED***port class Legend e***REMOVED***tends Element<import("../types/basic.js").AnyObject, import("../types/basic.js").AnyObject> {
+export class Legend extends Element<import("../types/basic.js").AnyObject, import("../types/basic.js").AnyObject> {
     /**
-       * @param {{ ct***REMOVED***: any; options: any; chart: any; }} config
+       * @param {{ ctx: any; options: any; chart: any; }} config
        */
     constructor(config: {
-        ct***REMOVED***: any;
+        ctx: any;
         options: any;
         chart: any;
     });
     _added: boolean;
-    legendHitBo***REMOVED***es: any[];
+    legendHitBoxes: any[];
     /**
          * @private
          */
@@ -16,12 +16,12 @@ e***REMOVED***port class Legend e***REMOVED***tends Element<import("../types/bas
     doughnutMode: boolean;
     chart: any;
     options: any;
-    ct***REMOVED***: any;
+    ctx: any;
     legendItems: any;
     columnSizes: any[];
     lineWidths: number[];
-    ma***REMOVED***Height: any;
-    ma***REMOVED***Width: any;
+    maxHeight: any;
+    maxWidth: any;
     top: any;
     bottom: any;
     left: any;
@@ -32,7 +32,7 @@ e***REMOVED***port class Legend e***REMOVED***tends Element<import("../types/bas
     position: any;
     weight: any;
     fullSize: any;
-    update(ma***REMOVED***Width: any, ma***REMOVED***Height: any, margins: any): void;
+    update(maxWidth: any, maxHeight: any, margins: any): void;
     setDimensions(): void;
     buildLabels(): void;
     fit(): void;
@@ -40,8 +40,8 @@ e***REMOVED***port class Legend e***REMOVED***tends Element<import("../types/bas
        * @private
        */
     private _fitRows;
-    _fitCols(titleHeight: any, labelFont: any, bo***REMOVED***Width: any, _itemHeight: any): any;
-    adjustHitBo***REMOVED***es(): void;
+    _fitCols(titleHeight: any, labelFont: any, boxWidth: any, _itemHeight: any): any;
+    adjustHitBoxes(): void;
     isHorizontal(): boolean;
     draw(): void;
     /**
@@ -67,14 +67,14 @@ e***REMOVED***port class Legend e***REMOVED***tends Element<import("../types/bas
     handleEvent(e: ChartEvent): void;
 }
 declare namespace _default {
-    e***REMOVED***port const id: string;
-    e***REMOVED***port { Legend as _element };
-    e***REMOVED***port function start(chart: any, _args: any, options: any): void;
-    e***REMOVED***port function stop(chart: any): void;
-    e***REMOVED***port function beforeUpdate(chart: any, _args: any, options: any): void;
-    e***REMOVED***port function afterUpdate(chart: any): void;
-    e***REMOVED***port function afterEvent(chart: any, args: any): void;
-    e***REMOVED***port namespace defaults {
+    export const id: string;
+    export { Legend as _element };
+    export function start(chart: any, _args: any, options: any): void;
+    export function stop(chart: any): void;
+    export function beforeUpdate(chart: any, _args: any, options: any): void;
+    export function afterUpdate(chart: any): void;
+    export function afterEvent(chart: any, args: any): void;
+    export namespace defaults {
         const display: boolean;
         const position: string;
         const align: string;
@@ -85,30 +85,30 @@ declare namespace _default {
         const onHover: any;
         const onLeave: any;
         namespace labels {
-            function color(ct***REMOVED***: any): any;
-            const bo***REMOVED***Width: number;
+            function color(ctx: any): any;
+            const boxWidth: number;
             const padding: number;
             function generateLabels(chart: any): any;
         }
         namespace title {
-            e***REMOVED***port function color_1(ct***REMOVED***: any): any;
-            e***REMOVED***port { color_1 as color };
+            export function color_1(ctx: any): any;
+            export { color_1 as color };
             const display_1: boolean;
-            e***REMOVED***port { display_1 as display };
+            export { display_1 as display };
             const position_1: string;
-            e***REMOVED***port { position_1 as position };
-            e***REMOVED***port const te***REMOVED***t: string;
+            export { position_1 as position };
+            export const text: string;
         }
     }
-    e***REMOVED***port namespace descriptors {
-        e***REMOVED***port function _scriptable(name: any): boolean;
-        e***REMOVED***port namespace labels_1 {
-            e***REMOVED***port function _scriptable_1(name: any): boolean;
-            e***REMOVED***port { _scriptable_1 as _scriptable };
+    export namespace descriptors {
+        export function _scriptable(name: any): boolean;
+        export namespace labels_1 {
+            export function _scriptable_1(name: any): boolean;
+            export { _scriptable_1 as _scriptable };
         }
-        e***REMOVED***port { labels_1 as labels };
+        export { labels_1 as labels };
     }
 }
-e***REMOVED***port default _default;
-e***REMOVED***port type ChartEvent = import('../types/inde***REMOVED***.js').ChartEvent;
+export default _default;
+export type ChartEvent = import('../types/index.js').ChartEvent;
 import Element from "../core/core.element.js";

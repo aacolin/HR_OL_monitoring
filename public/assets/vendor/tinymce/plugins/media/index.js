@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "media" plugin for usage with module loaders
+// Exports the "media" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/media')

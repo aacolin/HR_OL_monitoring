@@ -20,9 +20,9 @@ declare const effects: {
     readonly easeInSine: (t: number) => number;
     readonly easeOutSine: (t: number) => number;
     readonly easeInOutSine: (t: number) => number;
-    readonly easeInE***REMOVED***po: (t: number) => number;
-    readonly easeOutE***REMOVED***po: (t: number) => number;
-    readonly easeInOutE***REMOVED***po: (t: number) => number;
+    readonly easeInExpo: (t: number) => number;
+    readonly easeOutExpo: (t: number) => number;
+    readonly easeInOutExpo: (t: number) => number;
     readonly easeInCirc: (t: number) => number;
     readonly easeOutCirc: (t: number) => number;
     readonly easeInOutCirc: (t: number) => number;
@@ -36,5 +36,5 @@ declare const effects: {
     readonly easeOutBounce: (t: number) => number;
     readonly easeInOutBounce: (t: number) => number;
 };
-e***REMOVED***port type EasingFunction = keyof typeof effects;
-e***REMOVED***port default effects;
+export type EasingFunction = keyof typeof effects;
+export default effects;

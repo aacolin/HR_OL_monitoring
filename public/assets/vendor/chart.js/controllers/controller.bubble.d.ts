@@ -1,4 +1,4 @@
-e***REMOVED***port default class BubbleController e***REMOVED***tends DatasetController {
+export default class BubbleController extends DatasetController {
     static id: string;
     /**
      * @type {any}
@@ -22,11 +22,11 @@ e***REMOVED***port default class BubbleController e***REMOVED***tends DatasetCon
     /**
        * @protected
        */
-    protected getMa***REMOVED***Overflow(): number;
+    protected getMaxOverflow(): number;
     /**
        * @protected
        */
-    protected getLabelAndValue(inde***REMOVED***: any): {
+    protected getLabelAndValue(index: any): {
         label: any;
         value: string;
     };

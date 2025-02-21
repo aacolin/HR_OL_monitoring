@@ -1,7 +1,7 @@
-import {Chart} from './inde***REMOVED***.js';
+import {Chart} from './index.js';
 import {AnyObject} from './basic.js';
 
-e***REMOVED***port declare class Animation {
+export declare class Animation {
   constructor(cfg: AnyObject, target: AnyObject, prop: string, to?: unknown);
   active(): boolean;
   update(cfg: AnyObject, to: unknown, date: number): void;
@@ -10,14 +10,14 @@ e***REMOVED***port declare class Animation {
   readonly _to: unknown;
 }
 
-e***REMOVED***port interface AnimationEvent {
+export interface AnimationEvent {
   chart: Chart;
   numSteps: number;
   initial: boolean;
   currentStep: number;
 }
 
-e***REMOVED***port declare class Animator {
+export declare class Animator {
   listen(chart: Chart, event: 'complete' | 'progress', cb: (event: AnimationEvent) => void): void;
   add(chart: Chart, items: readonly Animation[]): void;
   has(chart: Chart): boolean;
@@ -27,7 +27,7 @@ e***REMOVED***port declare class Animator {
   remove(chart: Chart): boolean;
 }
 
-e***REMOVED***port declare class Animations {
+export declare class Animations {
   constructor(chart: Chart, animations: AnyObject);
   configure(animations: AnyObject): void;
   update(target: AnyObject, values: AnyObject): undefined | boolean;

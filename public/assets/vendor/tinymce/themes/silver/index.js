@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "silver" theme for usage with module loaders
+// Exports the "silver" theme for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/themes/silver')

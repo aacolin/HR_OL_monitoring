@@ -3,7 +3,7 @@
  * @typedef { import('../../core/core.scale.js').default } Scale
  * @typedef { import('../../elements/element.point.js').default } PointElement
  */
-e***REMOVED***port function _getTarget(source: any): any;
-e***REMOVED***port type Chart = import('../../core/core.controller.js').default;
-e***REMOVED***port type Scale = import('../../core/core.scale.js').default;
-e***REMOVED***port type PointElement = import('../../elements/element.point.js').default;
+export function _getTarget(source: any): any;
+export type Chart = import('../../core/core.controller.js').default;
+export type Scale = import('../../core/core.scale.js').default;
+export type PointElement = import('../../elements/element.point.js').default;

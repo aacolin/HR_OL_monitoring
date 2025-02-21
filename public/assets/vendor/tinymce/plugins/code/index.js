@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "code" plugin for usage with module loaders
+// Exports the "code" plugin for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/plugins/code')

@@ -40,9 +40,9 @@
     ],
     "shortDays": ["ی", "د", "س", "چ", "پ", "ج", "ش"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "دانلود SVG",
-      "e***REMOVED***portToPNG": "دانلود PNG",
-      "e***REMOVED***portToCSV": "دانلود CSV",
+      "exportToSVG": "دانلود SVG",
+      "exportToPNG": "دانلود PNG",
+      "exportToCSV": "دانلود CSV",
       "menu": "منو",
       "selection": "انتخاب",
       "selectionZoom": "بزرگنمایی انتخابی",

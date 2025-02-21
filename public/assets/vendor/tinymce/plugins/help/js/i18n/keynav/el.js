@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.el',
   '\n' +
   '<dl>\n' +
   '  <dt>Εστίαση στη γραμμή μενού</dt>\n' +
-  '  <dd>Windows ή Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows ή Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Εστίαση στη γραμμή εργαλείων</dt>\n' +
-  '  <dd>Windows ή Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows ή Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Εστίαση στο υποσέλιδο</dt>\n' +
-  '  <dd>Windows ή Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows ή Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Εστίαση στην ειδοποίηση</dt>\n' +
-  '  <dd>Windows ή Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows ή Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>Εστίαση σε γραμμή εργαλείων βάσει περιεχομένου</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** ή macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux ή macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Η πλοήγηση θα ξεκινήσει από το πρώτο στοιχείο περιβάλλοντος χρήστη, που θα επισημαίνεται ή θα είναι υπογραμμισμένο,\n' +

@@ -15,7 +15,7 @@
   function toggleScrolled() {
     const selectBody = document.querySelector('body');
     const selectHeader = document.querySelector('#header');
-    if (!selectHeader.classList.contains('scroll-up-sticky') && !selectHeader.classList.contains('sticky-top') && !selectHeader.classList.contains('fi***REMOVED***ed-top')) return;
+    if (!selectHeader.classList.contains('scroll-up-sticky') && !selectHeader.classList.contains('sticky-top') && !selectHeader.classList.contains('fixed-top')) return;
     window.scrollY > 100 ? selectBody.classList.add('scrolled') : selectBody.classList.remove('scrolled');
   }
 
@@ -30,7 +30,7 @@
   function mobileNavToogle() {
     document.querySelector('body').classList.toggle('mobile-nav-active');
     mobileNavToggleBtn.classList.toggle('bi-list');
-    mobileNavToggleBtn.classList.toggle('bi-***REMOVED***');
+    mobileNavToggleBtn.classList.toggle('bi-x');
   }
   mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
 
@@ -53,7 +53,7 @@
     navmenu.addEventListener('click', function(e) {
       e.preventDefault();
       this.parentNode.classList.toggle('active');
-      this.parentNode.ne***REMOVED***tElementSibling.classList.toggle('dropdown-active');
+      this.parentNode.nextElementSibling.classList.toggle('dropdown-active');
       e.stopImmediatePropagation();
     });
   });
@@ -122,10 +122,10 @@
   window.addEventListener("load", initSwiper);
 
   /**
-   * Initiate glightbo***REMOVED***
+   * Initiate glightbox
    */
-  const glightbo***REMOVED*** = GLightbo***REMOVED***({
-    selector: '.glightbo***REMOVED***'
+  const glightbox = GLightbox({
+    selector: '.glightbox'
   });
 
   /**

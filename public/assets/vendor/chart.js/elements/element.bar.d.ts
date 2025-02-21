@@ -1,4 +1,4 @@
-e***REMOVED***port default class BarElement e***REMOVED***tends Element<import("../types/basic.js").AnyObject, import("../types/basic.js").AnyObject> {
+export default class BarElement extends Element<import("../types/basic.js").AnyObject, import("../types/basic.js").AnyObject> {
     static id: string;
     /**
      * @type {any}
@@ -11,18 +11,18 @@ e***REMOVED***port default class BarElement e***REMOVED***tends Element<import("
     width: any;
     height: any;
     inflateAmount: any;
-    draw(ct***REMOVED***: any): void;
+    draw(ctx: any): void;
     inRange(mouseX: any, mouseY: any, useFinalPosition: any): boolean;
     inXRange(mouseX: any, useFinalPosition: any): boolean;
     inYRange(mouseY: any, useFinalPosition: any): boolean;
     getCenterPoint(useFinalPosition: any): {
-        ***REMOVED***: number;
+        x: number;
         y: number;
     };
-    getRange(a***REMOVED***is: any): number;
+    getRange(axis: any): number;
 }
-e***REMOVED***port type BarProps = {
-    ***REMOVED***: number;
+export type BarProps = {
+    x: number;
     y: number;
     base: number;
     horizontal: boolean;

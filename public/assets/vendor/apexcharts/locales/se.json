@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Ladda SVG",
-      "e***REMOVED***portToPNG": "Ladda PNG",
-      "e***REMOVED***portToCSV": "Ladda CSV",
+      "exportToSVG": "Ladda SVG",
+      "exportToPNG": "Ladda PNG",
+      "exportToCSV": "Ladda CSV",
       "menu": "Meny",
       "selection": "Selektion",
       "selectionZoom": "Val av zoom",

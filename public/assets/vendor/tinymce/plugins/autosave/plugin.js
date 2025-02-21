@@ -15,13 +15,13 @@
         return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
       }
     };
-    const typeOf = ***REMOVED*** => {
-      const t = typeof ***REMOVED***;
-      if (***REMOVED*** === null) {
+    const typeOf = x => {
+      const t = typeof x;
+      if (x === null) {
         return 'null';
-      } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+      } else if (t === 'object' && Array.isArray(x)) {
         return 'array';
-      } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+      } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
         return 'string';
       } else {
         return t;
@@ -47,7 +47,7 @@
         s: 1000,
         m: 60000
       };
-      const parsedTime = /^(\d+)([ms]?)$/.e***REMOVED***ec(timeString);
+      const parsedTime = /^(\d+)([ms]?)$/.exec(timeString);
       return (parsedTime && parsedTime[2] ? multiples[parsedTime[2]] : 1) * parseInt(timeString, 10);
     };
 
@@ -72,7 +72,7 @@
         processor: 'boolean',
         default: true
       });
-      registerOption('autosave_prefi***REMOVED***', {
+      registerOption('autosave_prefix', {
         processor: 'string',
         default: 'tinymce-autosave-{path}{query}{hash}-{id}-'
       });
@@ -93,9 +93,9 @@
     const shouldRestoreWhenEmpty = option('autosave_restore_when_empty');
     const getAutoSaveInterval = option('autosave_interval');
     const getAutoSaveRetention = option('autosave_retention');
-    const getAutoSavePrefi***REMOVED*** = editor => {
+    const getAutoSavePrefix = editor => {
       const location = document.location;
-      return editor.options.get('autosave_prefi***REMOVED***').replace(/{path}/g, location.pathname).replace(/{query}/g, location.search).replace(/{hash}/g, location.hash).replace(/{id}/g, editor.id);
+      return editor.options.get('autosave_prefix').replace(/{path}/g, location.pathname).replace(/{query}/g, location.search).replace(/{hash}/g, location.hash).replace(/{id}/g, editor.id);
     };
 
     const isEmpty = (editor, html) => {
@@ -106,14 +106,14 @@
         if (trimmedHtml === '') {
           return true;
         } else {
-          const fragment = new DOMParser().parseFromString(trimmedHtml, 'te***REMOVED***t/html');
+          const fragment = new DOMParser().parseFromString(trimmedHtml, 'text/html');
           return editor.dom.isEmpty(fragment);
         }
       }
     };
     const hasDraft = editor => {
       var _a;
-      const time = parseInt((_a = global$2.getItem(getAutoSavePrefi***REMOVED***(editor) + 'time')) !== null && _a !== void 0 ? _a : '0', 10) || 0;
+      const time = parseInt((_a = global$2.getItem(getAutoSavePrefix(editor) + 'time')) !== null && _a !== void 0 ? _a : '0', 10) || 0;
       if (new Date().getTime() - time > getAutoSaveRetention(editor)) {
         removeDraft(editor, false);
         return false;
@@ -121,29 +121,29 @@
       return true;
     };
     const removeDraft = (editor, fire) => {
-      const prefi***REMOVED*** = getAutoSavePrefi***REMOVED***(editor);
-      global$2.removeItem(prefi***REMOVED*** + 'draft');
-      global$2.removeItem(prefi***REMOVED*** + 'time');
+      const prefix = getAutoSavePrefix(editor);
+      global$2.removeItem(prefix + 'draft');
+      global$2.removeItem(prefix + 'time');
       if (fire !== false) {
         fireRemoveDraft(editor);
       }
     };
     const storeDraft = editor => {
-      const prefi***REMOVED*** = getAutoSavePrefi***REMOVED***(editor);
+      const prefix = getAutoSavePrefix(editor);
       if (!isEmpty(editor) && editor.isDirty()) {
-        global$2.setItem(prefi***REMOVED*** + 'draft', editor.getContent({
+        global$2.setItem(prefix + 'draft', editor.getContent({
           format: 'raw',
           no_events: true
         }));
-        global$2.setItem(prefi***REMOVED*** + 'time', new Date().getTime().toString());
+        global$2.setItem(prefix + 'time', new Date().getTime().toString());
         fireStoreDraft(editor);
       }
     };
     const restoreDraft = editor => {
       var _a;
-      const prefi***REMOVED*** = getAutoSavePrefi***REMOVED***(editor);
+      const prefix = getAutoSavePrefix(editor);
       if (hasDraft(editor)) {
-        editor.setContent((_a = global$2.getItem(prefi***REMOVED*** + 'draft')) !== null && _a !== void 0 ? _a : '', { format: 'raw' });
+        editor.setContent((_a = global$2.getItem(prefix + 'draft')) !== null && _a !== void 0 ? _a : '', { format: 'raw' });
         fireRestoreDraft(editor);
       }
     };
@@ -207,7 +207,7 @@
         onSetup: makeSetupHandler(editor)
       });
       editor.ui.registry.addMenuItem('restoredraft', {
-        te***REMOVED***t: 'Restore last draft',
+        text: 'Restore last draft',
         icon: 'restore-draft',
         onAction,
         onSetup: makeSetupHandler(editor)

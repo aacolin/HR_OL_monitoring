@@ -1,17 +1,17 @@
 declare namespace _default {
     /**
-       * Register a bo***REMOVED*** to a chart.
-       * A bo***REMOVED*** is simply a reference to an object that requires layout. eg. Scales, Legend, Title.
+       * Register a box to a chart.
+       * A box is simply a reference to an object that requires layout. eg. Scales, Legend, Title.
        * @param {Chart} chart - the chart to use
        * @param {LayoutItem} item - the item to add to be laid out
        */
-    function addBo***REMOVED***(chart: import("./core.controller.js").default, item: LayoutItem): void;
+    function addBox(chart: import("./core.controller.js").default, item: LayoutItem): void;
     /**
        * Remove a layoutItem from a chart
-       * @param {Chart} chart - the chart to remove the bo***REMOVED*** from
+       * @param {Chart} chart - the chart to remove the box from
        * @param {LayoutItem} layoutItem - the item to remove from the layout
        */
-    function removeBo***REMOVED***(chart: import("./core.controller.js").default, layoutItem: LayoutItem): void;
+    function removeBox(chart: import("./core.controller.js").default, layoutItem: LayoutItem): void;
     /**
        * Sets (or updates) options on the given `item`.
        * @param {Chart} chart - the chart in which the item lives (or will be added to)
@@ -20,7 +20,7 @@ declare namespace _default {
        */
     function configure(chart: import("./core.controller.js").default, item: LayoutItem, options: any): void;
     /**
-       * Fits bo***REMOVED***es of the given chart into the given size by having each bo***REMOVED*** measure itself
+       * Fits boxes of the given chart into the given size by having each box measure itself
        * then running a fitting algorithm
        * @param {Chart} chart - the chart
        * @param {number} width - the width to fit into
@@ -29,9 +29,9 @@ declare namespace _default {
        */
     function update(chart: import("./core.controller.js").default, width: number, height: number, minPadding: number): void;
 }
-e***REMOVED***port default _default;
-e***REMOVED***port type Chart = import('./core.controller.js').default;
-e***REMOVED***port type LayoutItem = {
+export default _default;
+export type Chart = import('./core.controller.js').default;
+export type LayoutItem = {
     /**
      * - The position of the item in the chart layout. Possible values are
      * 'left', 'top', 'right', 'bottom', and 'chartArea'
@@ -42,7 +42,7 @@ e***REMOVED***port type LayoutItem = {
      */
     weight: number;
     /**
-     * - if true, and the item is horizontal, then push vertical bo***REMOVED***es down
+     * - if true, and the item is horizontal, then push vertical boxes down
      */
     fullSize: boolean;
     /**

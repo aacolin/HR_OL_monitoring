@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.da',
   '\n' +
   '<dl>\n' +
   '  <dt>Fokuser på menulinjen</dt>\n' +
-  '  <dd>Windows eller Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows eller Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Fokuser på værktøjslinjen</dt>\n' +
-  '  <dd>Windows eller Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows eller Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Fokuser på sidefoden</dt>\n' +
-  '  <dd>Windows eller Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows eller Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Fokuser på meddelelsen</dt>\n' +
-  '  <dd>Windows eller Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows eller Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>Fokuser på kontekstuel værktøjslinje</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** eller macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux eller macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Navigationen starter ved det første UI-element, som fremhæves eller understreges hvad angår det første element i\n' +

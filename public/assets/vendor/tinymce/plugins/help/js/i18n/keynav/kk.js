@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.kk',
   '\n' +
   '<dl>\n' +
   '  <dt>Мәзір жолағын фокустау</dt>\n' +
-  '  <dd>Windows немесе Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows немесе Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Құралдар тақтасын фокустау</dt>\n' +
-  '  <dd>Windows немесе Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows немесе Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Төменгі деректемені фокустау</dt>\n' +
-  '  <dd>Windows немесе Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows немесе Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Хабарландыруды белгілеу</dt>\n' +
-  '  <dd>Windows немесе Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows немесе Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>Мәтінмәндік құралдар тақтасын фокустау</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** немесе macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux немесе macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Навигация бөлектелетін немесе Төменгі деректеме элементінің жолындағы бірінші элемент жағдайында асты сызылатын\n' +

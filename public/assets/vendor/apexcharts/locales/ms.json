@@ -48,9 +48,9 @@
             "Sab"
         ],
         "toolbar": {
-            "e***REMOVED***portToSVG": "Muat turun SVG",
-            "e***REMOVED***portToPNG": "Muat turun PNG",
-            "e***REMOVED***portToCSV": "Muat turun CSV",
+            "exportToSVG": "Muat turun SVG",
+            "exportToPNG": "Muat turun PNG",
+            "exportToCSV": "Muat turun CSV",
             "menu": "Menu",
             "selection": "Pilihan",
             "selectionZoom": "Zum Pilihan",

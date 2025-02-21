@@ -4,21 +4,21 @@
 /**
  * Abstract class that allows abstracting platform dependencies away from the chart.
  */
-e***REMOVED***port default class BasePlatform {
+export default class BasePlatform {
     /**
-       * Called at chart construction time, returns a conte***REMOVED***t2d instance implementing
-       * the [W3C Canvas 2D Conte***REMOVED***t API standard]{@link https://www.w3.org/TR/2dconte***REMOVED***t/}.
-       * @param {HTMLCanvasElement} canvas - The canvas from which to acquire conte***REMOVED***t (platform specific)
+       * Called at chart construction time, returns a context2d instance implementing
+       * the [W3C Canvas 2D Context API standard]{@link https://www.w3.org/TR/2dcontext/}.
+       * @param {HTMLCanvasElement} canvas - The canvas from which to acquire context (platform specific)
        * @param {number} [aspectRatio] - The chart options
        */
-    acquireConte***REMOVED***t(canvas: HTMLCanvasElement, aspectRatio?: number): void;
+    acquireContext(canvas: HTMLCanvasElement, aspectRatio?: number): void;
     /**
-       * Called at chart destruction time, releases any resources associated to the conte***REMOVED***t
-       * previously returned by the acquireConte***REMOVED***t() method.
-       * @param {CanvasRenderingConte***REMOVED***t2D} conte***REMOVED***t - The conte***REMOVED***t2d instance
+       * Called at chart destruction time, releases any resources associated to the context
+       * previously returned by the acquireContext() method.
+       * @param {CanvasRenderingContext2D} context - The context2d instance
        * @returns {boolean} true if the method succeeded, else false
        */
-    releaseConte***REMOVED***t(conte***REMOVED***t: CanvasRenderingConte***REMOVED***t2D): boolean;
+    releaseContext(context: CanvasRenderingContext2D): boolean;
     /**
        * Registers the specified listener on the given chart.
        * @param {Chart} chart - Chart from which to listen for event
@@ -35,17 +35,17 @@ e***REMOVED***port default class BasePlatform {
        */
     removeEventListener(chart: Chart, type: string, listener: Function): void;
     /**
-       * @returns {number} the current devicePi***REMOVED***elRatio of the device this platform is connected to.
+       * @returns {number} the current devicePixelRatio of the device this platform is connected to.
        */
-    getDevicePi***REMOVED***elRatio(): number;
+    getDevicePixelRatio(): number;
     /**
-       * Returns the ma***REMOVED***imum size in pi***REMOVED***els of given canvas element.
+       * Returns the maximum size in pixels of given canvas element.
        * @param {HTMLCanvasElement} element
        * @param {number} [width] - content width of parent element
        * @param {number} [height] - content height of parent element
        * @param {number} [aspectRatio] - aspect ratio to maintain
        */
-    getMa***REMOVED***imumSize(element: HTMLCanvasElement, width?: number, height?: number, aspectRatio?: number): {
+    getMaximumSize(element: HTMLCanvasElement, width?: number, height?: number, aspectRatio?: number): {
         width: number;
         height: number;
     };
@@ -60,4 +60,4 @@ e***REMOVED***port default class BasePlatform {
      */
     updateConfig(config: import('../core/core.config.js').default): void;
 }
-e***REMOVED***port type Chart = import('../core/core.controller.js').default;
+export type Chart = import('../core/core.controller.js').default;

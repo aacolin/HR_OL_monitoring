@@ -33,8 +33,8 @@ $(document).ready(function() {
             }
         }
 
-        const emailRege***REMOVED*** = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,5}$/;
-        if (!emailRege***REMOVED***.test(formData.Email)) {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,5}$/;
+        if (!emailRegex.test(formData.Email)) {
             errorMessages.push("Invalid or missing email address.");
         }
 
@@ -71,7 +71,7 @@ $(document).ready(function() {
         };
         const patientInfoInJSON = JSON.stringify(patientInfo);
 
-        $.aja***REMOVED***({
+        $.ajax({
             url: '/patients/signup',
             method: 'POST',
             contentType: 'application/json',

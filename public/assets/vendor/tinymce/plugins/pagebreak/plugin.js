@@ -32,11 +32,11 @@
     const setup$1 = editor => {
       const separatorHtml = getSeparatorHtml(editor);
       const shouldSplitBlock$1 = () => shouldSplitBlock(editor);
-      const pageBreakSeparatorRegE***REMOVED***p = new RegE***REMOVED***p(separatorHtml.replace(/[\?\.\*\[\]\(\)\{\}\+\^\$\:]/g, a => {
+      const pageBreakSeparatorRegExp = new RegExp(separatorHtml.replace(/[\?\.\*\[\]\(\)\{\}\+\^\$\:]/g, a => {
         return '\\' + a;
       }), 'gi');
       editor.on('BeforeSetContent', e => {
-        e.content = e.content.replace(pageBreakSeparatorRegE***REMOVED***p, getPlaceholderHtml(shouldSplitBlock$1()));
+        e.content = e.content.replace(pageBreakSeparatorRegExp, getPlaceholderHtml(shouldSplitBlock$1()));
       });
       editor.on('PreInit', () => {
         editor.serializer.addNodeFilter('img', nodes => {
@@ -44,7 +44,7 @@
           while (i--) {
             node = nodes[i];
             className = node.attr('class');
-            if (className && className.inde***REMOVED***Of(pageBreakClass) !== -1) {
+            if (className && className.indexOf(pageBreakClass) !== -1) {
               const parentNode = node.parent;
               if (parentNode && editor.schema.getBlockElements()[parentNode.name] && shouldSplitBlock$1()) {
                 parentNode.type = 3;
@@ -87,7 +87,7 @@
       };
     };
     const register = editor => {
-      const onAction = () => editor.e***REMOVED***ecCommand('mcePageBreak');
+      const onAction = () => editor.execCommand('mcePageBreak');
       editor.ui.registry.addButton('pagebreak', {
         icon: 'page-break',
         tooltip: 'Page break',
@@ -95,7 +95,7 @@
         onSetup: onSetupEditable(editor)
       });
       editor.ui.registry.addMenuItem('pagebreak', {
-        te***REMOVED***t: 'Page break',
+        text: 'Page break',
         icon: 'page-break',
         onAction,
         onSetup: onSetupEditable(editor)

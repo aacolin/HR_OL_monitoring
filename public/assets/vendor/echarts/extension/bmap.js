@@ -5,7 +5,7 @@
 * distributed with this work for additional information
 * regarding copyright ownership.  The ASF licenses this file
 * to you under the Apache License, Version 2.0 (the
-* "License"); you may not use this file e***REMOVED***cept in compliance
+* "License"); you may not use this file except in compliance
 * with the License.  You may obtain a copy of the License at
 *
 *   http://www.apache.org/licenses/LICENSE-2.0
@@ -13,16 +13,16 @@
 * Unless required by applicable law or agreed to in writing,
 * software distributed under the License is distributed on an
 * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-* KIND, either e***REMOVED***press or implied.  See the License for the
+* KIND, either express or implied.  See the License for the
 * specific language governing permissions and limitations
 * under the License.
 */
 
 (function (global, factory) {
-  typeof e***REMOVED***ports === 'object' && typeof module !== 'undefined' ? factory(e***REMOVED***ports, require('echarts')) :
-  typeof define === 'function' && define.amd ? define(['e***REMOVED***ports', 'echarts'], factory) :
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('echarts')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'echarts'], factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.bmap = {}, global.echarts));
-}(this, (function (e***REMOVED***ports, echarts) { 'use strict';
+}(this, (function (exports, echarts) { 'use strict';
 
   function BMapCoordSys(bmap, api) {
     this._bmap = bmap;
@@ -53,17 +53,17 @@
     // let height = this._api.getZr().getHeight();
     // let divider = Math.pow(2, 18 - 10);
     // return [
-    //     Math.round((mercatorPoint.***REMOVED*** - this._center.***REMOVED***) / divider + width / 2),
+    //     Math.round((mercatorPoint.x - this._center.x) / divider + width / 2),
     //     Math.round((this._center.y - mercatorPoint.y) / divider + height / 2)
     // ];
-    var p***REMOVED*** = this._bmap.pointToOverlayPi***REMOVED***el(point);
+    var px = this._bmap.pointToOverlayPixel(point);
     var mapOffset = this._mapOffset;
-    return [p***REMOVED***.***REMOVED*** - mapOffset[0], p***REMOVED***.y - mapOffset[1]];
+    return [px.x - mapOffset[0], px.y - mapOffset[1]];
   };
   BMapCoordSys.prototype.pointToData = function (pt) {
     var mapOffset = this._mapOffset;
-    pt = this._bmap.overlayPi***REMOVED***elToPoint({
-      ***REMOVED***: pt[0] + mapOffset[0],
+    pt = this._bmap.overlayPixelToPoint({
+      x: pt[0] + mapOffset[0],
       y: pt[1] + mapOffset[1]
     });
     return [pt.lng, pt.lat];
@@ -73,15 +73,15 @@
     return new echarts.graphic.BoundingRect(0, 0, api.getWidth(), api.getHeight());
   };
   BMapCoordSys.prototype.getRoamTransform = function () {
-    return echarts.matri***REMOVED***.create();
+    return echarts.matrix.create();
   };
   BMapCoordSys.prototype.prepareCustoms = function () {
     var rect = this.getViewRect();
     return {
       coordSys: {
-        // The name e***REMOVED***posed to user is always 'cartesian2d' but not 'grid'.
+        // The name exposed to user is always 'cartesian2d' but not 'grid'.
         type: 'bmap',
-        ***REMOVED***: rect.***REMOVED***,
+        x: rect.x,
         y: rect.y,
         width: rect.width,
         height: rect.height
@@ -92,24 +92,24 @@
       }
     };
   };
-  BMapCoordSys.prototype.convertToPi***REMOVED***el = function (ecModel, finder, value) {
+  BMapCoordSys.prototype.convertToPixel = function (ecModel, finder, value) {
     // here we ignore finder as only one bmap component is allowed
     return this.dataToPoint(value);
   };
-  BMapCoordSys.prototype.convertFromPi***REMOVED***el = function (ecModel, finder, value) {
+  BMapCoordSys.prototype.convertFromPixel = function (ecModel, finder, value) {
     return this.pointToData(value);
   };
   function dataToCoordSize(dataSize, dataItem) {
     dataItem = dataItem || [0, 0];
-    return echarts.util.map([0, 1], function (dimId***REMOVED***) {
-      var val = dataItem[dimId***REMOVED***];
-      var halfSize = dataSize[dimId***REMOVED***] / 2;
+    return echarts.util.map([0, 1], function (dimIdx) {
+      var val = dataItem[dimIdx];
+      var halfSize = dataSize[dimIdx] / 2;
       var p1 = [];
       var p2 = [];
-      p1[dimId***REMOVED***] = val - halfSize;
-      p2[dimId***REMOVED***] = val + halfSize;
-      p1[1 - dimId***REMOVED***] = p2[1 - dimId***REMOVED***] = dataItem[1 - dimId***REMOVED***];
-      return Math.abs(this.dataToPoint(p1)[dimId***REMOVED***] - this.dataToPoint(p2)[dimId***REMOVED***]);
+      p1[dimIdx] = val - halfSize;
+      p2[dimIdx] = val + halfSize;
+      p1[1 - dimIdx] = p2[1 - dimIdx] = dataItem[1 - dimIdx];
+      return Math.abs(this.dataToPoint(p1)[dimIdx] - this.dataToPoint(p2)[dimIdx]);
     }, this);
   }
   var Overlay;
@@ -148,23 +148,23 @@
       }
       Overlay = Overlay || createOverlayCtor();
       if (bmapCoordSys) {
-        throw new Error('Only one bmap component can e***REMOVED***ist');
+        throw new Error('Only one bmap component can exist');
       }
       var bmap;
       if (!bmapModel.__bmap) {
         // Not support IE8
-        var bmapRoot = root.querySelector('.ec-e***REMOVED***tension-bmap');
+        var bmapRoot = root.querySelector('.ec-extension-bmap');
         if (bmapRoot) {
           // Reset viewport left and top, which will be changed
           // in moving handler in BMapView
-          viewportRoot.style.left = '0p***REMOVED***';
-          viewportRoot.style.top = '0p***REMOVED***';
+          viewportRoot.style.left = '0px';
+          viewportRoot.style.top = '0px';
           root.removeChild(bmapRoot);
         }
         bmapRoot = document.createElement('div');
-        bmapRoot.className = 'ec-e***REMOVED***tension-bmap';
-        // fi***REMOVED*** #13424
-        bmapRoot.style.cssTe***REMOVED***t = 'position:absolute;width:100%;height:100%';
+        bmapRoot.className = 'ec-extension-bmap';
+        // fix #13424
+        bmapRoot.style.cssText = 'position:absolute;width:100%;height:100%';
         root.appendChild(bmapRoot);
         // initializes bmap
         var mapOptions = bmapModel.get('mapOptions');
@@ -216,7 +216,7 @@
   function v2Equal(a, b) {
     return a && b && a[0] === b[0] && a[1] === b[1];
   }
-  echarts.e***REMOVED***tendComponentModel({
+  echarts.extendComponentModel({
     type: 'bmap',
     getBMap: function () {
       // __bmap is injected when creating BMapCoordSys
@@ -233,9 +233,9 @@
     defaultOption: {
       center: [104.114129, 37.550339],
       zoom: 5,
-      // 2.0 https://lbsyun.baidu.com/custom/inde***REMOVED***.htm
+      // 2.0 https://lbsyun.baidu.com/custom/index.htm
       mapStyle: {},
-      // 3.0 https://lbsyun.baidu.com/inde***REMOVED***.php?title=open/custom
+      // 3.0 https://lbsyun.baidu.com/index.php?title=open/custom
       mapStyleV2: {},
       // See https://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference.html#a0b1
       mapOptions: {},
@@ -251,7 +251,7 @@
     }
     return true;
   }
-  echarts.e***REMOVED***tendComponentView({
+  echarts.extendComponentView({
     type: 'bmap',
     render: function (bMapModel, ecModel, api) {
       var rendering = true;
@@ -266,8 +266,8 @@
         var mapOffset = [-parseInt(offsetEl.style.left, 10) || 0, -parseInt(offsetEl.style.top, 10) || 0];
         // only update style when map offset changed
         var viewportRootStyle = viewportRoot.style;
-        var offsetLeft = mapOffset[0] + 'p***REMOVED***';
-        var offsetTop = mapOffset[1] + 'p***REMOVED***';
+        var offsetLeft = mapOffset[0] + 'px';
+        var offsetTop = mapOffset[1] + 'px';
         if (viewportRootStyle.left !== offsetLeft) {
           viewportRootStyle.left = offsetLeft;
         }
@@ -360,9 +360,9 @@
   });
   var version = '1.0.0';
 
-  e***REMOVED***ports.version = version;
+  exports.version = version;
 
-  Object.defineProperty(e***REMOVED***ports, '__esModule', { value: true });
+  Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 //# sourceMappingURL=bmap.js.map

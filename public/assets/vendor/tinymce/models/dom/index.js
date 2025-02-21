@@ -1,4 +1,4 @@
-// E***REMOVED***ports the "dom" model for usage with module loaders
+// Exports the "dom" model for usage with module loaders
 // Usage:
 //   CommonJS:
 //     require('tinymce/models/dom')

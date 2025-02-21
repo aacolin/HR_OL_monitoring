@@ -47,8 +47,8 @@ $(document).ready(function() {
     }
 
     function validateEmail(email, errorMessages) {
-        const emailRege***REMOVED*** = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,5}$/;
-        if (!emailRege***REMOVED***.test(email)) {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,5}$/;
+        if (!emailRegex.test(email)) {
             errorMessages.push("Invalid or missing email address.");
         }
     }
@@ -89,7 +89,7 @@ $(document).ready(function() {
         };
         const patientInfoInJSON = JSON.stringify(patientInfo);
 
-        $.aja***REMOVED***({
+        $.ajax({
             url: '/physicians/signup',
             method: 'POST',
             contentType: 'application/json',

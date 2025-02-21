@@ -1,4 +1,4 @@
-e***REMOVED***port default class LogarithmicScale e***REMOVED***tends Scale {
+export default class LogarithmicScale extends Scale {
     static id: string;
     /**
      * @type {any}
@@ -11,7 +11,7 @@ e***REMOVED***port default class LogarithmicScale e***REMOVED***tends Scale {
     /** @type {number} */
     _startValue: number;
     _valueRange: number;
-    parse(raw: any, inde***REMOVED***: any): number;
+    parse(raw: any, index: any): number;
     _zero: boolean;
     handleTickRangeOptions(): void;
     /**
@@ -19,7 +19,7 @@ e***REMOVED***port default class LogarithmicScale e***REMOVED***tends Scale {
        * @return {string}
        */
     getLabelForValue(value: number): string;
-    getPi***REMOVED***elForValue(value: any): number;
-    getValueForPi***REMOVED***el(pi***REMOVED***el: any): number;
+    getPixelForValue(value: any): number;
+    getValueForPixel(pixel: any): number;
 }
 import Scale from "../core/core.scale.js";

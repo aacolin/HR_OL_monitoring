@@ -1,5 +1,5 @@
-const e***REMOVED***press = require('e***REMOVED***press');
-const router = e***REMOVED***press.Router();
+const express = require('express');
+const router = express.Router();
 const jwt = require("jwt-simple");
 const bcrypt = require("bcryptjs");
 const fs = require('fs');
@@ -7,9 +7,9 @@ const secret = fs.readFileSync(__dirname + '/../jwt/secret').toString();
 const Patient = require('../models/patient');
 const Physician = require('../models/physician'); // Add this line to import the Physician model
 
-const PatientE***REMOVED***ists = 'A patient with this email address already e***REMOVED***ists. Please use a different email address.';
+const PatientExists = 'A patient with this email address already exists. Please use a different email address.';
 const InvalidData = 'Your request contains invalid data or missing fields. Please correct and try again.'
-const ServerError = 'An une***REMOVED***pected error occurred on the server while processing your request please try again later.'
+const ServerError = 'An unexpected error occurred on the server while processing your request please try again later.'
 const PatientCreated = 'Patient account created successfully.';
 const InvalidUserNameOrPassword = 'Invalid username or password.';
 const PatientNotFound = 'Email not found.';
@@ -20,16 +20,16 @@ const AllFieldsRequired = 'All fields are required: First Name, Last Name, email
 router.get('/token-auth', async function(req, res) {
     
     // check if X-Auth-Token header is present
-    if (!req.headers['***REMOVED***-auth']) {
+    if (!req.headers['x-auth']) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
     
-    const receivedToken = req.headers['***REMOVED***-auth'];
+    const receivedToken = req.headers['x-auth'];
     const tokenDecoded = jwt.decode(receivedToken, secret);
     
     try{
-        const patientE***REMOVED***ist = await Patient.findOne({ email: tokenDecoded.email });
-        if (!patientE***REMOVED***ist) {
+        const patientExist = await Patient.findOne({ email: tokenDecoded.email });
+        if (!patientExist) {
             throw new Error('Patient not found');
         }
         else{
@@ -55,8 +55,8 @@ router.post('/signup', async function(req, res) {
         }
         
         // Additional server-side validation for email and password
-        const emailRege***REMOVED*** = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,5}$/;
-        if (!emailRege***REMOVED***.test(signUpFormData.Email)) {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,5}$/;
+        if (!emailRegex.test(signUpFormData.Email)) {
             return res.status(400).json({ message: 'Invalid email address.' });
         }
         
@@ -83,9 +83,9 @@ router.post('/signup', async function(req, res) {
             password: hashedPassword
         });
 
-        const patientE***REMOVED***ist = await Patient.findOne({ email: signUpFormData.Email });
-        if (patientE***REMOVED***ist) {
-            throw new Error(PatientE***REMOVED***ists);
+        const patientExist = await Patient.findOne({ email: signUpFormData.Email });
+        if (patientExist) {
+            throw new Error(PatientExists);
         } else {
             await newPatient.save();
             const tokenPayload = { Email: signUpFormData.Email };
@@ -100,10 +100,10 @@ router.post('/signup', async function(req, res) {
                 .status(400)
                 .json({ message: InvalidData });
         }
-        if (err.message === PatientE***REMOVED***ists) {
+        if (err.message === PatientExists) {
             return res
                 .status(409)
-                .json({ message: PatientE***REMOVED***ists });
+                .json({ message: PatientExists });
         } else {
             console.log(err);
             return res
@@ -129,20 +129,20 @@ router.post('/login', async function(req, res) {
             throw new Error(InvalidUserNameOrPassword);
         }
       
-        //check if the patient e***REMOVED***ists in the database
-        const e***REMOVED***istingPatient = await Patient.findOne({ email: userEmail });
-        if (!e***REMOVED***istingPatient) {
+        //check if the patient exists in the database
+        const existingPatient = await Patient.findOne({ email: userEmail });
+        if (!existingPatient) {
             throw new Error(PatientNotFound);
         }
         
-        const isCorrectPassword = await bcrypt.compare(userPassword,e***REMOVED***istingPatient.password);
+        const isCorrectPassword = await bcrypt.compare(userPassword,existingPatient.password);
         if (!isCorrectPassword) {
             throw new Error(InvalidUserNameOrPassword);
         }
 
-        if (e***REMOVED***istingPatient && isCorrectPassword) {
-            // console.log("e***REMOVED***isting patient: " + e***REMOVED***istingPatient);
-            var payload = { email: e***REMOVED***istingPatient.email };
+        if (existingPatient && isCorrectPassword) {
+            // console.log("existing patient: " + existingPatient);
+            var payload = { email: existingPatient.email };
             let encodedToken = jwt.encode(payload, secret);
             // console.log("encoded token: " + encodedToken);
             return res.status(200).json({ success: true, patientToken: encodedToken});
@@ -294,7 +294,7 @@ router.put('/change-physician', async function(req, res) {
         return res.status(200).json({ patientProfile: patient, physicianProfile: physician, message: 'Physician changed successfully' });
     } catch (err) {
         console.log(err);
-        return res.status(500).json({ message: 'An une***REMOVED***pected error occurred on the server while processing your request. Please try again later.' });
+        return res.status(500).json({ message: 'An unexpected error occurred on the server while processing your request. Please try again later.' });
     }
 });
 
@@ -317,9 +317,9 @@ router.put('/change-device', async function(req, res) {
     }
 
     // delete the old device (deviceId) from the patient's devices list 
-    const deviceInde***REMOVED*** = patient.devices.inde***REMOVED***Of(deviceId);
-    if (deviceInde***REMOVED*** > -1) {
-        patient.devices.splice(deviceInde***REMOVED***, 1);
+    const deviceIndex = patient.devices.indexOf(deviceId);
+    if (deviceIndex > -1) {
+        patient.devices.splice(deviceIndex, 1);
     }
 
     // add the new device (deviceId) to the patient's devices list at the beginning of the list
@@ -352,9 +352,9 @@ router.put('/remove-device', async function(req, res) {
     }
     
     // delete the old device (deviceId) from the patient's devices list 
-    const deviceInde***REMOVED*** = patient.devices.inde***REMOVED***Of(deviceId);
-    if (deviceInde***REMOVED*** > -1) {
-        patient.devices.splice(deviceInde***REMOVED***, 1);
+    const deviceIndex = patient.devices.indexOf(deviceId);
+    if (deviceIndex > -1) {
+        patient.devices.splice(deviceIndex, 1);
     }
 
     try {
@@ -383,11 +383,11 @@ router.post('/patients-list', async function(req, res) {
         return res.status(200).json({ patients: patients });
     } catch (err) {
         console.log(err);
-        return res.status(500).json({ message: 'An une***REMOVED***pected error occurred on the server while processing your request. Please try again later.' });
+        return res.status(500).json({ message: 'An unexpected error occurred on the server while processing your request. Please try again later.' });
     }
 });
 
 
 
 
-module.e***REMOVED***ports = router;
+module.exports = router;

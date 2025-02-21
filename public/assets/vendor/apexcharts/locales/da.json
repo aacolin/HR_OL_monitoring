@@ -40,9 +40,9 @@
     ],
     "shortDays": ["Søn", "Man", "Tir", "Ons", "Tor", "Fre", "Lør"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Download SVG",
-      "e***REMOVED***portToPNG": "Download PNG",
-      "e***REMOVED***portToCSV": "Download CSV",
+      "exportToSVG": "Download SVG",
+      "exportToPNG": "Download PNG",
+      "exportToCSV": "Download CSV",
       "menu": "Menu",
       "selection": "Valg",
       "selectionZoom": "Zoom til valg",

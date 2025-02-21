@@ -1,22 +1,22 @@
 # TinyMCE
 
-The world's #1 open source rich te***REMOVED***t editor.
+The world's #1 open source rich text editor.
 
 **Using an old version of TinyMCE?** We recommend you to upgrade to TinyMCE 7 to continue receiving security updates, or consider [TinyMCE 5 LTS](https://www.tiny.cloud/long-term-support/) if you need more time to upgrade.
 
-Used and trusted by millions of developers, TinyMCE is the world’s most customizable, scalable, and fle***REMOVED***ible rich te***REMOVED***t editor. We’ve helped launch the likes of Atlassian, Medium, Evernote (and lots more that we can’t tell you), by empowering them to create e***REMOVED***ceptional content and e***REMOVED***periences for their users.
+Used and trusted by millions of developers, TinyMCE is the world’s most customizable, scalable, and flexible rich text editor. We’ve helped launch the likes of Atlassian, Medium, Evernote (and lots more that we can’t tell you), by empowering them to create exceptional content and experiences for their users.
 
 With more than 350M+ downloads every year, we’re also one of the most trusted enterprise-grade open source HTML editors on the internet. There’s currently more than 100M+ products worldwide, powered by Tiny. As a high powered WYSIWYG editor, TinyMCE is built to scale, designed to innovate, and thrives on delivering results to difficult edge-cases.
 
 You can access a [full featured demo of TinyMCE](https://www.tiny.cloud/docs/tinymce/7/premium-full-featured/) in the docs on the TinyMCE website.
 
 <p align="center">
-  <img alt="Screenshot of the TinyMCE Editor" src="https://www.tiny.cloud/storage/github-readme-images/tinymce-editor-6***REMOVED***.png"\>
+  <img alt="Screenshot of the TinyMCE Editor" src="https://www.tiny.cloud/storage/github-readme-images/tinymce-editor-6x.png"\>
 </p>
 
 ## Get started with TinyMCE
 
-Getting started with the TinyMCE rich te***REMOVED***t editor is easy, and for simple configurations can be done in less than 5 minutes.
+Getting started with the TinyMCE rich text editor is easy, and for simple configurations can be done in less than 5 minutes.
 
 [TinyMCE Cloud Deployment Quick Start Guide](https://www.tiny.cloud/docs/tinymce/7/cloud-quick-start/)
 
@@ -44,19 +44,19 @@ With over 29 integrations, and 400+ APIs, see the TinyMCE docs for a full list o
 
 ### Customization
 
-It is easy to [configure the UI](https://www.tiny.cloud/docs/tinymce/7/customize-ui/) of your rich te***REMOVED***t editor to match the design of your site, product or application. Due to its fle***REMOVED***ibility, you can [configure the editor](https://www.tiny.cloud/docs/tinymce/7/basic-setup/) with as much or as little functionality as you like, depending on your requirements.
+It is easy to [configure the UI](https://www.tiny.cloud/docs/tinymce/7/customize-ui/) of your rich text editor to match the design of your site, product or application. Due to its flexibility, you can [configure the editor](https://www.tiny.cloud/docs/tinymce/7/basic-setup/) with as much or as little functionality as you like, depending on your requirements.
 
 With [50+ powerful plugins available](https://www.tiny.cloud/tinymce/features/), and content editable as the basis of TinyMCE, adding additional functionality is as simple as including a single line of code.
 
 Realizing the full power of most plugins requires only a few lines more.
 
-### E***REMOVED***tensibility
+### Extensibility
 
-Sometimes your editor requirements can be quite unique, and you need the freedom and fle***REMOVED***ibility to innovate. Thanks to TinyMCE being open source, you can view the source code and develop your own e***REMOVED***tensions for custom functionality to meet your own requirements.
+Sometimes your editor requirements can be quite unique, and you need the freedom and flexibility to innovate. Thanks to TinyMCE being open source, you can view the source code and develop your own extensions for custom functionality to meet your own requirements.
 
-The TinyMCE [API](https://www.tiny.cloud/docs/tinymce/7/apis/tinymce.root/) is e***REMOVED***posed to make it easier for you to write custom functionality that fits within the e***REMOVED***isting framework of TinyMCE [UI components](https://www.tiny.cloud/docs/tinymce/7/custom-ui-components/).
+The TinyMCE [API](https://www.tiny.cloud/docs/tinymce/7/apis/tinymce.root/) is exposed to make it easier for you to write custom functionality that fits within the existing framework of TinyMCE [UI components](https://www.tiny.cloud/docs/tinymce/7/custom-ui-components/).
 
-### E***REMOVED***tended Features and Support
+### Extended Features and Support
 
 For the professional software teams that require more in-depth efficiency, compliance or collaborative features built to enterprise-grade standards, please [get in touch with our team](https://www.tiny.cloud/contact/).
 

@@ -3,10 +3,10 @@
  * @typedef { import('./core.controller.js').default } Chart
  */
 /**
- * Please use the module's default e***REMOVED***port which provides a singleton instance
- * Note: class is e***REMOVED***port for typedoc
+ * Please use the module's default export which provides a singleton instance
+ * Note: class is export for typedoc
  */
-e***REMOVED***port class Animator {
+export class Animator {
     _request: any;
     _charts: Map<any, any>;
     _running: boolean;
@@ -62,6 +62,6 @@ e***REMOVED***port class Animator {
     remove(chart: Chart): boolean;
 }
 declare const _default: Animator;
-e***REMOVED***port default _default;
-e***REMOVED***port type Animation = import('./core.animation.js').default;
-e***REMOVED***port type Chart = import('./core.controller.js').default;
+export default _default;
+export type Animation = import('./core.animation.js').default;
+export type Chart = import('./core.controller.js').default;

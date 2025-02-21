@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.pl',
   '\n' +
   '<dl>\n' +
   '  <dt>Ustaw fokus na pasek menu</dt>\n' +
-  '  <dd>Windows lub Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows lub Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Ustaw fokus na pasek narzędzi</dt>\n' +
-  '  <dd>Windows lub Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows lub Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Ustaw fokus na sekcję Footer</dt>\n' +
-  '  <dd>Windows lub Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows lub Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Skup się na powiadomieniu</dt>\n' +
-  '  <dd>Windows lub Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
+  '  <dd>Windows lub Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
   '  <dt>Ustaw fokus na kontekstowy pasek narzędzi</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** lub macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows, Linux lub macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Nawigacja zostanie rozpoczęta od pierwszego elementu interfejsu użytkownika, który jest podświetlony lub — w przypadku pierwszego elementu\n' +

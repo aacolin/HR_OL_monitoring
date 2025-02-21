@@ -24,4 +24,4 @@ const patientSchema = new db.Schema({
 
  const Patient = db.model("Patient", patientSchema);
 
-module.e***REMOVED***ports = Patient;
+module.exports = Patient;

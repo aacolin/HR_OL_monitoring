@@ -26,7 +26,7 @@ function handleFormSubmission() {
     const loginFormFields = getLoginFormFields();
     const credentialsInJSON = JSON.stringify(loginFormFields);
 
-    $.aja***REMOVED***({
+    $.ajax({
         url: '/patients/login',
         method: 'POST',
         contentType: 'application/json',

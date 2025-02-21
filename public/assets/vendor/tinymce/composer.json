@@ -8,20 +8,20 @@
 	"keywords": [
 		"wysiwyg",
 		"tinymce",
-		"richte***REMOVED***t",
+		"richtext",
 		"javascript",
 		"html",
-		"te***REMOVED***t",
+		"text",
 		"rich editor",
-		"rich te***REMOVED***t editor",
+		"rich text editor",
 		"rte",
-		"rich te***REMOVED***t",
+		"rich text",
 		"contenteditable",
 		"editing"
 	],
 	"homepage": "https://www.tiny.cloud/",
 	"type": "component",
-	"e***REMOVED***tra": {
+	"extra": {
 		"component": {
 			"scripts": [
 				"tinymce.js",
@@ -41,7 +41,7 @@
 		}
 	},
 	"archive": {
-		"e***REMOVED***clude": [
+		"exclude": [
 			"README.md",
 			"bower.js",
 			"package.json",

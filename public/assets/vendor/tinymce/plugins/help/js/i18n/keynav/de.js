@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.de',
   '\n' +
   '<dl>\n' +
   '  <dt>Fokus auf Menüleiste</dt>\n' +
-  '  <dd>Windows oder Linu***REMOVED***: ALT+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows oder Linux: ALT+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Fokus auf Symbolleiste</dt>\n' +
-  '  <dd>Windows oder Linu***REMOVED***: ALT+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows oder Linux: ALT+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Fokus auf Fußzeile</dt>\n' +
-  '  <dd>Windows oder Linu***REMOVED***: ALT+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows oder Linux: ALT+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Benachrichtigung fokussieren</dt>\n' +
-  '  <dd>Windows oder Linu***REMOVED***: ALT+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
-  '  <dt>Fokus auf konte***REMOVED***tbezogene Symbolleiste</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** oder macOS: STRG+F9</dd>\n' +
+  '  <dd>Windows oder Linux: ALT+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
+  '  <dt>Fokus auf kontextbezogene Symbolleiste</dt>\n' +
+  '  <dd>Windows, Linux oder macOS: STRG+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>Die Navigation beginnt beim ersten Benutzeroberflächenelement, welches hervorgehoben ist. Falls sich das erste Element im Pfad der Fußzeile befindet,\n' +

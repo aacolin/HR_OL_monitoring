@@ -1,4 +1,4 @@
-e***REMOVED***port default class TimeScale e***REMOVED***tends Scale {
+export default class TimeScale extends Scale {
     static id: string;
     /**
      * @type {any}
@@ -29,10 +29,10 @@ e***REMOVED***port default class TimeScale e***REMOVED***tends Scale {
     _adapter: DateAdapter;
     /**
        * @param {*} raw
-       * @param {number?} [inde***REMOVED***]
+       * @param {number?} [index]
        * @return {number}
        */
-    parse(raw: any, inde***REMOVED***?: number | null): number;
+    parse(raw: any, index?: number | null): number;
     /**
        * @private
        */
@@ -40,16 +40,16 @@ e***REMOVED***port default class TimeScale e***REMOVED***tends Scale {
     /**
        * Returns the start and end offsets from edges in the form of {start, end}
        * where each value is a relative width to the scale and ranges between 0 and 1.
-       * They add e***REMOVED***tra margins on the both sides by scaling down the original scale.
+       * They add extra margins on the both sides by scaling down the original scale.
        * Offsets are added when the `offset` option is true.
        * @param {number[]} timestamps
        * @protected
        */
     protected initOffsets(timestamps?: number[]): void;
     /**
-       * Generates a ma***REMOVED***imum of `capacity` timestamps between min and ma***REMOVED***, rounded to the
+       * Generates a maximum of `capacity` timestamps between min and max, rounded to the
        * `minor` unit using the given scale time `options`.
-       * Important: this method can return ticks outside the min and ma***REMOVED*** range, it's the
+       * Important: this method can return ticks outside the min and max range, it's the
        * responsibility of the calling code to clamp values if needed.
        * @protected
        */
@@ -68,7 +68,7 @@ e***REMOVED***port default class TimeScale e***REMOVED***tends Scale {
     /**
        * Function to format an individual tick mark
        * @param {number} time
-       * @param {number} inde***REMOVED***
+       * @param {number} index
        * @param {object[]} ticks
        * @param {string|undefined} [format]
        * @return {string}
@@ -88,12 +88,12 @@ e***REMOVED***port default class TimeScale e***REMOVED***tends Scale {
        * @param {number} value - Milliseconds since epoch (1 January 1970 00:00:00 UTC)
        * @return {number}
        */
-    getPi***REMOVED***elForValue(value: number): number;
+    getPixelForValue(value: number): number;
     /**
-       * @param {number} pi***REMOVED***el
+       * @param {number} pixel
        * @return {number}
        */
-    getValueForPi***REMOVED***el(pi***REMOVED***el: number): number;
+    getValueForPixel(pixel: number): number;
     /**
        * @param {string} label
        * @return {{w:number, h:number}}
@@ -101,7 +101,7 @@ e***REMOVED***port default class TimeScale e***REMOVED***tends Scale {
        */
     private _getLabelSize;
     /**
-       * @param {number} e***REMOVED***ampleTime
+       * @param {number} exampleTime
        * @return {number}
        * @private
        */
@@ -120,11 +120,11 @@ e***REMOVED***port default class TimeScale e***REMOVED***tends Scale {
        */
     protected normalize(values: number[]): number[];
 }
-e***REMOVED***port type Unit = import('../core/core.adapters.js').TimeUnit;
-e***REMOVED***port type Interval = {
+export type Unit = import('../core/core.adapters.js').TimeUnit;
+export type Interval = {
     common: boolean;
     size: number;
     steps?: number;
 };
-e***REMOVED***port type DateAdapter = import('../core/core.adapters.js').DateAdapter;
+export type DateAdapter = import('../core/core.adapters.js').DateAdapter;
 import Scale from "../core/core.scale.js";

@@ -40,9 +40,9 @@
     ],
     "shortDays": ["일", "월", "화", "수", "목", "금", "토"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "SVG 다운로드",
-      "e***REMOVED***portToPNG": "PNG 다운로드",
-      "e***REMOVED***portToCSV": "CSV 다운로드",
+      "exportToSVG": "SVG 다운로드",
+      "exportToPNG": "PNG 다운로드",
+      "exportToCSV": "CSV 다운로드",
       "menu": "메뉴",
       "selection": "선택",
       "selectionZoom": "선택영역 확대",

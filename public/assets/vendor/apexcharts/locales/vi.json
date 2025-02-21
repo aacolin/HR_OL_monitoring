@@ -48,9 +48,9 @@
       "T7"
     ],
     "toolbar": {
-      "e***REMOVED***portToSVG": "Tải ***REMOVED***uống SVG",
-      "e***REMOVED***portToPNG": "Tải ***REMOVED***uống PNG",
-      "e***REMOVED***portToCSV": "Tải ***REMOVED***uống CSV",
+      "exportToSVG": "Tải xuống SVG",
+      "exportToPNG": "Tải xuống PNG",
+      "exportToCSV": "Tải xuống CSV",
       "menu": "Tuỳ chọn",
       "selection": "Vùng chọn",
       "selectionZoom": "Vùng chọn phóng to",

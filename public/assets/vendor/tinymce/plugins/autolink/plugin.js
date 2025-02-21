@@ -13,8 +13,8 @@
   const register = editor => {
     const registerOption = editor.options.register;
     registerOption('autolink_pattern', {
-      processor: 'rege***REMOVED***p',
-      default: new RegE***REMOVED***p('^' + link().source + '$', 'i')
+      processor: 'regexp',
+      default: new RegExp('^' + link().source + '$', 'i')
     });
     registerOption('link_default_target', { processor: 'string' });
     registerOption('link_default_protocol', {
@@ -35,13 +35,13 @@
       return ((_a = v.constructor) === null || _a === void 0 ? void 0 : _a.name) === constructor.name;
     }
   };
-  const typeOf = ***REMOVED*** => {
-    const t = typeof ***REMOVED***;
-    if (***REMOVED*** === null) {
+  const typeOf = x => {
+    const t = typeof x;
+    if (x === null) {
       return 'null';
-    } else if (t === 'object' && Array.isArray(***REMOVED***)) {
+    } else if (t === 'object' && Array.isArray(x)) {
       return 'array';
-    } else if (t === 'object' && hasProto(***REMOVED***, String, (o, proto) => proto.isPrototypeOf(o))) {
+    } else if (t === 'object' && hasProto(x, String, (o, proto) => proto.isPrototypeOf(o))) {
       return 'string';
     } else {
       return t;
@@ -61,31 +61,31 @@
 
   const checkRange = (str, substr, start) => substr === '' || str.length >= substr.length && str.substr(start, start + substr.length) === substr;
   const contains = (str, substr, start = 0, end) => {
-    const id***REMOVED*** = str.inde***REMOVED***Of(substr, start);
-    if (id***REMOVED*** !== -1) {
-      return isUndefined(end) ? true : id***REMOVED*** + substr.length <= end;
+    const idx = str.indexOf(substr, start);
+    if (idx !== -1) {
+      return isUndefined(end) ? true : idx + substr.length <= end;
     } else {
       return false;
     }
   };
-  const startsWith = (str, prefi***REMOVED***) => {
-    return checkRange(str, prefi***REMOVED***, 0);
+  const startsWith = (str, prefix) => {
+    return checkRange(str, prefix, 0);
   };
 
   const zeroWidth = '\uFEFF';
   const isZwsp = char => char === zeroWidth;
   const removeZwsp = s => s.replace(/\uFEFF/g, '');
 
-  var global = tinymce.util.Tools.resolve('tinymce.dom.Te***REMOVED***tSeeker');
+  var global = tinymce.util.Tools.resolve('tinymce.dom.TextSeeker');
 
-  const isTe***REMOVED***tNode = node => node.nodeType === 3;
+  const isTextNode = node => node.nodeType === 3;
   const isElement = node => node.nodeType === 1;
   const isBracketOrSpace = char => /^[(\[{ \u00a0]$/.test(char);
   const hasProtocol = url => /^([A-Za-z][A-Za-z\d.+-]*:\/\/)|mailto:/.test(url);
   const isPunctuation = char => /[?!,.;:]/.test(char);
-  const findChar = (te***REMOVED***t, inde***REMOVED***, predicate) => {
-    for (let i = inde***REMOVED*** - 1; i >= 0; i--) {
-      const char = te***REMOVED***t.charAt(i);
+  const findChar = (text, index, predicate) => {
+    for (let i = index - 1; i >= 0; i--) {
+      const char = text.charAt(i);
       if (!isZwsp(char) && predicate(char)) {
         return i;
       }
@@ -97,7 +97,7 @@
     let tempOffset = offset;
     while (isElement(tempNode) && tempNode.childNodes[tempOffset]) {
       tempNode = tempNode.childNodes[tempOffset];
-      tempOffset = isTe***REMOVED***tNode(tempNode) ? tempNode.data.length : tempNode.childNodes.length;
+      tempOffset = isTextNode(tempNode) ? tempNode.data.length : tempNode.childNodes.length;
     }
     return {
       container: tempNode,
@@ -114,7 +114,7 @@
       return null;
     }
     const rng = selection.getRng();
-    const te***REMOVED***tSeeker = global(dom, node => {
+    const textSeeker = global(dom, node => {
       return dom.isBlock(node) || has(voidElements, node.nodeName.toLowerCase()) || dom.getContentEditable(node) === 'false';
     });
     const {
@@ -122,29 +122,29 @@
       offset: endOffset
     } = freefallRtl(rng.endContainer, rng.endOffset);
     const root = (_a = dom.getParent(endContainer, dom.isBlock)) !== null && _a !== void 0 ? _a : dom.getRoot();
-    const endSpot = te***REMOVED***tSeeker.backwards(endContainer, endOffset + offset, (node, offset) => {
-      const te***REMOVED***t = node.data;
-      const id***REMOVED*** = findChar(te***REMOVED***t, offset, not(isBracketOrSpace));
-      return id***REMOVED*** === -1 || isPunctuation(te***REMOVED***t[id***REMOVED***]) ? id***REMOVED*** : id***REMOVED*** + 1;
+    const endSpot = textSeeker.backwards(endContainer, endOffset + offset, (node, offset) => {
+      const text = node.data;
+      const idx = findChar(text, offset, not(isBracketOrSpace));
+      return idx === -1 || isPunctuation(text[idx]) ? idx : idx + 1;
     }, root);
     if (!endSpot) {
       return null;
     }
-    let lastTe***REMOVED***tNode = endSpot.container;
-    const startSpot = te***REMOVED***tSeeker.backwards(endSpot.container, endSpot.offset, (node, offset) => {
-      lastTe***REMOVED***tNode = node;
-      const id***REMOVED*** = findChar(node.data, offset, isBracketOrSpace);
-      return id***REMOVED*** === -1 ? id***REMOVED*** : id***REMOVED*** + 1;
+    let lastTextNode = endSpot.container;
+    const startSpot = textSeeker.backwards(endSpot.container, endSpot.offset, (node, offset) => {
+      lastTextNode = node;
+      const idx = findChar(node.data, offset, isBracketOrSpace);
+      return idx === -1 ? idx : idx + 1;
     }, root);
     const newRng = dom.createRng();
     if (!startSpot) {
-      newRng.setStart(lastTe***REMOVED***tNode, 0);
+      newRng.setStart(lastTextNode, 0);
     } else {
       newRng.setStart(startSpot.container, startSpot.offset);
     }
     newRng.setEnd(endSpot.container, endSpot.offset);
-    const rngTe***REMOVED***t = removeZwsp(newRng.toString());
-    const matches = rngTe***REMOVED***t.match(autoLinkPattern);
+    const rngText = removeZwsp(newRng.toString());
+    const matches = rngText.match(autoLinkPattern);
     if (matches) {
       let url = matches[0];
       if (startsWith(url, 'www.')) {
@@ -172,10 +172,10 @@
       ui: false,
       value: url
     };
-    const beforeE***REMOVED***ecEvent = editor.dispatch('BeforeE***REMOVED***ecCommand', args);
-    if (!beforeE***REMOVED***ecEvent.isDefaultPrevented()) {
-      editor.getDoc().e***REMOVED***ecCommand(command, false, url);
-      editor.dispatch('E***REMOVED***ecCommand', args);
+    const beforeExecEvent = editor.dispatch('BeforeExecCommand', args);
+    if (!beforeExecEvent.isDefaultPrevented()) {
+      editor.getDoc().execCommand(command, false, url);
+      editor.dispatch('ExecCommand', args);
       const defaultLinkTarget = getDefaultLinkTarget(editor);
       if (isString(defaultLinkTarget)) {
         const anchor = selection.getNode();

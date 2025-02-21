@@ -40,9 +40,9 @@
     ],
     "shortDays": ["रवि", "सोम", "मंगल", "बुध", "गुरु", "शुक्र", "शनि"],
     "toolbar": {
-      "e***REMOVED***portToSVG": "निर्यात SVG",
-      "e***REMOVED***portToPNG": "निर्यात PNG",
-      "e***REMOVED***portToCSV": "निर्यात CSV",
+      "exportToSVG": "निर्यात SVG",
+      "exportToPNG": "निर्यात PNG",
+      "exportToCSV": "निर्यात CSV",
       "menu": "सूची",
       "selection": "चयन",
       "selectionZoom": "ज़ूम करना",

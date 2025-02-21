@@ -3,19 +3,19 @@ tinymce.Resource.add('tinymce.html-i18n.help-keynav.nl',
   '\n' +
   '<dl>\n' +
   '  <dt>Focus op de menubalk instellen</dt>\n' +
-  '  <dd>Windows of Linu***REMOVED***: Alt+F9</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F9</dd>\n' +
+  '  <dd>Windows of Linux: Alt+F9</dd>\n' +
+  '  <dd>macOS: &#x2325;F9</dd>\n' +
   '  <dt>Focus op de werkbalk instellen</dt>\n' +
-  '  <dd>Windows of Linu***REMOVED***: Alt+F10</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F10</dd>\n' +
+  '  <dd>Windows of Linux: Alt+F10</dd>\n' +
+  '  <dd>macOS: &#x2325;F10</dd>\n' +
   '  <dt>Focus op de voettekst instellen</dt>\n' +
-  '  <dd>Windows of Linu***REMOVED***: Alt+F11</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F11</dd>\n' +
+  '  <dd>Windows of Linux: Alt+F11</dd>\n' +
+  '  <dd>macOS: &#x2325;F11</dd>\n' +
   '  <dt>Focus op de melding instellen</dt>\n' +
-  '  <dd>Windows of Linu***REMOVED***: Alt+F12</dd>\n' +
-  '  <dd>macOS: &#***REMOVED***2325;F12</dd>\n' +
-  '  <dt>Focus op een conte***REMOVED***tuele werkbalk instellen</dt>\n' +
-  '  <dd>Windows, Linu***REMOVED*** of macOS: Ctrl+F9</dd>\n' +
+  '  <dd>Windows of Linux: Alt+F12</dd>\n' +
+  '  <dd>macOS: &#x2325;F12</dd>\n' +
+  '  <dt>Focus op een contextuele werkbalk instellen</dt>\n' +
+  '  <dd>Windows, Linux of macOS: Ctrl+F9</dd>\n' +
   '</dl>\n' +
   '\n' +
   '<p>De navigatie start bij het eerste UI-item, dat wordt gemarkeerd of onderstreept als het eerste item zich in\n' +
