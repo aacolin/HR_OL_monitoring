@@ -1,6 +1,6 @@
 // Your Particle Cloud API credentials
-const accessToken = 'API_KEY'; // Replace with your access token
-const deviceId = 'e00fce68d3b6b43244c35726'; // Replace with your device ID
+const accessToken = 'accessToken-here'; // Replace with your access token
+const deviceId = 'deviceId-here'; // Replace with your device ID
 
 
 // URL to Particle Cloud API endpoint for fetching a variable (e.g., temperature)
